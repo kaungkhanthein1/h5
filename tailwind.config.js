@@ -15,6 +15,9 @@ module.exports = {
         unselected: '#4B5563',
         player: 'black',
         playerNavigator: '#F54100',
+        source: 'rgba(255, 255, 255, 0.1)',
+        sourceBack: 'rgba(22, 22, 25, 1)',
+        episodeSelected: 'rgba(255, 255, 255, 0.04)'
       },
       fontSize: {
         'xs': '0.75rem',   // Extra small text

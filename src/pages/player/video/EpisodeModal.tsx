@@ -74,7 +74,7 @@ const ModalComponent: React.FC<ModalComponentProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center">
-      <div className="bg-black backdrop-blur-md w-full max-w-md h-[65vh] rounded-t-xl p-4 text-white">
+      <div className="bg-sourceBack backdrop-blur-md w-full max-w-md h-[65vh] rounded-t-xl p-4 text-white">
         <div className="flex justify-between items-center mb-4">
           <div className="flex space-x-6 overflow-x-auto m-auto">
             {/* Episode Tab */}
@@ -137,8 +137,8 @@ const ModalComponent: React.FC<ModalComponentProps> = ({
                       onClick={() => handleEpisodeClick(episode)}
                       className={`py-2 text-center rounded-lg ${
                         episode.episode_id !== selectedEpisodeId
-                          ? "bg-gray-800 text-white"
-                          : "bg-gray-700 text-white"
+                          ? "bg-source text-white"
+                          : "bg-episodeSelected  text-white"
                       }`}
                     >
                       {episode.episode_name}
@@ -161,9 +161,7 @@ const ModalComponent: React.FC<ModalComponentProps> = ({
                 playFrom.map((source, index) => (
                   <div
                     key={index}
-                    className={`flex justify-between items-center bg-gray-800 p-3 rounded-lg mb-2 cursor-pointer ${
-                      index === selectedSource ? "border border-orange-500" : ""
-                    }`}
+                    className={`flex justify-between items-center bg-source p-3 rounded-lg mb-2 cursor-pointer`}
                     onClick={() => {
                       setSelectedSource(index);
                       changeSource(source);
@@ -181,9 +179,13 @@ const ModalComponent: React.FC<ModalComponentProps> = ({
                       </p>
                     </div>
                     {index === selectedSource && (
-                      <span className="text-orange-500">
-                        <FontAwesomeIcon icon={faCheck} className="text-lg" />
-                      </span>
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="12" cy="12" r="9" fill="#F54100"/>
+                      <path d="M10.5 13.6032L16.0152 8.0874L16.8642 8.9358L10.5 15.3L6.68158 11.4816L7.52998 10.6332L10.5 13.6032Z" fill="white"/>
+                      </svg>
+                      // <span className="text-orange-500">
+                      //   <FontAwesomeIcon icon={faCheck} className="text-lg" />
+                      // </span>
                     )}
                   </div>
                 ))}

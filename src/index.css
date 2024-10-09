@@ -146,13 +146,13 @@ input[type="range"]::-moz-range-thumb {
   /* background: #1e2238; */
   background: transparent;
 }
-
+/* 
 .video-react .video-react-play-progress {
   background-color: #F54100 !important;
 }
 .video-react .video-react-scrubber-button .video-react-scrubber-button-inner {
   border-color: #F54100 !important;
-}
+} */
 .gradient-bg-home {
   background: linear-gradient(
       180deg,
@@ -162,6 +162,25 @@ input[type="range"]::-moz-range-thumb {
     linear-gradient(90deg, #0a5b75 0%, #4b2555 100%), #161619;
 }
 
-.video-react .video-react-control-bar {
+.vjs-control-bar {
  background-color: transparent !important; 
+}
+
+.vjs-play-control {
+  /* display: none !important; */
+}
+
+.vjs-subs-caps-button {
+  display: none;
+}
+
+.vjs-play-progress {
+  background-color: #FF5722 !important;
+}
+
+.vjs-big-play-button {
+    width: 2em !important;
+    background: #000000a1 !important;
+    font-size: 2em !important;
+    border-radius: 10px !important;
 }

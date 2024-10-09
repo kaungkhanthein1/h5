@@ -13,7 +13,7 @@ const FilterByTag = ({ data }: any) => {
               onClick={() => setActiveClass(index)}
               className={`${
                 activeClass === index
-                  ? "bg-black/15 px-3 py-1 text-xs"
+                  ? "bg-gray-500/35 px-3 py-1 text-xs"
                   : "text-[14px]"
               } whitespace-nowrap py-2 rounded-lg hover:text-white transition-colors`}
             >
@@ -29,7 +29,7 @@ const FilterByTag = ({ data }: any) => {
               onClick={() => setActiveArea(index)}
               className={`${
                 activeArea === index
-                  ? "bg-black/15 px-3 py-1 text-xs"
+                  ? "bg-gray-500/35 px-3 py-1 text-xs"
                   : "text-[14px]"
               } whitespace-nowrap py-2 rounded-lg hover:text-white transition-colors`}
             >
@@ -45,7 +45,7 @@ const FilterByTag = ({ data }: any) => {
               onClick={() => setActiveYear(index)}
               className={`${
                 activeYear === index
-                  ? "bg-black/15 px-3 py-1 text-xs"
+                  ? "bg-gray-500/35 px-3 py-1 text-xs"
                   : "text-[14px]"
               } whitespace-nowrap py-2 rounded-lg hover:text-white transition-colors`}
             >

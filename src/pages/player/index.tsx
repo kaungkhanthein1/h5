@@ -56,6 +56,7 @@ interface AdsData {
     };
   };
 }
+
 const DetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [movieDetail, setMovieDetail] = useState<MovieDetail | null>(null);
@@ -68,22 +69,46 @@ const DetailPage: React.FC = () => {
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (id) {
+      getMovieDetail();
+      getAdsData();
+    }
+  }, [id]);
+
+  const getAdsData = async () => {
+    const res = await fetch(
+      "https://cc3e497d.qdhgtch.com:2345/api/v1/advert/config"
+    );
+    const data = await res.json();
+    setAdsData(data);
+    console.log("data is=>", data);
+  };
+  
   // Fetch the movie details based on the provided id
   const getMovieDetail = async () => {
     const loginResponse = await localStorage.getItem("authToken");
     const loginInfo = loginResponse ? JSON.parse(loginResponse) : null;
-    const authorization = loginInfo && loginInfo.data && loginInfo.data.token_type ? `${loginInfo.data.token_type} ${loginInfo.data.access_token}` : '';
-    if(!authorization) {
-      localStorage.removeItem('authToken');
+    const authorization =
+      loginInfo && loginInfo.data && loginInfo.data.token_type
+        ? `${loginInfo.data.token_type} ${loginInfo.data.access_token}`
+        : "";
+    if (!authorization) {
+      localStorage.removeItem("authToken");
     }
-    const header = authorization ? {
-      method: "GET",
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': authorization,
-      }} : {method: "GET"};
+    const header = authorization
+      ? {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: authorization,
+          },
+        }
+      : { method: "GET" };
     const res = await fetch(
-      `https://cc3e497d.qdhgtch.com:2345/api/v1/movie/detail?id=${id}`, header);
+      `https://cc3e497d.qdhgtch.com:2345/api/v1/movie/detail?id=${id}`,
+      header
+    );
     const data = await res.json();
     setMovieDetail(data?.data);
 
@@ -108,7 +133,6 @@ const DetailPage: React.FC = () => {
       `https://cc3e497d.qdhgtch.com:2345/api/v1/movie_addr/list?from_code=${code}&movie_id=${id}`
     );
     const data = await res.json();
-    console.log("data is=>", data);
     if (data.data[0].ready_to_play) {
       setCurrentEpisode(data.data[0]);
       setEpisodes(data.data);
@@ -116,27 +140,8 @@ const DetailPage: React.FC = () => {
       setSelectedSource(selectedSource);
       alert("Channel Unavailable");
     }
-    // setMovieDetail(data?.data);
-
-    // if (data?.data?.play_from?.[0]?.list?.[0]) {
-    //   setCurrentEpisode(data.data.play_from[0].list[0]); // Set the first episode as default
-    // }
   };
-  useEffect(() => {
-    if (id) {
-      getMovieDetail();
-      getAdsData();
-    }
-  }, [id]);
 
-  const getAdsData = async () => {
-    const res = await fetch(
-      "https://cc3e497d.qdhgtch.com:2345/api/v1/advert/config"
-    );
-    const data = await res.json();
-    setAdsData(data);
-    console.log("data is=>", data);
-  };
   const handleEpisodeChange = (episode: Episode) => {
     setCurrentEpisode(episode);
   };
@@ -148,12 +153,6 @@ const DetailPage: React.FC = () => {
   const navigateBackFunction = () => {
     navigate(-1); // Go back to the previous page
   };
-
-  // if (!movieDetail || !currentEpisode) {
-  //   return <div className="flex justify-center items-center mt-52 bg-black w-full" style={{height: '100vh'}}>
-  //   <Loader />
-  // </div>;
-  // }
 
   const changeSource = (playfrom: PlayFrom) => {
     if (movieDetail?.play_from) {
@@ -181,11 +180,10 @@ const DetailPage: React.FC = () => {
           {(selectedEpisode && selectedEpisode.ready_to_play) ||
           (currentEpisode && currentEpisode.ready_to_play) ? (
             <VideoPlayer
-              videoUrl={
-                selectedEpisode?.play_url || currentEpisode?.play_url || ""
-              }
+              key={selectedEpisode?.episode_id || currentEpisode?.episode_id} // Force remount when episode changes
+              videoUrl={selectedEpisode?.play_url || currentEpisode?.play_url}
               onBack={navigateBackFunction}
-              movieDetail={movieDetail} // Pass movie details to DetailSection
+              movieDetail={movieDetail} // Pass movie details to VideoPlayer
               selectedEpisode={selectedEpisode || currentEpisode}
             />
           ) : (

@@ -1,13 +1,9 @@
-// VideoPlayer.tsx
 import React, { useEffect, useRef, useState } from 'react';
-import { Player, ControlBar, BigPlayButton, ProgressControl, FullscreenToggle, CurrentTimeDisplay, DurationDisplay } from 'video-react';
-import 'video-react/dist/video-react.css';
-import Hls from 'hls.js';
+import videojs from 'video.js';
+import 'video.js/dist/video-js.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faExpand } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faPlay, faPause } from '@fortawesome/free-solid-svg-icons';
 import floatingScreen from '../../../assets/floatingScreen.png';
-
-// [Interfaces Episode and MovieDetail remain the same]
 
 interface Episode {
   episode_id: number | null;
@@ -50,148 +46,104 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   movieDetail,
   selectedEpisode,
 }) => {
-  const playerRef = useRef<Player>(null);
+  const playerRef = useRef<any>(null);
+  const videoElementRef = useRef<HTMLVideoElement>(null);
+
   const [isReady, setIsReady] = useState(false);
-  const hlsRef = useRef<Hls | null>(null);
-
-  const STORAGE_KEY = 'watchHistory';
-  const STORAGE_KEY_V2 = 'lastWatchHistory';
-
-  // Save the movie progress
-  const saveProgress = () => {
-    if (playerRef.current) {
-      const currentTime = playerRef.current.getState().player.currentTime;
-      const savedHistory = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-
-      if (!savedHistory[movieDetail.name]) {
-        savedHistory[movieDetail.name] = {};
-      }
-
-      savedHistory[movieDetail.name][`episode_${selectedEpisode?.episode_id}`] = {
-        progressTime: currentTime,
-      };
-
-      savedHistory[movieDetail.name]['movieDetail'] = {
-        movieDetail: movieDetail,
-      };
-
-      console.log('Saving progress:', currentTime);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(savedHistory));
-
-      const lastWatchHistoryList = JSON.parse(
-        localStorage.getItem(STORAGE_KEY_V2) || '{}'
-      );
-
-      if (!lastWatchHistoryList[movieDetail.name]) {
-        lastWatchHistoryList[movieDetail.name] = {};
-      }
-
-      const latestWatchHistory = {
-        playedTime: new Date(),
-        progressTime: currentTime,
-        movieId: (movieDetail as any)['id'],
-        duration: playerRef.current.getState().player.duration,
-        image: (movieDetail as any).cover,
-        ...selectedEpisode,
-      };
-      lastWatchHistoryList[movieDetail.name] = latestWatchHistory;
-      localStorage.setItem(STORAGE_KEY_V2, JSON.stringify(lastWatchHistoryList));
-    }
-  };
-
-  // Load saved progress if available
-  const loadProgress = () => {
-    const savedHistory = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-    if (
-      savedHistory[movieDetail.name] &&
-      savedHistory[movieDetail.name][`episode_${selectedEpisode?.episode_id}`]
-    ) {
-      const savedTime =
-        savedHistory[movieDetail.name][`episode_${selectedEpisode?.episode_id}`]
-          .progressTime;
-      if (playerRef.current && savedTime) {
-        console.log('Resuming from:', savedTime);
-        playerRef.current.seek(savedTime || 0);
-      }
-    }
-  };
-
-  // Handle back button click
-  const handleBack = () => {
-    saveProgress();
-    onBack();
-  };
-
-  // Handle Picture-in-Picture
-  const handlePiP = () => {
-    if (playerRef.current) {
-      const videoElement = playerRef.current.video.video;
-      if (
-        document.pictureInPictureEnabled &&
-        videoElement.requestPictureInPicture
-      ) {
-        videoElement.requestPictureInPicture().catch((error: any) => {
-          console.error('PiP request failed:', error);
-        });
-      } else {
-        console.error('Picture-in-Picture is not supported on this device.');
-      }
-    }
-  };
-
-  // Handle fullscreen
-  const handleFullscreenToggle = () => {
-    if (playerRef.current) {
-      playerRef.current.toggleFullscreen();
-    }
-  };
+  const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
-    const videoElement = playerRef.current?.video?.video;
-
-    if (videoElement) {
-      if (Hls.isSupported()) {
-        if (hlsRef.current) {
-          hlsRef.current.destroy();
+    // Function to initialize the player
+    const initializePlayer = () => {
+      if (videoElementRef.current && videoUrl) {
+        // Dispose previous instance if it exists
+        if (playerRef.current) {
+          playerRef.current.dispose();
         }
 
-        const hls = new Hls();
-        hls.loadSource(videoUrl);
-        hls.attachMedia(videoElement);
-        hls.on(Hls.Events.MANIFEST_PARSED, () => {
-          videoElement.play();
+        const player = videojs(videoElementRef.current, {
+          controls: true,
+          autoplay: true,
+          preload: 'auto',
+          iosNativeFullscreen: false, // Disable native fullscreen on iOS
+          playsinline: true,
+          fluid: true,
+          controlBar: {
+            volumePanel: false, // Hide volume control
+            fullscreenToggle: true, // Show fullscreen button
+            remainingTimeDisplay: true,
+            progressControl: true, // Show progress bar
+            currentTimeDisplay: true,
+            timeDivider: true,
+            durationDisplay: true,
+            captionsButton: false, // Disable captions button
+            pictureInPictureToggle: false, // Disable PiP toggle
+          },
+        });
+
+        // Store the player instance for later use
+        playerRef.current = player;
+
+        // Set video source
+        player.src({
+          src: videoUrl,
+          type: 'application/x-mpegURL', // HLS for iOS
+        });
+
+        // Mark video as ready
+        player.on('ready', () => {
           setIsReady(true);
         });
 
-        hlsRef.current = hls;
-      } else if (videoElement.canPlayType('application/vnd.apple.mpegurl')) {
-        videoElement.src = videoUrl;
-        videoElement.addEventListener('loadedmetadata', () => {
-          videoElement.play();
-          setIsReady(true);
+        // Update play state on play/pause
+        player.on('play', () => {
+          setIsPlaying(true);
         });
-      } else {
-        console.error('This browser does not support HLS.');
-      }
-    }
 
-    // Save progress on unmount
-    return () => {
-      saveProgress();
-      if (hlsRef.current) {
-        hlsRef.current.destroy();
+        player.on('pause', () => {
+          setIsPlaying(false);
+        });
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    // Initialize the player when videoUrl changes
+    initializePlayer();
+
+    // Cleanup when component is unmounted or video URL changes
+    return () => {
+      if (playerRef.current) {
+        playerRef.current.dispose();
+        playerRef.current = null; // Ensure reference is removed
+      }
+    };
   }, [videoUrl]);
 
-  useEffect(() => {
-    // Load progress when player is ready
-    if (isReady) {
-      loadProgress();
+  const handleBack = () => {
+    if (playerRef.current) {
+      playerRef.current.pause(); // Pause the video when going back
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isReady]);
+    onBack(); // Trigger the back function
+  };
+
+  const handlePiP = () => {
+    if (videoElementRef.current) {
+      if (document.pictureInPictureEnabled) {
+        videoElementRef.current.requestPictureInPicture().catch((error) => {
+          console.error('Failed to enter PiP mode:', error);
+        });
+      }
+    }
+  };
+
+  const handlePlayPause = () => {
+    if (playerRef.current) {
+      if (playerRef.current.paused()) {
+        playerRef.current.play();
+      } else {
+        playerRef.current.pause();
+      }
+    }
+  };
 
   return (
     <div className="relative bg-black h-full w-full">
@@ -209,16 +161,14 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         </button>
       </div>
 
-      {/* The video player */}
-      <Player ref={playerRef} autoPlay playsInline>
-        <BigPlayButton position="center" />
-        <ControlBar autoHide={true} disableDefaultControls={true}>
-          <CurrentTimeDisplay />
-          <ProgressControl />
-          <DurationDisplay />
-          <FullscreenToggle />
-        </ControlBar>
-      </Player>
+      {/* Video.js player */}
+      <div data-vjs-player>
+        <video
+          ref={videoElementRef}
+          className="video-js"
+          playsInline
+        ></video>
+      </div>
     </div>
   );
 };
