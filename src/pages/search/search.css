@@ -1,0 +1,320 @@
+.search-bg {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: linear-gradient(
+      180deg,
+      rgba(22, 22, 25, 0) 0%,
+      rgba(22, 22, 25, 0.9) 100%
+    ),
+    linear-gradient(90deg, #0a5b75 0%, #4b2555 100%), #161619;
+  height: 100vh;
+  padding-bottom: 100px;
+  z-index: -1;
+}
+.input-bg {
+  border: none;
+  background: linear-gradient(
+      180deg,
+      rgba(22, 22, 25, 0) 100%,
+      rgba(22, 22, 25, 0) 100%
+    ),
+    linear-gradient(90deg, #0a5b75 0%, #4b2555 100%);
+}
+
+.search-input {
+  border-radius: 18.138px;
+  border: 1.008px solid var(--White-20, rgba(255, 255, 255, 0.2));
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--White-60, rgba(255, 255, 255, 0.6));
+  font-family: "PingFang SC";
+  font-size: 14.108px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  width: 100%;
+  display: flex;
+  height: 36px;
+  padding: 8.062px 16.123px;
+  padding-left: 37px;
+  align-items: center;
+  gap: 4px;
+  flex: 1 0 0;
+}
+
+.search-input:focus {
+  outline: none;
+}
+
+.search-btn {
+  color: var(--White-100, #fff);
+  text-align: right;
+  font-family: "PingFang SC";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.ads {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+}
+
+.history-tab,
+.everyone-tab {
+  border-radius: 52px;
+  background: var(--White-10, rgba(255, 255, 255, 0.1));
+  display: flex;
+  padding: 8px 16px;
+  align-items: flex-start;
+  gap: 10px;
+  color: var(--White-100, #fff);
+  font-family: "PingFang SC";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.history-title {
+  color: var(--White-100, #fff);
+  font-family: "PingFang SC";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  opacity: 0.4;
+}
+
+.everyone-tab:nth-child(-n + 3) {
+  border-radius: 52px;
+  background: rgba(255, 194, 103, 0.2);
+  display: flex;
+  padding: 8px 16px;
+  align-items: flex-start;
+  gap: 10px;
+  color: #ffc267;
+  font-family: "PingFang SC";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.watch {
+  border-radius: 64px;
+  background: var(--brand-brand, #f54100);
+  display: flex;
+  padding: 8px 18px 8px 14px;
+  align-items: center;
+  gap: 4px;
+  color: var(--White-100, #fff);
+  font-family: "PingFang SC";
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+.star_watch {
+  border-radius: 64px;
+  border: 1px solid var(--White-20, rgba(255, 255, 255, 0.2));
+  display: flex;
+  padding: 8px 18px 8px 14px;
+  align-items: center;
+  gap: 4px;
+  color: var(--White-100, #fff);
+  font-family: "PingFang SC";
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.detail-head-text {
+  color: var(--White-100, #fff);
+  font-family: "PingFang SC";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.detail-text {
+  color: var(--White-60, rgba(255, 255, 255, 0.6));
+  font-family: "PingFang SC";
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  overflow: hidden;
+}
+
+.watch-main {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.search_card_score {
+  color: #fff;
+  text-align: right;
+  font-family: "PingFang SC";
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  border-radius: 0px 4px;
+  background: linear-gradient(180deg, #ff6332 0%, #ffa132 100%);
+  display: inline-flex;
+  padding: 1px 6px 2px 6px;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.movie_title {
+  color: var(--White-80, rgba(255, 255, 255, 0.8));
+  font-family: "PingFang SC";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.tab-main {
+  background: linear-gradient(
+      180deg,
+      rgba(22, 22, 25, 0) 100%,
+      rgba(22, 22, 25, 0.9) 100%
+    ),
+    linear-gradient(90deg, #0a5b75 0%, #4b2555 100%), #161619;
+}
+
+.tab-btn {
+  border-radius: 16px;
+  display: flex;
+  padding: 4px 8px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
+  text-align: right;
+  font-family: "PingFang SC";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.active {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.tab-btn:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.filter-title {
+  color: white;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.image-container {
+  position: relative;
+  background-image: url("../search/images/cardSkeleton.png");
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+  opacity: 1;
+  border-radius: 8.934px;
+}
+
+.image-placeholder {
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.image-loaded {
+  opacity: 1;
+}
+
+.rank {
+  display: flex;
+  width: 230px; /* Fixed width for all rank divs */
+  min-width: 230px; /* Ensures a minimum width */
+  padding: 16px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  border-radius: 8px;
+  border: 1px solid var(--White-10, rgba(255, 255, 255, 0.1));
+  background: linear-gradient(180deg, #1b2a34 0%, #1f1f22 46%);
+  background: linear-gradient(180deg, #341b1b 0%, #1f1f22 46%);
+  flex-shrink: 0; /* Prevent shrinking when space is limited */
+  word-wrap: break-word; /* Wrap long words */
+  white-space: normal; /* Allow text to wrap normally */
+  overflow: hidden; /* Prevents text overflow */
+  height: auto; /* Allow the height to adjust based on content */
+}
+
+.rank h1 {
+  color: var(--Secondary-Orange, #ff6a33);
+  font-family: "PingFang SC";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.number {
+  text-align: center;
+  font-family: "PingFang SC";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.rank_word {
+  color: var(--White-100, #fff);
+  font-family: "PingFang SC";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.container_scroll {
+  display: flex;
+  gap: 16px; /* Ensure space between columns */
+  overflow-x: auto; /* Enable horizontal scroll */
+  white-space: nowrap; /* Prevent line breaks in columns */
+  align-items: flex-start; /* Align to the top to avoid equal height */
+}
+
+.container_scroll::-webkit-scrollbar {
+  display: none; /* Hide the scrollbar */
+}
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.spinner {
+  animation: spinner 1s linear infinite;
+}

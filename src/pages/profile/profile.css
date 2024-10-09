@@ -1,0 +1,480 @@
+.profile-bg {
+  background: url("./images/bg.png") #161619 50% / cover no-repeat;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  padding-bottom: 100px;
+  z-index: -1;
+}
+
+.fixed-bg {
+  background: #161619;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  z-index: -1;
+}
+
+.profile-header {
+  display: flex;
+  width: 100%;
+  padding: 12px 16px;
+  align-items: center;
+  gap: 8px;
+}
+
+.profile-p {
+  fill: var(
+    --Glass,
+    linear-gradient(
+      112deg,
+      rgba(136, 136, 136, 0.5) 10.86%,
+      rgba(68, 68, 68, 0.27) 44.18%,
+      rgba(93, 90, 90, 0.29) 64.53%,
+      rgba(136, 128, 128, 0.33) 100%
+    )
+  );
+  stroke-width: 1px;
+  stroke: rgba(255, 255, 255, 0.12);
+  width: 60px;
+  height: 60px;
+  flex-shrink: 0;
+}
+
+.profile-card {
+  display: flex;
+  padding: 12px 16px;
+  align-items: center;
+  border-radius: 20px;
+  background: rgba(136, 136, 136, 0.08);
+  backdrop-filter: blur(12px);
+}
+
+.profile-header p {
+  color: var(--White-100, #fff);
+  text-align: center;
+  font-family: "PingFang SC";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 22px; /* 137.5% */
+}
+
+.p-first {
+  display: flex;
+  padding: 17px 16px;
+  justify-content: space-between;
+  align-items: center;
+  align-self: stretch;
+}
+
+.watch_ten {
+  margin: 17px 16px;
+}
+
+.profile-div {
+  display: flex;
+  padding: 12px 16px;
+  flex-direction: column;
+  align-items: center;
+  align-self: stretch;
+}
+
+.setting-profile-div {
+  display: flex;
+  padding: 12px 16px;
+  padding-bottom: 100px;
+  flex-direction: column;
+  align-items: center;
+  align-self: stretch;
+}
+
+.profile-div-main {
+  padding: 8px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(16px);
+}
+
+.profile-text {
+  color: var(--White-100, #fff);
+  text-align: center;
+  font-family: "PingFang SC";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.history-title {
+  color: var(--Neutral-Colors-Neutral_5, #fff);
+  font-family: Inter;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 20px; /* 125% */
+}
+
+.edit-title {
+  color: var(--White-100, #fff);
+  text-align: right;
+  font-family: "PingFang SC";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  text-transform: capitalize;
+}
+
+.history-text {
+  color: var(--White-100, #fff);
+  font-family: "PingFang SC";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  text-transform: capitalize;
+}
+
+.filter-text {
+  color: var(--White-40, rgba(255, 255, 255, 0.4));
+  font-family: "PingFang SC";
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.history-card h1 {
+  color: var(--White-100, #fff);
+  font-family: "PingFang SC";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  text-transform: capitalize;
+}
+
+.history-card p {
+  color: var(--White-40, rgba(255, 255, 255, 0.4));
+  font-family: "PingFang SC";
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.history-card {
+  display: flex;
+
+  padding: 11px 0px;
+  align-items: center;
+  /* gap: 12px; */
+}
+.history-card img {
+  width: 116px !important;
+}
+
+/* Custom styles for checkbox */
+.custom-checkbox input[type="checkbox"] {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background-color: #161619;
+  border: 2px solid #606060;
+  border-radius: 50%;
+  position: relative;
+  cursor: pointer;
+}
+
+.custom-checkbox input[type="checkbox"]:checked {
+  border-color: #f54100;
+  background-color: #f54100;
+}
+
+/* Add SVG checkmark when checkbox is checked */
+.custom-checkbox input[type="checkbox"]:checked::after {
+  content: "";
+  display: block;
+  width: 14px;
+  height: 14px;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6.66674 10.1148L12.7947 3.98608L13.7381 4.92875L6.66674 12.0001L2.42407 7.75742L3.36674 6.81475L6.66674 10.1148Z" fill="white"/></svg>');
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.cancel-all {
+  display: flex;
+  padding: 8px 24px;
+  justify-content: center;
+  align-items: center;
+  gap: 2px;
+  flex: 1 0 0;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.04);
+  color: #fff;
+  text-align: center;
+  font-family: "PingFang SC";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.delete-all {
+  display: flex;
+  padding: 8px 24px;
+  justify-content: center;
+  align-items: center;
+  gap: 2px;
+  flex: 1 0 0;
+  border-radius: 20px;
+  background: rgba(245, 65, 0, 0.08);
+  color: #f54100;
+  text-align: center;
+  font-family: "PingFang SC";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.confirm h2 {
+  color: var(--White-100, #fff);
+  text-align: center;
+  font-feature-settings: "liga" off, "clig" off;
+  font-family: "PingFang SC";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.confirm button {
+  text-align: center;
+  font-family: "PingFang SC";
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.no_history {
+  color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  font-family: "PingFang SC";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin-top: 10px;
+}
+
+.settings-text {
+  color: #888;
+  font-family: "PingFang SC";
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px;
+  text-transform: capitalize;
+}
+
+.settings-title {
+  color: var(--White-100, #fff);
+  font-family: "PingFang SC";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 24px; /* 171.429% */
+  text-transform: capitalize;
+}
+
+.versions-title {
+  color: #888;
+  text-align: center;
+  font-family: "PingFang SC";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  text-transform: capitalize;
+}
+.versions-text {
+  color: #fff;
+  text-align: center;
+  font-family: "PingFang SC";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  text-transform: capitalize;
+}
+
+.logout-div {
+  border-radius: 20px;
+  background: #1b1b1f;
+  display: flex;
+  padding: 17px 0px;
+  justify-content: center;
+  align-items: center;
+  align-self: stretch;
+}
+
+.logout-div h1 {
+  color: var(--White-100, #fff);
+  text-align: center;
+  font-family: "PingFang SC";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  text-transform: capitalize;
+}
+
+.noti-header .active {
+  border-bottom: 2px solid #f54100;
+}
+.noti-header div {
+  padding: 8px;
+}
+
+.text-card h1 {
+  color: #fff;
+  font-family: "PingFang SC";
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 14px; /* 116.667% */
+  letter-spacing: -0.132px;
+}
+
+.text-card p {
+  color: #bbb;
+  font-family: "PingFang SC";
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: -0.11px;
+}
+
+.noti-btn {
+  display: flex;
+  width: 134px;
+  padding: 8px 16px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 8px;
+  border: 1px solid #df3b00;
+  color: #f54100;
+  font-family: Inter;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: -0.132px;
+}
+
+.sidebar .active {
+  display: flex;
+  padding: 8px 12px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
+  border-radius: 8px;
+  background: #f54100;
+  border-bottom: none;
+}
+
+.sidebar-button {
+  display: flex;
+  padding: 8px 12px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
+  border-radius: 8px;
+  color: #fff;
+  text-align: center;
+  font-family: "PingFang SC";
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 14px; /* 116.667% */
+  letter-spacing: -0.132px;
+  margin-top: 10px;
+  border-bottom: 1px solid #474747;
+}
+
+.fav_text {
+  overflow: hidden;
+  color: var(--White-100, #fff);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: "PingFang SC";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+@media screen and (min-width: 575px) and (max-width: 640px) {
+  .fav {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+.watchlist-item-progress {
+  width: 100%;
+  height: 2px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.progress-bar {
+  height: 100%;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  background: #f54100;
+}
+
+.his-text {
+  color: #888;
+  text-shadow: 0px 0px 3px rgba(0, 0, 0, 0.25);
+  font-family: "PingFang SC";
+  font-size: 9px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.watchedDuration {
+  color: var(--White-100, #fff);
+  text-shadow: 0px 3px 3px rgba(0, 0, 0, 0.25);
+  font-family: "PingFang SC";
+  font-size: 9px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.uid {
+  color: #888;
+  font-family: "PingFang SC";
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 22px; /* 183.333% */
+}
