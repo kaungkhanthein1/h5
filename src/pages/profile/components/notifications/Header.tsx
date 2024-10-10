@@ -21,7 +21,8 @@ const Header = ({ categories, onCategoryClick, selectedCategory }: any) => {
       {categories.map((category: any) => (
         <div
           key={category.id}
-          className={selectedCategory === category.id ? "active" : ""}
+          style={{ cursor: "pointer" }}
+          className={selectedCategory === category.id ? "act" : ""}
           onClick={() => onCategoryClick(category.id)}
         >
           {category.name}

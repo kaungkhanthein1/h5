@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import VideoPlayer from "./video/VideoPlayer";
+import VideoPlayer from "./video/VideoPlayer4";
 import SourceSelector from "./video/SourceSelector";
 import DetailSection from "./video/DetailSection";
 import EpisodeSelector from "./video/EpisodeSelector";
@@ -30,6 +30,7 @@ interface MovieDetail {
   is_collect: boolean;
   content: string;
   cover: string;
+  id: string;
   type_name: string;
   tags: { name: string }[];
   comments_count: string;
@@ -41,6 +42,13 @@ interface MovieDetail {
     total: number | null;
     tips: string;
   }[];
+  last_playback: {
+    current_time: number;
+    duration: number;
+    episode_id: number;
+    id: string;
+    movie_from: string;
+  }
   members: { name: string; type: number }[];
 }
 
@@ -66,6 +74,7 @@ const DetailPage: React.FC = () => {
   const [episodes, setEpisodes] = useState<Episode[]>([]);
   const [selectedSource, setSelectedSource] = useState(0); // Track the selected source
   const [activeTab, setActiveTab] = useState("tab-1");
+  const [resumeTime, setResumeTime] = useState<number>(0); // For resuming playback
 
   const navigate = useNavigate();
 
@@ -84,7 +93,7 @@ const DetailPage: React.FC = () => {
     setAdsData(data);
     console.log("data is=>", data);
   };
-  
+
   // Fetch the movie details based on the provided id
   const getMovieDetail = async () => {
     const loginResponse = await localStorage.getItem("authToken");
@@ -111,9 +120,36 @@ const DetailPage: React.FC = () => {
     );
     const data = await res.json();
     setMovieDetail(data?.data);
-
-    if (data?.data?.play_from?.[0]?.list?.[0]) {
-      setCurrentEpisode(data.data.play_from[0].list[0]); // Set the first episode as default
+    const playBackInfo = data?.data?.last_playback || null;
+    const playFrom = data?.data?.play_from || null;
+    if (playBackInfo) {
+      const ind = playFrom.findIndex((x: any) => x.code === playBackInfo?.movie_from);
+      if(ind > -1) {
+        if(ind === 0) {
+          const episodeInd = playFrom[0].list.findIndex((x: any) => x.episode_id === playBackInfo.episode_id);
+          if(episodeInd > -1) {
+            setCurrentEpisode(playFrom[0].list[episodeInd]);
+            setResumeTime(playBackInfo.current_time);
+          }
+        } else {
+          const code = playFrom[ind]?.code;
+          const res = await fetch(
+            `https://cc3e497d.qdhgtch.com:2345/api/v1/movie_addr/list?from_code=${code}&movie_id=${id}`
+          );
+          const episodes = await res.json();
+          const episodeInd = episodes.data.findIndex((x: any) => x.episode_id === playBackInfo.episode_id);
+          if(episodeInd > -1) {
+            setCurrentEpisode(episodes.data[episodeInd]);
+            setResumeTime(playBackInfo.current_time);
+          }
+        }
+      } else {
+        setCurrentEpisode(playFrom[0].list[0]); // Set the first episode as default
+        setResumeTime(0);
+      }
+    } else if (playFrom?.[0]?.list?.[0]) {
+      setCurrentEpisode(playFrom[0].list[0]); // Set the first episode as default
+      setResumeTime(0);
     }
   };
 
@@ -170,7 +206,7 @@ const DetailPage: React.FC = () => {
   };
 
   return (
-    <div className="bg-black overflow-y-scroll min-h-screen">
+    <div className="bg-black min-h-screen">
       {!movieDetail || !currentEpisode ? (
         <div className="flex justify-center items-center mt-52 bg-black">
           <Loader />
@@ -179,13 +215,16 @@ const DetailPage: React.FC = () => {
         <>
           {(selectedEpisode && selectedEpisode.ready_to_play) ||
           (currentEpisode && currentEpisode.ready_to_play) ? (
+          <div className="sticky top-0 z-50">
             <VideoPlayer
-              key={selectedEpisode?.episode_id || currentEpisode?.episode_id} // Force remount when episode changes
+              key={selectedEpisode?.episode_id || currentEpisode?.episode_id}
               videoUrl={selectedEpisode?.play_url || currentEpisode?.play_url}
               onBack={navigateBackFunction}
-              movieDetail={movieDetail} // Pass movie details to VideoPlayer
+              movieDetail={movieDetail}
               selectedEpisode={selectedEpisode || currentEpisode}
+              resumeTime={resumeTime}
             />
+          </div>    
           ) : (
             <div className="relative flex justify-center items-center w-full min-h-[50vh] my-8">
               <div className="absolute inset-0 bg-black opacity-75"></div>
@@ -202,7 +241,7 @@ const DetailPage: React.FC = () => {
               </div>
             </div>
           )}
-
+          <div className="overflow-y-scroll">
           <DetailSection
             adsData={adsData}
             movieDetail={movieDetail} // Pass movie details to DetailSection
@@ -237,6 +276,7 @@ const DetailPage: React.FC = () => {
               />
             </>
           )}
+          </div>
         </>
       )}
     </div>

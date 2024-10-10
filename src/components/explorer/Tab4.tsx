@@ -32,7 +32,7 @@ const Tab4 = () => {
       `https://cc3e497d.qdhgtch.com:2345/api/v1//movie/ranking/data?id=${id}`
     );
     setRankingDataById(data?.data);
-    console.log(data);
+    // console.log(data);
   };
 
   useEffect(() => {
@@ -54,7 +54,7 @@ const Tab4 = () => {
             >
               <p
                 className={`${
-                  activeTab === index ? "text-white" : "text-gray-800"
+                  activeTab === index ? "text-white" : "text-gray-400"
                 } whitespace-nowrap py-2 rounded-lg hover:text-white transition-colors`}
               >
                 {item?.title}

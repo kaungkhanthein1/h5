@@ -23,9 +23,9 @@ const Navbar: React.FC<NavbarProps> = ({ isEditMode, onEditClick }) => {
           />
         </svg>
       </Link>
-      <div className="history-title">History</div>
+      <div className="history-title">观看历史</div>
       <div className="edit-title" onClick={onEditClick}>
-        {isEditMode ? "Cancel" : "Edit"}
+        {isEditMode ? "取消" : "编辑"}
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { setHistoryData } from "../../slice/HistorySlice";
 import {
   useLazyGetAutocompleteQuery,
@@ -81,16 +81,16 @@ const Navbar: React.FC = () => {
             value={query}
             type="text"
             className="search-input"
-            placeholder="Search for movies"
+            placeholder="觉醒年代"
             onChange={(e) => setQuery(e.target.value)} // Update the query state on input change
             onFocus={() => setIsFocused(true)}
             onBlur={() => setTimeout(() => setIsFocused(false), 200)} // Delay to allow clicks on suggestions
           />
         </div>
         <div className="w-[40px]">
-          <button className="search-btn" type="submit">
+          <Link to={"/"} className="search-btn">
             搜索
-          </button>
+          </Link>
         </div>
       </form>
 

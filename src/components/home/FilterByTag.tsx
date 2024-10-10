@@ -1,21 +1,50 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setArea,
+  setClass,
+  setSort,
+  setYear,
+} from "../../pages/home/slice/HomeSlice";
 
-const FilterByTag = ({ data }: any) => {
-  const [activeClass, setActiveClass] = useState(0);
-  const [activeYear, setActiveYear] = useState(0);
-  const [activeArea, setActiveArea] = useState(0);
+const FilterByTag = ({ data, sort }: any) => {
+  const sortData = useSelector((state: any) => state.home.sort);
+  const classData = useSelector((state: any) => state.home.class);
+  const area = useSelector((state: any) => state.home.area);
+  const year = useSelector((state: any) => state.home.year);
+
+  const dispatch = useDispatch();
   return (
     <div className="w-full gradient-bg-home pt-5 pb-2 flex flex-col gap-3">
+      <div className="flex overflow-x-scroll px-3 gap-10 remove-scrollbar items-center">
+        {sort?.map((item: any, index: any) => (
+          <div className="relative" key={index}>
+            <p
+              onClick={() => {
+                // setActiveSort(item?.value);
+                dispatch(setSort(item?.value));
+              }}
+              className={`${
+                sortData === item?.value
+                  ? "bg-gray-500/35 px-5 py-1 text-xs"
+                  : "text-[14px]"
+              } whitespace-nowrap py-2 rounded-full hover:text-white transition-colors`}
+            >
+              {item?.name}
+            </p>
+          </div>
+        ))}
+      </div>
       <div className="flex overflow-x-scroll px-3 gap-10 remove-scrollbar items-center">
         {data[0]?.class?.map((item: any, index: any) => (
           <div className="relative" key={index}>
             <p
-              onClick={() => setActiveClass(index)}
+              onClick={() => dispatch(setClass(item))}
               className={`${
-                activeClass === index
-                  ? "bg-gray-500/35 px-3 py-1 text-xs"
+                classData === item
+                  ? "bg-gray-500/35 px-5 py-1 text-xs"
                   : "text-[14px]"
-              } whitespace-nowrap py-2 rounded-lg hover:text-white transition-colors`}
+              } whitespace-nowrap py-2 rounded-full hover:text-white transition-colors`}
             >
               {item}
             </p>
@@ -26,12 +55,12 @@ const FilterByTag = ({ data }: any) => {
         {data[0]?.area?.map((item: any, index: any) => (
           <div className="relative" key={index}>
             <p
-              onClick={() => setActiveArea(index)}
+              onClick={() => dispatch(setArea(item))}
               className={`${
-                activeArea === index
-                  ? "bg-gray-500/35 px-3 py-1 text-xs"
+                area === item
+                  ? "bg-gray-500/35 px-5 py-1 text-xs"
                   : "text-[14px]"
-              } whitespace-nowrap py-2 rounded-lg hover:text-white transition-colors`}
+              } whitespace-nowrap py-2 rounded-full hover:text-white transition-colors`}
             >
               {item}
             </p>
@@ -42,12 +71,12 @@ const FilterByTag = ({ data }: any) => {
         {data[0]?.year?.map((item: any, index: any) => (
           <div className="relative" key={index}>
             <p
-              onClick={() => setActiveYear(index)}
+              onClick={() => dispatch(setYear(item))}
               className={`${
-                activeYear === index
-                  ? "bg-gray-500/35 px-3 py-1 text-xs"
+                year === item
+                  ? "bg-gray-500/35 px-5 py-1 text-xs"
                   : "text-[14px]"
-              } whitespace-nowrap py-2 rounded-lg hover:text-white transition-colors`}
+              } whitespace-nowrap py-2 rounded-full hover:text-white transition-colors`}
             >
               {item}
             </p>

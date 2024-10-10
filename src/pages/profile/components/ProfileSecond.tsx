@@ -21,7 +21,7 @@ const ProfileSecond = () => {
                 />
               </svg>
             </div>
-            <div className="profile-text">Share</div>
+            <div className="profile-text">我要分享</div>
           </div>
           <div>
             <svg
@@ -55,7 +55,7 @@ const ProfileSecond = () => {
                 fill-opacity="0.6"
               />
             </svg>
-            <div className="profile-text">Customer Service</div>
+            <div className="profile-text">在线客服</div>
           </div>
           <div>
             <svg
@@ -89,7 +89,7 @@ const ProfileSecond = () => {
                 fill-opacity="0.6"
               />
             </svg>
-            <div className="profile-text">Contact us</div>
+            <div className="profile-text">联系我们</div>
           </div>
           <div>
             <svg

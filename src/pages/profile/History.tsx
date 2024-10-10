@@ -51,7 +51,7 @@ const History = () => {
             setMovies={setMovies}
           />
         ) : (
-          <div className="flex justify-center items-center text-center h-[80vh]">
+          <div className="flex justify-center items-center text-center h-screen">
             <div>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -245,7 +245,7 @@ const History = () => {
                   fill="#565454"
                 />
               </svg>
-              <p className="no_history">No History</p>
+              <p className="no_history">空空如也</p>
             </div>
           </div>
         )}

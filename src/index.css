@@ -184,3 +184,16 @@ input[type="range"]::-moz-range-thumb {
     font-size: 2em !important;
     border-radius: 10px !important;
 }
+
+.artplayer-container {
+  width: 100%;
+  height: calc(100vw * (9 / 16)); /* Example: For a 16:9 aspect ratio */
+}
+
+.plyr--full-ui input[type=range] {
+  color: #FF5722 !important;
+}
+
+.plyr--video .plyr__control:hover {
+  background: transparent !important;
+}

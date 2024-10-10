@@ -20,10 +20,8 @@ const SettingFirst = () => {
       <div className="profile-div-main w-full">
         <div className="p-first">
           <div className="flex gap-1 max-w-[230px] flex-col ">
-            <h1>Teen Mode</h1>
-            <p className="settings-text">
-              R18 content will not be displayed once this setting is activated
-            </p>
+            <h1>青少年模式</h1>
+            <p className="settings-text">开启后不再展示R18内容 </p>
           </div>
           <div>
             <label className="relative inline-flex items-center cursor-pointer">
@@ -47,10 +45,8 @@ const SettingFirst = () => {
         {/* Picture-in-Picture Mode */}
         <div className="p-first">
           <div className="flex gap-1 max-w-[230px] flex-col ">
-            <h1>Picture-In-picture mode</h1>
-            <p className="settings-text">
-              Automatically start picture-in-picture mode when leaving the app.
-            </p>
+            <h1>自动画中画</h1>
+            <p className="settings-text">开启后打开自动画中画模式</p>
           </div>
           <div>
             <label className="relative inline-flex items-center cursor-pointer">
@@ -74,10 +70,8 @@ const SettingFirst = () => {
         {/* Vibrant Mode */}
         <div className="p-first">
           <div className="flex gap-1 max-w-[230px] flex-col ">
-            <h1>Vibrant Mode</h1>
-            <p className="settings-text">
-              Elevate Your App with Dynamic Motion in Every Interaction
-            </p>
+            <h1>无痕模式</h1>
+            <p className="settings-text">开启后您的浏览不会被记录</p>
           </div>
           <div>
             <label className="relative inline-flex items-center cursor-pointer">

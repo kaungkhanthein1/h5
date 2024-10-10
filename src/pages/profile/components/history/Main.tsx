@@ -197,14 +197,14 @@ const Main: React.FC<MainProps> = ({
             className="w-[50%] cancel-all"
             onClick={() => setSelectedMovies([])}
           >
-            Cancel all
+            全部取消
           </button>
           <button
             className="delete-all w-[50%]"
             onClick={handleDelete}
             disabled={selectedMovies.length === 0}
           >
-            Delete {selectedMovies.length > 0 && `${selectedMovies.length}`}
+            删除 {selectedMovies.length > 0 && `${selectedMovies.length}`}
           </button>
         </div>
 
@@ -212,21 +212,19 @@ const Main: React.FC<MainProps> = ({
         {showConfirmation && (
           <div className="fixed inset-0 z-20 bg-black bg-opacity-80 flex justify-center items-center">
             <div className="bg-[#242428] confirm rounded-2xl mx-10 text-center shadow-lg">
-              <h2 className="p-5">
-                Are you sure you want to clear all History?
-              </h2>
+              <h2 className="p-5">确定要删除所有观看历史吗？</h2>
               <div className="flex justify-between">
                 <button
                   className="text-white w-[50%] p-3 border-t-[1px] border-r-[1px] border-gray-500"
                   onClick={cancelDelete}
                 >
-                  Cancel
+                  取消
                 </button>
                 <button
                   className="text-[#f54100] w-[50%] p-3 border-t-[1px] border-gray-500"
                   onClick={confirmDelete}
                 >
-                  Clear All
+                  删除全部
                 </button>
               </div>
             </div>

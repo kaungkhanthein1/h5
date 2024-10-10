@@ -218,6 +218,13 @@
   background: rgba(255, 255, 255, 0.16);
 }
 
+.filter-title span {
+  gap: 2px;
+  color: white;
+  display: flex;
+  align-items: center;
+}
+
 .filter-title {
   color: white;
 }
@@ -238,6 +245,20 @@
   overflow: hidden;
   opacity: 1;
   border-radius: 8.934px;
+}
+.image-container1 {
+  position: relative;
+  background-image: url("../search/images/cardSkeleton.png");
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+  opacity: 1;
+  border-radius: 50%;
+}
+
+.image-placeholder1 {
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
 }
 
 .image-placeholder {

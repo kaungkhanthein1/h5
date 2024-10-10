@@ -8,13 +8,15 @@ import {
   useGetTagsQuery,
 } from "./services/searchApi";
 import { useSearchParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setHistoryData } from "./slice/HistorySlice";
 import Loader from "./components/Loader";
+import { selectFavData } from "./slice/FavoriteSlice";
 
 const Main = () => {
   const [searchParams] = useSearchParams();
   const dispatch = useDispatch();
+  const favorites = useSelector(selectFavData);
 
   const {
     data: ads,
@@ -70,6 +72,10 @@ const Main = () => {
   }, [initialQuery]); // Run effect when initialQuery changes (URL param changes)
 
   useEffect(() => {
+    handleSearch(); // Trigger search when filters change
+  }, [resActive, sortActive, typeActive]);
+
+  useEffect(() => {
     if (data) {
       if (currentPage === 1) {
         setMovies(data.data.list);
@@ -81,6 +87,21 @@ const Main = () => {
       }
     }
   }, [data, secAgain]);
+
+  useEffect(() => {
+    if (data) {
+      // Compare with favorites and set `is_collect` for each movie
+      const updatedMovies = data.data.list.map((movie: any) => ({
+        ...movie,
+        is_collect: movie.is_collect, // Use backend's `is_collect`
+      }));
+      if (currentPage === 1) {
+        setMovies(updatedMovies);
+      } else {
+        setMovies((prevMovies) => [...prevMovies, ...updatedMovies]);
+      }
+    }
+  }, [data, favorites]);
 
   const loadMoreMovies = () => {
     setcurrentPage((prevPage) => prevPage + 1);
@@ -99,7 +120,12 @@ const Main = () => {
         window.innerHeight + document.documentElement.scrollTop >=
         document.documentElement.offsetHeight - 50
       ) {
-        if (!isFetching && !isLoading && data?.data?.list.length !== 0) {
+        if (
+          !isFetching &&
+          !isLoading &&
+          data?.data?.list.length !== 0 &&
+          query.length !== 0
+        ) {
           loadMoreMovies();
         }
       }
@@ -109,10 +135,34 @@ const Main = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isFetching, isLoading, data]);
 
+  const updateMovieCollectStatus = (
+    movieId: number,
+    newCollectStatus: boolean
+  ) => {
+    setMovies((prevMovies) =>
+      prevMovies.map((movie) =>
+        movie.id === movieId
+          ? { ...movie, is_collect: newCollectStatus }
+          : movie
+      )
+    );
+  };
+  const noData = !data || data?.data?.list.length === 0;
+
   return (
     <>
       <div className="search-bg"></div>
-      <Navbar query={query} setQuery={setQuery} onSearch={handleSearch} />
+      <Navbar
+        query={query}
+        setQuery={setQuery}
+        onSearch={handleSearch}
+        res_type={res_type}
+        sort={sort}
+        type={type}
+        setresActive={setresActive}
+        setsortActive={setsortActive}
+        settypeActive={settypeActive}
+      />
 
       <div className="lg:container lg:mx-auto lg:px-[100px]">
         <Filter
@@ -326,7 +376,7 @@ const Main = () => {
                   fill="#565454"
                 />
               </svg>
-              <p className="no_history">No Data Found</p>
+              <p className="no_history">空空如也</p>
             </div>
           </div>
         ) : (
@@ -336,10 +386,16 @@ const Main = () => {
               advert={advert}
               adFetching={adFetching}
               adLoading={adLoading}
+              updateMovieCollectStatus={updateMovieCollectStatus}
             />
             {isFetching && (
               <div className="text-white flex justify-center pb-4 items-center text-center">
                 <Loader />
+              </div>
+            )}
+            {noData && (
+              <div className="text-gray-500 flex justify-center pb-4 items-center text-center">
+                没有更多数据了
               </div>
             )}
           </>

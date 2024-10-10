@@ -13,12 +13,12 @@ const Tab2 = () => {
     );
     const data = await res.json();
     setMovieData(data?.data);
-    console.log(data);
+    // console.log(data);
   };
 
   const today = new Date();
   const currentDate = today.getDate(); // Get only the day of the month
-  console.log(currentDate);
+  // console.log(currentDate);
   function getDatesForCurrentWeek() {
     const today = new Date();
     const currentDay = today.getDay(); // 0 (Sunday) to 6 (Saturday)
@@ -59,7 +59,7 @@ const Tab2 = () => {
     getMovieData(currentIndex);
   }, [currentIndex]);
 
-  console.log(currentIndex, "ci");
+  // console.log(currentIndex, "ci");
 
   return (
     <div className="pb-32 min-h-screen">

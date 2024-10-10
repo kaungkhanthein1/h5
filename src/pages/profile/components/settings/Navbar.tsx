@@ -18,7 +18,7 @@ const Navbar: React.FC = () => {
           />
         </svg>
       </Link>
-      <div className="history-title">Settings</div>
+      <div className="history-title">设置</div>
       <div></div>
     </div>
   );

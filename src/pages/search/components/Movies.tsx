@@ -6,11 +6,13 @@ const Movies = ({
   advert,
   adLoading,
   adFetching,
+  updateMovieCollectStatus,
 }: {
   movies: any;
   advert: any;
   adLoading: any;
   adFetching: any;
+  updateMovieCollectStatus: any;
 }) => {
   return (
     <div className="mb-5">
@@ -27,7 +29,10 @@ const Movies = ({
 
       {movies?.map((movie: any, index: any) => (
         <div key={index}>
-          <MovieCard movie={movie} />
+          <MovieCard
+            movie={movie}
+            updateMovieCollectStatus={updateMovieCollectStatus}
+          />
         </div>
       ))}
     </div>

@@ -35,8 +35,6 @@ const Notifications = () => {
       </div>
     );
 
-  console.log(data);
-
   const advert = ads?.data?.notice_up?.data;
 
   const categories = data?.data || []; // Safely get categories

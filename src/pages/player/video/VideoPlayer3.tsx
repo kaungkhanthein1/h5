@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
-import videojs from 'video.js';
-import 'video.js/dist/video-js.css';
+import Artplayer from 'artplayer';
+import Hls from 'hls.js'; // Import Hls.js
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
-import floatingScreen from '../../../assets/floatingScreen.png'; // Replace with your image path
+import floatingScreen from '../../../assets/floatingScreen.png';
 
 interface Episode {
   episode_id: number | null;
@@ -47,100 +47,94 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   selectedEpisode,
 }) => {
   const playerRef = useRef<any>(null);
-  const videoElementRef = useRef<HTMLVideoElement>(null);
+  const playerContainerRef = useRef<HTMLDivElement>(null);
 
-  const [isReady, setIsReady] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
-    if (videoElementRef.current) {
-      const player = videojs(videoElementRef.current, {
-        controls: true,
-        autoplay: true,
-        preload: 'auto',
-        // Disable native fullscreen for iOS to prevent conflicts
-        iosNativeFullscreen: false,
-        playsinline: true,
-        fluid: true,
-        responsive: false,
-        controlBar: {
-          // Hide play/pause and volume controls
-          playToggle: true,
-          volumePanel: false,
-          fullscreenToggle: true, // Keep the fullscreen toggle
-          remainingTimeDisplay: true,
-          progressControl: true, // Keep the progress bar
-          currentTimeDisplay: true,
-          timeDivider: true,
-          durationDisplay: true,
-          captionsButton: false,
-          pictureInPictureToggle: false
-        },
-      });
-
-      playerRef.current = player;
-
-      // Event listener for when the video is ready
-      player.on('ready', () => {
-        setIsReady(true);
-        console.log('Video.js is ready');
-      });
-
-      player.src({
-        src: videoUrl,
-        type: 'application/x-mpegURL', // Use HLS for iOS devices
-      });
-
-      return () => {
+    // Function to initialize the player
+    const initializePlayer = () => {
+      if (playerContainerRef.current && videoUrl) {
+        // Dispose of the previous player instance
         if (playerRef.current) {
-          playerRef.current.dispose();
+          playerRef.current.destroy(true);
         }
-      };
-    }
+
+        const player = new Artplayer({
+          container: playerContainerRef.current,
+          url: videoUrl,
+          autoplay: true,
+          volume: 0.5,
+          pip: true, // Enable Picture-in-Picture
+          setting: true, // Enable the settings button
+          playbackRate: true, // Enable playback speed control
+          autoSize: true,
+          aspectRatio: true,
+          mutex: true,
+          fullscreenWeb: true, // Enable fullscreen mode for the web
+          playsInline: true, // Enable inline video playback on mobile
+          customType: {
+            m3u8: function (video: HTMLVideoElement, url: string) {
+              // Hls.js is used to handle m3u8 streams
+              if (Hls.isSupported()) {
+                const hls = new Hls();
+                hls.loadSource(url);
+                hls.attachMedia(video);
+              } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = url;
+              }
+            },
+          },
+        });
+
+        // Handle play/pause
+        player.on('play', () => setIsPlaying(true));
+        player.on('pause', () => setIsPlaying(false));
+
+        playerRef.current = player;
+      }
+    };
+
+    // Initialize the player when videoUrl changes
+    initializePlayer();
+
+    // Cleanup when component is unmounted or video URL changes
+    return () => {
+      if (playerRef.current) {
+        playerRef.current.destroy(true);
+        playerRef.current = null;
+      }
+    };
   }, [videoUrl]);
 
-  // Handle back button click
   const handleBack = () => {
     if (playerRef.current) {
-      playerRef.current.pause();
+      playerRef.current.pause(); // Pause the video when going back
     }
-    onBack();
+    onBack(); // Trigger the back function
   };
 
-  // Handle Picture-in-Picture (floating video)
   const handlePiP = () => {
-    if (videoElementRef.current) {
-      if (document.pictureInPictureEnabled) {
-        videoElementRef.current.requestPictureInPicture().catch((error) => {
-          console.error('Failed to enter PiP mode:', error);
-        });
-      }
+    if (playerRef.current) {
+      playerRef.current.pip = true; // Trigger Picture-in-Picture mode
     }
   };
 
   return (
-    <div className="relative bg-black h-full w-full">
-      {/* Back button */}
-      <div className="absolute top-0 left-0 p-4 z-10">
+    <div className='w-full h-max'>
+      <div className="absolute top-0 left-0 p-4 z-50">
         <button onClick={handleBack} className="text-white">
           <FontAwesomeIcon icon={faArrowLeft} size="1x" />
         </button>
       </div>
-
-      {/* Picture-in-Picture button */}
-      <div className="absolute top-0 right-0 p-4 z-10">
+      <div className="absolute top-0 right-0 p-4 z-50">
         <button className="text-white" onClick={handlePiP}>
           <img src={floatingScreen} alt="PiP" className="h-5 w-5" />
         </button>
       </div>
 
-      {/* Video.js player */}
-      <div data-vjs-player>
-        <video
-          ref={videoElementRef}
-          className="video-js vjs-big-play-centered"
-          playsInline
-        ></video>
-      </div>
+      {/* ArtPlayer container */}
+      <div ref={playerContainerRef} className="artplayer-container"></div>
     </div>
   );
 };
