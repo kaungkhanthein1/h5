@@ -176,46 +176,7 @@ const DetailSection: React.FC<DetailSectionProps> = ({
   return (
     <div className="flex flex-col w-full bg-black">
       {/* Tabs */}
-      <div className="flex px-2 justify-between items-center">
-        <div className="flex">
-          <div
-            className={`px-4 py-3 bg-black text-gray-400 rounded-t-lg cursor-pointer relative ${
-              activeTab === "tab-1" ? "text-white z-10" : ""
-            }`}
-            onClick={() => setActiveTab("tab-1")}
-          >
-            <span className="text-white">详情</span>
-            {activeTab === "tab-1" && (
-              <div className="absolute bottom-0 left-0 w-full h-1 bg-orange-500"></div>
-            )}
-          </div>
-          <div
-            className={`px-4 py-3 bg-black text-gray-400 rounded-t-lg cursor-pointer relative ${
-              activeTab === "tab-2" ? "text-white z-10" : ""
-            }`}
-            onClick={() => setActiveTab("tab-2")}
-          >
-            <span>评论</span>
-            <span className="text-gray-500">
-              {" "}
-              {movieDetail.comments_count || "0"}
-            </span>
-            {activeTab === "tab-2" && (
-              <div className="absolute bottom-0 left-0 w-full h-1 bg-orange-500"></div>
-            )}
-          </div>
-        </div>
-
-        {/* Buttons aligned to the right */}
-        {/* <div className="flex mr-2 space-x-1 mt-3">
-          <button className="px-4 py-2 bg-gray-800 text-white font-bold rounded-l-3xl">
-            发起申
-          </button>
-          <button className="px-4 py-2 bg-gray-800 text-white font-bold rounded-r-3xl flex items-center">
-            弹<span className="text-sm text-orange-600">✔</span>
-          </button>
-        </div> */}
-      </div>
+      
 
       {/* Tab content */}
       <div className="bg-black p-5 rounded-b-lg">
