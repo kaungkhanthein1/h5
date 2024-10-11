@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import VideoPlayer from "./video/VideoPlayer4";
+import VideoPlayer from "./video/VideoPlayer5";
 import SourceSelector from "./video/SourceSelector";
 import DetailSection from "./video/DetailSection";
 import EpisodeSelector from "./video/EpisodeSelector";
@@ -213,7 +213,7 @@ const DetailPage: React.FC = () => {
   return (
     <div className="bg-black min-h-screen">
       {!movieDetail || !currentEpisode ? (
-        <div className="flex justify-center items-center mt-52 bg-black">
+        <div className="flex justify-center items-center pt-52 bg-black">
           <Loader />
         </div>
       ) : (
