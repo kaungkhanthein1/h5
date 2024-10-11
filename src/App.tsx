@@ -68,8 +68,8 @@ const App: React.FC = () => {
     location.pathname.startsWith("/search_overlay") ||
     location.pathname.startsWith("/search") ||
     location.pathname.startsWith("/profile") ||
-    location.pathname.startsWith("/social_callback");
-  location.pathname.startsWith("/info") ||
+    location.pathname.startsWith("/social_callback") ||
+    location.pathname.startsWith("/info") ||
     location.pathname.startsWith("/nickname") ||
     location.pathname.startsWith("/username") ||
     location.pathname.startsWith("/update_email") ||
@@ -168,9 +168,9 @@ const App: React.FC = () => {
             ></div>
           )}
           {/* <div className=" fixed h-screen flex flex-col justify-center items-center"> */}
-            {openAuthModel && <Login />}
-            {openLoginModel && <LoginEmail handleBack={handleBack} />}
-            {openSignupModel && <SignUp handleBack={handleBack} />}
+          {openAuthModel && <Login />}
+          {openLoginModel && <LoginEmail handleBack={handleBack} />}
+          {openSignupModel && <SignUp handleBack={handleBack} />}
           {/* </div> */}
         </div>
       )}

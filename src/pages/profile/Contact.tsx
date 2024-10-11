@@ -18,7 +18,6 @@ const Contact = () => {
     skip: !show,
   });
   const about = data?.data?.about;
-  console.log(about);
 
   return (
     <div>
