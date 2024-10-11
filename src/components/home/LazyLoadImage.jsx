@@ -10,7 +10,9 @@ const LazyLoadImage = ({ src, alt, width, height, className, ...props }) => {
             if (imgRef.current) {
               imgRef.current.src = src;
               imgRef.current.onload = () => {
-                imgRef.current.style.opacity = "1";
+                if (imgRef.current && imgRef.current !== null) {
+                  imgRef.current.style.opacity = "1";
+                }
               };
             }
             observer.disconnect();

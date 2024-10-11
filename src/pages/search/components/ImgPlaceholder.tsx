@@ -28,7 +28,7 @@ const ImageWithPlaceholder = ({
             if (imgRef.current) {
               imgRef.current.src = src;
               imgRef.current.onload = () => {
-                if (imgRef.current) {
+                if (imgRef.current && imgRef.current !== null) {
                   imgRef.current.style.opacity = "1";
                   if (containerRef.current) {
                     containerRef.current.style.borderRadius = "0";

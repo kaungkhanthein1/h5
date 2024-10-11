@@ -32,6 +32,7 @@ export function generateSignature(str: string): string {
  * @return {string} - The encrypted data in URL-safe base64 encoding
  */
 export function encryptWithRsa(data: string, key: string): string {
+  console.log(data,key)
   const encrypt = new JSEncrypt();
   encrypt.setPublicKey(key);
   const encrypted = encrypt.encrypt(data);

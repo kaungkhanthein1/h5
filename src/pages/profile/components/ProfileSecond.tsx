@@ -40,7 +40,7 @@ const ProfileSecond = () => {
             </svg>
           </div>
         </Link>
-        <Link to={"/"} className="p-first">
+        <Link to={"https://cc3e497d.qdhgtch.com:1333/help"} className="p-first">
           <div className="flex gap-3 items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -74,7 +74,7 @@ const ProfileSecond = () => {
             </svg>
           </div>
         </Link>
-        <Link to={"/"} className="p-first">
+        <Link to={"/contact"} className="p-first">
           <div className="flex gap-3 items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"

@@ -171,15 +171,31 @@ export const profileApi = createApi({
         },
       }),
     }),
+    getRecord: builder.query<any, void>({
+      query: () => {
+        return `/user/playback/list`;
+      },
+    }),
+    deleteRecord: builder.mutation<void, { ids: string }>({
+      query: (data) => ({
+        url: `/user/playback/delete`,
+        method: "POST",
+        body: {
+          ids: data.ids,
+        },
+      }),
+    }),
   }),
 });
 
 export const {
+  useGetRecordQuery,
   useGetNotificationQuery,
   useGetUserQuery,
   useLogOutUserMutation,
   useGetListQuery,
   useCollectMovieMutation,
+  useDeleteRecordMutation,
   useDeleteCollectMutation,
   useChangeNicknameMutation,
   useChangeUsernameMutation,

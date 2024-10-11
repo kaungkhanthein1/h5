@@ -86,7 +86,7 @@ const SignPhone: React.FC<SignPhoneProps> = ({ handleBack2 }) => {
       <AnimatePresence>
         {isVisible && (
           <motion.div
-            className="login_box h-[480px] absolute bottom-0 z-[9999] w-full max-w-md py-4 px-[20px] bg-gray-800 rounded-t-2xl"
+            className="login_box h-[480px] fixed bottom-0 z-[9999] w-full max-w-md py-4 px-[20px] bg-gray-800 rounded-t-2xl"
             initial="hidden"
             animate="visible"
             exit="exit"

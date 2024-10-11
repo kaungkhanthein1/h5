@@ -23,7 +23,6 @@ import Loader from "./pages/search/components/Loader";
 import ErrorToast from "./pages/profile/error/ErrorToast";
 import Landing from "./components/Landing";
 
-
 // Lazy load the pages
 const Home = React.lazy(() => import("./pages/home"));
 const Search = React.lazy(() => import("./pages/search"));
@@ -34,6 +33,7 @@ const Player = React.lazy(() => import("./pages/player"));
 const Detail = React.lazy(() => import("./pages/explorer/Detail"));
 const History = React.lazy(() => import("./pages/profile/History"));
 const Settings = React.lazy(() => import("./pages/profile/Settings"));
+const Callback = React.lazy(() => import("./pages/callback"));
 const Notifications = React.lazy(() => import("./pages/profile/Notifications"));
 const Info = React.lazy(() => import("./pages/profile/Info"));
 const Nickname = React.lazy(() => import("./pages/profile/Nickname"));
@@ -42,6 +42,7 @@ const Email = React.lazy(() => import("./pages/profile/Email"));
 const Phnumber = React.lazy(() => import("./pages/profile/Phnumber"));
 const Password = React.lazy(() => import("./pages/profile/Password"));
 const Bind = React.lazy(() => import("./pages/profile/Bind"));
+const Contact = React.lazy(() => import("./pages/profile/Contact"));
 
 // ProtectedRoute component to handle route guarding
 // const ProtectedRoute: React.FC<{ children: JSX.Element }> = ({ children }) => {
@@ -67,13 +68,15 @@ const App: React.FC = () => {
     location.pathname.startsWith("/search_overlay") ||
     location.pathname.startsWith("/search") ||
     location.pathname.startsWith("/profile") ||
-    location.pathname.startsWith("/info") ||
+    location.pathname.startsWith("/social_callback");
+  location.pathname.startsWith("/info") ||
     location.pathname.startsWith("/nickname") ||
     location.pathname.startsWith("/username") ||
     location.pathname.startsWith("/update_email") ||
     location.pathname.startsWith("/update_phone") ||
     location.pathname.startsWith("/update_password") ||
-    location.pathname.startsWith("/bind");
+    location.pathname.startsWith("/bind") ||
+    location.pathname.startsWith("/contact");
 
   const hideHeader = location.pathname.startsWith("/explorer");
   useEffect(() => {
@@ -143,13 +146,15 @@ const App: React.FC = () => {
                 <Route path="/info" element={<Info />} />
                 <Route path="/nickname" element={<Nickname />} />
                 <Route path="/username" element={<Username />} />
+                <Route path="/social_callback" element={<Callback />} />
                 <Route path="/update_email" element={<Email />} />
                 <Route path="/update_phone" element={<Phnumber />} />
                 <Route path="/update_password" element={<Password />} />
                 <Route path="/bind" element={<Bind />} />
+                <Route path="/contact" element={<Contact />} />
               </Routes>
             </Suspense>
-             <ErrorToast />
+            <ErrorToast />
           </div>
 
           {/* Conditionally render FooterNav */}
@@ -158,13 +163,15 @@ const App: React.FC = () => {
 
           {(openAuthModel || openLoginModel || openSignupModel) && (
             <div
-              className="fixed inset-0 bg-black opacity-50 z-[998]" // Overlay with 50% opacity
+              className="fixed inset-0 bg-black opacity-50 z-[998] h-screen" // Overlay with 50% opacity
               onClick={closeAllModals} // Close all modals on click
             ></div>
           )}
-          {openAuthModel && <Login />}
-          {openLoginModel && <LoginEmail handleBack={handleBack} />}
-          {openSignupModel && <SignUp handleBack={handleBack} />}
+          {/* <div className=" fixed h-screen flex flex-col justify-center items-center"> */}
+            {openAuthModel && <Login />}
+            {openLoginModel && <LoginEmail handleBack={handleBack} />}
+            {openSignupModel && <SignUp handleBack={handleBack} />}
+          {/* </div> */}
         </div>
       )}
     </>

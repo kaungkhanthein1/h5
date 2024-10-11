@@ -2,53 +2,39 @@ import { useState, useEffect } from "react";
 import Navbar from "./components/history/Navbar";
 import Main from "./components/history/Main";
 import "./profile.css";
+import { useGetRecordQuery } from "./services/profileApi";
+import Loader from "../search/components/Loader";
 
 const History = () => {
+  const { data, isLoading, isFetching, refetch } = useGetRecordQuery(); // Fetch favorite movies list from API
+
   const [isEditMode, setIsEditMode] = useState(false);
-  const [movies, setMovies] = useState<any[]>([]);
 
-  // Load data from localStorage
-  useEffect(() => {
-    const watchHistory = localStorage.getItem("lastWatchHistory");
-    if (watchHistory) {
-      const parsedData = JSON.parse(watchHistory);
-
-      const movieDetails = [];
-
-      for (const key in parsedData) {
-        const movieData = parsedData[key];
-
-        movieDetails.unshift({
-          id: movieData.movieId,
-          name: key,
-          duration: movieData?.duration,
-          playedTime: movieData?.playedTime,
-          episode_name: movieData.episode_name,
-          last_episodeid: movieData.episode_id,
-          progress_time: movieData.progressTime,
-          cover: movieData.image, // Assuming cover is not part of new data, update with your default cover
-        });
-      }
-
-      setMovies(movieDetails);
-    }
-  }, []);
+  const movies = data?.data;
 
   const handleEditClick = () => {
     setIsEditMode((prev) => !prev);
   };
+
+  if (isLoading || isFetching) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-[#161616]">
+        <Loader />
+      </div>
+    );
+  }
 
   return (
     <div>
       <div className="fixed-bg"></div>
       <div className="text-white">
         <Navbar isEditMode={isEditMode} onEditClick={handleEditClick} />
-        {movies.length !== 0 ? (
+        {movies?.length > 0 ? (
           <Main
             isEditMode={isEditMode}
             setIsEditMode={setIsEditMode}
             movies={movies}
-            setMovies={setMovies}
+            refetch={refetch}
           />
         ) : (
           <div className="flex justify-center items-center text-center h-screen">

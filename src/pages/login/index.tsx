@@ -3,15 +3,15 @@ import { motion, AnimatePresence } from "framer-motion";
 import "./login.css";
 import logo from "../../assets/login/logo.png";
 import Button from "../../components/login/Button";
-import blue from "../../assets/login/blue.png";
-import eye from "../../assets/login/eye.png";
-import weChat from "../../assets/login/weChat.png";
 import { useDispatch } from "react-redux";
 import {
   setLoginOpen,
   setSignupOpen,
   setAuthModel,
 } from "../../features/login/ModelSlice";
+import WeChatLogin from "../../components/login/WeChatLogin";
+import QQLogin from "../../components/login/QQlogin";
+import WelboLogin from "../../components/login/WelboLogin";
 
 const Login: React.FC = () => {
   const dispatch = useDispatch();
@@ -25,7 +25,7 @@ const Login: React.FC = () => {
   };
 
   const variants = {
-    hidden: { y: 300 },
+    hidden: { y: "100%" },
     visible: {
       opacity: 1,
       y: 0,
@@ -36,20 +36,30 @@ const Login: React.FC = () => {
       transition: { type: "tween", duration: 0.5 },
     },
   };
-
-  // const handleDragEnd = (event: any, info: any) => {
-  //   if (info.offset.y > 100) closeAllModals();
-  // };
+  const closeAllModals = () => {
+    startTransition(() => {
+      dispatch(setAuthModel(false));
+      dispatch(setLoginOpen(false));
+      dispatch(setSignupOpen(false));
+    });
+  };
+  const handleDragEnd = (event: any, info: any) => {
+    if (info.offset.y > 100) closeAllModals();
+  };
 
   return (
-    <div className="h-scree flex items-center justify-center overflow-hidde">
+    <div className="h-screen  z-[9999] flex items-center justify-center overflow-hidden">
       <AnimatePresence>
         <motion.div
-          className="login_box h-[410px] absolute bottom-0 z-[999] w-screen"
+          className="login_box fixed h-[410px] h-scree  bottom-0 z-[99999] w-screen"
           initial="hidden"
           animate="visible"
           exit="exit"
           variants={variants}
+          drag="y"
+          dragConstraints={{ top: 0 }}
+          dragElastic={0.2}
+          onDragEnd={handleDragEnd}
         >
           <div className="flex flex-col justify-center items-center gap-[32px]">
             <motion.p className="w-[60px] h-[4px] drag_line mt-[12px] cursor-pointer" />
@@ -68,9 +78,9 @@ const Login: React.FC = () => {
               Link account with
             </p>
             <div className="flex gap-[22px]">
-              <img className="w-[50px] h-[50px]" src={weChat} alt="WeChat" />
-              <img className="w-[50px] h-[50px]" src={blue} alt="Blue" />
-              <img className="w-[50px] h-[50px]" src={eye} alt="Eye" />
+              <WeChatLogin />
+              <QQLogin />
+              <WelboLogin />
             </div>
           </div>
         </motion.div>

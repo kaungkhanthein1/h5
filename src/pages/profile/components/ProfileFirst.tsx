@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import ImageWithPlaceholder from "../../search/components/ImgPlaceholder";
 import { setAuthModel } from "../../../features/login/ModelSlice";
 import { useDispatch } from "react-redux";
-import { useGetListQuery } from "../services/profileApi";
+import { useGetListQuery, useGetRecordQuery } from "../services/profileApi";
 
 interface Movie {
   id: any;
@@ -22,37 +22,26 @@ const ProfileFirst = () => {
     // isLoading: isFavoritesLoading,
     // isFetching: isFavoritesFetching,
   } = useGetListQuery({ page: 1 });
-  const [movies, setMovies] = useState<Movie[]>([]);
+  const { data, isLoading, isFetching, refetch } = useGetRecordQuery(); // Fetch favorite movies list from API
+
+  // const [movies, setMovies] = useState<Movie[]>([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const favorites = favoriteMovies?.data?.list?.slice(0, 10);
+  const movies = data?.data;
+  const moviesData = data?.data; // Assuming `data` is the fetched data containing your movie information
 
-  // Load data from localStorage
-  useEffect(() => {
-    const watchHistory = localStorage.getItem("lastWatchHistory");
-    if (watchHistory) {
-      const parsedData = JSON.parse(watchHistory);
-      const movieDetails = [];
+  // Extract all movies from the 'list' array in each 'data' object and flatten into a single array
+  const allMovies = moviesData
+    ?.map((section: any) => section.list) // Get the 'list' array from each section
+    ?.flat(); // Flatten the arrays into a single array
 
-      for (const key in parsedData) {
-        const movieData = parsedData[key];
-        movieDetails.unshift({
-          id: movieData.movieId,
-          name: key,
-          duration: movieData?.duration,
-          playedTime: movieData?.playedTime,
-          episode_name: movieData.episode_name,
-          last_episodeid: movieData.episode_id,
-          progress_time: movieData.progressTime,
-          cover: movieData.image,
-        });
-      }
+  // Sort the movies by 'update_time' in descending order and take the latest 10 movies
+  const latestMovies = allMovies
+    ?.sort((a: any, b: any) => b.update_time - a.update_time) // Sort by update_time (newest first)
+    ?.slice(0, 10); // Take the latest 10 movies
 
-      setMovies(movieDetails.slice(0, 10)); // Limit to 10 movies
-    }
-  }, []);
-  // Check for token in localStorage
   const isLoggedIn = localStorage.getItem("authToken");
   const parsedLoggedIn = isLoggedIn ? JSON.parse(isLoggedIn) : null;
   const token = parsedLoggedIn?.data?.access_token;
@@ -138,22 +127,22 @@ const ProfileFirst = () => {
         {/* Horizontal Scrolling Movie List */}
         {movies?.length !== 0 && (
           <div className="flex overflow-x-scroll whitespace-nowrap watch_ten scrollbar-hide gap-4 ">
-            {movies?.map((movie) => (
+            {latestMovies?.map((movie: any) => (
               <Link
-                to={`/player/${movie.id}`}
+                to={`/player/${movie?.id}`}
                 key={movie.id}
                 className="w-[136px]"
               >
                 <div className="relative">
                   <ImageWithPlaceholder
                     src={movie?.cover}
-                    alt={`Picture of ${movie?.name}`}
+                    alt={`Picture of ${movie?.movie_name}`}
                     width={136}
                     height={83}
                     className="w-[136px] rounded-t-md h-[86px] object-cover object-center"
                   />
                   <div className="absolute watchedDuration bottom-[2px] right-[3px] ">
-                    {formatDuration(movie.progress_time)}
+                    {formatDuration(movie?.current_time)}
                   </div>
                 </div>
 
@@ -163,13 +152,13 @@ const ProfileFirst = () => {
                     style={{
                       width: `${
                         movie?.duration
-                          ? (movie?.progress_time / movie?.duration) * 100
+                          ? (movie?.current_time / movie?.duration) * 100
                           : 0
                       }%`,
                     }}
                   ></div>
                 </div>
-                <div className="his-text mt-1">{movie.name}</div>
+                <div className="his-text mt-1">{movie?.movie_name}</div>
               </Link>
             ))}
           </div>
