@@ -16,10 +16,10 @@ const UserName: React.FC<UserNameProps> = ({}) => {
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); 
-    console.log('submit')
+    e.preventDefault();
+
     // if (validateName(name)) {
-      navigate("/");
+    navigate("/");
     // } else {
     //   alert("Invalid name. Please enter a name with 6-25 characters and include letters or numbers.");
     // }
@@ -32,7 +32,7 @@ const UserName: React.FC<UserNameProps> = ({}) => {
         <div className="flex justify-between">
           <h1 className="text-white text-[14px] font-[500]">Your Name</h1>
           <button
-            onClick={() => navigate("/")}  // Ensure this triggers navigation correctly
+            onClick={() => navigate("/")} // Ensure this triggers navigation correctly
             className="text-white text-[14px] font-[500] bg-transparent border-none"
           >
             Skip

@@ -7,7 +7,7 @@ import {
   useLazyGetSearchMovieQuery,
   useGetTagsQuery,
 } from "./services/searchApi";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setHistoryData } from "./slice/HistorySlice";
 import Loader from "./components/Loader";
@@ -43,7 +43,7 @@ const Main = () => {
   const [secAgain, setSecAgain] = useState(false);
   const [movies, setMovies] = useState<any[]>([]);
   const [noDataFound, setNoDataFound] = useState(false); // New state to track "no data"
-
+  const navigate = useNavigate();
   const [triggerSearchMovie, { data, isLoading, isFetching }] =
     useLazyGetSearchMovieQuery();
 
@@ -113,6 +113,11 @@ const Main = () => {
       res_type: resActive,
     });
   };
+  useEffect(() => {
+    if (query.length === 0) {
+      navigate("/search_overlay");
+    }
+  }, [query]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -153,6 +158,10 @@ const Main = () => {
     <>
       <div className="search-bg"></div>
       <Navbar
+        resActive={resActive}
+        sortActive={sortActive}
+        typeActive={typeActive}
+        movies={movies}
         query={query}
         setQuery={setQuery}
         onSearch={handleSearch}
@@ -165,20 +174,8 @@ const Main = () => {
       />
 
       <div className="lg:container lg:mx-auto lg:px-[100px]">
-        <Filter
-          res_type={res_type}
-          sort={sort}
-          type={type}
-          resActive={resActive}
-          setresActive={setresActive}
-          sortActive={sortActive}
-          setsortActive={setsortActive}
-          typeActive={typeActive}
-          settypeActive={settypeActive}
-        />
-
         {(tabLoading && tabFetching) || (isFetching && currentPage === 1) ? (
-          <div className="flex justify-center h-[80vh] items-center text-center text-white">
+          <div className="flex justify-center h-[100vh] items-center text-center text-white">
             <Loader />
           </div>
         ) : noDataFound ? ( // If no data is found, show a message

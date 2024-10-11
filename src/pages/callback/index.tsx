@@ -21,7 +21,7 @@ export const SocialLoginCallbackPage = () => {
       if (code && type) {
         try {
           const data = await handleSocialLoginCallback(type, "login", code); // Await the async call
-          console.log(data.token);
+
           if (data) {
             dispatch(setSocial_id(data.social_id));
           }

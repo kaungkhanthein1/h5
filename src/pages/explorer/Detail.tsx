@@ -18,7 +18,6 @@ const Detail = () => {
     const data = await res.json();
     setDetails(data?.data);
     setIsLoading(false);
-    console.log(data?.data, "details data");
   };
   useEffect(() => {
     getDetails();

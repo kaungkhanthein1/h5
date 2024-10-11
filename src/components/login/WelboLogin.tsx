@@ -9,7 +9,6 @@ const WelboLogin = () => {
       console.log("Social login data:", socialLoginData);
       const wechatLoginUrl = socialLoginData.data.url; // Make sure this matches the actual structure
 
-      console.log("Redirecting to:", wechatLoginUrl);
       window.location.href = wechatLoginUrl;
     } catch (error) {
       console.error("Error during WeChat login:", error);

@@ -15,12 +15,12 @@ const Movies = ({
   updateMovieCollectStatus: any;
 }) => {
   return (
-    <div className="mb-5">
-      <div className="movie_title px-3 py-1">
+    <div className="mb-5 mt-[150px]">
+      {/* <div className="movie_title px-3 py-1">
         共 {movies?.length} 条搜索结果
-      </div>
+      </div> */}
       {adLoading || adFetching ? (
-        <div className="ads text-white">Ads Loading...</div>
+        <div className="ads text-white"></div>
       ) : (
         <div className="my-3">
           <Ads advert={advert} />

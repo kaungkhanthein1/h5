@@ -33,9 +33,9 @@ const Login: React.FC<LoginProps> = ({ setShow }) => {
     return lengthValid && containsLetters && containsNumbers;
   };
 
-  const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const type = searchParams.get("type") ?? '';
+    const type = searchParams.get("type") ?? "";
 
     if (captchaCode && captchaKey) {
       const data = await handleSocialLoginCredentials(
@@ -46,7 +46,6 @@ const Login: React.FC<LoginProps> = ({ setShow }) => {
         type,
         social_id
       );
-      console.log(data)
     } else {
       dispatch(setCaptchaOpen(true));
     }

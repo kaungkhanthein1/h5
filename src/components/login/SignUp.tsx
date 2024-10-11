@@ -26,7 +26,6 @@ const SignUp: React.FC<SignUpProps> = ({ handleBack }) => {
     e.preventDefault();
     try {
       // const result = await registerUser(username, password);
-      console.log("Sign-up success:");
     } catch (err) {
       setError("Sign-up failed. Please check your details.");
     }

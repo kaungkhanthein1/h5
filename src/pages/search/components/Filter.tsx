@@ -10,6 +10,7 @@ interface FilterProps {
   res_type: any;
   sort: any;
   type: any;
+  movies: any;
 }
 
 const Filter: React.FC<FilterProps> = ({
@@ -22,6 +23,7 @@ const Filter: React.FC<FilterProps> = ({
   res_type,
   sort,
   type,
+  movies,
 }) => {
   const [showTabs, setShowTabs] = useState(false);
 
@@ -122,12 +124,12 @@ const Filter: React.FC<FilterProps> = ({
   }, [resActive, sortActive, typeActive, res_type, sort, type]);
 
   return (
-    <div>
+    <div className="">
       {/* Filter Button */}
-      <div className="flex items-center mt-[70px] justify-center relative">
+      <div className="flex items-center justify-center relative">
         <button
           onClick={handleFilterClick}
-          className="flex gap-1 items-center relative z-1"
+          className="flex gap-1 mt-1 items-center relative z-1"
         >
           <span className="filter-title">{filterText}</span>
           <svg
@@ -156,7 +158,7 @@ const Filter: React.FC<FilterProps> = ({
 
       {/* Tabs Container */}
       <div
-        className={`overflow-hidden transition-all duration-500 ease-in-out fixed top-[55px] left-0 w-full tab-main text-white z-20 rounded-lg ${
+        className={`overflow-hidden mt-3 transition-all duration-500 ease-in-out fixed top-[55px] left-0 w-full tab-main text-white z-20 rounded-lg ${
           showTabs ? "max-h-52" : "max-h-0"
         }`}
       >
@@ -213,6 +215,9 @@ const Filter: React.FC<FilterProps> = ({
             ))}
           </div>
         </div>
+      </div>
+      <div className="movie_title px-3 py-1">
+        共 {movies?.length} 条搜索结果
       </div>
     </div>
   );

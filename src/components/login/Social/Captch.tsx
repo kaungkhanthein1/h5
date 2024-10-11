@@ -33,7 +33,7 @@ const Captch: React.FC<{}> = () => {
   const fetchCaptcha = async () => {
     try {
       const { captchaImage, keyStatus } = await getCaptcha();
-      // console.log(keyStatus)
+
       setCaptchaImage(captchaImage);
       setKeyStatus(keyStatus);
     } catch (err) {

@@ -333,12 +333,10 @@ export const handleSocialLoginCredentials = async (
       captcha: captchaResponse.data.key,
       timestamp: new Date().getTime(),
     };
-    console.log(formData);
 
     const encryptedData = encryptWithRsa(JSON.stringify(formData), PUBLIC_KEY);
 
     const signature = generateSignature(encryptedData);
-    console.log(encryptedData);
 
     const response = await axios.post(
       "https://cc3e497d.qdhgtch.com:2345/api/v1/user/bind_social_with_credentials",
@@ -373,8 +371,6 @@ export const handleSocialLoginCredentials = async (
     // } else {
     //   return decryptWithAes(resultText);
     // }
-
-    console.log(response);
   } catch (error) {}
 };
 
@@ -395,8 +391,6 @@ export const handleSocialSignUpCredentials = async (
 
     const captchaResponse = captchaResult.data;
 
-    console.log("Captcha Response:", captchaResponse);
-
     if (!captchaResponse.data) {
       throw new Error("Captcha verification failed");
     }
@@ -410,13 +404,9 @@ export const handleSocialSignUpCredentials = async (
       captcha: captchaResponse.data.key,
       timestamp: new Date().getTime(),
     };
-    console.log("Form Data:", formData);
 
     const encryptedData = encryptWithRsa(JSON.stringify(formData), PUBLIC_KEY);
     const signature = generateSignature(encryptedData);
-
-    console.log("Encrypted Data:", encryptedData);
-    console.log("Signature:", signature);
 
     const response = await axios.post(
       "https://cc3e497d.qdhgtch.com:2345/api/v1/user/register/social",
@@ -430,7 +420,6 @@ export const handleSocialSignUpCredentials = async (
         },
       }
     );
-    console.log("Response:", response.data);
   } catch (error) {
     console.error("Error during social sign up:", error);
   }
@@ -513,7 +502,7 @@ export const setPasswordRecoveryFotgot = async (
     session_token: session_token,
     forget_code: forget_code,
   };
-  console.log(formData);
+
   const encryptedData = encryptWithRsa(JSON.stringify(formData), PUBLIC_KEY);
 
   // Step 3: Generate signature
@@ -538,6 +527,4 @@ export const setPasswordRecoveryFotgot = async (
     }),
   });
   const responseText = await setPasswordResult.text();
-
-  console.log(setPasswordResult);
 };

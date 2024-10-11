@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./search.css";
 import Navbar from "./components/overlay/Navbar";
 import Ads from "./components/Ads";
@@ -22,6 +22,10 @@ const Search: React.FC = () => {
   } = useGetSearchLateQuery();
 
   const advert = ads?.data?.search_result_up?.data;
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <>

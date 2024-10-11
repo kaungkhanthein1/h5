@@ -1,9 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react';
-import Hls from 'hls.js';
-import screenfull from 'screenfull';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faExpand, faSpinner, faPlay, faPause } from '@fortawesome/free-solid-svg-icons';
-import floatingScreen from '../../../assets/floatingScreen.png';
+import React, { useEffect, useRef, useState } from "react";
+import Hls from "hls.js";
+import screenfull from "screenfull";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faArrowLeft,
+  faExpand,
+  faSpinner,
+  faPlay,
+  faPause,
+} from "@fortawesome/free-solid-svg-icons";
+import floatingScreen from "../../../assets/floatingScreen.png";
 
 interface Episode {
   episode_id: number | null;
@@ -40,7 +46,12 @@ interface VideoPlayerProps {
   selectedEpisode?: Episode | null;
 }
 
-const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoUrl, onBack, movieDetail, selectedEpisode }) => {
+const VideoPlayer: React.FC<VideoPlayerProps> = ({
+  videoUrl,
+  onBack,
+  movieDetail,
+  selectedEpisode,
+}) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const hlsRef = useRef<Hls | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -51,39 +62,42 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoUrl, onBack, movieDetail
   const [isBuffering, setIsBuffering] = useState(false);
   const controlsTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const STORAGE_KEY = 'watchHistory';
-  const STORAGE_KEY_V2 = 'lastWatchHistory'; 
+  const STORAGE_KEY = "watchHistory";
+  const STORAGE_KEY_V2 = "lastWatchHistory";
 
   // Helper function to format time (e.g., 1:05)
   const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);
-    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
   };
 
   // Save the movie progress when back button or episode change happens
   const saveProgress = () => {
     if (videoRef.current) {
-      const currentTime = videoRef.current.currentTime;      
-      const savedHistory = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+      const currentTime = videoRef.current.currentTime;
+      const savedHistory = JSON.parse(
+        localStorage.getItem(STORAGE_KEY) || "{}"
+      );
 
       if (!savedHistory[movieDetail.name]) {
         savedHistory[movieDetail.name] = {};
       }
 
-      savedHistory[movieDetail.name][`episode_${selectedEpisode?.episode_id}`] = {
-        progressTime: currentTime,
+      savedHistory[movieDetail.name][`episode_${selectedEpisode?.episode_id}`] =
+        {
+          progressTime: currentTime,
+        };
+
+      savedHistory[movieDetail.name]["movieDetail"] = {
+        movieDetail: movieDetail,
       };
 
-      savedHistory[movieDetail.name]['movieDetail'] = {
-        movieDetail: movieDetail
-      };
-
-      console.log('Saving progress:', currentTime);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(savedHistory));
 
-      console.log('ideoRef.current =>', videoRef.current);
-      const lastWatchHistoryList = JSON.parse(localStorage.getItem(STORAGE_KEY_V2) || '{}');
+      const lastWatchHistoryList = JSON.parse(
+        localStorage.getItem(STORAGE_KEY_V2) || "{}"
+      );
 
       if (!lastWatchHistoryList[movieDetail.name]) {
         lastWatchHistoryList[movieDetail.name] = {};
@@ -92,24 +106,31 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoUrl, onBack, movieDetail
       const latestWatchHistory = {
         playedTime: new Date(),
         progressTime: currentTime,
-        movieId: (movieDetail as any)['id'],
+        movieId: (movieDetail as any)["id"],
         duration: videoRef.current?.duration,
         image: (movieDetail as any).cover,
-        ...selectedEpisode
-      }
+        ...selectedEpisode,
+      };
       lastWatchHistoryList[movieDetail.name] = latestWatchHistory;
-      localStorage.setItem(STORAGE_KEY_V2, JSON.stringify(lastWatchHistoryList));
+      localStorage.setItem(
+        STORAGE_KEY_V2,
+        JSON.stringify(lastWatchHistoryList)
+      );
     }
   };
 
   // Load saved progress if available
   const loadProgress = () => {
     setIsBuffering(true);
-    const savedHistory = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-    if (savedHistory[movieDetail.name] && savedHistory[movieDetail.name][`episode_${selectedEpisode?.episode_id}`]) {
-      const savedTime = savedHistory[movieDetail.name][`episode_${selectedEpisode?.episode_id}`].progressTime;
+    const savedHistory = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+    if (
+      savedHistory[movieDetail.name] &&
+      savedHistory[movieDetail.name][`episode_${selectedEpisode?.episode_id}`]
+    ) {
+      const savedTime =
+        savedHistory[movieDetail.name][`episode_${selectedEpisode?.episode_id}`]
+          .progressTime;
       if (videoRef.current && savedTime) {
-        console.log('Resuming from:', savedTime);
         videoRef.current.currentTime = savedTime || 0;
       }
     }
@@ -134,14 +155,16 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoUrl, onBack, movieDetail
         });
 
         hls.on(Hls.Events.ERROR, (event, data) => {
-          console.error('HLS error:', data);
+          console.error("HLS error:", data);
           setIsBuffering(false);
         });
 
         hlsRef.current = hls;
-      } else if (videoRef.current?.canPlayType('application/vnd.apple.mpegurl')) {
+      } else if (
+        videoRef.current?.canPlayType("application/vnd.apple.mpegurl")
+      ) {
         videoRef.current.src = videoUrl;
-        videoRef.current.addEventListener('loadedmetadata', () => {
+        videoRef.current.addEventListener("loadedmetadata", () => {
           setDuration(formatTime(videoRef.current?.duration || 0));
           loadProgress();
         });
@@ -157,16 +180,16 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoUrl, onBack, movieDetail
       const handlePlay = () => setIsPlaying(true);
       const handlePause = () => setIsPlaying(false);
 
-      videoElement.addEventListener('play', handlePlay);
-      videoElement.addEventListener('pause', handlePause);
+      videoElement.addEventListener("play", handlePlay);
+      videoElement.addEventListener("pause", handlePause);
 
       return () => {
         saveProgress();
         if (hlsRef.current) {
           hlsRef.current.destroy();
         }
-        videoElement.removeEventListener('play', handlePlay);
-        videoElement.removeEventListener('pause', handlePause);
+        videoElement.removeEventListener("play", handlePlay);
+        videoElement.removeEventListener("pause", handlePause);
       };
     }
   }, [videoUrl, selectedEpisode]);
@@ -196,12 +219,15 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoUrl, onBack, movieDetail
     if (videoRef.current) {
       if (videoRef.current.paused) {
         setIsBuffering(true);
-        videoRef.current.play().then(() => {
-          setIsBuffering(false);
-        }).catch((error) => {
-          console.error('Video play failed:', error);
-          setIsBuffering(false);
-        });
+        videoRef.current
+          .play()
+          .then(() => {
+            setIsBuffering(false);
+          })
+          .catch((error) => {
+            console.error("Video play failed:", error);
+            setIsBuffering(false);
+          });
       } else {
         videoRef.current.pause();
         saveProgress();
@@ -212,7 +238,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoUrl, onBack, movieDetail
   // Seek video using custom progress bar
   const handleProgressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (videoRef.current) {
-      const newTime = (Number(e.target.value) / 100) * videoRef.current.duration;
+      const newTime =
+        (Number(e.target.value) / 100) * videoRef.current.duration;
       videoRef.current.currentTime = newTime;
     }
   };
@@ -225,7 +252,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoUrl, onBack, movieDetail
         (videoRef.current as any).webkitEnterFullscreen?.();
       } else if (screenfull.isEnabled) {
         screenfull.toggle(videoRef.current).catch((err) => {
-          console.error('Fullscreen error:', err);
+          console.error("Fullscreen error:", err);
         });
       }
     }
@@ -253,8 +280,10 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoUrl, onBack, movieDetail
             setCurrentTime(formatTime(currentTime));
           }
         }}
-        onLoadedMetadata={() => setDuration(formatTime(videoRef.current?.duration || 0))}
-        style={{ objectFit: 'contain', minHeight: '40vh' }}
+        onLoadedMetadata={() =>
+          setDuration(formatTime(videoRef.current?.duration || 0))
+        }
+        style={{ objectFit: "contain", minHeight: "40vh" }}
         autoPlay
       >
         Your browser does not support the video tag.
@@ -270,7 +299,12 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoUrl, onBack, movieDetail
       {/* Buffering Icon */}
       {isBuffering && (
         <div className="absolute inset-0 flex justify-center items-center">
-          <FontAwesomeIcon icon={faSpinner} size="1x" spin className="text-playerNavigator" />
+          <FontAwesomeIcon
+            icon={faSpinner}
+            size="1x"
+            spin
+            className="text-playerNavigator"
+          />
         </div>
       )}
 
@@ -299,11 +333,14 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoUrl, onBack, movieDetail
               value={progress}
               onChange={handleProgressChange}
               style={{
-                background: `linear-gradient(to right, #FFA500 ${progress}%, gray 0%)`
+                background: `linear-gradient(to right, #FFA500 ${progress}%, gray 0%)`,
               }}
             />
             {/* Fullscreen button */}
-            <button onClick={handleFullscreenToggle} className="ml-2 text-white">
+            <button
+              onClick={handleFullscreenToggle}
+              className="ml-2 text-white"
+            >
               <FontAwesomeIcon icon={faExpand} size="lg" />
             </button>
           </div>
@@ -312,17 +349,25 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ videoUrl, onBack, movieDetail
 
       {/* Picture-in-Picture button */}
       <div className="absolute top-0 right-0 p-4 z-10">
-        <button className="text-white" onClick={() => {
-          if (videoRef.current) {
-            if (document.pictureInPictureEnabled && videoRef.current.requestPictureInPicture) {
-              videoRef.current.requestPictureInPicture().catch((error) => {
-                console.error('PiP request failed:', error);
-              });
-            } else {
-              console.error('Picture-in-Picture is not supported on this device.');
+        <button
+          className="text-white"
+          onClick={() => {
+            if (videoRef.current) {
+              if (
+                document.pictureInPictureEnabled &&
+                videoRef.current.requestPictureInPicture
+              ) {
+                videoRef.current.requestPictureInPicture().catch((error) => {
+                  console.error("PiP request failed:", error);
+                });
+              } else {
+                console.error(
+                  "Picture-in-Picture is not supported on this device."
+                );
+              }
             }
-          }
-        }}>
+          }}
+        >
           <img src={floatingScreen} alt="PiP" className="h-5 w-5" />
         </button>
       </div>
