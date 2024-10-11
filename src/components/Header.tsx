@@ -50,7 +50,6 @@ const Header: FC = () => {
           </div>
         </div>
       </div>
-      ''
       <div className="w-full">
         <nav className="flex overflow-x-scroll px-3 gap-3 remove-scrollbar">
           {configData?.map((item: any, index: any) => (
