@@ -1,6 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { startTransition, useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import ImageWithPlaceholder from "./bannerPlaceholder";
+import {
+  useGetListQuery,
+  useGetRecordQuery,
+} from "../../pages/profile/services/profileApi";
+import { useDispatch } from "react-redux";
+import { setAuthModel } from "../../features/login/ModelSlice";
 interface Movie {
   id: any;
   name: string;
@@ -12,32 +18,34 @@ interface Movie {
   cover: any;
 }
 const ContinueWatching = () => {
-  const [movies, setMovies] = useState<Movie[]>([]);
+  const {
+    data: favoriteMovies,
+    // isLoading: isFavoritesLoading,
+    // isFetching: isFavoritesFetching,
+  } = useGetListQuery({ page: 1 });
+  const { data, isLoading, isFetching, refetch } = useGetRecordQuery(); // Fetch favorite movies list from API
 
-  // Load data from localStorage
-  useEffect(() => {
-    const watchHistory = localStorage.getItem("lastWatchHistory");
-    if (watchHistory) {
-      const parsedData = JSON.parse(watchHistory);
-      const movieDetails = [];
+  // const [movies, setMovies] = useState<Movie[]>([]);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-      for (const key in parsedData) {
-        const movieData = parsedData[key];
-        movieDetails.unshift({
-          id: movieData.movieId,
-          name: key,
-          duration: movieData?.duration,
-          playedTime: movieData?.playedTime,
-          episode_name: movieData.episode_name,
-          last_episodeid: movieData.episode_id,
-          progress_time: movieData.progressTime,
-          cover: movieData.image,
-        });
-      }
+  const favorites = favoriteMovies?.data?.list?.slice(0, 10);
+  const movies = data?.data;
+  const moviesData = data?.data; // Assuming `data` is the fetched data containing your movie information
 
-      setMovies(movieDetails.slice(0, 10)); // Limit to 10 movies
-    }
-  }, []);
+  // Extract all movies from the 'list' array in each 'data' object and flatten into a single array
+  const allMovies = moviesData
+    ?.map((section: any) => section.list) // Get the 'list' array from each section
+    ?.flat(); // Flatten the arrays into a single array
+
+  // Sort the movies by 'update_time' in descending order and take the latest 10 movies
+  const latestMovies = allMovies
+    ?.sort((a: any, b: any) => b.update_time - a.update_time) // Sort by update_time (newest first)
+    ?.slice(0, 10); // Take the latest 10 movies
+
+  const isLoggedIn = localStorage.getItem("authToken");
+  const parsedLoggedIn = isLoggedIn ? JSON.parse(isLoggedIn) : null;
+  const token = parsedLoggedIn?.data?.access_token;
 
   function formatDuration(durationInSeconds: any) {
     const hours = Math.floor(durationInSeconds / 3600);
@@ -52,9 +60,32 @@ const ContinueWatching = () => {
     const formattedDuration = `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
     return formattedDuration;
   }
+
+  const handleFavoritesClick = () => {
+    if (!token) {
+      // If not logged in, open the login modal
+      startTransition(() => {
+        dispatch(setAuthModel(true));
+      });
+    } else {
+      // If logged in, redirect to the favorites page
+      navigate("/favorites");
+    }
+  };
+  const handleHistoryClick = () => {
+    if (!token) {
+      // If not logged in, open the login modal
+      startTransition(() => {
+        dispatch(setAuthModel(true));
+      });
+    } else {
+      // If logged in, redirect to the favorites page
+      navigate("/history");
+    }
+  };
   return (
     <>
-      {movies?.length ? (
+      {movies?.length !== 0 ? (
         <div className="text-sm uppercase text-white font-semibold flex items-center px-3 justify-between w-full">
           <span className="text-white font-headerFont">Continue Watching</span>
           <svg
@@ -75,24 +106,24 @@ const ContinueWatching = () => {
       ) : (
         <></>
       )}
-      {movies.length !== 0 ? (
+      {movies?.length !== 0 ? (
         <div className="flex overflow-x-scroll whitespace-nowrap watch_ten scrollbar-hide gap-4 ">
-          {movies?.map((movie) => (
+          {latestMovies?.map((movie: any) => (
             <Link
-              to={`/player/${movie.id}`}
+              to={`/player/${movie?.id}`}
               key={movie.id}
-              className="min-w-[150px]"
+              className="w-[150px]"
             >
               <div className="relative">
                 <ImageWithPlaceholder
                   src={movie?.cover}
-                  alt={`Picture of ${movie?.name}`}
+                  alt={`Picture of ${movie?.movie_name}`}
                   width={150}
                   height={85}
-                  className="w-[150px] rounded-t-md h-[65px] object-cover object-top"
+                  className="w-[150px] rounded-t-md h-[86px] object-cover object-center"
                 />
                 <div className="absolute watchedDuration bottom-[2px] right-[3px] ">
-                  {formatDuration(movie.progress_time)}
+                  {formatDuration(movie?.current_time)}
                 </div>
               </div>
 
@@ -102,13 +133,13 @@ const ContinueWatching = () => {
                   style={{
                     width: `${
                       movie?.duration
-                        ? (movie?.progress_time / movie?.duration) * 100
+                        ? (movie?.current_time / movie?.duration) * 100
                         : 0
                     }%`,
                   }}
                 ></div>
               </div>
-              <div className="his-text mt-1">{movie.name}</div>
+              <div className="his-text mt-1">{movie?.movie_name}</div>
             </Link>
           ))}
         </div>
