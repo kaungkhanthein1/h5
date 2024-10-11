@@ -70,7 +70,7 @@ const SourceSelector: React.FC<SourceSelectorProps> = ({
   // Close the modal
   const closeModal = () => setIsModalOpen(false);
   return (
-    <div className="bg-black p-4 mb-4">
+    <div className="bg-background p-4 mb-4">
       {/* Section header with title and expand all */}
       <div className="flex justify-between items-center mb-2">
         <h4 className="text-white text-base font-bold">Episodes</h4>

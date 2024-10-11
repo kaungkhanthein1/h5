@@ -260,8 +260,8 @@ const CommentComponent: React.FC<CommentProps> = ({ movieId }) => {
         dataLength={comments.length}
         next={() => setPage((prevPage) => prevPage + 1)}
         hasMore={hasMore}
-        loader={<h4>Loading...</h4>}
-        endMessage={<p>No more comments</p>}
+        loader={<h4 className="text-white">Loading...</h4>}
+        // endMessage={<p className="text-white">No more comments</p>}
       >
         {comments.map((comment) => (
           <div
@@ -269,7 +269,7 @@ const CommentComponent: React.FC<CommentProps> = ({ movieId }) => {
             className="comment border-b border-gray-700 pb-4 mb-4 relative"
           >
             {/* Like button at the top right corner */}
-            <button
+            <button disabled={!isLoggedIn}
               onClick={() => likeComment(comment.id)}
               className="absolute top-0 right-0 m-2 text-gray-400 hover:text-blue-500"
             >

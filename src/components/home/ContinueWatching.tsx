@@ -110,8 +110,8 @@ const ContinueWatching = () => {
         <div className="flex overflow-x-scroll whitespace-nowrap watch_ten scrollbar-hide gap-4 ">
           {latestMovies?.map((movie: any) => (
             <Link
-              to={`/player/${movie?.id}`}
-              key={movie.id}
+              to={`/player/${movie?.movie_id}`}
+              key={movie.movie_id}
               className="w-[150px]"
             >
               <div className="relative">

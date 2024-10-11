@@ -63,7 +63,7 @@ const FeedbackComponent: React.FC<FeedbackComponentProps> = ({ onClose, movieId,
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bottom-0">
-      <div className="bg-black backdrop-blur-md w-full max-w-md rounded-xl p-4 text-white">
+      <div className="bg-background backdrop-blur-md w-full max-w-md rounded-xl p-4 text-white">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-bold">反馈求片</h2>
           <button onClick={onClose} className="text-white">

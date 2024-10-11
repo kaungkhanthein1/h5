@@ -19,7 +19,7 @@ const SkipSettingsModal: React.FC<SkipSettingsModalProps> = ({ isOpen, onClose, 
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4">
+    <div className="fixed inset-0 bg-background bg-opacity-75 flex items-center justify-center p-4">
       <div className="bg-gray-800 text-white p-4 rounded-lg space-y-4">
         <h2 className="text-lg">{type === 'intro' ? '跳过片头设置' : '跳过片尾设置'}</h2>
         <div>

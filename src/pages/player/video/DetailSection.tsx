@@ -174,12 +174,12 @@ const DetailSection: React.FC<DetailSectionProps> = ({
   
 
   return (
-    <div className="flex flex-col w-full bg-black">
+    <div className="flex flex-col w-full bg-background">
       {/* Tabs */}
       
 
       {/* Tab content */}
-      <div className="bg-black p-5 rounded-b-lg">
+      <div className="bg-background p-5 rounded-b-lg">
         {activeTab === "tab-1" && (
           <div id="tab-1" className="block">
             {/* Movie Title and Info */}
@@ -256,7 +256,7 @@ const DetailSection: React.FC<DetailSectionProps> = ({
           </div>
         )}
 
-              {visible && <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black text-white text-lg font-medium px-4 py-2 rounded-lg shadow-md">
+              {visible && <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-background text-white text-lg font-medium px-4 py-2 rounded-lg shadow-md">
                   Link Copied
                </div>}
 
@@ -296,7 +296,7 @@ const DetailSection: React.FC<DetailSectionProps> = ({
       {/* Modal for sharing */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-end">
-          <div className="bg-black backdrop-blur-md w-full max-w-md h-[60vh] bottom-0 rounded-lg p-6 text-white overflow-y-auto">
+          <div className="bg-background backdrop-blur-md w-full max-w-md h-[60vh] bottom-0 rounded-lg p-6 text-white overflow-y-auto">
             {/* Modal Header */}
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-semibold">Introduction</h2>

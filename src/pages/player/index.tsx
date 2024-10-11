@@ -211,9 +211,9 @@ const DetailPage: React.FC = () => {
   };
 
   return (
-    <div className="bg-black min-h-screen">
+    <div className="bg-background min-h-screen">
       {!movieDetail || !currentEpisode ? (
-        <div className="flex justify-center items-center pt-52 bg-black">
+        <div className="flex justify-center items-center pt-52 bg-background">
           <Loader />
         </div>
       ) : (
@@ -229,10 +229,10 @@ const DetailPage: React.FC = () => {
                 selectedEpisode={selectedEpisode || currentEpisode}
                 resumeTime={resumeTime}
               />
-              <div className="relative flex px-2 justify-between items-center bg-black pb-2">
+              <div className="relative flex px-2 justify-between items-center bg-background pb-2">
             <div className="flex">
               <div
-                className={`px-4 py-3 bg-black text-gray-400 rounded-t-lg cursor-pointer relative ${
+                className={`px-4 py-3 bg-background text-gray-400 rounded-t-lg cursor-pointer relative ${
                   activeTab === "tab-1" ? "text-white z-10" : ""
                 }`}
                 onClick={() => setActiveTab("tab-1")}
@@ -243,7 +243,7 @@ const DetailPage: React.FC = () => {
                 )}
               </div>
               <div
-                className={`px-4 py-3 bg-black text-gray-400 rounded-t-lg cursor-pointer relative ${
+                className={`px-4 py-3 bg-background text-gray-400 rounded-t-lg cursor-pointer relative ${
                   activeTab === "tab-2" ? "text-white z-10" : ""
                 }`}
                 onClick={() => setActiveTab("tab-2")}
@@ -262,7 +262,7 @@ const DetailPage: React.FC = () => {
             </div>
           ) : (
             <div className="relative flex justify-center items-center w-full min-h-[50vh] my-8">
-              <div className="absolute inset-0 bg-black opacity-75"></div>
+              <div className="absolute inset-0 bg-background opacity-75"></div>
               <div className="relative z-10 flex flex-col items-center p-8 bg-opacity-90 text-center text-white rounded-lg shadow-lg max-w-md mx-auto">
                 <p className="text-2xl font-bold mb-6 tracking-wider">
                   Oops! Video Not Found
