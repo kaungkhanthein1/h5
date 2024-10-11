@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Artplayer from 'artplayer';
-// import 'artplayer/dist/artplayer.css'; // Import Artplayer styles
 import Hls from 'hls.js'; // Import Hls.js
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
@@ -60,8 +59,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 }) => {
   const playerRef = useRef<any>(null);
   const videoElementRef = useRef<HTMLDivElement>(null);
-
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [videoRatio, setVideoRatio] = useState(9 / 16); // Default to 16:9 ratio
 
   // Function to get token from localStorage
   const getToken = () => {
@@ -102,59 +100,46 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         const art = new Artplayer({
           container: videoElementRef.current,
           url: videoUrl,
-          autoSize: true,
+        //   autoSize: true,
           autoplay: true,
           playbackRate: true,
           setting: true,
           fullscreen: true,
           fullscreenWeb: true,
-          pip: true,
-        //   controls: [
-        //     'play',
-        //     'progress',
-        //     'volume',
-        //     'currentTime',
-        //     'fullscreen',
-        //   ],
+        //   pip: true,
           moreVideoAttr: {
             playsInline: true,
           },
         });
 
-        // Initialize Hls.js for HLS streams
+        // Use Hls.js for HLS streams
         if (Hls.isSupported() && videoUrl.includes('.m3u8')) {
           const hls = new Hls();
           hls.loadSource(videoUrl);
           hls.attachMedia(art.video);
         } else if (art.video.canPlayType('application/vnd.apple.mpegurl')) {
-          // For Safari and iOS where Hls.js is not needed
-          art.video.src = videoUrl;
+          art.video.src = videoUrl; // For Safari and iOS
         }
 
-        // If resume time is available, set it
+        // Adjust video ratio based on the video's actual dimensions
+        art.once('video:loadedmetadata', () => {
+          const videoWidth = art.video.videoWidth;
+          const videoHeight = art.video.videoHeight;
+          console.log('videoHeight is=>', videoHeight, videoWidth);
+          setVideoRatio(videoHeight / videoWidth); // Set the dynamic aspect ratio
+        });
+
+        // Set resume time if available
         art.once('ready', () => {
           if (resumeTime > 0) {
-            console.log('Setting resume time:', resumeTime);
             art.currentTime = resumeTime;
           }
         });
 
-        // Extra check: Force seeking after the video starts playing
-        art.on('play', () => {
-          if (resumeTime > 0 && art.currentTime === 0) {
-            console.log('Forcing seek to resume time:', resumeTime);
-            art.currentTime = resumeTime; // Try setting current time after play
-          }
-        });
-
-        // Set isPlaying state
-        art.on('play', () => setIsPlaying(true));
-        art.on('pause', () => setIsPlaying(false));
-
-        // Cleanup the player when the component unmounts
         playerRef.current = art;
       }
     };
+
     initializePlayer();
 
     return () => {
@@ -166,7 +151,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   const handleBack = () => {
     if (playerRef.current) {
-      // Send a final report before navigating back
+      // Report progress before going back
       reportProgress(playerRef.current.currentTime, playerRef.current.duration);
       playerRef.current.pause();
     }
@@ -184,7 +169,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   };
 
   return (
-    <div className='relative w-full h-max'>
+    <div className='relative w-full bg-black'>
       {/* Back button */}
       <div className="absolute top-0 left-0 p-4 z-50">
         <button onClick={handleBack} className="text-white">
@@ -199,7 +184,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       </div>
 
       {/* Video element wrapper */}
-      <div className="relative w-full" style={{ paddingTop: '56.25%' }}>
+      <div className="relative w-full" style={{ paddingTop: `${videoRatio * 100}%` }}>
         {/* Video element */}
         <div ref={videoElementRef} className="absolute top-0 left-0 w-full h-full"></div>
       </div>
