@@ -3,9 +3,9 @@ import MovieCard from "../../../components/home/MovieCard";
 
 const RecommendedList = ({ data }: any) => {
   return (
-    <div className="pb-20 px-3">
-      <h1 className="text-white mb-3 my-5 text-[16px]">相关推荐</h1>
-      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2">
+    <div className="pb-16 px-5">
+      <h1 className="text-white mb-3 my-5">继续观看</h1>
+      <div className="flex justify-start items-center flex-wrap gap-4 mb-5">
         {data?.recommendList?.map((movie: any) => (
           <div style={{width: '30%'}}>
           <MovieCard movie={movie} height={"100px"} width={"200px"} />
