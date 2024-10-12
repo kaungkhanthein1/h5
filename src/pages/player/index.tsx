@@ -5,7 +5,9 @@ import SourceSelector from "./video/SourceSelector";
 import DetailSection from "./video/DetailSection";
 import EpisodeSelector from "./video/EpisodeSelector";
 import Loader from "../search/components/Loader";
-import noPlayImage from '../../assets/noplay.svg';
+import noPlayImage from "../../assets/noplay.svg";
+import RecommendedList from "./video/RecommendedList";
+import AdsSection from "./video/AdsSection";
 
 interface Episode {
   episode_id: number | null;
@@ -79,23 +81,29 @@ const DetailPage: React.FC = () => {
   const [autoSwitch, setAutoSwitch] = useState(6); // Initialize countdown value with 3
   const [videoError, setVideoError] = useState(false);
   const navigate = useNavigate();
-  
+
+  console.log(movieDetail, "ddfdsfadf");
+
   useEffect(() => {
     let interval: any; // Declare the interval variable to store the interval ID
-  
+
     const handleCountdown = async () => {
-      if ((autoSwitch > -1 && !((selectedEpisode && selectedEpisode.ready_to_play) ||
-        (currentEpisode && currentEpisode.ready_to_play))) || (autoSwitch > -1 && videoError)) {
-  
+      if (
+        (autoSwitch > 0 &&
+          !(
+            (selectedEpisode && selectedEpisode.ready_to_play) ||
+            (currentEpisode && currentEpisode.ready_to_play)
+          )) ||
+        (autoSwitch > 0 && videoError)
+      ) {
         // Start the interval and store the interval ID
         interval = setInterval(() => {
           setAutoSwitch((prevCount) => prevCount - 1);
         }, 1000);
-  
-      } else if (autoSwitch === -1) {
+      } else if (autoSwitch === 0) {
         // Clear the interval when the countdown reaches 0
         clearInterval(interval);
-  
+
         try {
           // Await the autoPlayNextEpisode function if it involves any async operation
           await autoPlayNextEpisode();
@@ -105,23 +113,21 @@ const DetailPage: React.FC = () => {
         }
       }
     };
-  
+
     handleCountdown(); // Call the async function to manage the countdown
-  
+
     // Cleanup function: This clears the interval when the component unmounts or dependencies change
     return () => clearInterval(interval);
-  
   }, [autoSwitch, videoError]);
-  
 
   const autoPlayNextEpisode = async () => {
-    console.log('hello');
+    console.log("hello");
     if (movieDetail?.play_from) {
       let currentSourceIndex = selectedSource;
       let currentEpisodeIndex = episodes.findIndex(
         (ep) => ep.episode_id === currentEpisode?.episode_id
       );
-  
+
       // Try to find the next episode in the same source
       if (currentEpisodeIndex + 1 < episodes.length) {
         const nextEpisode = episodes[currentEpisodeIndex + 1];
@@ -131,9 +137,13 @@ const DetailPage: React.FC = () => {
           return;
         }
       }
-  
+
       // If no more episodes in the current source, move to the next source
-      for (let i = currentSourceIndex + 1; i < movieDetail.play_from.length; i++) {
+      for (
+        let i = currentSourceIndex + 1;
+        i < movieDetail.play_from.length;
+        i++
+      ) {
         const nextSource = movieDetail.play_from[i];
         const res = await fetch(
           `https://cc3e497d.qdhgtch.com:2345/api/v1/movie_addr/list?from_code=${nextSource.code}&movie_id=${id}`
@@ -147,12 +157,12 @@ const DetailPage: React.FC = () => {
           return;
         }
       }
-  
+
       // If no more sources or episodes available, handle accordingly
       // alert("No more playable episodes available.");
     }
   };
-  
+
   useEffect(() => {
     if (id) {
       getMovieDetail();
@@ -229,7 +239,7 @@ const DetailPage: React.FC = () => {
         setResumeTime(0);
       }
     } else if (playFrom?.[0]?.list?.[0]) {
-      setCurrentEpisode(playFrom[0].list[0]); // Set the first episode as default
+      setCurrentEpisode(playFrom[0]?.list[0]); // Set the first episode as default
       setResumeTime(0);
     }
   };
@@ -295,7 +305,8 @@ const DetailPage: React.FC = () => {
       ) : (
         <>
           {((selectedEpisode && selectedEpisode.ready_to_play) ||
-          (currentEpisode && currentEpisode.ready_to_play)) && !videoError ? (
+            (currentEpisode && currentEpisode.ready_to_play)) &&
+          !videoError ? (
             <div className="sticky top-0 z-50">
               <VideoPlayer
                 key={selectedEpisode?.episode_id || currentEpisode?.episode_id}
@@ -339,7 +350,14 @@ const DetailPage: React.FC = () => {
               </div>
             </div>
           ) : (
-            <div className="relative flex justify-center items-center w-full min-h-[40vh]" style={{ backgroundImage: `url(${noPlayImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+            <div
+              className="relative flex justify-center items-center w-full min-h-[40vh]"
+              style={{
+                backgroundImage: `url(${noPlayImage})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
+            >
               <div className="relative z-10 flex flex-col items-center p-8 text-center text-white max-w-md mx-auto">
                 <p className="text-sm mb-4 tracking-wide text-gray-400">
                   Playback Error Or Connection Issue? We'll Automatically Switch
@@ -396,6 +414,10 @@ const DetailPage: React.FC = () => {
                 />
               </>
             )}
+            <div className="mt-4 px-4">
+              <AdsSection adsData={adsData} />
+            </div>
+            <RecommendedList data={movieDetail} />
           </div>
         </>
       )}

@@ -13,6 +13,7 @@ import CommentComponent from "./CommentSection";
 import { useDispatch, useSelector } from "react-redux";
 import { setAuthModel } from "../../../features/login/ModelSlice";
 import FeedbackComponent from "./Feedback";
+import AdsSection from "./AdsSection";
 interface DetailSectionProps {
   movieDetail: {
     code: string;
@@ -53,7 +54,6 @@ const DetailSection: React.FC<DetailSectionProps> = ({
   activeTab,
   setActiveTab
 }) => {
-  const adEntries = adsData && adsData.data ? Object.values(adsData.data) : []; // Extracting all the ads
   const [showModal, setShowModal] = useState(false); // For triggering modal
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -267,28 +267,7 @@ const DetailSection: React.FC<DetailSectionProps> = ({
           </div>
         ) :
         <div className="mt-4">
-          {adEntries.length > 0
-            ? (() => {
-                const randomIndex = Math.floor(
-                  Math.random() * adEntries.length
-                );
-                const ad: any = adEntries[randomIndex % adEntries.length];
-                return ad && ad.data && ad.data.image && ad.data.url ? (
-                  <a
-                    href={ad.data.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <img
-                      src={ad.data.image}
-                      alt={`Ad ${randomIndex}`}
-                      className="w-full h-auto rounded-md"
-                    />
-                  </a>
-                ) : null;
-              })()
-            : null}{" "}
-          {/* Don't render if no ad data */}
+          <AdsSection adsData={adsData}/>
         </div>
 }
       </div>

@@ -9,7 +9,7 @@ interface EpisodeSelectorProps {
 
 const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes, selectedEpisode, onEpisodeSelect }) => {
   return (
-    <div className="overflow-x-auto whitespace-nowrap m-4 bg-background"> {/* Horizontal scroll container */}
+    <div className="overflow-x-auto whitespace-nowrap m-4 bg-background remove-scrollbar"> {/* Horizontal scroll container */}
       <div className="inline-flex space-x-3"> {/* Inline flex for horizontal layout */}
         {episodes.map((episode) => (
           <button
