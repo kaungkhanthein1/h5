@@ -6,6 +6,8 @@ import {
 } from "../../pages/explorer/services/explorerAPi";
 import RatingCard from "./RatingCard";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { setActiveRank } from "../../pages/explorer/slice/ExploreSlice";
 
 // Define the type for the movie data
 interface Movie {
@@ -23,6 +25,8 @@ interface RankingItem {
 
 const Tab4 = () => {
   const [activeTab, setActiveTab] = useState(0);
+  const activeRank = useSelector((state: any) => state?.explore?.activeRank);
+  const dispatch = useDispatch();
   const [rankingDataById, setRankingDataById] = useState([]);
   const [id, setId] = useState(0);
   const { data } = useGetMovieRankingListQuery();
@@ -36,7 +40,7 @@ const Tab4 = () => {
   };
 
   useEffect(() => {
-    getRankingById(id);
+    getRankingById(activeRank ? activeRank : id);
   }, [id]);
 
   return (
@@ -48,20 +52,33 @@ const Tab4 = () => {
               className="relative"
               onClick={() => {
                 setActiveTab(index);
+                dispatch(setActiveRank(item?.id));
                 setId(item?.id);
               }}
               key={index}
             >
               <p
                 className={`${
-                  activeTab === index ? "text-white" : "text-gray-400"
+                  activeRank
+                    ? activeRank === item?.id
+                      ? "text-white"
+                      : "text-gray-400"
+                    : activeTab === index
+                    ? "text-white"
+                    : "text-gray-400"
                 } whitespace-nowrap py-2 rounded-lg hover:text-white transition-colors`}
               >
                 {item?.title}
               </p>
               <div
                 className={`w-[29px] h-[3px] bg-[#F54100] absolute left-[20px] ${
-                  activeTab === index ? "opacity-1" : "opacity-0"
+                  activeRank
+                    ? activeRank === item?.id
+                      ? "opacity-1"
+                      : "opacity-0"
+                    : activeTab === index
+                    ? "opacity-1"
+                    : "opacity-0"
                 }`}
               ></div>
             </div>
@@ -69,10 +86,12 @@ const Tab4 = () => {
         </nav>
       </div>
       <div className="px-3">
-        {data?.data[activeTab]?.movie_data?.length
-          ? data?.data[activeTab]?.movie_data?.map((item: any, index: any) => (
-              <RatingCard movie={item} key={index} index={index} />
-            ))
+        {data?.data[activeRank ? activeRank : activeTab]?.movie_data?.length
+          ? data?.data[activeRank ? activeRank : activeTab]?.movie_data?.map(
+              (item: any, index: any) => (
+                <RatingCard movie={item} key={index} index={index} />
+              )
+            )
           : rankingDataById?.map((item: any, index: any) => (
               <RatingCard movie={item} key={index} index={index} />
             ))}

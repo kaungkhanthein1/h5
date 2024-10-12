@@ -179,7 +179,7 @@ const DetailSection: React.FC<DetailSectionProps> = ({
       
 
       {/* Tab content */}
-      <div className="bg-background p-5 rounded-b-lg">
+      <div className="bg-background p-4 rounded-b-lg">
         {activeTab === "tab-1" && (
           <div id="tab-1" className="block">
             {/* Movie Title and Info */}

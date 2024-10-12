@@ -5,6 +5,7 @@ import SourceSelector from "./video/SourceSelector";
 import DetailSection from "./video/DetailSection";
 import EpisodeSelector from "./video/EpisodeSelector";
 import Loader from "../search/components/Loader";
+import noPlayImage from '../../assets/noplay.svg';
 
 interface Episode {
   episode_id: number | null;
@@ -75,8 +76,82 @@ const DetailPage: React.FC = () => {
   const [selectedSource, setSelectedSource] = useState(0); // Track the selected source
   const [activeTab, setActiveTab] = useState("tab-1");
   const [resumeTime, setResumeTime] = useState<number>(0); // For resuming playback
+  const [autoSwitch, setAutoSwitch] = useState(6); // Initialize countdown value with 3
   const navigate = useNavigate();
+  
+  useEffect(() => {
+    let interval: any; // Declare the interval variable to store the interval ID
+  
+    const handleCountdown = async () => {
+      if (autoSwitch > 0 && !((selectedEpisode && selectedEpisode.ready_to_play) ||
+        (currentEpisode && currentEpisode.ready_to_play))) {
+  
+        // Start the interval and store the interval ID
+        interval = setInterval(() => {
+          setAutoSwitch((prevCount) => prevCount - 1);
+        }, 1000);
+  
+      } else if (autoSwitch === 0) {
+        // Clear the interval when the countdown reaches 0
+        clearInterval(interval);
+  
+        try {
+          // Await the autoPlayNextEpisode function if it involves any async operation
+          await autoPlayNextEpisode();
+          setAutoSwitch(6); // Optionally reset the countdown for the next episode
+        } catch (error) {
+          console.error("Error auto-playing next episode:", error);
+        }
+      }
+    };
+  
+    handleCountdown(); // Call the async function to manage the countdown
+  
+    // Cleanup function: This clears the interval when the component unmounts or dependencies change
+    return () => clearInterval(interval);
+  
+  }, [autoSwitch, selectedEpisode, currentEpisode]);
+  
 
+  const autoPlayNextEpisode = async () => {
+    console.log('hello');
+    if (movieDetail?.play_from) {
+      let currentSourceIndex = selectedSource;
+      let currentEpisodeIndex = episodes.findIndex(
+        (ep) => ep.episode_id === currentEpisode?.episode_id
+      );
+  
+      // Try to find the next episode in the same source
+      if (currentEpisodeIndex + 1 < episodes.length) {
+        const nextEpisode = episodes[currentEpisodeIndex + 1];
+        if (nextEpisode.ready_to_play) {
+          setCurrentEpisode(nextEpisode);
+          setSelectedEpisode(nextEpisode);
+          return;
+        }
+      }
+  
+      // If no more episodes in the current source, move to the next source
+      for (let i = currentSourceIndex + 1; i < movieDetail.play_from.length; i++) {
+        const nextSource = movieDetail.play_from[i];
+        const res = await fetch(
+          `https://cc3e497d.qdhgtch.com:2345/api/v1/movie_addr/list?from_code=${nextSource.code}&movie_id=${id}`
+        );
+        const data = await res.json();
+        if (data.data && data.data[0].ready_to_play) {
+          setEpisodes(data.data);
+          setCurrentEpisode(data.data[0]);
+          setSelectedEpisode(data.data[0]);
+          setSelectedSource(i);
+          return;
+        }
+      }
+  
+      // If no more sources or episodes available, handle accordingly
+      // alert("No more playable episodes available.");
+    }
+  };
+  
   useEffect(() => {
     if (id) {
       getMovieDetail();
@@ -179,7 +254,7 @@ const DetailPage: React.FC = () => {
       setEpisodes(data.data);
     } else {
       setSelectedSource(selectedSource);
-      alert("Channel Unavailable");
+      // alert("Channel Unavailable");
     }
   };
 
@@ -230,54 +305,59 @@ const DetailPage: React.FC = () => {
                 resumeTime={resumeTime}
               />
               <div className="relative flex px-2 justify-between items-center bg-background pb-2">
-            <div className="flex">
-              <div
-                className={`px-4 py-3 bg-background text-gray-400 rounded-t-lg cursor-pointer relative ${
-                  activeTab === "tab-1" ? "text-white z-10" : ""
-                }`}
-                onClick={() => setActiveTab("tab-1")}
-              >
-                <span className="text-white">详情</span>
-                {activeTab === "tab-1" && (
-                  <div className="absolute bottom-0 left-0 w-full h-1 bg-orange-500"></div>
-                )}
+                <div className="flex">
+                  <div
+                    className={`px-4 py-3 bg-background text-gray-400 rounded-t-lg cursor-pointer relative ${
+                      activeTab === "tab-1" ? "text-white z-10" : ""
+                    }`}
+                    onClick={() => setActiveTab("tab-1")}
+                  >
+                    <span className="text-white">详情</span>
+                    {activeTab === "tab-1" && (
+                      <div className="absolute bottom-0 left-0 w-full h-1 bg-orange-500"></div>
+                    )}
+                  </div>
+                  <div
+                    className={`px-4 py-3 bg-background text-gray-400 rounded-t-lg cursor-pointer relative ${
+                      activeTab === "tab-2" ? "text-white z-10" : ""
+                    }`}
+                    onClick={() => setActiveTab("tab-2")}
+                  >
+                    <span>评论</span>
+                    <span className="text-gray-500">
+                      {" "}
+                      {movieDetail.comments_count || "0"}
+                    </span>
+                    {activeTab === "tab-2" && (
+                      <div className="absolute bottom-0 left-0 w-full h-1 bg-orange-500"></div>
+                    )}
+                  </div>
+                </div>
               </div>
-              <div
-                className={`px-4 py-3 bg-background text-gray-400 rounded-t-lg cursor-pointer relative ${
-                  activeTab === "tab-2" ? "text-white z-10" : ""
-                }`}
-                onClick={() => setActiveTab("tab-2")}
-              >
-                <span>评论</span>
-                <span className="text-gray-500">
-                  {" "}
-                  {movieDetail.comments_count || "0"}
-                </span>
-                {activeTab === "tab-2" && (
-                  <div className="absolute bottom-0 left-0 w-full h-1 bg-orange-500"></div>
-                )}
-              </div>
-            </div>
-          </div>
             </div>
           ) : (
-            <div className="relative flex justify-center items-center w-full min-h-[50vh] my-8">
-              <div className="absolute inset-0 bg-background opacity-75"></div>
-              <div className="relative z-10 flex flex-col items-center p-8 bg-opacity-90 text-center text-white rounded-lg shadow-lg max-w-md mx-auto">
-                <p className="text-2xl font-bold mb-6 tracking-wider">
-                  Oops! Video Not Found
+            <div className="relative flex justify-center items-center w-full min-h-[40vh]" style={{ backgroundImage: `url(${noPlayImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+              <div className="relative z-10 flex flex-col items-center p-8 text-center text-white max-w-md mx-auto">
+                <p className="text-sm mb-4 tracking-wide text-gray-400">
+                  Playback Error Or Connection Issue? We'll Automatically Switch
+                  To The Next Available Line
                 </p>
-                <button
-                  className="px-8 py-3 bg-gradient-to-r from-blue-500 to-teal-400 text-white font-semibold rounded-full shadow-md hover:from-teal-400 hover:to-blue-500 hover:shadow-lg transition-all duration-300 ease-in-out"
-                  onClick={navigateBackFunction}
-                >
-                  Go Back
-                </button>
+                <div className="flex space-x-4">
+                  <button
+                    className="px-6 py-2 bg-gray-700 text-white font-semibold rounded-full shadow-md hover:bg-gray-600 transition-all duration-300 ease-in-out"
+                    onClick={navigateBackFunction}
+                  >
+                    Cancel
+                  </button>
+                  <button className="px-6 py-2 bg-gradient-to-r from-gray-400 to-gray-700 text-white font-semibold rounded-full shadow-md transition-all duration-300 ease-in-out">
+                    Switch in {autoSwitch}s
+                  </button>
+                </div>
               </div>
             </div>
           )}
-          
-          <div className="overflow-y-scroll">
+
+          <div className={`${activeTab === "tab-1" && "overflow-y-scroll"}`}>
             <DetailSection
               adsData={adsData}
               movieDetail={movieDetail} // Pass movie details to DetailSection

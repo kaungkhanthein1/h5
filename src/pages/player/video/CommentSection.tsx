@@ -253,7 +253,7 @@ const CommentComponent: React.FC<CommentProps> = ({ movieId }) => {
   }, [replyingTo]);
 
   return (
-    <div className="comment-section p-1 rounded-md">
+    <div className="comment-section h-auto flex flex-col rounded-md">
       {
         comments && comments.length > 0 ? 
         <InfiniteScroll
@@ -354,7 +354,7 @@ const CommentComponent: React.FC<CommentProps> = ({ movieId }) => {
           </div>
         ))}
       </InfiniteScroll> : 
-      <div className="flex justify-center items-center text-center h-[40vh]">
+      <div className="flex justify-center items-center text-center h-[60vh]">
       <div>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -555,7 +555,7 @@ const CommentComponent: React.FC<CommentProps> = ({ movieId }) => {
       
 
       {/* Create new comment or reply */}
-      {isLoggedIn ? <div className="create-comment mt-6 flex items-center justify-center rounded-lg w-full">
+      {isLoggedIn ? <div className="create-comment sticky bg-background left-0 bottom-0 p-2 flex items-center justify-center rounded-lg w-full">
         <img
           src={ProfileImg}
           alt="User Avatar"

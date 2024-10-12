@@ -34,6 +34,9 @@ module.exports = {
         sans: ['Inter', 'sans-serif'],
         serif: ['Merriweather', 'serif'],
       },
+      // backgroundImage: {
+      //   noplay: "url('./src/assets/noplay.svg')",
+      // },
     },
   },
   plugins: [],

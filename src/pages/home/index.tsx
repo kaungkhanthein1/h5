@@ -12,9 +12,9 @@ const Home: React.FC = () => {
   const { data, isLoading } = useGetRecommendedMoviesQuery();
   const activeTab = useSelector((state: any) => state.home.activeTab);
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(setActiveTab(0));
-  }, []);
+  // useEffect(() => {
+  //   dispatch(setActiveTab(0));
+  // }, []);
   return (
     <>
       {/* <FilteredByType /> */}

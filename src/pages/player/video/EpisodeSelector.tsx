@@ -20,7 +20,7 @@ const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes, selectedEpi
                 ? 'bg-gray-800 text-white'
                 : 'bg-gray-700 text-gray-300'
             }`}
-            style={{ minWidth: '100px', maxWidth: '120px' }}  // Adjust width for uniformity
+            style={{ minWidth: '100px' }}  // Adjust width for uniformity
           >
             <span>{episode.episode_name}</span>
 

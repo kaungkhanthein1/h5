@@ -21,7 +21,7 @@ import ErrorSlice from "../pages/profile/error/ErrorSlice";
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["history", "favorite", "user"], // Reducers you want to persist
+  whitelist: ["history", "favorite", "user", "explore", "home"], // Reducers you want to persist
 };
 
 // Combine all reducers

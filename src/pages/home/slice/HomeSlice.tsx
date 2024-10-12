@@ -8,10 +8,14 @@ const HomeSlice = createSlice({
     class: "",
     area: "",
     year: "",
+    activeNav: 0,
   },
   reducers: {
     setActiveTab: (state, { payload }) => {
       state.activeTab = payload;
+    },
+    setActiveNav: (state, { payload }) => {
+      state.activeNav = payload;
     },
     setSort: (state, { payload }) => {
       state.sort = payload;
@@ -28,6 +32,12 @@ const HomeSlice = createSlice({
   },
 });
 
-export const { setActiveTab, setSort, setClass, setArea, setYear } =
-  HomeSlice.actions;
+export const {
+  setActiveTab,
+  setSort,
+  setClass,
+  setArea,
+  setYear,
+  setActiveNav,
+} = HomeSlice.actions;
 export default HomeSlice.reducer;

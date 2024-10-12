@@ -83,9 +83,10 @@ const ContinueWatching = () => {
       navigate("/history");
     }
   };
+  console.log(movies?.length, "ml");
   return (
     <>
-      {movies?.length !== 0 ? (
+      {movies?.length ? (
         <div className="text-sm uppercase text-white font-semibold flex items-center px-3 justify-between w-full">
           <span className="text-white font-headerFont">Continue Watching</span>
           <svg

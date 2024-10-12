@@ -85,7 +85,11 @@ const FilterTag = () => {
                     dispatch(setClass(item));
                   }}
                   className={`${
-                    activeClass === index
+                    classData
+                      ? classData === item
+                        ? "bg-gray-500/35 px-5 py-1 text-xs"
+                        : "text-[14px]"
+                      : activeClass === index
                       ? "bg-gray-500/35 px-5 py-1 text-xs"
                       : "text-[14px]"
                   } whitespace-nowrap py-2 rounded-full hover:text-white transition-colors`}
@@ -108,7 +112,11 @@ const FilterTag = () => {
                     dispatch(setArea(item));
                   }}
                   className={`${
-                    activeArea === index
+                    area
+                      ? area === item
+                        ? "bg-gray-500/35 px-5 py-1 text-xs"
+                        : "text-[14px]"
+                      : activeArea === index
                       ? "bg-gray-500/35 px-5 py-1 text-xs"
                       : "text-[14px]"
                   } whitespace-nowrap py-2 rounded-full hover:text-white transition-colors`}
@@ -132,7 +140,11 @@ const FilterTag = () => {
                     dispatch(setYear(item));
                   }}
                   className={`${
-                    activeYear === index
+                    year
+                      ? year === item
+                        ? "bg-gray-500/35 px-5 py-1 text-xs"
+                        : "text-[14px]"
+                      : activeYear === index
                       ? "bg-gray-500/35 px-5 py-1 text-xs"
                       : "text-[14px]"
                   } whitespace-nowrap py-2 rounded-full hover:text-white transition-colors`}
