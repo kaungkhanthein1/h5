@@ -77,21 +77,22 @@ const DetailPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState("tab-1");
   const [resumeTime, setResumeTime] = useState<number>(0); // For resuming playback
   const [autoSwitch, setAutoSwitch] = useState(6); // Initialize countdown value with 3
+  const [videoError, setVideoError] = useState(false);
   const navigate = useNavigate();
   
   useEffect(() => {
     let interval: any; // Declare the interval variable to store the interval ID
   
     const handleCountdown = async () => {
-      if (autoSwitch > 0 && !((selectedEpisode && selectedEpisode.ready_to_play) ||
-        (currentEpisode && currentEpisode.ready_to_play))) {
+      if ((autoSwitch > -1 && !((selectedEpisode && selectedEpisode.ready_to_play) ||
+        (currentEpisode && currentEpisode.ready_to_play))) || (autoSwitch > -1 && videoError)) {
   
         // Start the interval and store the interval ID
         interval = setInterval(() => {
           setAutoSwitch((prevCount) => prevCount - 1);
         }, 1000);
   
-      } else if (autoSwitch === 0) {
+      } else if (autoSwitch === -1) {
         // Clear the interval when the countdown reaches 0
         clearInterval(interval);
   
@@ -110,7 +111,7 @@ const DetailPage: React.FC = () => {
     // Cleanup function: This clears the interval when the component unmounts or dependencies change
     return () => clearInterval(interval);
   
-  }, [autoSwitch, selectedEpisode, currentEpisode]);
+  }, [autoSwitch, videoError]);
   
 
   const autoPlayNextEpisode = async () => {
@@ -293,8 +294,8 @@ const DetailPage: React.FC = () => {
         </div>
       ) : (
         <>
-          {(selectedEpisode && selectedEpisode.ready_to_play) ||
-          (currentEpisode && currentEpisode.ready_to_play) ? (
+          {((selectedEpisode && selectedEpisode.ready_to_play) ||
+          (currentEpisode && currentEpisode.ready_to_play)) && !videoError ? (
             <div className="sticky top-0 z-50">
               <VideoPlayer
                 key={selectedEpisode?.episode_id || currentEpisode?.episode_id}
@@ -303,6 +304,8 @@ const DetailPage: React.FC = () => {
                 movieDetail={movieDetail}
                 selectedEpisode={selectedEpisode || currentEpisode}
                 resumeTime={resumeTime}
+                setVideoError={setVideoError}
+                setAutoSwitch={setAutoSwitch}
               />
               <div className="relative flex px-2 justify-between items-center bg-background pb-2">
                 <div className="flex">

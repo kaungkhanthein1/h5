@@ -48,6 +48,8 @@ interface VideoPlayerProps {
   movieDetail: MovieDetail;
   selectedEpisode?: Episode | null;
   resumeTime: number;
+  setVideoError: (videoError: boolean) => void;
+  setAutoSwitch: (count: number) => void;
 }
 
 const VideoPlayer: React.FC<VideoPlayerProps> = ({
@@ -56,6 +58,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   movieDetail,
   selectedEpisode,
   resumeTime,
+  setVideoError,
+  setAutoSwitch
 }) => {
   const playerRef = useRef<any>(null);
   const videoElementRef = useRef<HTMLDivElement>(null);
@@ -117,6 +121,14 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
           const hls = new Hls();
           hls.loadSource(videoUrl);
           hls.attachMedia(art.video);
+             // Handle Hls.js errors
+          hls.on(Hls.Events.ERROR, (_, data) => {
+          if (data.fatal) {
+            console.log('errroer', data.fatal);
+            setVideoError(true);
+            setAutoSwitch(6);
+          }
+        });
         } else if (art.video.canPlayType('application/vnd.apple.mpegurl')) {
           art.video.src = videoUrl; // For Safari and iOS
         }
@@ -125,7 +137,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         art.once('video:loadedmetadata', () => {
           const videoWidth = art.video.videoWidth;
           const videoHeight = art.video.videoHeight;
-          console.log('videoHeight is=>', videoHeight, videoWidth);
           setVideoRatio(videoHeight / videoWidth); // Set the dynamic aspect ratio
         });
 
