@@ -412,12 +412,13 @@ const DetailPage: React.FC = () => {
                   onEpisodeSelect={handleEpisodeSelect}
                   selectedEpisode={selectedEpisode || currentEpisode}
                 />
-              </>
-            )}
+
             <div className="mt-4 px-4">
               <AdsSection adsData={adsData} />
             </div>
             <RecommendedList data={movieDetail} />
+              </>
+            )}
           </div>
         </>
       )}

@@ -94,6 +94,10 @@ const CommentComponent: React.FC<CommentProps> = ({ movieId }) => {
 
   // Like a comment
   const likeComment = async (commentId: number) => {
+    if(!isLoggedIn) {
+      dispatch(setAuthModel(true));
+      return;
+    }
     const loginResponse = await localStorage.getItem("authToken");
     const loginInfo = loginResponse ? JSON.parse(loginResponse || "") : null;
     const authorization =
