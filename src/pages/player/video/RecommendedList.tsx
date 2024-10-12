@@ -7,7 +7,9 @@ const RecommendedList = ({ data }: any) => {
       <h1 className="text-white mb-3 my-5">继续观看</h1>
       <div className="flex justify-start items-center flex-wrap gap-4 mb-5">
         {data?.recommendList?.map((movie: any) => (
-          <MovieCard movie={movie} height={"100px"} width={104} />
+          <div style={{width: '30%'}}>
+          <MovieCard movie={movie} height={"100px"} width={"200px"} />
+          </div>
         ))}
       </div>
     </div>

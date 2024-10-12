@@ -235,7 +235,7 @@ const DetailPage: React.FC = () => {
           }
         }
       } else {
-        setCurrentEpisode(playFrom[0].list[0]); // Set the first episode as default
+        setCurrentEpisode(playFrom[0]?.list[0]); // Set the first episode as default
         setResumeTime(0);
       }
     } else if (playFrom?.[0]?.list?.[0]) {

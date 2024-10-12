@@ -3,12 +3,12 @@ import he from "he";
 // import videoIcon from "../../assets/videoIcon.svg";
 import LazyLoadImage from "./LazyLoadImage";
 
-const MovieCard = ({ movie, height, width = 114 }) => {
+const MovieCard = ({ movie, height, width = '114px' }) => {
   return (
     <div className="movie-item max-sm:h-auto cursor-default relative mt-2">
       <Link className="block relative zoom-effect" to={`/player/${movie?.id}`}>
         <div
-          className={`relative img_a h-[153px] w-[${width}px] border-none ${
+          className={`relative img_a border-none ${
             height ? `max-sm:h-[${height}]` : "max-sm:h-[153px]"
           }`}
         >
