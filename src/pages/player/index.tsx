@@ -110,6 +110,7 @@ const DetailPage: React.FC = () => {
           setAutoSwitch(6); // Optionally reset the countdown for the next episode
         } catch (error) {
           console.error("Error auto-playing next episode:", error);
+          clearInterval(interval);
         }
       }
     };
@@ -118,7 +119,7 @@ const DetailPage: React.FC = () => {
 
     // Cleanup function: This clears the interval when the component unmounts or dependencies change
     return () => clearInterval(interval);
-  }, [autoSwitch, videoError]);
+  }, [autoSwitch, videoError, selectedEpisode, currentEpisode]);
 
   const autoPlayNextEpisode = async () => {
     console.log("hello");
@@ -165,6 +166,9 @@ const DetailPage: React.FC = () => {
 
   useEffect(() => {
     if (id) {
+      console.log('hello')
+      setAutoSwitch(0);
+      setVideoError(false);
       getMovieDetail();
       getAdsData();
     }
@@ -278,7 +282,8 @@ const DetailPage: React.FC = () => {
   };
 
   const navigateBackFunction = () => {
-    navigate(-1); // Go back to the previous page
+    navigate('/home')
+    // navigate(-1); // Go back to the previous page
   };
 
   const changeSource = (playfrom: PlayFrom) => {
@@ -351,7 +356,7 @@ const DetailPage: React.FC = () => {
             </div>
           ) : (
             <div
-              className="relative flex justify-center items-center w-full min-h-[40vh]"
+              className="sticky top-0 z-50 flex justify-center items-center w-full min-h-[40vh] bg-background"
               style={{
                 backgroundImage: `url(${noPlayImage})`,
                 backgroundSize: "cover",
@@ -413,7 +418,7 @@ const DetailPage: React.FC = () => {
                   selectedEpisode={selectedEpisode || currentEpisode}
                 />
 
-            <div className="mt-4 px-4">
+            <div className="mt-8 px-4">
               <AdsSection adsData={adsData} />
             </div>
             <RecommendedList data={movieDetail} />
