@@ -125,8 +125,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
           hls.on(Hls.Events.ERROR, (_, data) => {
           if (data.fatal) {
             console.log('errroer', data.fatal);
-            setVideoError(true);
-            setAutoSwitch(6);
+            // setVideoError(true);
+            // setAutoSwitch(6);
           }
         });
         } else if (art.video.canPlayType('application/vnd.apple.mpegurl')) {

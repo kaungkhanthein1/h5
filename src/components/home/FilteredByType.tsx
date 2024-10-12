@@ -35,7 +35,7 @@ const FilteredByType = () => {
     setMovieData(data?.data?.list);
   };
   const { data: configData } = useGetHeaderTopicsQuery();
-  const filteredTags = configData?.data?.movie_screen?.filter?.filter(
+  const filteredTags: any = configData?.data?.movie_screen?.filter?.filter(
     (data: any) => data?.id === activeTab
   );
 
