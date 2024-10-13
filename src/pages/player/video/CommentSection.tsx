@@ -330,7 +330,7 @@ const CommentComponent: React.FC<CommentProps> = ({ movieId }) => {
                         <span className="username text-white font-bold">
                           {reply?.user?.nickname}
                         </span>
-                        <span className="badge bg-blue-500 text-xs text-white px-2 py-1 ml-2 rounded">
+                        <span className="badge bg-blue-500 text-xs text-white px-4 py-1 ml-2 rounded">
                           {reply?.user?.level}
                         </span>
                       </div>

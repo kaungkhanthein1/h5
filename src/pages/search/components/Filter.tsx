@@ -216,7 +216,7 @@ const Filter: React.FC<FilterProps> = ({
           </div>
         </div>
       </div>
-      <div className="movie_title px-3 py-1">
+      <div className="movie_title px-4 py-1">
         共 {movies?.length} 条搜索结果
       </div>
     </div>

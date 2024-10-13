@@ -23,7 +23,7 @@ const Home: React.FC = () => {
       ) : (
         <>
           {data && !isLoading ? (
-            <div className="bg-background text-text min-h-screen pb-32 flex flex-col gap-10">
+            <div className="bg-background text-text min-h-screen pb-32 flex flex-col gap-6">
               {data?.data?.map((movieData: any, index: any) => {
                 if (movieData?.layout === "index_recommend_carousel") {
                   return (

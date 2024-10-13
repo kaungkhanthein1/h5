@@ -66,7 +66,7 @@ const Main: React.FC<any> = ({
       )}
       {movies?.map((movie: any, index: number) => (
         <div className="mt-5" key={index}>
-          <div className="flex items-center justify-between bg-[#1B1B1F] px-5 py-1">
+          <div className="flex items-center justify-between bg-[#1B1B1F] px-4 py-1">
             <div className="history-text">{movie?.title}</div>
             <div className="flex gap-2 items-center">
               {/* <p className="filter-text">Filter the watched videos</p> */}
