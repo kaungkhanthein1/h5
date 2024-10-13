@@ -13,7 +13,7 @@ const RecommendedList = ({ data }: any) => {
         }}
       >
         {data?.recommendList?.map((movie: any) => (
-          <MovieCard key={movie.id} movie={movie} height={"100px"} width={"200px"} />
+          <MovieCard key={movie.id} movie={movie} height={"100px"} width={"200px"} showDynamic={true}/>
         ))}
       </div>
     </div>

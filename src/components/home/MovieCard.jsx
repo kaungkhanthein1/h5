@@ -3,7 +3,7 @@ import he from "he";
 // import videoIcon from "../../assets/videoIcon.svg";
 import LazyLoadImage from "./LazyLoadImage";
 
-const MovieCard = ({ movie, height, width = '114px' }) => {
+const MovieCard = ({ movie, height, width = '114px', showDynamic = false }) => {
   return (
     <div className="movie-item max-sm:h-auto cursor-default relative mt-2">
       <Link className="block relative zoom-effect" to={`/player/${movie?.id}`}>
@@ -29,6 +29,9 @@ const MovieCard = ({ movie, height, width = '114px' }) => {
         <div className="overlay">
           {/* <img className="h-[40px]" src={videoIcon} alt="" /> */}
         </div>
+        {showDynamic && <div className="top-0 right-0 search_card_score z-1 absolute">
+            <span>{movie?.dynamic}</span>
+        </div>}
       </Link>
 
       <div className="text-container">
