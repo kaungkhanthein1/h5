@@ -203,6 +203,7 @@ const DetailPage: React.FC = () => {
         if (mvDetail?.play_from?.[0]?.list?.[0]) {
           setCurrentEpisode(mvDetail?.play_from[0].list[0]);
           setResumeTime(0);
+          setEpisodes(mvDetail?.play_from[0].list);
         } 
         if (mvDetail?.play_from?.[0]?.list?.[0] && !mvDetail?.play_from?.[0]?.list?.[0].ready_to_play) {
           setAutoSwitch(6);
@@ -219,6 +220,8 @@ const DetailPage: React.FC = () => {
       abortControllerRef.current.abort();
     }
     setCurrentEpisode(episode);
+    setVideoError(false);
+    setAutoSwitch(null);
     setResumeTime(0);
   };
 
