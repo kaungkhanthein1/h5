@@ -127,6 +127,7 @@ const DetailPage: React.FC = () => {
           } else {
             setAutoSwitch(null);
             setVideoError(false);
+            return;
           }
         }
         // navigate('/home');
