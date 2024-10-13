@@ -48,9 +48,7 @@ interface VideoPlayerProps {
   movieDetail: MovieDetail;
   selectedEpisode?: Episode | null;
   resumeTime: number;
-  setVideoError: (videoError: boolean) => void;
-  setAutoSwitch: (count: number) => void;
-  autoPlayNextEpisode: () => void;
+  handleVideoError: (videlUrl: string) => void
 }
 
 const VideoPlayer: React.FC<VideoPlayerProps> = ({
@@ -59,9 +57,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   movieDetail,
   selectedEpisode,
   resumeTime,
-  setVideoError,
-  setAutoSwitch,
-  autoPlayNextEpisode
+  handleVideoError
 }) => {
   const playerRef = useRef<any>(null);
   const videoElementRef = useRef<HTMLDivElement>(null);
@@ -127,9 +123,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
           hls.on(Hls.Events.ERROR, (_, data) => {
           if (data.fatal) {
             setTimeout(() => {
-              setVideoError(true);
-              setAutoSwitch(6);
-              autoPlayNextEpisode();
+              handleVideoError(videoUrl);
             }, 1000);
           }
         });

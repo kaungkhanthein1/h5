@@ -42,9 +42,9 @@ interface PlayFrom {
 
 interface SourceSelectorProps {
   episodes: Episode[]; // Episodes list
-  onEpisodeChange: (episode: Episode) => void; // Callback to change the current episode
+  // onEpisodeChange: (episode: Episode) => void; // Callback to change the current episode
   onEpisodeSelect: (episode: Episode) => void;
-  changeSource: (playfrom: PlayFrom) => void;
+  changeSource: (playfrom: any) => void;
   selectedEpisode: Episode | null;
   movieDetail: MovieDetail;
   selectedSource: number;
@@ -53,7 +53,7 @@ interface SourceSelectorProps {
 
 const SourceSelector: React.FC<SourceSelectorProps> = ({
   episodes,
-  onEpisodeChange,
+  // onEpisodeChange,
   onEpisodeSelect,
   selectedEpisode,
   changeSource,
@@ -61,6 +61,7 @@ const SourceSelector: React.FC<SourceSelectorProps> = ({
   selectedSource,
   setSelectedSource
 }) => {
+  console.log('episodes is=>', episodes);
   const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
   const [source, setSource] = useState<"episodes" | "sources">("episodes"); // Modal state
 

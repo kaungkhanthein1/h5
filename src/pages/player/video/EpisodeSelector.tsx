@@ -8,6 +8,7 @@ interface EpisodeSelectorProps {
 }
 
 const EpisodeSelector: React.FC<EpisodeSelectorProps> = ({ episodes, selectedEpisode, onEpisodeSelect }) => {
+  console.log('episodes is=>', episodes);
   return (
     <div className="overflow-x-auto whitespace-nowrap m-4 bg-background remove-scrollbar"> {/* Horizontal scroll container */}
       <div className="inline-flex space-x-3"> {/* Inline flex for horizontal layout */}

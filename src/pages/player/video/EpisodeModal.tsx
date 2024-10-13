@@ -52,9 +52,9 @@ const ModalComponent: React.FC<ModalComponentProps> = ({
 
   useEffect(() => {
     // Combine all episodes from the playFrom list
-    const allEpisodes = playFrom.flatMap((source) => source.list);
-    setFilteredEpisodes(allEpisodes);
-  }, [playFrom]);
+    // const allEpisodes = playFrom.flatMap((source) => source.list);
+    setFilteredEpisodes(episodes);
+  }, [episodes]);
 
   // Handle episode selection and update the state
   const handleEpisodeClick = (episode: Episode) => {
