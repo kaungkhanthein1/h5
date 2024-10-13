@@ -8,7 +8,7 @@ const MovieCard = ({ movie, height, width = '114px' }) => {
     <div className="movie-item max-sm:h-auto cursor-default relative mt-2">
       <Link className="block relative zoom-effect" to={`/player/${movie?.id}`}>
         <div
-          className={`relative img_a border-none ${
+          className={`relative img_a border-none w-[${width}] ${
             height ? `max-sm:h-[${height}]` : "max-sm:h-[153px]"
           }`}
         >
