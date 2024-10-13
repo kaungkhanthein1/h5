@@ -12,6 +12,7 @@ import {
 } from "../../features/login/ModelSlice";
 import { getCaptcha, login } from "../../services/userService"; // Importing service methods
 import { useNavigate } from "react-router-dom";
+import { showToast } from "../../pages/profile/error/ErrorSlice";
 
 const Captch: React.FC<{
   username: string;
@@ -67,10 +68,12 @@ const Captch: React.FC<{
         captchaCode,
         keyStatus
       );
-      console.log("Login Success:", loginResponse);
-
+      if (loginResponse.errorCode) {
+        dispatch(showToast({ message: loginResponse.msg, type: "error" }));
+      } else {
+        localStorage.setItem("authToken", JSON.stringify(loginResponse));
+      }
       // Set the token in localStorage
-      localStorage.setItem("authToken", JSON.stringify(loginResponse));
 
       // Close the captcha modal and redirect to home (or the desired route)
       dispatch(setCaptchaOpen(false));

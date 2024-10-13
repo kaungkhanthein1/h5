@@ -13,6 +13,7 @@ import {
 } from "../../features/login/ModelSlice";
 import Captch from "./Captch";
 import { useNavigate } from "react-router-dom";
+import { showToast } from "../../pages/profile/error/ErrorSlice";
 
 interface LoginEmailProps {
   handleBack: () => void; // Accept handleBack as a prop
@@ -38,8 +39,16 @@ const LoginEmail: React.FC<LoginEmailProps> = ({ handleBack }) => {
     return lengthValid && (containsLetters || containsNumbers);
   };
 
+  const validateEmail = (email: string) => {
+    return email.length >= 6 && email.length <= 25;
+  };
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!validateEmail(email)) {
+    dispatch(showToast({ message: '请输入5-25位用户名', type: "error" }))
+      return;
+    }
     try {
       dispatch(setCaptchaOpen(true));
       setIsVisible(false)

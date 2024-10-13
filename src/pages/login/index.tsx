@@ -51,7 +51,7 @@ const Login: React.FC = () => {
     <div className="h-screen  z-[9999] flex items-center justify-center overflow-hidden">
       <AnimatePresence>
         <motion.div
-          className="login_box fixed h-[410px] h-scree  bottom-0 z-[99999] w-screen"
+          className="login_box fixed h-[380px] bottom-0 z-[99999] w-screen"
           initial="hidden"
           animate="visible"
           exit="exit"
@@ -74,14 +74,14 @@ const Login: React.FC = () => {
                 text={"Sign Up"}
               />
             </div>
-            <p className="text-[#888] text-[12px] font-[500] leading-[18px]">
+            {/* <p className="text-[#888] text-[12px] font-[500] leading-[18px]">
               Link account with
-            </p>
-            <div className="flex gap-[22px]">
+            </p> */}
+            {/* <div className="flex gap-[22px]">
               <WeChatLogin />
               <QQLogin />
               <WelboLogin />
-            </div>
+            </div> */}
           </div>
         </motion.div>
       </AnimatePresence>

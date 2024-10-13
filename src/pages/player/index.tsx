@@ -8,6 +8,7 @@ import Loader from "../search/components/Loader";
 import noPlayImage from "../../assets/noplay.svg";
 import RecommendedList from "./video/RecommendedList";
 import AdsSection from "./video/AdsSection";
+import NetworkError from "./video/NetworkError";
 
 interface Episode {
   episode_id: number | null;
@@ -75,99 +76,71 @@ const DetailPage: React.FC = () => {
   const [selectedEpisode, setSelectedEpisode] = useState<Episode | null>(null);
   const [adsData, setAdsData] = useState<AdsData | null>(null);
   const [episodes, setEpisodes] = useState<Episode[]>([]);
-  const [selectedSource, setSelectedSource] = useState(0); // Track the selected source
+  const [selectedSource, setSelectedSource] = useState(0);
   const [activeTab, setActiveTab] = useState("tab-1");
-  const [resumeTime, setResumeTime] = useState<number>(0); // For resuming playback
-  const [autoSwitch, setAutoSwitch] = useState(6); // Initialize countdown value with 3
+  const [resumeTime, setResumeTime] = useState<number>(0);
+  const [autoSwitch, setAutoSwitch] = useState<number | null>(null);
   const [videoError, setVideoError] = useState(false);
+  const [wholePageError, setWholePageError] = useState(false);
   const navigate = useNavigate();
 
-  console.log(movieDetail, "ddfdsfadf");
-
   useEffect(() => {
-    let interval: any; // Declare the interval variable to store the interval ID
-
-    const handleCountdown = async () => {
-      if (
-        (autoSwitch > 0 &&
-          !(
-            (selectedEpisode && selectedEpisode.ready_to_play) ||
-            (currentEpisode && currentEpisode.ready_to_play)
-          )) ||
-        (autoSwitch > 0 && videoError)
-      ) {
-        // Start the interval and store the interval ID
-        interval = setInterval(() => {
-          setAutoSwitch((prevCount) => prevCount - 1);
-        }, 1000);
-      } else if (autoSwitch === 0) {
-        // Clear the interval when the countdown reaches 0
-        clearInterval(interval);
-
-        try {
-          // Await the autoPlayNextEpisode function if it involves any async operation
-          await autoPlayNextEpisode();
-          setAutoSwitch(6); // Optionally reset the countdown for the next episode
-        } catch (error) {
-          console.error("Error auto-playing next episode:", error);
-          clearInterval(interval);
-        }
-      }
-    };
-
-    handleCountdown(); // Call the async function to manage the countdown
-
-    // Cleanup function: This clears the interval when the component unmounts or dependencies change
-    return () => clearInterval(interval);
-  }, [autoSwitch, videoError, selectedEpisode, currentEpisode]);
+    if (autoSwitch !== null) {
+      const interval = setInterval(() => {
+        setAutoSwitch((prevCount) => {
+          if (prevCount !== null && prevCount > 0) {
+            return prevCount - 1;
+          } else {
+            clearInterval(interval);
+            autoPlayNextEpisode();
+            return null;
+          }
+        });
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [autoSwitch]);
 
   const autoPlayNextEpisode = async () => {
-    console.log("hello");
-    if (movieDetail?.play_from) {
-      let currentSourceIndex = selectedSource;
-      let currentEpisodeIndex = episodes.findIndex(
-        (ep) => ep.episode_id === currentEpisode?.episode_id
-      );
+    try {
+      if (movieDetail?.play_from) {
+        let currentSourceIndex = selectedSource;
 
-      // Try to find the next episode in the same source
-      if (currentEpisodeIndex + 1 < episodes.length) {
-        const nextEpisode = episodes[currentEpisodeIndex + 1];
-        if (nextEpisode.ready_to_play) {
-          setCurrentEpisode(nextEpisode);
-          setSelectedEpisode(nextEpisode);
-          return;
+        for (
+          let i = currentSourceIndex + 1;
+          i < movieDetail.play_from.length;
+          i++
+        ) {
+          const nextSource = movieDetail.play_from[i];
+          const res = await fetch(
+            `https://cc3e497d.qdhgtch.com:2345/api/v1/movie_addr/list?from_code=${nextSource.code}&movie_id=${id}`
+          );
+          const data = await res.json();
+          if (data.data && data.data.length > 0 && data.data[0].ready_to_play) {
+            setEpisodes(data.data);
+            setCurrentEpisode(data.data[0]);
+            setSelectedEpisode(data.data[0]);
+            setSelectedSource(i);
+            setAutoSwitch(null);
+            setVideoError(false);
+            return;
+          } else {
+            setAutoSwitch(null);
+            setVideoError(false);
+          }
         }
+        // navigate('/home');
+        setWholePageError(true);
+        console.warn("No more playable episodes found.");
       }
-
-      // If no more episodes in the current source, move to the next source
-      for (
-        let i = currentSourceIndex + 1;
-        i < movieDetail.play_from.length;
-        i++
-      ) {
-        const nextSource = movieDetail.play_from[i];
-        const res = await fetch(
-          `https://cc3e497d.qdhgtch.com:2345/api/v1/movie_addr/list?from_code=${nextSource.code}&movie_id=${id}`
-        );
-        const data = await res.json();
-        if (data.data && data.data[0].ready_to_play) {
-          setEpisodes(data.data);
-          setCurrentEpisode(data.data[0]);
-          setSelectedEpisode(data.data[0]);
-          setSelectedSource(i);
-          return;
-        }
-      }
-
-      // If no more sources or episodes available, handle accordingly
-      // alert("No more playable episodes available.");
+    } catch (error) {
+      console.error("Error auto-playing next episode:", error);
     }
   };
 
   useEffect(() => {
     if (id) {
-      console.log('hello')
-      setAutoSwitch(0);
+      setAutoSwitch(null);
       setVideoError(false);
       getMovieDetail();
       getAdsData();
@@ -175,88 +148,118 @@ const DetailPage: React.FC = () => {
   }, [id]);
 
   const getAdsData = async () => {
-    const res = await fetch(
-      "https://cc3e497d.qdhgtch.com:2345/api/v1/advert/config"
-    );
-    const data = await res.json();
-    setAdsData(data);
-    console.log("data is=>", data);
+    try {
+      const res = await fetch(
+        "https://cc3e497d.qdhgtch.com:2345/api/v1/advert/config"
+      );
+      const data = await res.json();
+      setAdsData(data);
+    } catch (error) {
+      console.error("Error fetching ads data:", error);
+    }
   };
 
-  // Fetch the movie details based on the provided id
   const getMovieDetail = async () => {
-    const loginResponse = await localStorage.getItem("authToken");
-    const loginInfo = loginResponse ? JSON.parse(loginResponse) : null;
-    const authorization =
-      loginInfo && loginInfo.data && loginInfo.data.token_type
-        ? `${loginInfo.data.token_type} ${loginInfo.data.access_token}`
-        : "";
-    if (!authorization) {
-      localStorage.removeItem("authToken");
-    }
-    const header = authorization
-      ? {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: authorization,
-          },
-        }
-      : { method: "GET" };
-    const res = await fetch(
-      `https://cc3e497d.qdhgtch.com:2345/api/v1/movie/detail?id=${id}`,
-      header
-    );
-    const data = await res.json();
-    setMovieDetail(data?.data);
-    const playBackInfo = data?.data?.last_playback || null;
-    const playFrom = data?.data?.play_from || null;
-    if (playBackInfo) {
-      const ind = playFrom.findIndex(
-        (x: any) => x.code === playBackInfo?.movie_from
+    try {
+      const loginResponse = await localStorage.getItem("authToken");
+      const loginInfo = loginResponse ? JSON.parse(loginResponse) : null;
+      const authorization =
+        loginInfo && loginInfo.data && loginInfo.data.token_type
+          ? `${loginInfo.data.token_type} ${loginInfo.data.access_token}`
+          : "";
+      if (!authorization) {
+        localStorage.removeItem("authToken");
+      }
+      const header = authorization
+        ? {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: authorization,
+            },
+          }
+        : { method: "GET" };
+      const res = await fetch(
+        `https://cc3e497d.qdhgtch.com:2345/api/v1/movie/detail?id=${id}`,
+        header
       );
-      if (ind > -1) {
-        if (ind === 0) {
-          const episodeInd = playFrom[0].list.findIndex(
-            (x: any) => x.episode_id === playBackInfo.episode_id
-          );
-          if (episodeInd > -1) {
-            setCurrentEpisode(playFrom[0].list[episodeInd]);
-            setResumeTime(playBackInfo.current_time);
+      const data = await res.json();
+      setMovieDetail(data?.data);
+      const playBackInfo = data?.data?.last_playback || null;
+      const playFrom = data?.data?.play_from || null;
+      if (playBackInfo && playBackInfo.code) {
+        const ind = playFrom.findIndex(
+          (x: any) => x.code === playBackInfo?.movie_from
+        );
+        if (ind > -1) {
+          if (ind === 0) {
+            const episodeInd = playFrom[0].list.findIndex(
+              (x: any) => x.episode_id === playBackInfo.episode_id
+            );
+            if (episodeInd > -1) {
+              setCurrentEpisode(playFrom[0].list[episodeInd]);
+              setResumeTime(playBackInfo.current_time);
+            }
+          } else {
+            const code = playFrom[ind]?.code;
+            const res = await fetch(
+              `https://cc3e497d.qdhgtch.com:2345/api/v1/movie_addr/list?from_code=${code}&movie_id=${id}`
+            );
+            const episodes = await res.json();
+            const episodeInd = episodes.data.findIndex(
+              (x: any) => x.episode_id === playBackInfo.episode_id
+            );
+            if (episodeInd > -1) {
+              setCurrentEpisode(episodes.data[episodeInd]);
+              setResumeTime(playBackInfo.current_time);
+            }
           }
         } else {
-          const code = playFrom[ind]?.code;
-          const res = await fetch(
-            `https://cc3e497d.qdhgtch.com:2345/api/v1/movie_addr/list?from_code=${code}&movie_id=${id}`
-          );
-          const episodes = await res.json();
-          const episodeInd = episodes.data.findIndex(
-            (x: any) => x.episode_id === playBackInfo.episode_id
-          );
-          if (episodeInd > -1) {
-            setCurrentEpisode(episodes.data[episodeInd]);
-            setResumeTime(playBackInfo.current_time);
-          }
+          setCurrentEpisode(playFrom[0]?.list[0]);
+          setResumeTime(0);
         }
-      } else {
-        setCurrentEpisode(playFrom[0]?.list[0]); // Set the first episode as default
+      } else if (playFrom?.[0]?.list?.[0]) {
+        setSelectedEpisode(playFrom[0]?.list[0])
+        setCurrentEpisode(playFrom[0]?.list[0]);
         setResumeTime(0);
       }
-    } else if (playFrom?.[0]?.list?.[0]) {
-      setCurrentEpisode(playFrom[0]?.list[0]); // Set the first episode as default
-      setResumeTime(0);
+      if((playBackInfo && playBackInfo.ready_to_play) || (playFrom?.[0]?.list?.[0] && playFrom?.[0]?.list?.[0].ready_to_play)) {
+        setVideoError(false);
+        setAutoSwitch(null);
+      } else {
+        setVideoError(true);
+        setAutoSwitch(6);
+      }
+    } catch (error) {
+      console.error("Error fetching movie details:", error);
     }
   };
 
   const handleSelectedSource = async (ind: number) => {
-    const code = movieDetail?.play_from[ind]?.code;
-    const res = await fetch(
-      `https://cc3e497d.qdhgtch.com:2345/api/v1/movie_addr/list?from_code=${code}&movie_id=${id}`
-    );
-    const data = await res.json();
-    if (data.data[0].ready_to_play) {
-      setSelectedSource(ind);
+    try {
+      const code = movieDetail?.play_from[ind]?.code;
+      const res = await fetch(
+        `https://cc3e497d.qdhgtch.com:2345/api/v1/movie_addr/list?from_code=${code}&movie_id=${id}`
+      );
+      const data = await res.json();
+      if (data.data[0].ready_to_play) {
+        setSelectedSource(ind);
+      }
+    } catch (error) {
+      console.error("Error selecting source:", error);
     }
+  };
+
+  const handleEpisodeChange = (episode: Episode) => {
+    setCurrentEpisode(episode);
+  };
+
+  const handleEpisodeSelect = (episode: Episode) => {
+    setSelectedEpisode(episode);
+  };
+
+  const navigateBackFunction = () => {
+    navigate('/home');
   };
 
   const getEpisodes = async (code: string) => {
@@ -273,19 +276,6 @@ const DetailPage: React.FC = () => {
     }
   };
 
-  const handleEpisodeChange = (episode: Episode) => {
-    setCurrentEpisode(episode);
-  };
-
-  const handleEpisodeSelect = (episode: Episode) => {
-    setSelectedEpisode(episode);
-  };
-
-  const navigateBackFunction = () => {
-    navigate('/home')
-    // navigate(-1); // Go back to the previous page
-  };
-
   const changeSource = (playfrom: PlayFrom) => {
     if (movieDetail?.play_from) {
       const ind: number = movieDetail?.play_from.findIndex(
@@ -294,8 +284,8 @@ const DetailPage: React.FC = () => {
       if (ind >= 0) {
         getEpisodes(movieDetail?.play_from[ind]?.code || "");
         if (movieDetail?.play_from[ind]?.list?.[0]) {
-          setCurrentEpisode(movieDetail.play_from[ind].list[0]); // Set the first episode as default
-          setSelectedEpisode(movieDetail.play_from[ind].list[0]); // Set the first episode as default
+          setCurrentEpisode(movieDetail.play_from[ind].list[0]);
+          setSelectedEpisode(movieDetail.play_from[ind].list[0]);
         }
       }
     }
@@ -303,6 +293,8 @@ const DetailPage: React.FC = () => {
 
   return (
     <div className="bg-background min-h-screen">
+      {!wholePageError && 
+      <>
       {!movieDetail || !currentEpisode ? (
         <div className="flex justify-center items-center pt-52 bg-background">
           <Loader />
@@ -319,6 +311,7 @@ const DetailPage: React.FC = () => {
                 onBack={navigateBackFunction}
                 movieDetail={movieDetail}
                 selectedEpisode={selectedEpisode || currentEpisode}
+                autoPlayNextEpisode={autoPlayNextEpisode}
                 resumeTime={resumeTime}
                 setVideoError={setVideoError}
                 setAutoSwitch={setAutoSwitch}
@@ -344,7 +337,6 @@ const DetailPage: React.FC = () => {
                   >
                     <span>评论</span>
                     <span className="text-gray-500">
-                      {" "}
                       {movieDetail.comments_count || "0"}
                     </span>
                     {activeTab === "tab-2" && (
@@ -376,7 +368,7 @@ const DetailPage: React.FC = () => {
                     Cancel
                   </button>
                   <button className="px-6 py-2 bg-gradient-to-r from-gray-400 to-gray-700 text-white font-semibold rounded-full shadow-md transition-all duration-300 ease-in-out">
-                    Switch in {autoSwitch}s
+                    Switch in {autoSwitch || 0}s
                   </button>
                 </div>
               </div>
@@ -386,11 +378,10 @@ const DetailPage: React.FC = () => {
           <div className={`${activeTab === "tab-1" && "overflow-y-scroll"}`}>
             <DetailSection
               adsData={adsData}
-              movieDetail={movieDetail} // Pass movie details to DetailSection
+              movieDetail={movieDetail}
               id={id || ""}
               activeTab={activeTab}
               setActiveTab={setActiveTab}
-              // activeTab={detailActiveTab}
             />
             {activeTab === "tab-1" && (
               <>
@@ -404,7 +395,7 @@ const DetailPage: React.FC = () => {
                   onEpisodeChange={handleEpisodeChange}
                   onEpisodeSelect={handleEpisodeSelect}
                   selectedEpisode={selectedEpisode || currentEpisode}
-                  movieDetail={movieDetail} // Pass movie details to DetailSection
+                  movieDetail={movieDetail}
                   selectedSource={selectedSource}
                   setSelectedSource={handleSelectedSource}
                 />
@@ -418,15 +409,18 @@ const DetailPage: React.FC = () => {
                   selectedEpisode={selectedEpisode || currentEpisode}
                 />
 
-            <div className="mt-8 px-4">
-              <AdsSection adsData={adsData} />
-            </div>
-            <RecommendedList data={movieDetail} />
+                <div className="mt-8 px-4">
+                  <AdsSection adsData={adsData} />
+                </div>
+                <RecommendedList data={movieDetail} />
               </>
             )}
           </div>
         </>
       )}
+      </>
+    }
+      {wholePageError && <NetworkError onBack={navigateBackFunction} />}
     </div>
   );
 };
