@@ -271,7 +271,7 @@ const Main = () => {
                 </svg>
               </div>
             </Link>
-            <Link to={"/bind"} className="info-first1">
+            {/* <Link to={"/bind"} className="info-first1">
               <div className="flex gap-1 max-w-[230px] flex-col ">
                 <h1 className="info-text">绑定快捷登录 </h1>
               </div>
@@ -289,7 +289,7 @@ const Main = () => {
                   />
                 </svg>
               </div>
-            </Link>
+            </Link> */}
           </div>
           <div className="info-main-first mt-3">
             <Link to={"/update_password"} className="info-first1">

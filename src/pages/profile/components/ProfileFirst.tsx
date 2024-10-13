@@ -125,7 +125,7 @@ const ProfileFirst = () => {
         </a>
 
         {/* Horizontal Scrolling Movie List */}
-        {movies?.length !== 0 && (
+        {token && movies?.length !== 0 && (
           <div className="flex overflow-x-scroll whitespace-nowrap watch_ten scrollbar-hide gap-4 ">
             {latestMovies?.map((movie: any) => (
               <Link
@@ -201,7 +201,7 @@ const ProfileFirst = () => {
         </a>
 
         {/* Horizontal Scrolling Movie List */}
-        {favorites?.length !== 0 && (
+        {token && favorites?.length !== 0 && (
           <div className="flex overflow-x-scroll whitespace-nowrap watch_ten scrollbar-hide gap-4 ">
             {favorites?.map((movie: any) => (
               <Link

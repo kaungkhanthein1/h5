@@ -22,6 +22,8 @@ const Header = () => {
     skip: user || !token, // Skip API call if user data exists in slice or no token present
   });
 
+  console.log(user);
+
   useEffect(() => {
     if (!user && userData) {
       // If user data comes from the API, dispatch it to the Redux slice

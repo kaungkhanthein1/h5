@@ -9,6 +9,7 @@ const ErrorToast: React.FC = () => {
   const { message, type, showToast } = useSelector((state: any) => state.error);
 
   useEffect(() => {
+    console.log('appear')
     if (showToast) {
       const timer = setTimeout(() => {
         dispatch(hideToast());
@@ -22,7 +23,7 @@ const ErrorToast: React.FC = () => {
   return (
     <div className="flex justify-center items-center ">
       <div
-        className={`text-[8px] fixed w-fit  bottom-10 mx-auto left-0 right-0  py-2 px-4  flex items-center justify-center gap-1 rounded-full toast  text-white text-center z-[999999]`}
+        className={`text-[8px] fixed w-fit  bottom-10 mx-auto left-0 right-0  py-2 px-4  flex items-center justify-center gap-1 rounded-full toast  text-white text-center z-[9999999999999999999]`}
       >
         <img src={logo} alt="" className="w-3 h-3" />
         <p>{message}</p>

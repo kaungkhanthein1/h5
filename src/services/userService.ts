@@ -158,6 +158,7 @@ export const registerEmail = async (
       "Error during registration:",
       error.response?.data || error.message
     );
+    return error.response;
     throw error;
   }
 };
@@ -240,8 +241,9 @@ export const getOtp = async (
         signature: signature,
       },
     });
-  } catch (error) {
-    console.error("Error requesting OTP:", error);
+  } catch (error: any) {
+    // console.error("Error requesting OTP:", error);
+    return error.response;
   }
 };
 

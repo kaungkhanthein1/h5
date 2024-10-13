@@ -12,6 +12,7 @@ import {
   setLoginOpen,
   setSignupOpen,
 } from "../../features/login/ModelSlice";
+import { showToast } from "../../pages/profile/error/ErrorSlice";
 
 interface SignPhoneProps {
   handleBack2: () => void; // Accept handleBack as a prop
@@ -60,9 +61,15 @@ const SignPhone: React.FC<SignPhoneProps> = ({ handleBack2 }) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const phoneRegex = /^(13|14|15|16|17|18|19)\d{9}$/;
+
+    if (!phoneRegex.test(phone)) {
+      setError("手机号格式不正确"); // Invalid phone number format
+      dispatch(showToast({ message: "手机号格式不正确", type: "error" }));
+      return;
+    }
     try {
       dispatch(setCaptchaOpen(true));
-      console.log("Login successful");
       setShowOtp(true);
       setIsVisible(false);
     } catch (err) {
@@ -79,7 +86,9 @@ const SignPhone: React.FC<SignPhoneProps> = ({ handleBack2 }) => {
 
   return (
     <div className="min-h-screen flex items-center justify-center overflow-hidden">
-      {openOtp && <Opt setIsVisible={setIsVisible} phone={phone} password={password} />}
+      {openOtp && (
+        <Opt setIsVisible={setIsVisible} phone={phone} password={password} />
+      )}
       {openCaptcha && (
         <Captch isLogin={false} username={phone} password={password} />
       )}
@@ -122,7 +131,7 @@ const SignPhone: React.FC<SignPhoneProps> = ({ handleBack2 }) => {
               >
                 <div className="relative ">
                   <input
-                    type="text"
+                    type="number"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     onFocus={() => setIsFocusedEmail(true)}
@@ -189,7 +198,7 @@ const SignPhone: React.FC<SignPhoneProps> = ({ handleBack2 }) => {
                 </button>
               </form>
 
-              {error && <p className="text-red-500 mt-2">{error}</p>}
+              {/* {error && <p className="text-red-500 mt-2">{error}</p>} */}
             </div>
           </motion.div>
         )}

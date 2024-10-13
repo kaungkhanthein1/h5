@@ -40,12 +40,13 @@ const LoginEmail: React.FC<LoginEmailProps> = ({ handleBack }) => {
   };
 
   const validateEmail = (email: string) => {
-    return email.length >= 6 && email.length <= 25;
+    return email.length >= 6 && email.length <= 40;
   };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateEmail(email)) {
+      console.log('not correct')
     dispatch(showToast({ message: '请输入5-25位用户名', type: "error" }))
       return;
     }
