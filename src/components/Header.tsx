@@ -11,13 +11,10 @@ const Header: FC = () => {
   const activeTab = useSelector((state: any) => state.home.activeTab);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   return (
     <header
-      className={`w-full z-50 fixed top-0 ${
-        activeTab !== 0
-          ? "gradient-bg-home"
-          : "bg-gradient-to-b from-[#151722] via-[#151722] to-[#161619]/80"
-      } py-4`}
+      className={`w-full z-[99999] fixed top-0 gradient-bg-home pt-4 pb-2`}
     >
       <div className="flex items-center px-3 gap-3">
         <div className="flex items-center gap-1">
@@ -31,7 +28,7 @@ const Header: FC = () => {
             onFocus={() => navigate("/search_overlay")}
             placeholder="觉醒年代"
             type="text"
-            className="rounded-[18.138px] bg-[#444B56]/50 py-[8.062px] px-[16.123px] w-full text-white outline-none"
+            className="rounded-[18.138px] home-input py-[8.062px] px-[16.123px] w-full text-white outline-none"
           />
           <div className="absolute top-2 right-2">
             <svg
@@ -50,7 +47,7 @@ const Header: FC = () => {
           </div>
         </div>
       </div>
-      <br/>
+
       <div className="w-full">
         <nav className="flex overflow-x-scroll px-3 gap-3 remove-scrollbar">
           {configData?.map((item: any, index: any) => (
