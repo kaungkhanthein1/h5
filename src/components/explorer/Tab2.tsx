@@ -73,7 +73,12 @@ const Tab2 = () => {
             >
               <span
                 className={`${
-                  currentDate === date && "bg-gray-700 px-1.5 py-1 rounded-full"
+                  currentIndex
+                    ? currentIndex === index + 1
+                      ? "bg-orange-600 px-1.5 py-1 rounded-full"
+                      : ""
+                    : currentDate === date &&
+                      "bg-orange-600 px-1.5 py-1 rounded-full"
                 }`}
               >
                 {currentDate === date ? "今" : date}

@@ -107,6 +107,7 @@ const Navbar: React.FC<NavbarProps> = ({
                 onChange={(e) => setQuery(e.target.value)} // Update the query state
                 onFocus={() => setIsFocused(true)} // Show suggestions on focus
                 onBlur={() => setTimeout(() => setIsFocused(false), 200)} // Delay for clicks on suggestions
+                style={{ fontSize: "16px" }} // Ensure font size is 16px or higher to prevent zoom
               />
             </div>
           </form>
