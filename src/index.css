@@ -199,3 +199,57 @@ input[type="range"]::-moz-range-thumb {
 .art-video-player .art-progress-indicator {
     background: #F97316 !important;
 }
+
+@keyframes scrollText {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.warning {
+  display: flex;
+  overflow: hidden;
+  padding: 10px;
+  background-color: rgba(31, 31, 34, 1);
+  border-radius: 10px;
+  color: white;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.warning-content {
+  display: flex;
+  white-space: nowrap;
+  animation: scrollText 15s linear infinite;
+}
+
+.warning-text {
+  padding-right: 100px; /* Adds space between repeated text */
+}
+
+.warning::before,
+.warning::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100px;
+  pointer-events: none;
+}
+
+.warning::before {
+  left: 0;
+  background: linear-gradient(to right, rgba(31, 31, 34, 1) 10%, transparent 100%);
+  z-index: 20;
+}
+
+.warning::after {
+  right: 0;
+  background: linear-gradient(to left, rgba(31, 31, 34, 1) 10%, transparent 100%);
+  z-index: 20;
+}

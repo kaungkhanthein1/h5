@@ -3,6 +3,7 @@ import share from "../../../assets/share.png";
 import star from "../../../assets/star.png";
 import info from "../../../assets/info.png";
 import selectedStar from "../../../assets/selectedStar.png";
+import rate from "../../../assets/rate.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronRight,
@@ -52,12 +53,14 @@ const DetailSection: React.FC<DetailSectionProps> = ({
   adsData,
   id,
   activeTab,
-  setActiveTab
+  setActiveTab,
 }) => {
   const [showModal, setShowModal] = useState(false); // For triggering modal
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isStarred, setIsStarred] = useState<boolean>(movieDetail && movieDetail.is_collect ? true : false);
+  const [isStarred, setIsStarred] = useState<boolean>(
+    movieDetail && movieDetail.is_collect ? true : false
+  );
   const [showFeedbackModal, setShowFeedbackModal] = useState(false); // For triggering modal
   const [visible, setVisible] = useState(false);
 
@@ -65,7 +68,7 @@ const DetailSection: React.FC<DetailSectionProps> = ({
     setVisible(true);
     setTimeout(() => setVisible(false), 2000); // Hide after 2 seconds
   };
-  
+
   const handleDetailClick = () => {
     setShowModal(true);
   };
@@ -76,48 +79,51 @@ const DetailSection: React.FC<DetailSectionProps> = ({
 
   const handleFeedbackModel = () => {
     setShowFeedbackModal(!showFeedbackModal);
-  }
-    const handleTabClick = async(tab: string) => {
-      const loginResponse = await localStorage.getItem("authToken");
-      const loginInfo = loginResponse ? JSON.parse(loginResponse || '') : null;
+  };
+  const handleTabClick = async (tab: string) => {
+    const loginResponse = await localStorage.getItem("authToken");
+    const loginInfo = loginResponse ? JSON.parse(loginResponse || "") : null;
 
-      if(loginInfo && loginInfo.data && loginInfo.data.access_token) {
-        const authorization = `${loginInfo.data.token_type} ${loginInfo.data.access_token}`;
-          if(tab === 'star') {
-            handleStarToggle(authorization);
-          } else if (tab === 'share') {
-            handleShare(authorization);
-          } else {
-            handleFeedbackModel();
-          }
+    if (loginInfo && loginInfo.data && loginInfo.data.access_token) {
+      const authorization = `${loginInfo.data.token_type} ${loginInfo.data.access_token}`;
+      if (tab === "star") {
+        handleStarToggle(authorization);
+      } else if (tab === "share") {
+        handleShare(authorization);
       } else {
-        dispatch(setAuthModel(true));
+        handleFeedbackModel();
       }
+    } else {
+      dispatch(setAuthModel(true));
     }
+  };
 
   const handleStarToggle = async (authorization: string) => {
     setIsLoading(true);
     try {
       // Toggle collection API call
-      const response = await fetch('https://cc3e497d.qdhgtch.com:2345/api/v1/movie/collect/action', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': authorization,
-        },
-        body: JSON.stringify({
-          movie_id: id,
-          state: isStarred ? 0 : 1,
-        }),
-      });
+      const response = await fetch(
+        "https://cc3e497d.qdhgtch.com:2345/api/v1/movie/collect/action",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: authorization,
+          },
+          body: JSON.stringify({
+            movie_id: id,
+            state: isStarred ? 0 : 1,
+          }),
+        }
+      );
       if (response.ok) {
         setIsStarred(!isStarred);
       } else {
-        alert('收藏操作失败，请稍后重试');
+        alert("收藏操作失败，请稍后重试");
       }
     } catch (error) {
-      console.error('Error toggling star:', error);
-      alert('收藏操作失败，请稍后重试');
+      console.error("Error toggling star:", error);
+      alert("收藏操作失败，请稍后重试");
     } finally {
       setIsLoading(false);
     }
@@ -127,22 +133,22 @@ const DetailSection: React.FC<DetailSectionProps> = ({
     // Create a textarea element to hold the text
     const textArea = document.createElement("textarea");
     textArea.value = text;
-  
+
     // Position off-screen and make it invisible
     textArea.style.position = "fixed";
     textArea.style.top = "-1000px";
     textArea.style.opacity = "0";
-  
+
     document.body.appendChild(textArea);
     textArea.select();
-  
+
     try {
-      document.execCommand('copy'); // This works on most browsers, including iOS Safari
+      document.execCommand("copy"); // This works on most browsers, including iOS Safari
       handleCopy(); // Show the "Link Copied" message
     } catch (err) {
-      console.error('Failed to copy to clipboard', err);
+      console.error("Failed to copy to clipboard", err);
     }
-  
+
     // Remove the textarea after copying
     document.body.removeChild(textArea);
   };
@@ -151,32 +157,33 @@ const DetailSection: React.FC<DetailSectionProps> = ({
     setIsLoading(true);
     try {
       // Fetch share content API call
-      const response = await fetch('https://cc3e497d.qdhgtch.com:2345/api/v1/user/get_share', {
-        method: "GET",
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': authorization,
-        },
-      });
-      
+      const response = await fetch(
+        "https://cc3e497d.qdhgtch.com:2345/api/v1/user/get_share",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: authorization,
+          },
+        }
+      );
+
       const data = await response.json();
       if (data && data.data && data.data.content) {
         copyToClipboard(data.data.content);
       } else {
-        alert('获取分享内容失败，请稍后重试');
+        alert("获取分享内容失败，请稍后重试");
       }
     } catch (error) {
-      console.error('Error fetching share content:', error);
+      console.error("Error fetching share content:", error);
     } finally {
       setIsLoading(false);
     }
   };
-  
 
   return (
     <div className="flex flex-col w-full bg-background">
       {/* Tabs */}
-      
 
       {/* Tab content */}
       <div className="bg-background p-4 rounded-b-lg">
@@ -184,23 +191,26 @@ const DetailSection: React.FC<DetailSectionProps> = ({
           <div id="tab-1" className="block">
             {/* Movie Title and Info */}
             <div className="movie-info mb-4 flex-auto overflow-x-scroll">
-              <h2 className="text-2xl font-bold text-white">
+              <h2 className="text-[16px] font-semibold text-white">
                 {movieDetail.name || "暂无标题"}
               </h2>
-              <div className="info text-gray-400 text-sm flex justify-between items-start overflow-x-auto space-x-2 mt-2">
+              <div className="info text-white/40 text-sm flex justify-between items-start overflow-x-auto space-x-2 mt-2">
                 {/* Left Section: Flames, year, area, and tags */}
-                <div className="left-section flex items-start flex-wrap space-x-2 max-w-[80%]">
-                  <div className="rating flex items-center">
-                    <div className="flames flex">
-                      {Array(Math.max(1, movieDetail.popularity_score))
+                <div className="left-section flex items-center flex-wrap space-x-2 w-[80%] overflow-x-auto text-[14px]">
+                  {/* <span className="rating flex items-center"> */}
+                    <span className="flames">
+                      {Array.of(movieDetail?.popularity_score)?.map((item) => (
+                        <img src={rate} key={item} alt="" />
+                      ))}
+                      {/* {Array(Math.max(1, movieDetail.popularity_score))
                         .fill("🔥")
                         .map((flame, index) => (
                           <span key={index} className="text-xl mr-1">
                             {flame}
                           </span>
-                        ))}
-                    </div>
-                  </div>
+                        ))} */}
+                    </span>
+                  {/* </span> */}
                   <span>{movieDetail.year}</span>
                   <span>/</span>
                   <span>{movieDetail.area}</span>
@@ -223,7 +233,7 @@ const DetailSection: React.FC<DetailSectionProps> = ({
                   className="right-section flex items-center"
                   onClick={handleDetailClick}
                 >
-                  <span className="font-semibold text-sm">简介</span>
+                  <span className="font-semibold text-[14px]">简介</span>
                   <FontAwesomeIcon
                     icon={faChevronRight}
                     className="text-md ml-1"
@@ -234,42 +244,62 @@ const DetailSection: React.FC<DetailSectionProps> = ({
 
             {/* Action Buttons */}
             <div className="actions flex justify-between my-4">
-              <button onClick={()=>handleTabClick('star')} className="action-btn flex flex-col items-center px-4 py-2 rounded-md">
-                <img src={isStarred ? selectedStar : star} alt="" className={`${isStarred ? 'w-12 h-auto -mt-2' : 'h-7 mb-2'}`} />
-                <span className="text-gray-200">收藏</span>
+              <button
+                onClick={() => handleTabClick("star")}
+                className="action-btn flex flex-col items-center px-4 py-2 rounded-md"
+              >
+                <img
+                  src={isStarred ? selectedStar : star}
+                  alt=""
+                  className={`${
+                    isStarred ? "w-[22px] h-auto -mt-2" : "h-7 mb-2"
+                  }`}
+                />
+                <span className="text-white/40 text-[14px]">收藏</span>
               </button>
 
-              <button onClick={()=>handleTabClick('feedback')} className="flex flex-col items-center px-4 py-2 rounded-md">
+              <button
+                onClick={() => handleTabClick("feedback")}
+                className="flex flex-col items-center px-4 py-2 rounded-md"
+              >
                 <img src={info} alt="" className="h-7 mb-2" />
-                <span className="text-gray-200">反馈/求片</span>
+                <span className="text-white/40 text-[14px]">反馈/求片</span>
               </button>
 
-              <button onClick={()=>handleTabClick('share')} className="action-btn flex flex-col items-center px-4 py-2 rounded-md">
+              <button
+                onClick={() => handleTabClick("share")}
+                className="action-btn flex flex-col items-center px-4 py-2 rounded-md"
+              >
                 <img src={share} alt="" className="h-7 mb-2" />
-                <span className="text-gray-200">分享</span>
+                <span className="text-white/40 text-[14px]">分享</span>
               </button>
             </div>
             {/* Warning Message */}
-            <div className="warning p-2 bg-gray-800 rounded-md text-sm text-white text-center">
-              切勿相信视频中的任何广告，谨防上当受骗！
+            <div className="warning bg-gray-800 rounded-md text-white text-center">
+              <div className="warning-content">
+                <span className="warning-text">切勿相信视频中的任何广告，谨防上当受骗！</span>
+                <span className="warning-text">切勿相信视频中的任何广告，谨防上当受骗！</span>
+              </div>
             </div>
           </div>
         )}
 
-              {visible && <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-background text-white text-lg font-medium px-4 py-2 rounded-lg shadow-md">
-                  Link Copied
-               </div>}
+        {visible && (
+          <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-background text-white text-lg font-medium px-4 py-2 rounded-lg shadow-md">
+            Link Copied
+          </div>
+        )}
 
         {activeTab === "tab-2" ? (
           <div id="tab-2" className="block">
             {/* Comment section or other content */}
             <CommentComponent movieId={id} />
           </div>
-        ) :
-        <div className="mt-4">
-          <AdsSection adsData={adsData}/>
-        </div>
-}
+        ) : (
+          <div className="mt-4">
+            {adsData && <AdsSection adsData={adsData} />}
+          </div>
+        )}
       </div>
 
       {/* Modal for sharing */}
@@ -356,8 +386,15 @@ const DetailSection: React.FC<DetailSectionProps> = ({
           </div>
         </div>
       )}
-      {showFeedbackModal && <FeedbackComponent movieId={id} onActionComplete={handleTabClick} onClose={handleFeedbackModel} setIsLoading={setIsLoading}
-            isLoading={isLoading}/>}
+      {showFeedbackModal && (
+        <FeedbackComponent
+          movieId={id}
+          onActionComplete={handleTabClick}
+          onClose={handleFeedbackModel}
+          setIsLoading={setIsLoading}
+          isLoading={isLoading}
+        />
+      )}
     </div>
   );
 };
