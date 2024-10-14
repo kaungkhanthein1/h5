@@ -62,7 +62,6 @@ const DetailPage: React.FC = () => {
   const [wholePageError, setWholePageError] = useState(false);
   const [errorVideoUrl, setErrorVideoUrl] = useState('');
   const abortControllerRef = useRef<AbortController | null>(null);
-  const activeRequestIdRef = useRef<string | null>(null);
   const [episodes, setEpisodes] = useState<any>([]);
 
   const navigate = useNavigate();
@@ -279,6 +278,29 @@ const DetailPage: React.FC = () => {
     }
   }
 
+  const handleChangeSource = async (nextSource: any) => {
+    if(nextSource && nextSource.code && id) {
+      try {
+        const res = await fetch(
+          `https://cc3e497d.qdhgtch.com:2345/api/v1/movie_addr/list?from_code=${nextSource.code}&movie_id=${id}`);
+        const data = await res.json();
+          setCurrentEpisode(data.data[0]);
+          console.log('111', data)
+          setEpisodes(data.data);
+        if (data.data?.[0]?.ready_to_play) {
+          setAutoSwitch(null);
+          setVideoError(false);
+        } else {
+          setAutoSwitch(6);
+          setVideoError(true);
+          setErrorVideoUrl(data.data?.[0]?.play_url);
+        }
+      } catch (error) {
+        console.error("Error auto-playing next episode:", error);
+      }
+    }
+  }
+
   return (
     <div className="bg-background min-h-screen">
       {!wholePageError ? (
@@ -379,7 +401,7 @@ const DetailPage: React.FC = () => {
               {activeTab === "tab-1" && (
                 <>
                   <SourceSelector
-                    changeSource={setInitialEpisode}
+                    changeSource={handleChangeSource}
                     episodes={episodes || []}
                     selectedEpisode={currentEpisode}
                     onEpisodeSelect={handleEpisodeSelect}

@@ -8,8 +8,7 @@ import {
 } from "../../features/login/ModelSlice";
 import {
   getOtp,
-  registerEmail,
-  registerPhone,
+ 
 } from "../../services/userService";
 import back from "../../assets/login/back.svg";
 import { showToast } from "../../pages/profile/error/ErrorSlice";
@@ -92,28 +91,28 @@ const Opt: React.FC<OptProps> = ({ email, password, phone, setIsVisible }) => {
             dispatch(showToast({ message: result?.msg, type: "error" }));
             localStorage.setItem("authToken", JSON.stringify(result));
           }
-          console.log("Result", result);
+          // console.log("Result", result);
 
           // console.log(result?.msg)
         } catch (error: any) {
           if (error.data.msg === "无效验证码") {
-            console.log("code error", error.data.msg);
+            // console.log("code error", error.data.msg);
             dispatch(showToast({ message: error.data.msg, type: "error" }));
           } else if (error.data.msg) {
             dispatch(setOtpOpen(false));
             navigate("/profile");
             dispatch(showToast({ message: error.data.msg, type: "error" }));
           }
-          console.log("pok ka ya error :", error);
+          // console.log("pok ka ya error :", error);
         }
       } else if (phone && password) {
         try {
           // console.log(phone, otpCode);
-          console.log(otpCode)
+          // console.log(otpCode)
           const result = await signUpPhone({
             phone,
             password,
-            sms_code	: otpCode,
+            sms_code: otpCode,
           }).unwrap();
           if (result && result.msg) {
             // console.log("Result message:", result.msg);
@@ -126,16 +125,19 @@ const Opt: React.FC<OptProps> = ({ email, password, phone, setIsVisible }) => {
 
           // console.log(result?.msg)
         } catch (error: any) {
-          if (error.data.msg === "无效验证码" || error.data.msg === "验证码不正确") {
-            console.log("code error", error.data.msg);
+          if (
+            error.data.msg === "无效验证码" ||
+            error.data.msg === "验证码不正确"
+          ) {
+            // console.log("code error", error.data.msg);
             dispatch(showToast({ message: error.data.msg, type: "error" }));
           } else if (error.data.msg) {
-            console.log('nom=e')
+            // console.log('nom=e')
             dispatch(setOtpOpen(false));
             navigate("/profile");
             dispatch(showToast({ message: error.data.msg, type: "error" }));
           }
-          console.log("pok ka ya error :", error);
+          // console.log("pok ka ya error :", error);
         }
       }
     }

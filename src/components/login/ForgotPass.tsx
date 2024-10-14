@@ -10,6 +10,8 @@ import Capt from "./forgot/Capt";
 import { RecoverPassword } from "../../services/userService";
 import Panding from "./Panding";
 import Verify from "./forgot/Varify";
+import { showToast } from "../../pages/profile/error/ErrorSlice";
+import ErrorToast from "../../pages/profile/error/ErrorToast";
 
 interface ForgotPassProps {
   setForgot: React.Dispatch<React.SetStateAction<boolean>>;
@@ -45,42 +47,32 @@ const ForgotPass: React.FC<ForgotPassProps> = ({ setForgot }) => {
     setShowPassword(!showPassword);
   };
 
+  const passwordsMatch = (password: string, confirmPassword: string) => {
+    return password === confirmPassword;
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (captchaCode && captchaKey) {
-      setPanding(true);
-      const result = await RecoverPassword(captchaCode, captchaCode, email);
-      // setEmail("")
-      // setPassword("")
-      // setConfirmPassword("")
-      console.log(result);
-      if (result) {
-        setPanding(false);
-        setShowVerify(true);
-        setToken(result.session_token);
-      }else{
-        window.alert("Sonething went wrong")
-        setPanding(false)
-      }
-    } else {
-      dispatch(setCaptchaOpen(true));
+    if (!passwordsMatch(password, confirmPassword)) {
+      dispatch(showToast({ message: "密码不匹配", type: "error" }));
+      return;
     }
+    dispatch(setCaptchaOpen(true));
   };
 
   return (
     <>
       {panding && <Panding />}
-      {showVerify && (
-        <Verify
-          setShowVerify={setShowVerify}
-          password={password}
-          confirmPassword={confirmPassword}
-          accessToken={accessToken}
-        />
-      )}
+
       {isVisible && (
         <div className=" w-screen h-screen bg-[#161619] fixed top-0 z-[99990088]">
-          {openCaptcha && <Capt />}
+          {openCaptcha && (
+            <Capt
+              password={password}
+              confirmPassword={confirmPassword}
+              email={email}
+            />
+          )}
           <div className="p-[20px]">
             {/* head */}
             <div className="flex justify-between w-2/3">
@@ -200,6 +192,7 @@ const ForgotPass: React.FC<ForgotPassProps> = ({ setForgot }) => {
           </div>
         </div>
       )}
+      <ErrorToast />
     </>
   );
 };

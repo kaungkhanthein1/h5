@@ -193,7 +193,7 @@ const SignEmail: React.FC<SignEmailProps> = ({ handleBack2 }) => {
 
                 {/* <button className=" bg-white text-black px-2 py-2" onClick={getOtp}>test</button> */}
 
-                {error && <p className="text-red-500 mt-2">{error}</p>}
+                {/* {error && <p className="text-red-500 mt-2">{error}</p>} */}
               </div>
             </motion.div>
           )}
