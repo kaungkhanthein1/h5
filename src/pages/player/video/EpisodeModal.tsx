@@ -1,34 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes, faCheck } from "@fortawesome/free-solid-svg-icons";
-
-interface Episode {
-  episode_id: number | null;
-  episode_name: string;
-  play_url: string;
-  from_code: string;
-  ready_to_play: boolean;
-}
-
-interface PlayFrom {
-  name: string;
-  total: number | null;
-  tips: string;
-  code: string;
-  list: Episode[];
-}
-
-interface ModalComponentProps {
-  onClose: () => void;
-  changeSource: (playfrom: PlayFrom) => void;
-  source: "episodes" | "sources";
-  episodes: Episode[];
-  onEpisodeSelect: (episode: Episode) => void;
-  playFrom: PlayFrom[];
-  defaultEpisodeId: number | null;
-  selectedSource: number;
-  setSelectedSource: (source: number) => void;
-}
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { Episode, ModalComponentProps } from '../../../model/videoModel';
 
 const ModalComponent: React.FC<ModalComponentProps> = ({
   onClose,
@@ -183,9 +156,6 @@ const ModalComponent: React.FC<ModalComponentProps> = ({
                       <circle cx="12" cy="12" r="9" fill="#F54100"/>
                       <path d="M10.5 13.6032L16.0152 8.0874L16.8642 8.9358L10.5 15.3L6.68158 11.4816L7.52998 10.6332L10.5 13.6032Z" fill="white"/>
                       </svg>
-                      // <span className="text-orange-500">
-                      //   <FontAwesomeIcon icon={faCheck} className="text-lg" />
-                      // </span>
                     )}
                   </div>
                 ))}

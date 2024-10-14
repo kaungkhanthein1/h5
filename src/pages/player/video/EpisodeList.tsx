@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useSpring, animated } from 'react-spring';
+import { animated } from 'react-spring';
 
 const EpisodeList: React.FC = () => {
   const [selectedEpisode, setSelectedEpisode] = useState<number | null>(null);

@@ -1,173 +1,158 @@
 import React, { useEffect, useRef, useState } from 'react';
-import videojs from 'video.js';
-import 'video.js/dist/video-js.css';
+import Artplayer from 'artplayer';
+import Hls from 'hls.js'; // Import Hls.js
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faPlay, faPause } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import floatingScreen from '../../../assets/floatingScreen.png';
-
-interface Episode {
-  episode_id: number | null;
-  episode_name: string;
-  play_url: string;
-  from_code: string;
-  ready_to_play: boolean;
-}
-
-interface MovieDetail {
-  name: string;
-  area: string;
-  year: string;
-  score: string;
-  content: string;
-  cover: string;
-  type_name: string;
-  tags: { name: string }[];
-  comments_count: string;
-  popularity_score: number;
-  play_from: {
-    name: string;
-    code: string;
-    list: Episode[];
-    total: number | null;
-    tips: string;
-  }[];
-}
-
-interface VideoPlayerProps {
-  videoUrl: string;
-  onBack: () => void;
-  movieDetail: MovieDetail;
-  selectedEpisode?: Episode | null;
-}
+import axios from 'axios';
+import { VideoPlayerProps } from '../../../model/videoModel';
 
 const VideoPlayer: React.FC<VideoPlayerProps> = ({
   videoUrl,
   onBack,
   movieDetail,
   selectedEpisode,
+  resumeTime,
+  handleVideoError
 }) => {
   const playerRef = useRef<any>(null);
-  const videoElementRef = useRef<HTMLVideoElement>(null);
+  const videoElementRef = useRef<HTMLDivElement>(null);
+  const [videoRatio, setVideoRatio] = useState(9 / 16); // Default to 16:9 ratio
 
-  const [isReady, setIsReady] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
+  // Function to get token from localStorage
+  const getToken = () => {
+    const isLoggedIn = localStorage.getItem('authToken');
+    const parsedLoggedIn = isLoggedIn ? JSON.parse(isLoggedIn) : null;
+    return parsedLoggedIn?.data?.access_token;
+  };
+
+  // Function to report playback progress on specific events (back or episode change)
+  const reportProgress = async (currentTime: number, duration: number) => {
+    const token = getToken();
+    if (!token) return;
+
+    try {
+      await axios.post(
+        'https://cc3e497d.qdhgtch.com:2345/api/v1/movie_play/report',
+        {
+          movie_id: movieDetail.id, // Assuming movie_id is movie name
+          episode_id: selectedEpisode?.episode_id,
+          movie_from: selectedEpisode?.from_code,
+          duration: Math.floor(duration), // Report in seconds
+          current_time: Math.floor(currentTime), // Report in seconds
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+    } catch (error) {
+      console.error('Error reporting playback progress:', error);
+    }
+  };
 
   useEffect(() => {
-    // Function to initialize the player
     const initializePlayer = () => {
       if (videoElementRef.current && videoUrl) {
-        // Dispose previous instance if it exists
-        if (playerRef.current) {
-          playerRef.current.dispose();
-        }
-
-        const player = videojs(videoElementRef.current, {
-          controls: true,
+        const art = new Artplayer({
+          container: videoElementRef.current,
+          url: videoUrl,
+        //   autoSize: true,
           autoplay: true,
-          preload: 'auto',
-          iosNativeFullscreen: false, // Disable native fullscreen on iOS
-          playsinline: true,
-          fluid: true,
-          controlBar: {
-            volumePanel: false, // Hide volume control
-            fullscreenToggle: true, // Show fullscreen button
-            remainingTimeDisplay: true,
-            progressControl: true, // Show progress bar
-            currentTimeDisplay: true,
-            timeDivider: true,
-            durationDisplay: true,
-            captionsButton: false, // Disable captions button
-            pictureInPictureToggle: false, // Disable PiP toggle
+          playbackRate: true,
+          setting: true,
+          fullscreen: true,
+          airplay: true,
+          // fullscreenWeb: true,
+        //   pip: true,
+          moreVideoAttr: {
+            playsInline: true,
           },
         });
 
-        // Store the player instance for later use
-        playerRef.current = player;
+        // Use Hls.js for HLS streams
+        if (Hls.isSupported() && videoUrl.includes('.m3u8')) {
+          const hls = new Hls();
+          hls.loadSource(videoUrl);
+          hls.attachMedia(art.video);
+             // Handle Hls.js errors
+          hls.on(Hls.Events.ERROR, (_, data) => {
+          if (data.fatal) {
+            setTimeout(() => {
+              handleVideoError(videoUrl);
+            }, 1000);
+          }
+        });
+        } else if (art.video.canPlayType('application/vnd.apple.mpegurl')) {
+          art.video.src = videoUrl; // For Safari and iOS
+        }
 
-        // Set video source
-        player.src({
-          src: videoUrl,
-          type: 'application/x-mpegURL', // HLS for iOS
+        // Adjust video ratio based on the video's actual dimensions
+        art.once('video:loadedmetadata', () => {
+          const videoWidth = art.video.videoWidth;
+          const videoHeight = art.video.videoHeight;
+          setVideoRatio(videoHeight / videoWidth); // Set the dynamic aspect ratio
         });
 
-        // Mark video as ready
-        player.on('ready', () => {
-          setIsReady(true);
+        // Set resume time if available
+        art.once('ready', () => {
+          if (resumeTime > 0) {
+            art.currentTime = resumeTime;
+          }
         });
 
-        // Update play state on play/pause
-        player.on('play', () => {
-          setIsPlaying(true);
-        });
-
-        player.on('pause', () => {
-          setIsPlaying(false);
-        });
+        playerRef.current = art;
       }
     };
 
-    // Initialize the player when videoUrl changes
     initializePlayer();
 
-    // Cleanup when component is unmounted or video URL changes
     return () => {
       if (playerRef.current) {
-        playerRef.current.dispose();
-        playerRef.current = null; // Ensure reference is removed
+        playerRef.current.destroy();
       }
     };
-  }, [videoUrl]);
+  }, [videoUrl, resumeTime]);
 
   const handleBack = () => {
     if (playerRef.current) {
-      playerRef.current.pause(); // Pause the video when going back
+      // Report progress before going back
+      reportProgress(playerRef.current.currentTime, playerRef.current.duration);
+      playerRef.current.pause();
     }
-    onBack(); // Trigger the back function
+    onBack();
   };
 
   const handlePiP = () => {
-    if (videoElementRef.current) {
-      if (document.pictureInPictureEnabled) {
-        videoElementRef.current.requestPictureInPicture().catch((error) => {
-          console.error('Failed to enter PiP mode:', error);
-        });
-      }
-    }
-  };
-
-  const handlePlayPause = () => {
-    if (playerRef.current) {
-      if (playerRef.current.paused()) {
-        playerRef.current.play();
+    if (document.pictureInPictureEnabled && playerRef.current) {
+      if (playerRef.current.video !== document.pictureInPictureElement) {
+        playerRef.current.video.requestPictureInPicture();
       } else {
-        playerRef.current.pause();
+        document.exitPictureInPicture();
       }
     }
   };
 
   return (
-    <div className="relative bg-black h-full w-full">
+    <div className='relative w-full bg-black'>
       {/* Back button */}
-      <div className="absolute top-0 left-0 p-4 z-10">
+      <div className="absolute top-0 left-0 p-4 z-50">
         <button onClick={handleBack} className="text-white">
-          <FontAwesomeIcon icon={faArrowLeft} size="1x" />
+          <FontAwesomeIcon icon={faArrowLeft} size="1x" /> {selectedEpisode?.episode_name}
         </button>
       </div>
-
-      {/* Picture-in-Picture button */}
-      <div className="absolute top-0 right-0 p-4 z-10">
+      {/* PiP button */}
+      <div className="absolute top-0 right-0 p-4 z-50">
         <button className="text-white" onClick={handlePiP}>
           <img src={floatingScreen} alt="PiP" className="h-5 w-5" />
         </button>
       </div>
 
-      {/* Video.js player */}
-      <div data-vjs-player>
-        <video
-          ref={videoElementRef}
-          className="video-js"
-          playsInline
-        ></video>
+      {/* Video element wrapper */}
+      <div className="relative w-full" style={{ paddingTop: `${videoRatio * 100}%` }}>
+        {/* Video element */}
+        <div ref={videoElementRef} className="absolute top-0 left-0 w-full h-full"></div>
       </div>
     </div>
   );

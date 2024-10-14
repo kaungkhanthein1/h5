@@ -1,15 +1,15 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { startTransition, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
+  setAuthModel,
+  setLoginOpen,
   setOpenUserNameForm,
   setOtpOpen,
   setSignUpEmail,
+  setSignupOpen,
 } from "../../features/login/ModelSlice";
-import {
-  getOtp,
- 
-} from "../../services/userService";
+import { getOtp } from "../../services/userService";
 import back from "../../assets/login/back.svg";
 import { showToast } from "../../pages/profile/error/ErrorSlice";
 import {
@@ -61,6 +61,14 @@ const Opt: React.FC<OptProps> = ({ email, password, phone, setIsVisible }) => {
     }
   }, [captchaCode, email]);
 
+  const closeAllModals = () => {
+    startTransition(() => {
+      dispatch(setAuthModel(false));
+      dispatch(setLoginOpen(false));
+      dispatch(setSignupOpen(false));
+    });
+  };
+
   const handleOTPChange = async (index: number, value: string) => {
     const updatedOTP = [...otpDigits];
     updatedOTP[index] = value;
@@ -87,9 +95,12 @@ const Opt: React.FC<OptProps> = ({ email, password, phone, setIsVisible }) => {
           if (result && result.msg) {
             // console.log("Result message:", result.msg);
             dispatch(setOtpOpen(false));
-            navigate("/profile");
+            // navigate("/profile");
             dispatch(showToast({ message: result?.msg, type: "error" }));
             localStorage.setItem("authToken", JSON.stringify(result));
+            setTimeout(() => {
+              closeAllModals();
+            }, 1000);
           }
           // console.log("Result", result);
 
@@ -117,9 +128,12 @@ const Opt: React.FC<OptProps> = ({ email, password, phone, setIsVisible }) => {
           if (result && result.msg) {
             // console.log("Result message:", result.msg);
             dispatch(setOtpOpen(false));
-            navigate("/profile");
+            // navigate("/profile");
             dispatch(showToast({ message: result?.msg, type: "success" }));
             localStorage.setItem("authToken", JSON.stringify(result));
+            setTimeout(() => {
+              closeAllModals();
+            }, 1000);
           }
           console.log("Result", result);
 

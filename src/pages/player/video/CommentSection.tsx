@@ -4,47 +4,13 @@ import {
   faThumbsUp,
   faPaperPlane,
   faSpinner,
-  faReply,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import ProfileImg from "../../../assets/profile.png";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setAuthModel } from "../../../features/login/ModelSlice";
-
-interface CommentProps {
-  movieId: string;
-}
-
-interface Comment {
-  id: number;
-  movie_id: string;
-  user: {
-    id: number;
-    nickname: string;
-    avatar: string;
-    level: string;
-  };
-  content: string;
-  type: string;
-  likes: number;
-  create_time: string;
-  replies?: Reply[];
-}
-
-interface Reply {
-  id: number;
-  comment_id: number;
-  parent_id: number;
-  user: {
-    id: number;
-    nickname: string;
-    avatar: string;
-    level: string;
-  };
-  content: string;
-  create_time: string;
-}
+import {CommentProps, Comment } from '../../../model/commentModel';
 
 const CommentComponent: React.FC<CommentProps> = ({ movieId }) => {
   const [comments, setComments] = useState<Comment[]>([]);

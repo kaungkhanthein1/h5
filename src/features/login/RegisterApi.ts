@@ -5,6 +5,8 @@ import {
   GetTCodeResponse,
   GetTokenArgs,
   GetTokenResponse,
+  RecoverPassArgs,
+  RecoverPassResponse,
   SignUpEmailArgs,
   SignUpPhoneArgs,
   SignUpResponse,
@@ -31,7 +33,7 @@ const RegisterApi = createApi({
         try {
           const { data } = await queryFulfilled;
           const msg = data.msg;
-          console.log("Registration successful:", msg);
+          // console.log("Registration successful:", msg);
         } catch (error: any) {
           if (error.error?.data) {
             console.error("Registration failed:", error.error.data);
@@ -78,7 +80,8 @@ const RegisterApi = createApi({
         try {
           const { data } = await queryFulfilled;
           const msg = data.msg;
-          console.log("Verification successful:", msg);
+          console.log(data)
+          // console.log("Verification:", msg);
         } catch (error: any) {
           if (error.error?.data) {
             console.error("Verification failed:", error.error.data);
@@ -98,7 +101,7 @@ const RegisterApi = createApi({
         },
       }),
     }),
-    getCodeForgot: builder.query<GetTCodeResponse,GetCodeArgs>({
+    getCodeForgot: builder.query<GetTCodeResponse, GetCodeArgs>({
       query: ({ send_type, session_token }) => ({
         url: `/v1/user/forget/send_code`,
         method: "GET",
@@ -108,6 +111,37 @@ const RegisterApi = createApi({
         },
       }),
     }),
+    passwordRecovery: builder.mutation<RecoverPassResponse, RecoverPassArgs>({
+      query: ({ password, repassword, session_token, forget_code }) => ({
+        url: "v1/user/forget/set_pass",
+        method: "POST",
+        body: {
+          password: password,
+          repassword: repassword,
+          session_token: session_token,
+          forget_code: forget_code,
+        },
+      }),
+      async onQueryStarted(arg, { queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          const msg = data.msg;
+          return msg
+          console.log("set successful:", msg);
+        } catch (error: any) {
+          if (error.error?.data) {
+            if (error.error?.data) {
+              const errorMsg = error.error.data.msg; // Extract the error message
+              const errorCode = error.error.data.errorCode; // Extract the error code
+              console.error("Set failed:", errorMsg, "Error Code:", errorCode);
+              return errorMsg
+            }
+          } else {
+            console.error("set error:", error.message);
+          }
+        }
+      },
+    }),
   }),
 });
 
@@ -116,7 +150,8 @@ export const {
   useSignUpPhoneMutation,
   useConfirmCaptchaForgotMutation,
   useGetTokenForgotQuery,
-  useGetCodeForgotQuery
+  useGetCodeForgotQuery,
+  usePasswordRecoveryMutation,
 } = RegisterApi;
 
 export default RegisterApi;

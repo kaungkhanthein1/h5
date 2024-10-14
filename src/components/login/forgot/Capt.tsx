@@ -14,6 +14,8 @@ import {
   useGetTokenForgotQuery,
 } from "../../../features/login/RegisterApi";
 import Verify from "./Varify";
+import { showToast } from "../../../pages/profile/error/ErrorSlice";
+import ErrorToast from "../../../pages/profile/error/ErrorToast";
 
 interface CaptProp {
   email: string;
@@ -33,7 +35,7 @@ const Capt: React.FC<CaptProp> = ({ email, password, confirmPassword }) => {
   const dispatch = useDispatch();
   const [captchaCode, setCaptchaCode] = useState("");
   const [accessToken, setToken] = useState("");
-  const [isemail,setIsemail] = useState<string>("")
+  const [isemail, setIsemail] = useState<string>("");
   const [captchaImage, setCaptchaImage] = useState<string | null>(null);
   const [keyStatus, setKeyStatus] = useState("");
   const [error, setError] = useState("");
@@ -80,14 +82,18 @@ const Capt: React.FC<CaptProp> = ({ email, password, confirmPassword }) => {
       if (tokenData) {
         const { data } = tokenData;
         const { email, phone, session_token } = data;
-        if(email){
-          setIsemail("email")
-        }else{
-          setIsemail("phone")
+        if (email) {
+          setIsemail("email");
+        } else {
+          setIsemail("phone");
         }
-        setToken(session_token)
+        setToken(session_token);
         console.log(" here is", email, phone, session_token);
         setShowVerify(true);
+      } else if(!tokenData && graphicKey) {
+        console.log("user not exist");
+        dispatch(setCaptchaOpen(false));
+        dispatch(showToast({ message: "找不到用户", type: "error" }));
       }
     } catch (error) {
       console.log(error);
@@ -96,6 +102,7 @@ const Capt: React.FC<CaptProp> = ({ email, password, confirmPassword }) => {
 
   return (
     <>
+      <ErrorToast />
       {showVerify && (
         <Verify
           setShowVerify={setShowVerify}

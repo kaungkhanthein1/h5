@@ -4,7 +4,11 @@ import { useNavigate } from "react-router-dom";
 import back from "../../../assets/login/back.svg";
 import { setPasswordRecoveryFotgot } from "../../../services/userService";
 import { setCapCode, setOCapKey } from "../../../features/login/ModelSlice";
-import { useGetCodeForgotQuery } from "../../../features/login/RegisterApi";
+import {
+  useGetCodeForgotQuery,
+  usePasswordRecoveryMutation,
+} from "../../../features/login/RegisterApi";
+import { showToast } from "../../../pages/profile/error/ErrorSlice";
 
 interface OptProps {
   send_type: string;
@@ -21,18 +25,26 @@ const Verify: React.FC<OptProps> = ({
   setShowVerify,
   send_type,
 }) => {
-  console.log(send_type, accessToken);
+  // console.log(send_type, accessToken);
   const { data: codeData } = useGetCodeForgotQuery(
     { send_type, session_token: accessToken || "" },
     { skip: !accessToken }
   );
-  console.log(codeData);
+  // console.log(codeData);
+
+  const [passwordRecovery, { error }] = usePasswordRecoveryMutation();
   const [otpDigits, setOtpDigits] = useState<string[]>(Array(6).fill(""));
   const [timer, setTimer] = useState<number>(59);
   const [buttonText, setButtonText] = useState<string>("59 s");
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (codeData) {
+      console.log("Code data fetched:", codeData);
+    }
+  }, [codeData]);
 
   useEffect(() => {
     const countdown = setInterval(() => {
@@ -45,7 +57,7 @@ const Verify: React.FC<OptProps> = ({
     return () => clearInterval(countdown);
   }, [timer]);
 
-  const handleOTPChange = (index: number, value: string) => {
+  const handleOTPChange = async (index: number, value: string) => {
     const updatedOTP = [...otpDigits];
     updatedOTP[index] = value;
     setOtpDigits(updatedOTP);
@@ -62,12 +74,27 @@ const Verify: React.FC<OptProps> = ({
     if (updatedOTP.every((digit) => digit)) {
       const otpCode = updatedOTP.join("");
       if (otpCode) {
-        setPasswordRecoveryFotgot(
-          password,
-          confirmPassword,
-          otpCode,
-          accessToken
-        );
+        try {
+          const {data,error} = await passwordRecovery({
+            password,
+            repassword: confirmPassword,
+            session_token: accessToken,
+            forget_code: otpCode,
+          });
+          console.log(error);
+          if(data){
+            navigate("/profile")
+            console.log('set success')
+          }
+          if (error) {
+            dispatch(
+              showToast({ message: "验证码错误", type: "error" })
+            );
+            // console.log("'", result.error);
+          }
+        } catch (error) {
+          console.log(error);
+        }
       }
     }
   };

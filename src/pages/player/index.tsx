@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import VideoPlayer from "./video/VideoPlayer5";
+import VideoPlayer from "./video/VideoPlayer";
 import SourceSelector from "./video/SourceSelector";
 import DetailSection from "./video/DetailSection";
 import EpisodeSelector from "./video/EpisodeSelector";
@@ -9,51 +9,14 @@ import noPlayImage from "../../assets/noplay.svg";
 import RecommendedList from "./video/RecommendedList";
 import AdsSection from "./video/AdsSection";
 import NetworkError from "./video/NetworkError";
-
-interface Episode {
-  episode_id: number | null;
-  episode_name: string;
-  play_url: string;
-  from_code: string;
-  ready_to_play: boolean;
-}
-
-interface MovieDetail {
-  code: string;
-  name: string;
-  area: string;
-  year: string;
-  score: string;
-  is_collect: boolean;
-  content: string;
-  cover: string;
-  id: string;
-  type_name: string;
-  tags: { name: string }[];
-  comments_count: string;
-  popularity_score: number;
-  play_from: {
-    name: string;
-    code: string;
-    list: Episode[];
-    total: number | null;
-    tips: string;
-  }[];
-  last_playback: {
-    current_time: number;
-    duration: number;
-    episode_id: number;
-    id: string;
-    movie_from: string;
-  };
-  members: { name: string; type: number }[];
-}
+import { Episode, MovieDetail, AdsData } from '../../model/videoModel';
+import { getMovieDetail, getAdsData, getEpisodesBySource, reportPlaybackProgress } from '../../services/playerService';
 
 const DetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [movieDetail, setMovieDetail] = useState<MovieDetail | null>(null);
   const [currentEpisode, setCurrentEpisode] = useState<Episode | null>(null);
-  const [adsData, setAdsData] = useState(null);
+  const [adsData, setAdsData] = useState<AdsData | null>(null);
   const [selectedSource, setSelectedSource] = useState(0);
   const [activeTab, setActiveTab] = useState("tab-1");
   const [resumeTime, setResumeTime] = useState(0);
@@ -88,20 +51,17 @@ const DetailPage: React.FC = () => {
     for (let i = selectedSource + 1; i < movieDetail.play_from.length; i++) {
       const nextSource = movieDetail.play_from[i];
       try {
-        const res = await fetch(
-          `https://cc3e497d.qdhgtch.com:2345/api/v1/movie_addr/list?from_code=${nextSource.code}&movie_id=${id}`);
-        const data = await res.json();
-          setCurrentEpisode(data.data[0]);
-          console.log('111', data)
-          setEpisodes(data.data);
+        const res = await getEpisodesBySource(nextSource.code, id || '');
+          setCurrentEpisode(res.data[0]);
+          setEpisodes(res.data);
           setSelectedSource(i);
-        if (data.data?.[0]?.ready_to_play) {
+        if (res.data?.[0]?.ready_to_play) {
           setAutoSwitch(null);
           setVideoError(false);
         } else {
           setAutoSwitch(6);
           setVideoError(true);
-          setErrorVideoUrl(data.data?.[0]?.play_url);
+          setErrorVideoUrl(res.data?.[0]?.play_url);
         }
         return;
       } catch (error) {
@@ -115,61 +75,31 @@ const DetailPage: React.FC = () => {
     if (id) {
       setAutoSwitch(null);
       setVideoError(false);
-      getMovieDetail();
-      getAdsData();
+      fetchMovieDetail();
+      fetchAdsData();
     }
   }, [id]);
 
-  const getAdsData = async () => {
+  const fetchAdsData = async () => {
     try {
-      const res = await fetch(
-        "https://cc3e497d.qdhgtch.com:2345/api/v1/advert/config"
-      );
-      const data = await res.json();
-      setAdsData(data);
+      const res = await getAdsData();
+      setAdsData(res.data);
     } catch (error) {
-      console.error("Error fetching ads data:", error);
+      console.error('Error fetching ads data:', error);
     }
   };
 
-  const getMovieDetail = async () => {
+  const fetchMovieDetail = async () => {
     try {
-      const loginResponse = await localStorage.getItem("authToken");
-      const loginInfo = loginResponse ? JSON.parse(loginResponse) : null;
-      const authorization =
-        loginInfo?.data?.token_type && loginInfo?.data?.access_token
-          ? `${loginInfo.data.token_type} ${loginInfo.data.access_token}`
-          : "";
-
-      if (!authorization) {
-        localStorage.removeItem("authToken");
-      }
-
-      const header = authorization
-        ? {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: authorization,
-            },
-          }
-        : { method: "GET" };
-
-      const res = await fetch(
-        `https://cc3e497d.qdhgtch.com:2345/api/v1/movie/detail?id=${id}`,
-        header
-      );
-      const data = await res.json();
-      console.log("data.data is=>", data.data);
-      setMovieDetail(data?.data);
-      setInitialEpisode(data?.data);
+      const res = await getMovieDetail(id || '');
+      setMovieDetail(res?.data);
+      setInitialEpisode(res?.data);
     } catch (error) {
-      console.error("Error fetching movie details:", error);
+      console.error('Error fetching movie details:', error);
     }
   };
 
   const setInitialEpisode = (mvDetail: any) => {
-    console.log("movieDetail,playFrom =>", mvDetail);
     if (mvDetail) {
       const playBackInfo = mvDetail.last_playback;
       if (playBackInfo && playBackInfo.movie_from) {
@@ -186,7 +116,6 @@ const DetailPage: React.FC = () => {
             setCurrentEpisode(
               mvDetail?.play_from[sourceIndex]?.list[episodeIndex]
             );
-            console.log('205', mvDetail)
             setEpisodes(mvDetail?.play_from[sourceIndex]?.list);
             setResumeTime(playBackInfo.current_time);
             return;
@@ -232,35 +161,18 @@ const DetailPage: React.FC = () => {
   };
 
   const reportProgress = async (episode: Episode) => {
-    const token = getToken();
-    if (!token || !currentEpisode) return;
+    if (!movieDetail || !episode) return;
     try {
-      await fetch(
-        "https://cc3e497d.qdhgtch.com:2345/api/v1/movie_play/report",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            movie_id: movieDetail?.id,
-            episode_id: episode.episode_id,
-            movie_from: episode.from_code,
-            duration: Math.floor(movieDetail?.last_playback?.duration || 0),
-            current_time: Math.floor(resumeTime || 0),
-          }),
-        }
+      await reportPlaybackProgress(
+        movieDetail.id,
+        episode?.episode_id?.toString() || '',
+        episode.from_code,
+        movieDetail.last_playback?.duration || 0,
+        resumeTime || 0
       );
     } catch (error) {
       console.error("Error reporting playback progress:", error);
     }
-  };
-
-  const getToken = (): string | null => {
-    const isLoggedIn = localStorage.getItem("authToken");
-    const parsedLoggedIn = isLoggedIn ? JSON.parse(isLoggedIn) : null;
-    return parsedLoggedIn?.data?.access_token || null;
   };
 
   const switchNow = () => {
@@ -270,7 +182,6 @@ const DetailPage: React.FC = () => {
   };
 
   const handleVideoError = (errorUrl: string) => {
-    console.log('errorVideoUrl , errorUrl', errorVideoUrl, errorUrl);
     if((errorVideoUrl !== errorUrl) && errorUrl) {
       setAutoSwitch(6);
       setVideoError(true);
@@ -281,19 +192,16 @@ const DetailPage: React.FC = () => {
   const handleChangeSource = async (nextSource: any) => {
     if(nextSource && nextSource.code && id) {
       try {
-        const res = await fetch(
-          `https://cc3e497d.qdhgtch.com:2345/api/v1/movie_addr/list?from_code=${nextSource.code}&movie_id=${id}`);
-        const data = await res.json();
-          setCurrentEpisode(data.data[0]);
-          console.log('111', data)
-          setEpisodes(data.data);
-        if (data.data?.[0]?.ready_to_play) {
+        const res = await getEpisodesBySource(nextSource.code, id || '');
+          setCurrentEpisode(res.data[0]);
+          setEpisodes(res.data);
+        if (res.data?.[0]?.ready_to_play) {
           setAutoSwitch(null);
           setVideoError(false);
         } else {
           setAutoSwitch(6);
           setVideoError(true);
-          setErrorVideoUrl(data.data?.[0]?.play_url);
+          setErrorVideoUrl(res.data?.[0]?.play_url);
         }
       } catch (error) {
         console.error("Error auto-playing next episode:", error);

@@ -1,7 +1,7 @@
 import { useState } from "react";
   
 const AdsSection = (adsData: any) => {
-    const adEntries = adsData && adsData.adsData.data ? Object.values(adsData.adsData.data) : []; // Extracting all the ads
+    const adEntries = adsData && adsData.adsData ? Object.values(adsData.adsData) : []; // Extracting all the ads
   const [randomIndex, setRandomIndex] = useState(
     Math.floor(Math.random() * adEntries.length)
   );

@@ -1,44 +1,9 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronRight, faArrowsRotate } from "@fortawesome/free-solid-svg-icons";
+import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import ModalComponent from "./EpisodeModal";
+import { Episode, MovieDetail } from '../../../model/videoModel';
 
-interface Episode {
-  episode_id: number | null;
-  episode_name: string;
-  play_url: string;
-  from_code: string;
-  ready_to_play: boolean;
-}
-
-interface MovieDetail {
-  name: string;
-  code: string;
-  area: string;
-  year: string;
-  score: string;
-  content: string;
-  cover: string;
-  type_name: string;
-  tags: { name: string }[];
-  comments_count: string;
-  popularity_score: number;
-  play_from: {
-    name: string;
-    code: string;
-    list: Episode[];
-    total: number | null;
-    tips: string;
-  }[];
-  members: { name: string; type: number }[];
-}
-
-interface PlayFrom {
-  name: string;
-  total: number | null;
-  tips: string;
-  code: string;
-}
 
 interface SourceSelectorProps {
   episodes: Episode[]; // Episodes list

@@ -11,42 +11,11 @@ import {
   faFire,
 } from "@fortawesome/free-solid-svg-icons";
 import CommentComponent from "./CommentSection";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setAuthModel } from "../../../features/login/ModelSlice";
 import FeedbackComponent from "./Feedback";
 import AdsSection from "./AdsSection";
-interface DetailSectionProps {
-  movieDetail: {
-    code: string;
-    name: string;
-    area: string;
-    year: string;
-    score: string;
-    content: string;
-    cover: string;
-    type_name: string;
-    is_collect: boolean;
-    tags: { name: string }[];
-    comments_count: string;
-    popularity_score: number;
-    members: { name: string; type: number }[];
-  };
-  adsData: {
-    [key: string]: {
-      type: number;
-      location_id: number;
-      channel: string;
-      remarks: string;
-      data: {
-        image: string;
-        url: string;
-      };
-    };
-  } | null;
-  id: string;
-  activeTab: string;
-  setActiveTab: (active: string) => void;
-}
+import { DetailSectionProps } from '../../../model/videoModel';
 
 const DetailSection: React.FC<DetailSectionProps> = ({
   movieDetail,
@@ -202,13 +171,6 @@ const DetailSection: React.FC<DetailSectionProps> = ({
                       {Array.of(movieDetail?.popularity_score)?.map((item) => (
                         <img src={rate} key={item} alt="" />
                       ))}
-                      {/* {Array(Math.max(1, movieDetail.popularity_score))
-                        .fill("🔥")
-                        .map((flame, index) => (
-                          <span key={index} className="text-xl mr-1">
-                            {flame}
-                          </span>
-                        ))} */}
                     </span>
                   {/* </span> */}
                   <span>{movieDetail.year}</span>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes, faStar, faShareAlt } from '@fortawesome/free-solid-svg-icons';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 interface FeedbackComponentProps {
   onClose: () => void;
@@ -70,27 +70,6 @@ const FeedbackComponent: React.FC<FeedbackComponentProps> = ({ onClose, movieId,
             <FontAwesomeIcon icon={faTimes} className="text-xl" />
           </button>
         </div>
-
-        {/* <div className="actions flex justify-between my-4">
-          <button
-            onClick={handleStarToggle}
-            className={`action-btn flex flex-col items-center px-4 py-2 rounded-md ${isStarred ? 'text-orange-500' : 'text-gray-200'}`}
-            disabled={isLoading}
-          >
-            <FontAwesomeIcon icon={faStar} className="h-7 mb-2" />
-            <span>收藏</span>
-          </button>
-
-          <button onClick={onClose} className="flex flex-col items-center px-4 py-2 rounded-md">
-            <span className="text-gray-200">反馈/求片</span>
-          </button>
-
-          <button onClick={handleShare} className="action-btn flex flex-col items-center px-4 py-2 rounded-md" disabled={isLoading}>
-            <FontAwesomeIcon icon={faShareAlt} className="h-7 mb-2" />
-            <span className="text-gray-200">分享</span>
-          </button>
-        </div> */}
-
         <div className="mb-4">
           <h3 className="text-md mb-2">选择遇到的问题</h3>
           <div className="grid grid-cols-2 gap-2">

@@ -45,3 +45,16 @@ export interface GetCodeArgs {
     msg: string;
     data: any;
   }
+
+  export interface RecoverPassArgs{
+    password: string;
+    repassword: string;
+    session_token: string;
+    forget_code: string;
+  }
+
+  export interface RecoverPassResponse{
+    msg: string;
+    data: any;
+  }
+  
