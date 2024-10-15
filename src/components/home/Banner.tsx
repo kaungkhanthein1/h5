@@ -1,6 +1,20 @@
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from "react-responsive-carousel";
+import { useNavigate } from "react-router-dom";
 const Banner = ({ list }: { list: any }) => {
+  const navigate = useNavigate();
+
+  const handleBannerClick = (clickLink: string) => {
+    console.log('clickLink is=>', clickLink);
+    if (clickLink && clickLink.startsWith('http')) {
+      window.open(clickLink, '_blank');
+    } else {
+      navigate(`/player/${clickLink}`)
+      // Handle cases where clickLink is not a full URL or handle internal links
+      console.log("Clicked on banner:", clickLink);
+    }
+  };
+
   return (
     <div className="mt-[115px] max-md:px-3 px-10">
       <div className="">
@@ -9,8 +23,9 @@ const Banner = ({ list }: { list: any }) => {
             {list?.map((banner: any) => (
               <div
                 key={banner?.image}
-                className="h-[200px] lg:h-[400px] rounded-md"
-              >
+                className="h-[200px] lg:h-[400px] rounded-md"              
+                onClick={() => handleBannerClick(banner?.click)} 
+                >
                 <img
                   className="relative h-[200px] lg:h-[400px] rounded-md"
                   src={banner?.image}

@@ -49,7 +49,7 @@ const Capt: React.FC<CaptProp> = ({ email, password, confirmPassword }) => {
 
   useEffect(() => {
     if (tokenData) {
-      console.log("Token data:", tokenData);
+      console.log("Token data:");
       // Handle the token and proceed further
     }
   }, [tokenData, graphicKey]);
@@ -88,15 +88,15 @@ const Capt: React.FC<CaptProp> = ({ email, password, confirmPassword }) => {
           setIsemail("phone");
         }
         setToken(session_token);
-        console.log(" here is", email, phone, session_token);
+        // console.log(" here is", email, phone, session_token);
         setShowVerify(true);
       } else if(!tokenData && graphicKey) {
-        console.log("user not exist");
+        // console.log("user not exist");
         dispatch(setCaptchaOpen(false));
         dispatch(showToast({ message: "找不到用户", type: "error" }));
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 

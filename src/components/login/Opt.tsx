@@ -162,10 +162,16 @@ const Opt: React.FC<OptProps> = ({ email, password, phone, setIsVisible }) => {
       setTimer(59);
       setOtpDigits(Array(6).fill(""));
       getOtp(captchaCode, captchaKey, email, "email");
+      dispatch(
+        showToast({ message: "验证码已成功重新发送", type: "success" })
+      );
     } else if (phone) {
       setTimer(59);
       setOtpDigits(Array(6).fill(""));
       getOtp(captchaCode, captchaKey, phone, "phone");
+      dispatch(
+        showToast({ message: "验证码已成功重新发送", type: "success" })
+      );
     }
   };
 

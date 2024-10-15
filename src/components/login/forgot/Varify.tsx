@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import back from "../../../assets/login/back.svg";
-import { setPasswordRecoveryFotgot } from "../../../services/userService";
+// import { setPasswordRecoveryFotgot } from "../../../services/userService";
 import { setCapCode, setOCapKey } from "../../../features/login/ModelSlice";
 import {
   useGetCodeForgotQuery,
@@ -26,7 +26,7 @@ const Verify: React.FC<OptProps> = ({
   send_type,
 }) => {
   // console.log(send_type, accessToken);
-  const { data: codeData } = useGetCodeForgotQuery(
+  const { data: codeData, refetch: resendOtpApi } = useGetCodeForgotQuery(
     { send_type, session_token: accessToken || "" },
     { skip: !accessToken }
   );
@@ -75,21 +75,19 @@ const Verify: React.FC<OptProps> = ({
       const otpCode = updatedOTP.join("");
       if (otpCode) {
         try {
-          const {data,error} = await passwordRecovery({
+          const { data, error } = await passwordRecovery({
             password,
             repassword: confirmPassword,
             session_token: accessToken,
             forget_code: otpCode,
           });
           console.log(error);
-          if(data){
-            navigate("/profile")
-            console.log('set success')
+          if (data) {
+            navigate("/profile");
+            console.log("set success");
           }
           if (error) {
-            dispatch(
-              showToast({ message: "验证码错误", type: "error" })
-            );
+            dispatch(showToast({ message: "验证码错误", type: "error" }));
             // console.log("'", result.error);
           }
         } catch (error) {
@@ -99,7 +97,17 @@ const Verify: React.FC<OptProps> = ({
     }
   };
 
-  const resendOtp = () => {};
+  const resendOtp = async () => {
+    try {
+      await resendOtpApi(); // Triggers the resend OTP API call
+      setTimer(59); // Resets the timer to 59 seconds
+      dispatch(
+        showToast({ message: "验证码已成功重新发送", type: "success" })
+      );
+    } catch (error) {
+      dispatch(showToast({ message: "验证码重新发送失败", type: "error" }));
+    }
+  };
 
   const handleBack = () => {
     setShowVerify(false);

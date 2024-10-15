@@ -132,7 +132,9 @@ const DetailPage: React.FC = () => {
           setCurrentEpisode(mvDetail?.play_from[0].list[0]);
           setResumeTime(0);
           setEpisodes(mvDetail?.play_from[0].list);
-        } 
+        } else {
+          setWholePageError(true);
+        }
         if (mvDetail?.play_from?.[0]?.list?.[0] && !mvDetail?.play_from?.[0]?.list?.[0].ready_to_play) {
           setAutoSwitch(6);
           setVideoError(true);

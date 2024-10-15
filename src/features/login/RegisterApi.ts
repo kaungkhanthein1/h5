@@ -57,7 +57,7 @@ const RegisterApi = createApi({
         try {
           const { data } = await queryFulfilled;
           const msg = data.msg;
-          console.log("Registration successful:", msg);
+          // console.log("Registration successful:", msg);
         } catch (error: any) {
           if (error.error?.data) {
             console.error("Registration failed:", error.error.data);
@@ -80,7 +80,7 @@ const RegisterApi = createApi({
         try {
           const { data } = await queryFulfilled;
           const msg = data.msg;
-          console.log(data)
+          // console.log(data)
           // console.log("Verification:", msg);
         } catch (error: any) {
           if (error.error?.data) {
@@ -127,7 +127,7 @@ const RegisterApi = createApi({
           const { data } = await queryFulfilled;
           const msg = data.msg;
           return msg
-          console.log("set successful:", msg);
+          // console.log("set successful:", msg);
         } catch (error: any) {
           if (error.error?.data) {
             if (error.error?.data) {

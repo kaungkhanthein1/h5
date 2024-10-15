@@ -1,5 +1,5 @@
 import React from "react";
-import MovieCard from "../../../components/home/MovieCard";
+import MovieCard from "./MovieCard";
 
 const RecommendedList = ({ data }: any) => {
   return (
@@ -9,11 +9,11 @@ const RecommendedList = ({ data }: any) => {
         className="grid gap-4 mb-5" 
         style={{ 
           gridTemplateColumns: 'repeat(3, 1fr)', 
-          gridGap: '16px' 
+          gridGap: '8px' 
         }}
       >
         {data?.recommendList?.map((movie: any) => (
-          <MovieCard key={movie.id} movie={movie} height={"100px"} width={"200px"} showDynamic={true}/>
+          <MovieCard key={movie.id} movie={movie}/>
         ))}
       </div>
     </div>
