@@ -22,12 +22,13 @@ const ModalComponent: React.FC<ModalComponentProps> = ({
   );
   const [episodeRange, setEpisodeRange] = useState<[number, number]>([0, 50]);
   const [filteredEpisodes, setFilteredEpisodes] = useState<Episode[]>([]);
+  const [lowerDivHeight, setLowerDivHeight] = useState(0);
 
   useEffect(() => {
     // Combine all episodes from the playFrom list
     // const allEpisodes = playFrom.flatMap((source) => source.list);
     setFilteredEpisodes(episodes);
-  }, [episodes]);
+    }, [episodes]);
 
   // Handle episode selection and update the state
   const handleEpisodeClick = (episode: Episode) => {
@@ -45,9 +46,31 @@ const ModalComponent: React.FC<ModalComponentProps> = ({
     setSelectedEpisodeId(defaultEpisodeId);
   }, [defaultEpisodeId]);
 
+  const customHeight = () => {
+    const upperDiv = document.getElementById('upper-div');
+    const upperDivHeight = upperDiv?.offsetHeight || 0;
+    const remainingHeight = window.innerHeight - upperDivHeight;
+    return remainingHeight;
+  };
+
+  useEffect(() => {
+    const updateHeight = () => {
+      setLowerDivHeight(customHeight());
+    };
+
+    updateHeight(); // Set initial height
+    window.addEventListener('resize', updateHeight); // Update height on window resize
+
+    return () => {
+      window.removeEventListener('resize', updateHeight); // Cleanup event listener
+    };
+  }, []);
+
+
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center">
-      <div className="bg-sourceBack backdrop-blur-md w-full max-w-md h-[65vh] rounded-t-xl p-4 text-white">
+      <div className="bg-sourceBack backdrop-blur-md w-full max-w-md rounded-t-xl p-4 text-white"
+        style={{ height: `${lowerDivHeight}px` }}>
         <div className="flex justify-between items-center mb-4">
           <div className="flex space-x-6 overflow-x-auto m-auto">
             {/* Episode Tab */}
@@ -134,7 +157,8 @@ const ModalComponent: React.FC<ModalComponentProps> = ({
                 playFrom.map((source, index) => (
                   <div
                     key={index}
-                    className={`flex justify-between items-center bg-source p-3 rounded-lg mb-2 cursor-pointer`}
+                    className={`flex justify-between items-center p-3 rounded-lg mb-2 cursor-pointer 
+                      ${index === selectedSource ? 'bg-episodeSelected' : 'bg-source'}`}
                     onClick={() => {
                       setSelectedSource(index);
                       changeSource(source);
@@ -143,13 +167,15 @@ const ModalComponent: React.FC<ModalComponentProps> = ({
                     <div>
                       <h4 className="text-white">{source.name}</h4>
                       {/* Display total videos if available */}
+                      <div className="flex justify-between items-center">
                       {source.total && (
-                        <p className="text-gray-400 text-xs">{source.total} 个视频</p>
+                        <p className="bg-source text-white text-xs px-3 py-1.5 my-2 mr-3 rounded-md">{source.total} 个视频</p>
                       )}
                       {/* Display tips if available */}
-                      <p className="text-gray-400 text-xs">
+                      <p className="bg-source text-white text-xs px-3 py-1.5 my-2 rounded-md">
                         {source.tips || "No description available"}
                       </p>
+                      </div>
                     </div>
                     {index === selectedSource && (
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

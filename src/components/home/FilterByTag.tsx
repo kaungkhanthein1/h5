@@ -36,7 +36,7 @@ const FilterByTag = ({ data, sort }: any) => {
         ))}
       </div>
       <div className="flex overflow-x-scroll px-3 gap-5 remove-scrollbar items-center">
-        {data[0]?.class?.map((item: any, index: any) => (
+        {data && data.length > 0 && data[0]?.class?.map((item: any, index: any) => (
           <div className="relative" key={index}>
             <p
               onClick={() => dispatch(setClass(item))}

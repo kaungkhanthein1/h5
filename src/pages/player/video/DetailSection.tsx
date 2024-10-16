@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import share from "../../../assets/share.png";
 import star from "../../../assets/star.png";
 import info from "../../../assets/info.png";
@@ -32,6 +32,7 @@ const DetailSection: React.FC<DetailSectionProps> = ({
   );
   const [showFeedbackModal, setShowFeedbackModal] = useState(false); // For triggering modal
   const [visible, setVisible] = useState(false);
+  const [lowerDivHeight, setLowerDivHeight] = useState(0);
 
   const handleCopy = () => {
     setVisible(true);
@@ -150,6 +151,27 @@ const DetailSection: React.FC<DetailSectionProps> = ({
     }
   };
 
+
+  const customHeight = () => {
+    const upperDiv = document.getElementById('upper-div');
+    const upperDivHeight = upperDiv?.offsetHeight || 0;
+    const remainingHeight = window.innerHeight - upperDivHeight;
+    return remainingHeight;
+  };
+
+  useEffect(() => {
+    const updateHeight = () => {
+      setLowerDivHeight(customHeight());
+    };
+
+    updateHeight(); // Set initial height
+    window.addEventListener('resize', updateHeight); // Update height on window resize
+
+    return () => {
+      window.removeEventListener('resize', updateHeight); // Cleanup event listener
+    };
+  }, []);
+
   return (
     <div className="flex flex-col w-full bg-background">
       {/* Tabs */}
@@ -267,7 +289,8 @@ const DetailSection: React.FC<DetailSectionProps> = ({
       {/* Modal for sharing */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-end">
-          <div className="bg-background backdrop-blur-md w-full max-w-md h-[60vh] bottom-0 rounded-lg p-6 text-white overflow-y-auto">
+          <div className="bg-background backdrop-blur-md w-full max-w-md bottom-0 rounded-lg p-6 text-white overflow-y-auto"
+          style={{ height: `${lowerDivHeight}px` }}>
             {/* Modal Header */}
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-semibold">Introduction</h2>

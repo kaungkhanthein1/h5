@@ -162,16 +162,12 @@ const Opt: React.FC<OptProps> = ({ email, password, phone, setIsVisible }) => {
       setTimer(59);
       setOtpDigits(Array(6).fill(""));
       getOtp(captchaCode, captchaKey, email, "email");
-      dispatch(
-        showToast({ message: "验证码已成功重新发送", type: "success" })
-      );
+      dispatch(showToast({ message: "验证码已成功重新发送", type: "success" }));
     } else if (phone) {
       setTimer(59);
       setOtpDigits(Array(6).fill(""));
       getOtp(captchaCode, captchaKey, phone, "phone");
-      dispatch(
-        showToast({ message: "验证码已成功重新发送", type: "success" })
-      );
+      dispatch(showToast({ message: "验证码已成功重新发送", type: "success" }));
     }
   };
 
@@ -205,10 +201,8 @@ const Opt: React.FC<OptProps> = ({ email, password, phone, setIsVisible }) => {
         </div>
 
         <p className="text-[#888] text-[10px] font-light leading-[15px] p-3 text-center">
-          Verification code sent ,{" "}
-          {/* <span className="text-white">DevelopX10@gmail.com</span> /{" "} */}
-          {/* <span className="text-white">+868880818.</span> */}
-          Please check your messages and spam folder.
+          Verification code sent to <span className=" text-white">{email}</span>  <span className="text-white">{phone}</span> Please
+          check your messages and be sure to check your spam folder
         </p>
       </div>
 

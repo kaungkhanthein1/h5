@@ -135,7 +135,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   };
 
   return (
-    <div className='relative w-full bg-black'>
+    <div id="my-player" className='relative w-full bg-black'>
       {/* Back button */}
       <div className="absolute top-0 left-0 p-4 z-50">
         <button onClick={handleBack} className="text-white">

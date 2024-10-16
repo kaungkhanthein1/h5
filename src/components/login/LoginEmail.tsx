@@ -36,7 +36,7 @@ const LoginEmail: React.FC<LoginEmailProps> = ({ handleBack }) => {
     const lengthValid = password.length >= 8 && password.length <= 25;
     const containsLetters = /[a-zA-Z]/.test(password);
     const containsNumbers = /\d/.test(password);
-    return lengthValid && (containsLetters || containsNumbers);
+    return lengthValid && containsLetters && containsNumbers;
   };
 
   const validateEmail = (email: string) => {
@@ -92,14 +92,14 @@ const LoginEmail: React.FC<LoginEmailProps> = ({ handleBack }) => {
   return (
     <div className="min-h-screen w-screen flex items-center justify-center overflow-hidden">
       {/* Conditionally render the ForgotPass component if `forgot` is true */}
-      {openCaptcha && <Captch isLogin={true} username={email} password={password} />}
+      {openCaptcha && <Captch setIsVisible={setIsVisible} isLogin={true} username={email} password={password} />}
       {forgot ? (
         <ForgotPass forgot={forgot} setForgot={setForgot} />
       ) : (
         <AnimatePresence>
           {isVisible && (
             <motion.div
-              className="login_box h-[480px] fixed bottom-0 z-[9999] w-screen  py-4 px-[20px] bg-gray-800 rounded-t-2xl"
+              className="login_box h-[480px] fixed bottom-0 z-[99999] w-screen  py-4 px-[20px] bg-gray-800 rounded-t-2xl"
               initial="hidden"
               animate="visible"
               exit="exit"

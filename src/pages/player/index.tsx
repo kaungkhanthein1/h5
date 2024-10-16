@@ -9,8 +9,13 @@ import noPlayImage from "../../assets/noplay.svg";
 import RecommendedList from "./video/RecommendedList";
 import AdsSection from "./video/AdsSection";
 import NetworkError from "./video/NetworkError";
-import { Episode, MovieDetail, AdsData } from '../../model/videoModel';
-import { getMovieDetail, getAdsData, getEpisodesBySource, reportPlaybackProgress } from '../../services/playerService';
+import { Episode, MovieDetail, AdsData } from "../../model/videoModel";
+import {
+  getMovieDetail,
+  getAdsData,
+  getEpisodesBySource,
+  reportPlaybackProgress,
+} from "../../services/playerService";
 
 const DetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -20,47 +25,26 @@ const DetailPage: React.FC = () => {
   const [selectedSource, setSelectedSource] = useState(0);
   const [activeTab, setActiveTab] = useState("tab-1");
   const [resumeTime, setResumeTime] = useState(0);
-  const [autoSwitch, setAutoSwitch] = useState<number | null>(null);
-  const [videoError, setVideoError] = useState(false);
   const [wholePageError, setWholePageError] = useState(false);
-  const [errorVideoUrl, setErrorVideoUrl] = useState('');
+  const [errorVideoUrl, setErrorVideoUrl] = useState("");
   const abortControllerRef = useRef<AbortController | null>(null);
   const [episodes, setEpisodes] = useState<any>([]);
 
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (autoSwitch !== null) {
-      const interval = setInterval(() => {
-        setAutoSwitch((prevCount) => {
-          if (prevCount && prevCount > 0) {
-            return prevCount - 1;
-          } else {
-            clearInterval(interval);
-            autoPlayNextEpisode();
-            return null;
-          }
-        });
-      }, 1000);
-      return () => clearInterval(interval);
-    }
-  }, [autoSwitch]);
 
   const autoPlayNextEpisode = async () => {
     if (!movieDetail?.play_from) return;
     for (let i = selectedSource + 1; i < movieDetail.play_from.length; i++) {
       const nextSource = movieDetail.play_from[i];
       try {
-        const res = await getEpisodesBySource(nextSource.code, id || '');
-          setCurrentEpisode(res.data[0]);
-          setEpisodes(res.data);
-          setSelectedSource(i);
+        const res = await getEpisodesBySource(nextSource.code, id || "");
+        setCurrentEpisode(res.data[0]);
+        setEpisodes(res.data);
+        setSelectedSource(i);
         if (res.data?.[0]?.ready_to_play) {
-          setAutoSwitch(null);
-          setVideoError(false);
+          setWholePageError(false);
         } else {
-          setAutoSwitch(6);
-          setVideoError(true);
+          setWholePageError(true);
           setErrorVideoUrl(res.data?.[0]?.play_url);
         }
         return;
@@ -68,13 +52,13 @@ const DetailPage: React.FC = () => {
         console.error("Error auto-playing next episode:", error);
       }
     }
+    console.log('here');
     setWholePageError(true);
   };
 
   useEffect(() => {
     if (id) {
-      setAutoSwitch(null);
-      setVideoError(false);
+      setWholePageError(false);
       fetchMovieDetail();
       fetchAdsData();
     }
@@ -85,17 +69,17 @@ const DetailPage: React.FC = () => {
       const res = await getAdsData();
       setAdsData(res.data);
     } catch (error) {
-      console.error('Error fetching ads data:', error);
+      console.error("Error fetching ads data:", error);
     }
   };
 
   const fetchMovieDetail = async () => {
     try {
-      const res = await getMovieDetail(id || '');
+      const res = await getMovieDetail(id || "");
       setMovieDetail(res?.data);
       setInitialEpisode(res?.data);
     } catch (error) {
-      console.error('Error fetching movie details:', error);
+      console.error("Error fetching movie details:", error);
     }
   };
 
@@ -121,9 +105,8 @@ const DetailPage: React.FC = () => {
             return;
           }
         }
-        if(!playBackInfo.ready_to_play) {
-          setAutoSwitch(6);
-          setVideoError(true);
+        if (!playBackInfo.ready_to_play) {
+          setWholePageError(true);
           setErrorVideoUrl(playBackInfo?.play_url);
         }
       } else {
@@ -135,9 +118,11 @@ const DetailPage: React.FC = () => {
         } else {
           setWholePageError(true);
         }
-        if (mvDetail?.play_from?.[0]?.list?.[0] && !mvDetail?.play_from?.[0]?.list?.[0].ready_to_play) {
-          setAutoSwitch(6);
-          setVideoError(true);
+        if (
+          mvDetail?.play_from?.[0]?.list?.[0] &&
+          !mvDetail?.play_from?.[0]?.list?.[0].ready_to_play
+        ) {
+          setWholePageError(true);
           setErrorVideoUrl(mvDetail?.play_from?.[0]?.list?.[0].play_url);
         }
       }
@@ -150,8 +135,7 @@ const DetailPage: React.FC = () => {
       abortControllerRef.current.abort();
     }
     setCurrentEpisode(episode);
-    setVideoError(false);
-    setAutoSwitch(null);
+    setWholePageError(false);
     setResumeTime(0);
   };
 
@@ -167,7 +151,7 @@ const DetailPage: React.FC = () => {
     try {
       await reportPlaybackProgress(
         movieDetail.id,
-        episode?.episode_id?.toString() || '',
+        episode?.episode_id?.toString() || "",
         episode.from_code,
         movieDetail.last_playback?.duration || 0,
         resumeTime || 0
@@ -178,164 +162,124 @@ const DetailPage: React.FC = () => {
   };
 
   const switchNow = () => {
-    setAutoSwitch(null);
-    setVideoError(false);
+    console.log('hello');
+    setWholePageError(false);
     autoPlayNextEpisode();
   };
 
   const handleVideoError = (errorUrl: string) => {
-    if((errorVideoUrl !== errorUrl) && errorUrl) {
-      setAutoSwitch(6);
-      setVideoError(true);
+    if (errorVideoUrl !== errorUrl && errorUrl) {
+      setWholePageError(true);
       setErrorVideoUrl(errorUrl);
     }
-  }
+  };
 
   const handleChangeSource = async (nextSource: any) => {
-    if(nextSource && nextSource.code && id) {
+    if (nextSource && nextSource.code && id) {
       try {
-        const res = await getEpisodesBySource(nextSource.code, id || '');
-          setCurrentEpisode(res.data[0]);
-          setEpisodes(res.data);
+        const res = await getEpisodesBySource(nextSource.code, id || "");
+        setCurrentEpisode(res.data[0]);
+        setEpisodes(res.data);
         if (res.data?.[0]?.ready_to_play) {
-          setAutoSwitch(null);
-          setVideoError(false);
+          setWholePageError(false);
         } else {
-          setAutoSwitch(6);
-          setVideoError(true);
+          setWholePageError(true);
           setErrorVideoUrl(res.data?.[0]?.play_url);
         }
       } catch (error) {
         console.error("Error auto-playing next episode:", error);
       }
     }
-  }
+  };
 
   return (
     <div className="bg-background min-h-screen">
-      {!wholePageError ? (
-        !movieDetail || !currentEpisode ? (
-          <div className="flex justify-center items-center pt-52 bg-background">
-            <Loader />
-          </div>
-        ) : (
-          <>
-            {currentEpisode.ready_to_play && !videoError ? (
-              <div className="sticky top-0 z-50">
-                <VideoPlayer
-                  key={currentEpisode.episode_id}
-                  videoUrl={currentEpisode.play_url}
-                  onBack={navigateBackFunction}
-                  movieDetail={movieDetail}
-                  selectedEpisode={currentEpisode}
-                  resumeTime={resumeTime}
-                  handleVideoError={handleVideoError}
-                />
-                <div className="relative flex px-2 justify-between items-center bg-background pb-2">
-                  <div className="flex">
-                    <div
-                      className={`px-4 py-3 bg-background text-gray-400 rounded-t-lg cursor-pointer relative ${
-                        activeTab === "tab-1" ? "text-white z-10" : ""
-                      }`}
-                      onClick={() => setActiveTab("tab-1")}
-                    >
-                      <span className="text-white">详情</span>
-                      {activeTab === "tab-1" && (
-                        <div className="absolute bottom-0 left-0 w-full h-1 bg-orange-500"></div>
-                      )}
-                    </div>
-                    <div
-                      className={`px-4 py-3 bg-background text-gray-400 rounded-t-lg cursor-pointer relative ${
-                        activeTab === "tab-2" ? "text-white z-10" : ""
-                      }`}
-                      onClick={() => setActiveTab("tab-2")}
-                    >
-                      <span>评论</span>
-                      <span className="text-gray-500">
-                        {movieDetail.comments_count || "0"}
-                      </span>
-                      {activeTab === "tab-2" && (
-                        <div className="absolute bottom-0 left-0 w-full h-1 bg-orange-500"></div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div
-                className="sticky top-0 z-50 flex justify-center items-center w-full min-h-[40vh] bg-background"
-                style={{
-                  backgroundImage: `url(${noPlayImage})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                }}
-              >
-                      {/* Back Arrow */}
-                <div className="absolute top-4 left-4 z-50">
-                  <button className="text-white text-2xl" onClick={()=>navigate('/home')}>
-                    ← {/* Replace with your actual back arrow component or icon */}
-                  </button>
-                </div>
-
-                <div className="relative z-10 flex flex-col items-center p-8 text-center text-white max-w-md mx-auto">
-                  <p className="text-sm mb-4 tracking-wide text-gray-400">
-                    Playback Error Or Connection Issue? We'll Automatically
-                    Switch To The Next Available Line
-                  </p>
-                  <div className="flex space-x-4">
-                    <button
-                      className="px-6 py-2 bg-gray-700 text-white font-semibold rounded-full shadow-md hover:bg-gray-600 transition-all duration-300 ease-in-out"
-                      onClick={navigateBackFunction}
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      onClick={switchNow}
-                      className="px-6 py-2 bg-gradient-to-r from-gray-400 to-gray-700 text-white font-semibold rounded-full shadow-md transition-all duration-300 ease-in-out"
-                    >
-                      Switch in {autoSwitch || 0}s
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            <div className={`${activeTab === "tab-1" && "overflow-y-scroll"}`}>
-              <DetailSection
-                adsData={adsData}
-                movieDetail={movieDetail}
-                id={id || ""}
-                activeTab={activeTab}
-                setActiveTab={setActiveTab}
-              />
-              {activeTab === "tab-1" && (
-                <>
-                  <SourceSelector
-                    changeSource={handleChangeSource}
-                    episodes={episodes || []}
-                    selectedEpisode={currentEpisode}
-                    onEpisodeSelect={handleEpisodeSelect}
-                    movieDetail={movieDetail}
-                    selectedSource={selectedSource}
-                    setSelectedSource={setSelectedSource}
-                  />
-                  <EpisodeSelector
-                    episodes={episodes || []}
-                    onEpisodeSelect={handleEpisodeSelect}
-                    selectedEpisode={currentEpisode}
-                  />
-
-                  <div className="mt-8 px-4">
-                    {adsData && <AdsSection adsData={adsData} />}
-                  </div>
-                  <RecommendedList data={movieDetail} />
-                </>
-              )}
-            </div>
-          </>
-        )
+      {!movieDetail || !currentEpisode ? (
+        <div className="flex justify-center items-center pt-52 bg-background">
+          <Loader />
+        </div>
       ) : (
-        <NetworkError onBack={navigateBackFunction} />
+        <>
+          <div className="sticky top-0 z-50">
+            <div id='upper-div'>
+            {currentEpisode.ready_to_play && !wholePageError ? (
+              <VideoPlayer
+                key={currentEpisode.episode_id}
+                videoUrl={currentEpisode.play_url}
+                onBack={navigateBackFunction}
+                movieDetail={movieDetail}
+                selectedEpisode={currentEpisode}
+                resumeTime={resumeTime}
+                handleVideoError={handleVideoError}
+              />
+            ) : (
+              <NetworkError switchNow={switchNow} />
+            )}
+            </div>
+            <div className="relative flex px-2 justify-between items-center bg-background pb-2">
+              <div className="flex">
+                <div
+                  className={`px-4 py-3 bg-background text-gray-400 rounded-t-lg cursor-pointer relative ${
+                    activeTab === "tab-1" ? "text-white z-10" : ""
+                  }`}
+                  onClick={() => setActiveTab("tab-1")}
+                >
+                  <span className="text-white">详情</span>
+                  {activeTab === "tab-1" && (
+                    <div className="absolute bottom-0 left-0 w-full h-1 bg-orange-500"></div>
+                  )}
+                </div>
+                <div
+                  className={`px-4 py-3 bg-background text-gray-400 rounded-t-lg cursor-pointer relative ${
+                    activeTab === "tab-2" ? "text-white z-10" : ""
+                  }`}
+                  onClick={() => setActiveTab("tab-2")}
+                >
+                  <span>评论</span>
+                  <span className="text-gray-500">
+                    {movieDetail.comments_count || "0"}
+                  </span>
+                  {activeTab === "tab-2" && (
+                    <div className="absolute bottom-0 left-0 w-full h-1 bg-orange-500"></div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className={`${activeTab === "tab-1" && "overflow-y-scroll"}`}>
+            <DetailSection
+              adsData={adsData}
+              movieDetail={movieDetail}
+              id={id || ""}
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+            />
+            {activeTab === "tab-1" && (
+              <>
+                <SourceSelector
+                  changeSource={handleChangeSource}
+                  episodes={episodes || []}
+                  selectedEpisode={currentEpisode}
+                  onEpisodeSelect={handleEpisodeSelect}
+                  movieDetail={movieDetail}
+                  selectedSource={selectedSource}
+                  setSelectedSource={setSelectedSource}
+                />
+                <EpisodeSelector
+                  episodes={episodes || []}
+                  onEpisodeSelect={handleEpisodeSelect}
+                  selectedEpisode={currentEpisode}
+                />
+
+                <div className="mt-8 px-4">
+                  {adsData && <AdsSection adsData={adsData} />}
+                </div>
+                <RecommendedList data={movieDetail} />
+              </>
+            )}
+          </div>
+        </>
       )}
     </div>
   );

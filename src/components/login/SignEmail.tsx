@@ -34,7 +34,7 @@ const SignEmail: React.FC<SignEmailProps> = ({ handleBack2 }) => {
     const lengthValid = password.length >= 8 && password.length <= 25;
     const containsLetters = /[a-zA-Z]/.test(password);
     const containsNumbers = /\d/.test(password);
-    return lengthValid && (containsLetters || containsNumbers);
+    return lengthValid && containsLetters && containsNumbers;
   };
   const variants = {
     hidden: { y: 300 },
@@ -77,7 +77,7 @@ const SignEmail: React.FC<SignEmailProps> = ({ handleBack2 }) => {
       )}
       <div className="min-h-screen flex items-center justify-center overflow-hidde fixed z-[99999]">
         {openCaptcha && (
-          <Captch isLogin={false} username={email} password={password} />
+          <Captch  setIsVisible={setIsVisible} isLogin={false} username={email} password={password} />
         )}
         {openUserNameForm && <UserName />}
 
@@ -170,7 +170,7 @@ const SignEmail: React.FC<SignEmailProps> = ({ handleBack2 }) => {
                     />
                   </div>
                   {/* decs */}
-                  <div className=" mt-[-20px] text-[12px] font-[500] leading-[20px] text-[#888]">
+                  <div className={` mt-[-20px] text-[12px] font-[500] leading-[20px] text-[#888] `}>
                     <p>8-25 characters</p>
                     <p>
                       Must be a combination of at least two of the following:

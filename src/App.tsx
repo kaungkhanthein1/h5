@@ -163,7 +163,7 @@ const App: React.FC = () => {
 
           {(openAuthModel || openLoginModel || openSignupModel) && (
             <div
-              className="fixed inset-0 bg-black opacity-50 z-[998] h-screen" // Overlay with 50% opacity
+              className="fixed inset-0 bg-black opacity-50 z-[99899] h-screen" // Overlay with 50% opacity
               onClick={closeAllModals} // Close all modals on click
             ></div>
           )}

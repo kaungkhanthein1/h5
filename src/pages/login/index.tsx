@@ -48,7 +48,7 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="h-screen  z-[9999] flex items-center justify-center overflow-hidden">
+    <div className="h-screen  z-[998999] flex items-center justify-center overflow-hidden">
       <AnimatePresence>
         <motion.div
           className="login_box fixed h-[380px] bottom-0 z-[99999] w-screen"

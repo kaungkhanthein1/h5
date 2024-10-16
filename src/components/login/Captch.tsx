@@ -16,9 +16,11 @@ import { showToast } from "../../pages/profile/error/ErrorSlice";
 
 const Captch: React.FC<{
   username: string;
+  setIsVisible: (isVisible: boolean) => void;
+
   password: string;
   isLogin: boolean;
-}> = ({ username, password, isLogin }) => {
+}> = ({ username, password, isLogin,setIsVisible }) => {
   const dispatch = useDispatch();
   const [captchaCode, setCaptchaCode] = useState("");
   const [captchaImage, setCaptchaImage] = useState<string | null>(null);
@@ -103,6 +105,11 @@ const Captch: React.FC<{
     dispatch(setOtpOpen(true));
   };
 
+  const handleClose = () => {
+    dispatch(setCaptchaOpen(false))
+    setIsVisible(true)
+  }
+
   return (
     <div className="fixed inset-0 z-[99999] bg-black/50 backdrop-blur-[12px] w-screen h-screen flex justify-center items-center">
       {captchaImage && (
@@ -112,7 +119,7 @@ const Captch: React.FC<{
               Verify
             </h1>
             <img
-              onClick={() => dispatch(setCaptchaOpen(false))}
+              onClick={handleClose}
               className="p-1 bg-white"
               src={capClose}
               alt="Close"

@@ -65,7 +65,7 @@ const Captch: React.FC<{}> = () => {
           </div>
           <div className="flex justify-center items-center gap-[4px]">
             <input
-              type="text"
+              type="number"
               placeholder="Enter Code"
               className="bg-[#333237] rounded-[4px] text-white p-[10px] focus:outline-none h-[40px]"
               value={captchaCode}
@@ -89,9 +89,9 @@ const Captch: React.FC<{}> = () => {
           >
             Sure
           </button>
-          {error && (
+          {/* {error && (
             <div className="text-red-500 mt-2 text-center">{error}</div>
-          )}
+          )} */}
         </div>
       )}
     </div>
