@@ -189,11 +189,11 @@ const DetailSection: React.FC<DetailSectionProps> = ({
                 {/* Left Section: Flames, year, area, and tags */}
                 <div className="left-section flex items-center flex-wrap space-x-2 w-[80%] overflow-x-auto text-[14px]">
                   {/* <span className="rating flex items-center"> */}
-                    <span className="flames">
-                      {Array.of(movieDetail?.popularity_score)?.map((item) => (
-                        <img src={rate} key={item} alt="" />
-                      ))}
-                    </span>
+                  <span className="flames">
+                    {Array.of(movieDetail?.popularity_score)?.map((item) => (
+                      <img src={rate} key={item} alt="" />
+                    ))}
+                  </span>
                   {/* </span> */}
                   <span>{movieDetail.year}</span>
                   <span>/</span>
@@ -261,8 +261,12 @@ const DetailSection: React.FC<DetailSectionProps> = ({
             {/* Warning Message */}
             <div className="warning bg-gray-800 rounded-md text-white text-center">
               <div className="warning-content">
-                <span className="warning-text">切勿相信视频中的任何广告，谨防上当受骗！</span>
-                <span className="warning-text">切勿相信视频中的任何广告，谨防上当受骗！</span>
+                <span className="warning-text">
+                  切勿相信视频中的任何广告，谨防上当受骗！
+                </span>
+                <span className="warning-text">
+                  切勿相信视频中的任何广告，谨防上当受骗！
+                </span>
               </div>
             </div>
           </div>
@@ -281,7 +285,7 @@ const DetailSection: React.FC<DetailSectionProps> = ({
           </div>
         ) : (
           <div className="mt-4">
-            {adsData && <AdsSection adsData={adsData} />}
+            {adsData && <AdsSection adsData={adsData?.player_episode_up} />}
           </div>
         )}
       </div>
@@ -289,8 +293,10 @@ const DetailSection: React.FC<DetailSectionProps> = ({
       {/* Modal for sharing */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-end">
-          <div className="bg-background backdrop-blur-md w-full max-w-md bottom-0 rounded-lg p-6 text-white overflow-y-auto"
-          style={{ height: `${lowerDivHeight}px` }}>
+          <div
+            className="bg-background backdrop-blur-md w-full max-w-md bottom-0 rounded-lg p-6 text-white overflow-y-auto"
+            style={{ height: `${lowerDivHeight}px` }}
+          >
             {/* Modal Header */}
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-semibold">Introduction</h2>

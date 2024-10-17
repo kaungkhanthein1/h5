@@ -338,3 +338,13 @@ input[type="range"]::-moz-range-thumb {
   );
   z-index: 20;
 }
+
+.low-res-image {
+  background-size: cover;
+  filter: blur(10px); /* Add some blur effect */
+  transition: opacity 0.3s ease-in-out;
+}
+
+.image-placeholder {
+  transition: opacity 0.3s ease-in-out;
+}
