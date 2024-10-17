@@ -76,13 +76,21 @@ const FilteredByType = () => {
           />
 
           {movieData?.length ? (
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 pl-3 lg:grid-cols-8 gap-y-5 gap-2 mt-0 pt-5 pb-32 px-3">
-              {movieData?.map((movie: any) => (
-                <div key={movie?.id} className="mx-auto w-full">
-                  <MovieCard movie={movie} height={"200px"} />
+            <>
+              {isLoading ? (
+                <div className="mt-10 flex justify-center items-center w-full">
+                  <Loader />
                 </div>
-              ))}
-            </div>
+              ) : (
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 pl-3 lg:grid-cols-8 gap-y-5 gap-2 mt-0 pt-5 pb-32 px-3">
+                  {movieData?.map((movie: any) => (
+                    <div key={movie?.id} className="mx-auto w-full">
+                      <MovieCard movie={movie} height={"200px"} />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </>
           ) : (
             <div className="text-center flex justify-center items-center w-full pt-32 px-3">
               <Loader />
@@ -92,34 +100,6 @@ const FilteredByType = () => {
             </div>
           )}
         </div>
-        {/* {isLoading ? (
-        <div className="flex justify-center items-center min-h-screen bg-background">
-          <Loader />
-        </div>
-      ) : (
-        <div className="pt-32">
-          <FilterByTag
-            data={filteredTags}
-            sort={configData?.data?.movie_screen?.sort}
-          />
-
-          {movieData?.length ? (
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2 pt-5 pb-32 px-3">
-              {movieData?.map((movie: any) => (
-                <div key={movie?.id} className="mx-auto">
-                  <MovieCard movie={movie} height={"200px"} />
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center flex justify-center items-center w-full pt-32 px-3">
-              <h1 className="text-white font-semibold text-[16px]">
-                Movie Data Not Found
-              </h1>
-            </div>
-          )}
-        </div>
-      )} */}
       </div>
     </>
   );

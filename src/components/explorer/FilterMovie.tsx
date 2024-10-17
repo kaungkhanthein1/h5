@@ -35,17 +35,25 @@ const FilterMovie = () => {
       <div className="">
         <FilterTag />
         {movieData?.length ? (
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2 pt-5 pb-32 px-3">
-            {movieData?.map((movie: any) => (
-              <Link
-                to={`/player/${movie?.id}`}
-                key={movie?.id}
-                className="mx-auto"
-              >
-                <MovieCard movie={movie} height={"200px"} />
-              </Link>
-            ))}
-          </div>
+          <>
+            {isLoading ? (
+              <div className="flex w-full justify-center items-center mt-10">
+                <Loader />
+              </div>
+            ) : (
+              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2 pt-5 pb-32 px-3">
+                {movieData?.map((movie: any) => (
+                  <Link
+                    to={`/player/${movie?.id}`}
+                    key={movie?.id}
+                    className="mx-auto"
+                  >
+                    <MovieCard movie={movie} height={"200px"} />
+                  </Link>
+                ))}
+              </div>
+            )}
+          </>
         ) : (
           <div className="text-center flex justify-center items-center w-full pt-32 px-3">
             <Loader />

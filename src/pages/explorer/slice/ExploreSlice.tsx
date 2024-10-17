@@ -10,6 +10,7 @@ const ExploreSlice = createSlice({
     year: "",
     activeNav: "",
     activeRank: "",
+    activeWeek: null,
   },
   reducers: {
     setActiveTab: (state, { payload }) => {
@@ -20,6 +21,9 @@ const ExploreSlice = createSlice({
     },
     setActiveRank: (state, { payload }) => {
       state.activeRank = payload;
+    },
+    setActiveWeek: (state, { payload }) => {
+      state.activeWeek = payload;
     },
     setSort: (state, { payload }) => {
       state.sort = payload;
@@ -36,6 +40,14 @@ const ExploreSlice = createSlice({
   },
 });
 
-export const { setActiveTab, setSort, setClass, setArea, setYear, setActiveNav, setActiveRank } =
-  ExploreSlice.actions;
+export const {
+  setActiveTab,
+  setSort,
+  setClass,
+  setArea,
+  setYear,
+  setActiveNav,
+  setActiveRank,
+  setActiveWeek
+} = ExploreSlice.actions;
 export default ExploreSlice.reducer;
