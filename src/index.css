@@ -188,6 +188,11 @@ input[type="range"]::-moz-range-thumb {
   gap: 4px;
 }
 
+/* Add this to your global CSS */
+.no-scroll-auth {
+  overflow: hidden;
+}
+
 .home-bg {
   height: 100vh;
   padding-bottom: 100px;
@@ -201,6 +206,12 @@ input[type="range"]::-moz-range-thumb {
   background-repeat: no-repeat;
   background-size: contain;
   margin-top: 50px;
+}
+
+@media screen and (min-width: 800px) {
+  .home-bg {
+    background-size: cover;
+  }
 }
 
 .home-label {
@@ -263,7 +274,7 @@ input[type="range"]::-moz-range-thumb {
   background: #f97316 !important;
 }
 .art-video-player .art-progress-indicator {
-    background: #F97316 !important;
+  background: #f97316 !important;
 }
 
 @keyframes scrollText {
@@ -310,12 +321,20 @@ input[type="range"]::-moz-range-thumb {
 
 .warning::before {
   left: 0;
-  background: linear-gradient(to right, rgba(31, 31, 34, 1) 10%, transparent 100%);
+  background: linear-gradient(
+    to right,
+    rgba(31, 31, 34, 1) 10%,
+    transparent 100%
+  );
   z-index: 20;
 }
 
 .warning::after {
   right: 0;
-  background: linear-gradient(to left, rgba(31, 31, 34, 1) 10%, transparent 100%);
+  background: linear-gradient(
+    to left,
+    rgba(31, 31, 34, 1) 10%,
+    transparent 100%
+  );
   z-index: 20;
 }

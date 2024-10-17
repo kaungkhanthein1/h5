@@ -1,4 +1,4 @@
-import React, { useState, startTransition } from "react";
+import React, { useState, startTransition, useEffect } from "react";
 import { Link } from "react-router-dom";
 import ImageWithPlaceholder from "./ImgPlaceholder";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,10 +16,24 @@ const MovieCard = ({
   const dispatch = useDispatch();
   const [collectMovie] = useCollectMovieMutation();
   const favorites = useSelector(selectFavData);
+  const { openAuthModel } = useSelector((state: any) => state.model);
 
   const isLoggedIn = localStorage.getItem("authToken");
   const parsedLoggedIn = isLoggedIn ? JSON.parse(isLoggedIn) : null;
   const token = parsedLoggedIn?.data?.access_token;
+
+  useEffect(() => {
+    if (openAuthModel) {
+      document.body.classList.add("no-scroll-auth"); // Disable scrolling
+    } else {
+      document.body.classList.remove("no-scroll-auth"); // Enable scrolling
+    }
+
+    // Clean up the class when the component is unmounted
+    return () => {
+      document.body.classList.remove("no-scroll-auth");
+    };
+  }, [openAuthModel]);
 
   const handleAddFavorite = async (e: any) => {
     e.preventDefault();

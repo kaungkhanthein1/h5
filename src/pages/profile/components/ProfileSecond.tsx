@@ -1,10 +1,24 @@
-import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { setAuthModel } from "../../../features/login/ModelSlice";
 
 const ProfileSecond = () => {
+  const isLoggedIn = localStorage.getItem("authToken");
+  const parsedLoggedIn = isLoggedIn ? JSON.parse(isLoggedIn) : null;
+  const token = parsedLoggedIn?.data?.access_token;
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const handleLoginClick = () => {
+    if (!token) {
+      dispatch(setAuthModel(true)); // Open the login modal if not logged in
+    } else {
+      navigate("/share");
+    }
+  };
   return (
     <div className="profile-div">
       <div className="profile-div-main w-full">
-        {/* <Link to={"/"} className="p-first">
+        <div onClick={handleLoginClick} className="p-first">
           <div className="flex gap-3 items-center">
             <div>
               <svg
@@ -39,7 +53,7 @@ const ProfileSecond = () => {
               </g>
             </svg>
           </div>
-        </Link> */}
+        </div>
         <Link
           to={"https://cc3e497d.qdhgtch.com:1333/help"}
           target="_blank"

@@ -21,6 +21,7 @@
     "embla-carousel-react": "^8.3.0",
     "framer-motion": "^11.9.0",
     "hls.js": "^1.5.15",
+    "html-to-image": "^1.11.11",
     "i18next": "^23.15.1",
     "jsencrypt": "^3.3.2",
     "plyr": "^3.7.8",

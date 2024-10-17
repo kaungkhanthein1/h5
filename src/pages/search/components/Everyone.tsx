@@ -47,21 +47,18 @@ const Everyone = ({
           </svg>
         </a>
       </div>
-      {Loading || Fetching ? (
-        <div className="text-white text-center pt-12"></div>
-      ) : (
-        <div className="flex flex-wrap gap-3 py-3">
-          {lists?.map((list: any, index: any) => (
-            <button
-              className="everyone-tab cursor-pointer"
-              key={index}
-              onClick={() => handleClick(list?.word)}
-            >
-              {list?.word}
-            </button>
-          ))}
-        </div>
-      )}
+
+      <div className="flex flex-wrap gap-3 py-3">
+        {lists?.map((list: any, index: any) => (
+          <button
+            className="everyone-tab cursor-pointer"
+            key={index}
+            onClick={() => handleClick(list?.word)}
+          >
+            {list?.word}
+          </button>
+        ))}
+      </div>
     </div>
   );
 };

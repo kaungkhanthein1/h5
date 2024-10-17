@@ -17,6 +17,7 @@ import { profileApi } from "../pages/profile/services/profileApi";
 import UserSlice from "../pages/profile/components/slice/UserSlice";
 import ErrorSlice from "../pages/profile/error/ErrorSlice";
 import RegisterApi from "../features/login/RegisterApi";
+import ShareApi from "../features/share/ShareApi";
 
 // Define persist config
 const persistConfig = {
@@ -41,7 +42,8 @@ const rootReducer = combineReducers({
   [profileApi.reducerPath]: profileApi.reducer,
   [homeApi.reducerPath]: homeApi.reducer,
   [explorerAPi.reducerPath]: explorerAPi.reducer,
-  [RegisterApi.reducerPath] : RegisterApi.reducer
+  [RegisterApi.reducerPath]: RegisterApi.reducer,
+  [ShareApi.reducerPath]: ShareApi.reducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -58,7 +60,8 @@ const store = configureStore({
       .concat(profileApi.middleware)
       .concat(homeApi.middleware)
       .concat(explorerAPi.middleware)
-      .concat(RegisterApi.middleware),
+      .concat(RegisterApi.middleware)
+      .concat(ShareApi.middleware),
 });
 
 export const persistor = persistStore(store);

@@ -53,13 +53,7 @@ const Navbar: React.FC = () => {
   const handleRedirect = (event: any) => {
     event.preventDefault();
 
-    if (!query.trim()) {
-      // If the input is empty, redirect to the home page
-      navigate("/");
-    } else {
-      // Clear the input after search
-      setQuery("");
-    }
+    navigate("/");
   };
 
   return (
@@ -97,7 +91,7 @@ const Navbar: React.FC = () => {
         </form>
         <div className="w-[40px]">
           <button className="search-btn" onClick={handleRedirect}>
-            搜索
+            取消
           </button>
         </div>
       </div>

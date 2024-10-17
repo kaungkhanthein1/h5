@@ -22,6 +22,8 @@ import Favorite from "./pages/profile/Favorite";
 import Loader from "./pages/search/components/Loader";
 import ErrorToast from "./pages/profile/error/ErrorToast";
 import Landing from "./components/Landing";
+// import Menber from "./pages/share/member";
+// import Share from "./pages/share";
 
 // Lazy load the pages
 const Home = React.lazy(() => import("./pages/home"));
@@ -43,6 +45,8 @@ const Phnumber = React.lazy(() => import("./pages/profile/Phnumber"));
 const Password = React.lazy(() => import("./pages/profile/Password"));
 const Bind = React.lazy(() => import("./pages/profile/Bind"));
 const Contact = React.lazy(() => import("./pages/profile/Contact"));
+const Share = React.lazy(() =>import("./pages/share"))
+const Member = React.lazy(() =>import("./pages/share/member"))
 
 // ProtectedRoute component to handle route guarding
 // const ProtectedRoute: React.FC<{ children: JSX.Element }> = ({ children }) => {
@@ -76,7 +80,9 @@ const App: React.FC = () => {
     location.pathname.startsWith("/update_phone") ||
     location.pathname.startsWith("/update_password") ||
     location.pathname.startsWith("/bind") ||
-    location.pathname.startsWith("/contact");
+    location.pathname.startsWith("/contact") ||
+    location.pathname.startsWith("/share") ||
+    location.pathname.startsWith("/share/member")
 
   const hideHeader = location.pathname.startsWith("/explorer");
   useEffect(() => {
@@ -152,6 +158,8 @@ const App: React.FC = () => {
                 <Route path="/update_password" element={<Password />} />
                 <Route path="/bind" element={<Bind />} />
                 <Route path="/contact" element={<Contact />} />
+                <Route path="/share" element={<Share />} />
+                <Route path="/share/member" element={<Member />} />
               </Routes>
             </Suspense>
             <ErrorToast />

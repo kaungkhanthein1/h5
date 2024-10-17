@@ -29,17 +29,20 @@ const FilteredByType = () => {
   const getMoviesByType = async (id: any) => {
     setIsLoading(true);
     try {
-
       const { data } = await axios.get(
         `https://cc3e497d.qdhgtch.com:2345/api/v1/movie/screen/list?type_id=${id}&&sort=${sort}&&class=${classData}&&area=${area}&&year=${year}`
       );
       if (data?.data?.list?.length >= 0) setIsLoading(false);
       setMovieData(data?.data?.list);
     } catch (err) {
-      console.log('err is=>', err);
+      console.log("err is=>", err);
     }
   };
-  const { data: configData } = useGetHeaderTopicsQuery();
+  const {
+    data: configData,
+    isLoading: isloader,
+    isFetching,
+  } = useGetHeaderTopicsQuery();
   const filteredTags: any = configData?.data?.movie_screen?.filter?.filter(
     (data: any) => data?.id === activeTab
   );
@@ -56,10 +59,16 @@ const FilteredByType = () => {
     dispatch(setYear(filteredTags && filteredTags[0]?.year[0]));
   }, []);
 
+  console.log(filteredTags);
+
+  if (isloader || isFetching) {
+    return null; // Ensure you return null instead of undefined
+  }
+
   return (
     <>
       <div className="home-bg"></div>
-      <div className=" mt-[100px] text-text min-h-screen">
+      <div className=" mt-[120px] text-text min-h-screen">
         <div className="">
           <FilterByTag
             data={filteredTags}

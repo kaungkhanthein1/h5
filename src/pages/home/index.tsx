@@ -11,7 +11,7 @@ import "../../components/home/home.css";
 import { useGetRecordQuery } from "../profile/services/profileApi";
 
 const Home: React.FC = () => {
-  const { data, isLoading, isFetching } = useGetRecommendedMoviesQuery();
+  const { data, isLoading } = useGetRecommendedMoviesQuery();
   const activeTab = useSelector((state: any) => state.home.activeTab);
   const { data: movies } = useGetRecordQuery(); // Fetch favorite movies list from API
 
@@ -23,7 +23,6 @@ const Home: React.FC = () => {
   return (
     <>
       <div className="home-bg"></div>
-      {/* <FilteredByType /> */}
       {activeTab !== 0 ? (
         <FilteredByType />
       ) : (
