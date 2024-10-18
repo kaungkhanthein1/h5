@@ -36,6 +36,9 @@ const Header = () => {
         phone,
         active,
         social_accounts,
+        inviter_id,
+        invite_code,
+        invite_user_num,
       } = userData.data;
 
       // Dispatch the user data to Redux store
@@ -51,6 +54,9 @@ const Header = () => {
           email,
           phone,
           active,
+          inviter_id,
+          invite_code,
+          invite_user_num,
         })
       );
     }

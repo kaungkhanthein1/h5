@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import he from "he";
 // import videoIcon from "../../assets/videoIcon.svg";
-import LazyLoadImage from "./LazyLoadImage";
+import LazyLoadImage from "../../../components/home/LazyLoadImage";
 
 const MovieCard = ({ movie, height='147px', width = '114px' }) => {
   return (

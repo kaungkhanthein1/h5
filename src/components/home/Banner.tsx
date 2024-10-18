@@ -5,27 +5,27 @@ const Banner = ({ list }: { list: any }) => {
   const navigate = useNavigate();
 
   const handleBannerClick = (clickLink: string) => {
-    console.log('clickLink is=>', clickLink);
-    if (clickLink && clickLink.startsWith('http')) {
-      window.open(clickLink, '_blank');
+    console.log("clickLink is=>", clickLink);
+    if (clickLink && clickLink.startsWith("http")) {
+      window.open(clickLink, "_blank");
     } else {
-      navigate(`/player/${clickLink}`)
+      navigate(`/player/${clickLink}`);
       // Handle cases where clickLink is not a full URL or handle internal links
       console.log("Clicked on banner:", clickLink);
     }
   };
 
   return (
-    <div className="mt-[140px] max-md:px-3 px-10">
+    <div className="mt-[120px] max-md:px-3 px-10">
       <div className="">
         <div className="relative">
           <Carousel showThumbs={false} showArrows={false} showStatus={false}>
             {list?.map((banner: any) => (
               <div
                 key={banner?.image}
-                className="h-[200px] lg:h-[400px] rounded-md"              
-                onClick={() => handleBannerClick(banner?.click)} 
-                >
+                className="h-[200px] lg:h-[400px] rounded-md"
+                onClick={() => handleBannerClick(banner?.click)}
+              >
                 <img
                   className="relative h-[200px] lg:h-[400px] rounded-md"
                   src={banner?.image}

@@ -1,5 +1,6 @@
 .profile-bg {
-  background: url("./images/profileBg.png") #161619 50% / cover no-repeat;
+  background: url("./images/profileBg.png") #161619 50% / contain no-repeat;
+  background-position: top;
   width: 100%;
   position: fixed;
   top: 0;
@@ -7,6 +8,12 @@
   height: 100vh;
   padding-bottom: 100px;
   z-index: -1;
+}
+
+@media screen and (min-width: 800px) {
+  .profile-bg {
+    background-size: cover;
+  }
 }
 
 .fixed-bg {
@@ -545,7 +552,64 @@
   color: white;
 }
 
+.new-input {
+  display: flex;
+  width: 100%;
+  /* background-color: #1b1b1f; */
+  background-color: transparent;
+  padding: var(--Height-And-Sizes-12, 12px) 0px 16px 0px;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 0.5px solid #888;
+  color: white;
+  font-family: Inter;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px; /* 125% */
+}
+
+.close-btn-input {
+  flex-shrink: 0;
+  display: flex;
+  width: 24px;
+  height: 24px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  border-radius: 1000px;
+  background: rgba(255, 255, 255, 0.04);
+  position: absolute;
+  top: 25px;
+  right: 15px;
+}
+
+.submit_btn {
+  display: flex;
+  width: 100%;
+  height: 48px;
+  padding: 8px 16px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  border-radius: var(--Height-And-Sizes-80, 80px);
+  background: rgba(255, 255, 255, 0.04);
+  margin-top: 60px;
+  color: rgba(255, 255, 255, 0.2);
+  text-align: center;
+  font-family: Inter;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 22px; /* 157.143% */
+}
+
 .nickname-input:focus {
+  outline: none;
+}
+
+.new-input:focus {
   outline: none;
 }
 

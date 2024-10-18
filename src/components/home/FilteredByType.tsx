@@ -68,7 +68,7 @@ const FilteredByType = () => {
   return (
     <>
       <div className="home-bg"></div>
-      <div className=" mt-[120px] text-text min-h-screen">
+      <div className=" mt-[100px] text-text min-h-screen">
         <div className="">
           <FilterByTag
             data={filteredTags}

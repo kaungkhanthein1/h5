@@ -83,6 +83,13 @@ export const profileApi = createApi({
         body: { new_nickname },
       }),
     }),
+    createInvite: builder.mutation<void, { invite_code: string }>({
+      query: ({ invite_code }) => ({
+        url: `/user/enter_invitation_code`,
+        method: "POST",
+        body: { invite_code },
+      }),
+    }),
     changeUsername: builder.mutation<void, { new_username: string }>({
       query: ({ new_username }) => ({
         url: `/user/change/username`,
@@ -189,6 +196,7 @@ export const profileApi = createApi({
 });
 
 export const {
+  useLazyGetUserQuery,
   useGetRecordQuery,
   useGetNotificationQuery,
   useGetUserQuery,
@@ -207,4 +215,5 @@ export const {
   useCheckCaptchaMutation,
   useChangeAvatarMutation,
   useLazySocialCallbackQuery,
+  useCreateInviteMutation,
 } = profileApi;

@@ -25,6 +25,9 @@ interface User {
   integral: number;
   active: number;
   level: string;
+  inviter_id: number;
+  invite_user_num: number;
+  invite_code: string;
   social_accounts: SocialAccounts;
 }
 

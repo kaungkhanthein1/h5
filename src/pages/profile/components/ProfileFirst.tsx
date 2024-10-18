@@ -2,8 +2,9 @@ import { startTransition, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import ImageWithPlaceholder from "../../search/components/ImgPlaceholder";
 import { setAuthModel } from "../../../features/login/ModelSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useGetListQuery, useGetRecordQuery } from "../services/profileApi";
+import { showToast } from "../error/ErrorSlice";
 
 interface Movie {
   id: any;
@@ -17,6 +18,8 @@ interface Movie {
 }
 
 const ProfileFirst = () => {
+  const user = useSelector((state: any) => state.user.user);
+
   const {
     data: favoriteMovies,
     // isLoading: isFavoritesLoading,
@@ -71,6 +74,28 @@ const ProfileFirst = () => {
       navigate("/favorites");
     }
   };
+
+  const handleInviteClick = () => {
+    if (!token) {
+      // If not logged in, open the login modal
+      startTransition(() => {
+        dispatch(setAuthModel(true));
+      });
+    } else {
+      if (user?.inviter_id !== 0) {
+        dispatch(
+          showToast({
+            message: "Already invited",
+            type: "success",
+          })
+        );
+      } else {
+        navigate("/invite");
+      }
+      // If logged in, redirect to the favorites page
+    }
+  };
+
   const handleHistoryClick = () => {
     if (!token) {
       // If not logged in, open the login modal
@@ -235,6 +260,45 @@ const ProfileFirst = () => {
             ))}
           </div>
         )}
+
+        <a className="p-first cursor-pointer" onClick={handleInviteClick}>
+          <div className="flex gap-3 items-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 18 18"
+              fill="none"
+            >
+              <path
+                d="M17.6919 6.34701L9.38423 0.80855C9.27046 0.732646 9.13676 0.692139 9 0.692139C8.86324 0.692139 8.72954 0.732646 8.61577 0.80855L0.308077 6.34701C0.21324 6.41028 0.135497 6.496 0.0817527 6.59655C0.0280083 6.69709 -7.39029e-05 6.80935 1.46063e-07 6.92336V15.9234C1.46063e-07 16.2906 0.145879 16.6428 0.405545 16.9024C0.66521 17.1621 1.01739 17.308 1.38462 17.308H16.6154C16.9826 17.308 17.3348 17.1621 17.5945 16.9024C17.8541 16.6428 18 16.2906 18 15.9234V6.92336C18.0001 6.80935 17.972 6.69709 17.9182 6.59655C17.8645 6.496 17.7868 6.41028 17.6919 6.34701ZM6.29308 11.7695L1.38462 15.2311V8.2673L6.29308 11.7695ZM7.70971 12.4618H10.2903L15.191 15.9234H2.80904L7.70971 12.4618ZM11.7069 11.7695L16.6154 8.2673V15.2311L11.7069 11.7695ZM9 2.21653L16.0884 6.9424L10.2903 11.0772H7.71144L1.91337 6.9424L9 2.21653Z"
+                fill="#A3A3A4"
+              />
+            </svg>
+            <div className="profile-text">Invitation code</div>
+          </div>
+          <div className="flex gap-1 items-center">
+            <div className="text-[12px] text-[#d0bc94]">
+              {token && user?.inviter_id !== 0
+                ? user?.inviter_id
+                : "输入邀请码得积分"}
+            </div>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+            >
+              <g opacity="0.2">
+                <path
+                  d="M13.1722 12L8.22217 7.04999L9.63617 5.63599L16.0002 12L9.63617 18.364L8.22217 16.95L13.1722 12Z"
+                  fill="white"
+                />
+              </g>
+            </svg>
+          </div>
+        </a>
       </div>
     </div>
   );

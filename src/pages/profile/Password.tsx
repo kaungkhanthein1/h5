@@ -1,5 +1,5 @@
 import "./profile.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useChangePasswordMutation } from "../profile/services/profileApi";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -8,6 +8,7 @@ import { showToast } from "./error/ErrorSlice";
 const Password = () => {
   const [password, setPassword] = useState("");
   const [repassword, setRePassword] = useState("");
+  const [active, setActive] = useState(false);
   const [showPassword, setShowPassword] = useState(false); // Toggle password visibility
   const [showRePassword, setShowRePassword] = useState(false); // Toggle repassword visibility
   const [changePassword] = useChangePasswordMutation(); // RTK Mutation for password change
@@ -64,6 +65,14 @@ const Password = () => {
   const toggleRePasswordVisibility = () => {
     setShowRePassword((prev) => !prev);
   };
+
+  useEffect(() => {
+    if (repassword && password) {
+      setActive(true);
+    } else {
+      setActive(false);
+    }
+  }, [password, repassword]);
 
   return (
     <div>
@@ -179,6 +188,10 @@ const Password = () => {
             </p>
 
             <button
+              style={{
+                background: active ? "#F54100" : "rgba(255, 255, 255, 0.04)",
+                color: active ? "white" : "rgba(255, 255, 255, 0.20)",
+              }}
               type="submit" // Correctly using type submit here
               className="mt-6 otp_btn text-white"
             >

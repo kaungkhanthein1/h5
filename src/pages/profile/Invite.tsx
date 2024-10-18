@@ -2,42 +2,76 @@ import { useDispatch, useSelector } from "react-redux";
 import "./profile.css";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useChangeUsernameMutation } from "../profile/services/profileApi"; // import the hook
-import { setUser } from "./components/slice/UserSlice";
+import {
+  useCreateInviteMutation,
+  useLazyGetUserQuery,
+} from "../profile/services/profileApi"; // import the hook
 import { showToast } from "./error/ErrorSlice";
+import { setUser } from "./components/slice/UserSlice";
 
-const Username = () => {
+const Invite = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const user = useSelector((state: any) => state.user.user);
+  const [text, setText] = useState("");
   const [active, setActive] = useState(false);
-  const [text, setText] = useState(user?.username);
-
-  const [changeUsername, { isLoading, isError, isSuccess }] =
-    useChangeUsernameMutation(); // use the mutation hook
+  const [createInvite, { isLoading, isError, isSuccess }] =
+    useCreateInviteMutation(); // use the mutation hook
+  const [triggerUser] = useLazyGetUserQuery();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     try {
-      await changeUsername({ new_username: text }).unwrap();
-      dispatch(
-        setUser({
-          ...user,
-          username: text, // Update the Username
-        })
-      );
+      await createInvite({ invite_code: text }).unwrap();
+      const users = await triggerUser().unwrap();
+
+      if (users?.data) {
+        const {
+          id,
+          username,
+          nickname,
+          avatar,
+          level,
+          integral,
+          email,
+          phone,
+          active,
+          social_accounts,
+          inviter_id,
+          invite_code,
+          invite_user_num,
+        } = users.data;
+
+        dispatch(
+          setUser({
+            id,
+            username,
+            nickname,
+            avatar,
+            level,
+            integral,
+            social_accounts,
+            email,
+            phone,
+            active,
+            inviter_id,
+            invite_code,
+            invite_user_num,
+          })
+        );
+      }
       dispatch(
         showToast({
-          message: "用户名修改成功！",
+          message: "Invited!",
           type: "success",
         })
       );
-      navigate("/info");
-    } catch (error: any) {
+      navigate("/profile");
+    } catch (error) {
       dispatch(
         showToast({
-          message: (error as any)?.data?.msg || "无法更改用户名",
+          message: (error as any)?.data?.msg || "修改昵称失败",
           type: "error",
         })
       );
@@ -61,7 +95,7 @@ const Username = () => {
       <div className="fixed-bg"></div>
       <div>
         <div className="flex fixed top-0 w-full z-10 bg-[#161619] justify-between items-center p-5">
-          <Link to="/info">
+          <Link to="/profile">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="10"
@@ -75,7 +109,7 @@ const Username = () => {
               />
             </svg>
           </Link>
-          <div className="history-title">用户名</div>
+          <div className="history-title">填写邀请码</div>
           <div className="edit-title cursor-pointer"></div>{" "}
           {/* Trigger form submit */}
         </div>
@@ -120,4 +154,4 @@ const Username = () => {
   );
 };
 
-export default Username;
+export default Invite;

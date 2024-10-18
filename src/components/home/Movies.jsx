@@ -1,7 +1,5 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
-// import swiperLeft from "../../assets/public/swiperLeft.svg";
-// import swiperRight from "../../assets/public/swiperRight.svg";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";

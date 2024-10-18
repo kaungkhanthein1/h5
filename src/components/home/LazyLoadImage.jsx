@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-// import cardSkeleton from "../../assets/public/imgLoading.png"; // Placeholder image
+import cardSkeleton from "../../assets/imgLoading.png"; // Placeholder image
 const LazyLoadImage = ({ src, alt, width, height, className, ...props }) => {
   const imgRef = useRef(null);
   useEffect(() => {
@@ -34,11 +34,10 @@ const LazyLoadImage = ({ src, alt, width, height, className, ...props }) => {
     };
   }, [src]);
   return (
-    <div className={`image-container ${className}`} style={{ width, height }}>
+    <div className={`image-container2 ${className}`} style={{ width, height }}>
       <img
         ref={imgRef}
-        // src={cardSkeleton}
-        src=""
+        src={cardSkeleton}
         alt={alt}
         width={width}
         height={height}

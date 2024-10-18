@@ -45,6 +45,7 @@ const Phnumber = React.lazy(() => import("./pages/profile/Phnumber"));
 const Password = React.lazy(() => import("./pages/profile/Password"));
 const Bind = React.lazy(() => import("./pages/profile/Bind"));
 const Contact = React.lazy(() => import("./pages/profile/Contact"));
+const Invite = React.lazy(() => import("./pages/profile/Invite"));
 const Share = React.lazy(() =>import("./pages/share"))
 const Member = React.lazy(() =>import("./pages/share/member"))
 
@@ -82,7 +83,8 @@ const App: React.FC = () => {
     location.pathname.startsWith("/bind") ||
     location.pathname.startsWith("/contact") ||
     location.pathname.startsWith("/share") ||
-    location.pathname.startsWith("/share/member")
+    location.pathname.startsWith("/invite")||
+    location.pathname.startsWith("/share/member");
 
   const hideHeader = location.pathname.startsWith("/explorer");
   useEffect(() => {
@@ -159,6 +161,7 @@ const App: React.FC = () => {
                 <Route path="/bind" element={<Bind />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/share" element={<Share />} />
+                <Route path="/invite" element={<Invite />} />
                 <Route path="/share/member" element={<Member />} />
               </Routes>
             </Suspense>
