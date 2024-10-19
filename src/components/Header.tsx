@@ -58,7 +58,7 @@ const Header: FC = () => {
             >
               <p
                 className={`${
-                  activeTab === index ? "text-white" : "text-gray-500"
+                  activeTab === index ? "text-white font-bold" : "text-white/80"
                 } whitespace-nowrap py-2 rounded-lg hover:text-white transition-colors`}
               >
                 {item?.name}

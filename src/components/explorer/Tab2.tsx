@@ -12,7 +12,7 @@ const Tab2 = () => {
   const [movieData, setMovieData] = useState([]);
   const activeWeek = useSelector((state: any) => state.explore.activeWeek);
   const dispatch = useDispatch();
-  console.log(activeWeek, "active week");
+  // console.log(activeWeek, "active week");
 
   const getMovieData = async (week: any) => {
     setIsLoading(true);

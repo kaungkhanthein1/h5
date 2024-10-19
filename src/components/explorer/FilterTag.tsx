@@ -15,7 +15,7 @@ const FilterTag = () => {
   const [activeYear, setActiveYear] = useState(0);
   const activeTab = useSelector((state: any) => state?.explore?.activeTab);
   const sort = useSelector((state: any) => state?.explore?.sort);
-  console.log(sort, "sort");
+  // console.log(sort, "sort");
   const classData = useSelector((state: any) => state?.explore?.class);
   const area = useSelector((state: any) => state?.explore?.area);
   const year = useSelector((state: any) => state?.explore?.year);

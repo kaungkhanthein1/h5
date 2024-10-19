@@ -59,7 +59,7 @@ const FilteredByType = () => {
     dispatch(setYear(filteredTags && filteredTags[0]?.year[0]));
   }, []);
 
-  console.log(filteredTags);
+  // console.log(filteredTags);
 
   if (isloader || isFetching) {
     return null; // Ensure you return null instead of undefined

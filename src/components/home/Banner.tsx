@@ -5,13 +5,13 @@ const Banner = ({ list }: { list: any }) => {
   const navigate = useNavigate();
 
   const handleBannerClick = (clickLink: string) => {
-    console.log("clickLink is=>", clickLink);
+    // console.log("clickLink is=>", clickLink);
     if (clickLink && clickLink.startsWith("http")) {
       window.open(clickLink, "_blank");
     } else {
       navigate(`/player/${clickLink}`);
       // Handle cases where clickLink is not a full URL or handle internal links
-      console.log("Clicked on banner:", clickLink);
+      // console.log("Clicked on banner:", clickLink);
     }
   };
 

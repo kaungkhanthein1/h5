@@ -8,7 +8,7 @@ import {
 } from "../../pages/home/slice/HomeSlice";
 
 const FilterByTag = ({ data, sort }: any) => {
-  console.log(data);
+  // console.log(data);
   const sortData = useSelector((state: any) => state.home.sort);
   const classData = useSelector((state: any) => state.home.class);
   const area = useSelector((state: any) => state.home.area);

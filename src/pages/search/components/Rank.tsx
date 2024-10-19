@@ -43,7 +43,7 @@ const Rank = ({ data, index }: { data: any; index: number }) => {
           >
             {idx + 1}
           </span>
-          <span className="rank_word">{res?.word}</span>
+          <span className="rank_word truncate">{res?.word}</span>
         </button>
       ))}
     </div>
