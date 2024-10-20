@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import FilterMovie from "./FilterMovie";
 
+
 const Tab1 = () => {
   const dispatch = useDispatch()
   const activeTab = useSelector((state: any) => state.explore.activeTab);

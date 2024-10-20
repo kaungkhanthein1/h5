@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import InfiniteScroll from "react-infinite-scroll-component";
+
 import {
   useGetFilterByMoviesByTypeIdQuery,
   useGetHeaderTopicsQuery,
@@ -19,6 +21,8 @@ import {
 const FilteredByType = () => {
   const activeTab = useSelector((state: any) => state.home.activeTab);
   const [movieData, setMovieData] = useState([]);
+  const [pageSize, setPageSize] = useState(10);
+  const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const sort = useSelector((state: any) => state.home.sort);
   const classData = useSelector((state: any) => state.home.class);
@@ -30,7 +34,7 @@ const FilteredByType = () => {
     setIsLoading(true);
     try {
       const { data } = await axios.get(
-        `https://cc3e497d.qdhgtch.com:2345/api/v1/movie/screen/list?type_id=${id}&&sort=${sort}&&class=${classData}&&area=${area}&&year=${year}`
+        `https://cc3e497d.qdhgtch.com:2345/api/v1/movie/screen/list?type_id=${id}&&sort=${sort}&&class=${classData}&&area=${area}&&year=${year}&&pageSize=${pageSize}&&page=${page}`
       );
       if (data?.data?.list?.length >= 0) setIsLoading(false);
       setMovieData(data?.data?.list);
@@ -38,6 +42,16 @@ const FilteredByType = () => {
       console.log("err is=>", err);
     }
   };
+
+  const fetchData = async () => {
+    setPage(page + 1);
+    const { data } = await axios.get(
+      `https://cc3e497d.qdhgtch.com:2345/api/v1/movie/screen/list?type_id=${activeTab}&&sort=${sort}&&class=${classData}&&area=${area}&&year=${year}&&pageSize=${pageSize}&&page=${page}`
+    );
+    if (data?.data?.list?.length >= 0) setIsLoading(false);
+    setMovieData(movieData.concat(data?.data?.list));
+  };
+
   const {
     data: configData,
     isLoading: isloader,
@@ -50,6 +64,7 @@ const FilteredByType = () => {
   useEffect(() => {
     getMoviesByType(activeTab);
     window.scrollTo(0, 0);
+    setPage(1);
   }, [activeTab, sort, area, year, classData]);
 
   useEffect(() => {
@@ -88,6 +103,19 @@ const FilteredByType = () => {
                       <MovieCard movie={movie} height={"200px"} />
                     </div>
                   ))}
+
+                  <InfiniteScroll
+                    dataLength={movieData.length} //This is important field to render the next data
+                    next={fetchData}
+                    hasMore={true}
+                    loader={
+                      <div className="flex justify-center items-center w-full pb-20">
+                        <Loader />
+                      </div>
+                    }
+                  >
+                    {/* {item} */}
+                  </InfiniteScroll>
                 </div>
               )}
             </>
