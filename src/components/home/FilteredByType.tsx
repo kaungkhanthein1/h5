@@ -21,7 +21,7 @@ import {
 const FilteredByType = () => {
   const activeTab = useSelector((state: any) => state.home.activeTab);
   const [movieData, setMovieData] = useState([]);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(9);
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const sort = useSelector((state: any) => state.home.sort);
@@ -97,13 +97,14 @@ const FilteredByType = () => {
                   <Loader />
                 </div>
               ) : (
-                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 pl-3 lg:grid-cols-8 gap-y-5 gap-2 mt-0 pt-5 pb-32 px-3">
-                  {movieData?.map((movie: any) => (
-                    <div key={movie?.id} className="mx-auto w-full">
-                      <MovieCard movie={movie} height={"200px"} />
-                    </div>
-                  ))}
-
+                <>
+                  <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 pl-3 lg:grid-cols-8 gap-y-5 gap-2 mt-0 pt-5 pb-32 px-3">
+                    {movieData?.map((movie: any) => (
+                      <div key={movie?.id} className="mx-auto w-full">
+                        <MovieCard movie={movie} height={"200px"} />
+                      </div>
+                    ))}
+                  </div>
                   <InfiniteScroll
                     dataLength={movieData.length} //This is important field to render the next data
                     next={fetchData}
@@ -116,7 +117,7 @@ const FilteredByType = () => {
                   >
                     {/* {item} */}
                   </InfiniteScroll>
-                </div>
+                </>
               )}
             </>
           ) : (

@@ -22,7 +22,7 @@ const FilterMovie = () => {
   const getMoviesByType = async (id: any) => {
     setIsLoading(true);
     const { data } = await axios.get(
-      `https://cc3e497d.qdhgtch.com:2345/api/v1/movie/explore/list?type_id=${id}&&sort=${sort}&&class=${classData}&&area=${area}&&year=${year}&&page=${page}&&pageSize=10`
+      `https://cc3e497d.qdhgtch.com:2345/api/v1/movie/explore/list?type_id=${id}&&sort=${sort}&&class=${classData}&&area=${area}&&year=${year}&&page=${page}&&pageSize=9`
     );
     if (data?.data?.list?.length >= 0) setIsLoading(false);
     setMovieData(data?.data?.list);
@@ -31,7 +31,7 @@ const FilterMovie = () => {
   const fetchData = async () => {
     setPage(page + 1);
     const { data } = await axios.get(
-      `https://cc3e497d.qdhgtch.com:2345/api/v1/movie/explore/list?type_id=${activeTab}&&sort=${sort}&&class=${classData}&&area=${area}&&year=${year}&&page=${page}&&pageSize=10`
+      `https://cc3e497d.qdhgtch.com:2345/api/v1/movie/explore/list?type_id=${activeTab}&&sort=${sort}&&class=${classData}&&area=${area}&&year=${year}&&page=${page}&&pageSize=9`
     );
     if (data?.data?.list?.length >= 0) setIsLoading(false);
     setMovieData(movieData.concat(data?.data?.list));
@@ -53,29 +53,31 @@ const FilterMovie = () => {
                 <Loader />
               </div>
             ) : (
-              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2 pt-5 pb-32 px-3">
-                {movieData?.map((movie: any) => (
-                  <Link
-                    to={`/player/${movie?.id}`}
-                    key={movie?.id}
-                    className="mx-auto"
-                  >
-                    <MovieCard movie={movie} height={"200px"} />
-                  </Link>
-                ))}
+              <>
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2 pt-5 pb-32 px-3">
+                  {movieData?.map((movie: any) => (
+                    <Link
+                      to={`/player/${movie?.id}`}
+                      key={movie?.id}
+                      className="mx-auto"
+                    >
+                      <MovieCard movie={movie} height={"200px"} />
+                    </Link>
+                  ))}
+                </div>
                 <InfiniteScroll
                   dataLength={movieData?.length} //This is important field to render the next data
                   next={fetchData}
                   hasMore={true}
                   loader={
-                    <div className="flex justify-center items-center pb-20 w-full mx-auto">
+                    <div className="flex justify-center items-center pb-20 will mx-auto">
                       <Loader />
                     </div>
                   }
                 >
                   {/* {item} */}
                 </InfiniteScroll>
-              </div>
+              </>
             )}
           </>
         ) : (
