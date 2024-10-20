@@ -235,9 +235,7 @@ const DetailSection: React.FC<DetailSectionProps> = ({
                 <img
                   src={isStarred ? selectedStar : star}
                   alt=""
-                  className={`${
-                    isStarred ? "w-[22px] h-auto -mt-2" : "h-7 mb-2"
-                  }`}
+                  className="h-7 mb-2"
                 />
                 <span className="text-white/40 text-[14px]">收藏</span>
               </button>
@@ -384,6 +382,7 @@ const DetailSection: React.FC<DetailSectionProps> = ({
           onClose={handleFeedbackModel}
           setIsLoading={setIsLoading}
           isLoading={isLoading}
+          height={`${lowerDivHeight}px`}
         />
       )}
     </div>

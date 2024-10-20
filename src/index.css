@@ -263,7 +263,7 @@ input[type="range"]::-moz-range-thumb {
 }
 
 .plyr--full-ui input[type="range"] {
-  color: #ff5722 !important;
+  color: rgba(245, 65, 0, 1) !important;
 }
 
 .plyr--video .plyr__control:hover {
@@ -271,10 +271,10 @@ input[type="range"]::-moz-range-thumb {
 }
 
 .art-video-player .art-progress-played {
-  background: #f97316 !important;
+  background: rgba(245, 65, 0, 1) !important;
 }
 .art-video-player .art-progress-indicator {
-  background: #f97316 !important;
+  background: rgba(245, 65, 0, 1) !important;
 }
 
 @keyframes scrollText {

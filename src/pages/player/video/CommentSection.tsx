@@ -11,6 +11,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { useDispatch } from "react-redux";
 import { setAuthModel } from "../../../features/login/ModelSlice";
 import {CommentProps, Comment } from '../../../model/commentModel';
+import { showToast } from "../../../pages/profile/error/ErrorSlice";
 
 const CommentComponent: React.FC<CommentProps> = ({ movieId }) => {
   const [comments, setComments] = useState<Comment[]>([]);
@@ -208,8 +209,10 @@ const CommentComponent: React.FC<CommentProps> = ({ movieId }) => {
         }
         setNewComment("");
         setReplyingTo(null);
+        dispatch(showToast({ message: "已发布", type: "success" }));
       } catch (error) {
         console.error("Error creating comment or reply:", error);
+        dispatch(showToast({ message: "创建评论或回复时出错", type: "error" }));
       } finally {
         setLoading(false);
       }
@@ -537,7 +540,7 @@ const CommentComponent: React.FC<CommentProps> = ({ movieId }) => {
           value={newComment}
           onChange={(e) => setNewComment(e.target.value)}
           className="flex-grow bg-gray-700 text-white p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder={replyingTo ? "Replying..." : "确认过眼神，你是发言人！"}
+          placeholder={"回复 小熊吹奶盖"}
         />
         {newComment && (
           <button
@@ -548,7 +551,7 @@ const CommentComponent: React.FC<CommentProps> = ({ movieId }) => {
             {loading ? (
               <FontAwesomeIcon icon={faSpinner} />
             ) : (
-              <FontAwesomeIcon icon={faPaperPlane} />
+              <span>发送</span>
             )}
           </button>
         )}

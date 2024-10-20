@@ -226,7 +226,7 @@ const DetailPage: React.FC = () => {
                 >
                   <span className="text-white">详情</span>
                   {activeTab === "tab-1" && (
-                    <div className="absolute bottom-0 left-0 w-full h-1 bg-orange-500"></div>
+                    <div className="absolute bottom-0 left-0 w-full h-1 bg-mainColor"></div>
                   )}
                 </div>
                 <div
@@ -240,7 +240,7 @@ const DetailPage: React.FC = () => {
                     {movieDetail.comments_count || "0"}
                   </span>
                   {activeTab === "tab-2" && (
-                    <div className="absolute bottom-0 left-0 w-full h-1 bg-orange-500"></div>
+                    <div className="absolute bottom-0 left-0 w-full h-1 bg-mainColor"></div>
                   )}
                 </div>
               </div>
