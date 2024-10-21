@@ -49,16 +49,16 @@ const Header: FC = () => {
       </div>
 
       <div className="w-full">
-        <nav className="flex overflow-x-scroll px-3 gap-3 remove-scrollbar">
+        <nav className="flex overflow-x-scroll px-3 gap-3 remove-scrollbar items-center">
           {configData?.map((item: any, index: any) => (
             <div
               className="relative"
               onClick={() => dispatch(setActiveTab(item?.id))}
-              key={index}
+              key={item.id}
             >
               <p
                 className={`${
-                  activeTab === index ? "text-white font-bold" : "text-white/80"
+                  activeTab === item?.id ? "text-white font-bold text-[24px]" : "text-white/80 text-[16px]"
                 } whitespace-nowrap py-2 rounded-lg hover:text-white transition-colors`}
               >
                 {item?.name}

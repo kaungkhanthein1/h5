@@ -30,10 +30,12 @@ const Explorer: React.FC = () => {
             //     ? "text-white text-[18px]"
             //     : "text-gray-600 text-[18px]"
             // } `}
-            className={`inline-flex whitespace-nowrap border-b-2 border-transparent font-medium  transition-all duration-200 ease-in-out hover:text-white text-gray-600 text-[18px] ${
+            // transition-all duration-200 ease-in-out 
+            className={`inline-flex whitespace-nowrap border-b-2 border-transparent font-medium  ${
               activeNav
-                ? activeNav === index && "text-white text-[18px]"
-                : activeTab === index && "text-white text-[18px]"
+                && activeNav === index ? "text-white text-[24px]"
+                : activeTab === index ? "text-white text-[24px]"
+                : "text-unselectedColor text-[18px]"
             }`}
             onClick={() => {
               setActiveTab(index);

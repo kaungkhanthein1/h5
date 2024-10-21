@@ -41,7 +41,7 @@ const FilterTag = () => {
                 className={`${
                   activeTab === item?.id
                     ? "text-[16px] text-white"
-                    : "text-[16px] text-gray-500"
+                    : "text-[16px] text-unselectedColor"
                 } whitespace-nowrap hover:text-white transition-colors`}
               >
                 {item?.name}

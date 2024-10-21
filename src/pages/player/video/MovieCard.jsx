@@ -3,20 +3,20 @@ import he from "he";
 // import videoIcon from "../../assets/videoIcon.svg";
 import LazyLoadImage from "../../../components/home/LazyLoadImage";
 
-const MovieCard = ({ movie, height='147px', width = '114px' }) => {
+const MovieCard = ({ movie, height='185px', width = '114px' }) => {
   return (
     <div className={`movie-item max-sm:h-auto cursor-default relative mt-2`} style={{width: '100%'}}>
       <Link className="block relative zoom-effect" to={`/player/${movie?.id}`}>
         <div
           className={`relative img_a border-none ${
-            height ? `max-sm:h-[${height}]` : "max-sm:h-[147px]"
+            height ? `max-sm:h-[${height}]` : "max-sm:h-[185px]"
           }`}  style={{width: '100%'}}
         >
           <LazyLoadImage
             src={movie.cover}
             alt={movie.name}
-            className={`movie_img  h-[147px] rounded-lg border-none  ${
-              height ? `max-sm:h-[${height}]` : "max-sm:h-[147px]"
+            className={`movie_img  h-[185px] rounded-lg border-none  ${
+              height ? `max-sm:h-[${height}]` : "max-sm:h-[185px]"
             } cursor-default object-cover w-full`}
           />
           <div className="absolute rounded-bl-lg rounded-br-lg  h-full w-full inset-0 bg-gradient-to-b from-transparent via-black/5 to-black"></div>
