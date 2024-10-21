@@ -8,15 +8,15 @@ const MovieCard = ({ movie, height, width = '114px', showDynamic = false }) => {
     <div className="movie-item max-sm:h-auto cursor-default relative mt-2">
       <Link className="block relative zoom-effect" to={`/player/${movie?.id}`}>
         <div
-          className={`relative img_a h-[153px] w-full border-none ${
-            height ? `max-sm:h-[${height}]` : "max-sm:h-[153px]"
+          className={`relative img_a h-[185px] w-full border-none ${
+            height ? `max-sm:h-[185px]` : "max-sm:h-[185px]"
           }`}
         >
           <LazyLoadImage
             src={movie.cover}
             alt={movie.name}
-            className={`movie_img  h-[153px] rounded-lg border-none  ${
-              height ? `max-sm:h-[${height}]` : "max-sm:h-[153px]"
+            className={`movie_img  h-[185px] rounded-lg border-none  ${
+              height ? `max-sm:h-[185px]` : "max-sm:h-[185px]"
             } cursor-default object-cover w-full`}
           />
           <div className="absolute rounded-bl-lg rounded-br-lg  h-full w-full inset-0 bg-gradient-to-b from-transparent via-black/5 to-black"></div>
