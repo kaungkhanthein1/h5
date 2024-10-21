@@ -28,12 +28,12 @@ const Landing: React.FC<LandingProps> = ({}) => {
       {/* Adjusted Image Section */}
       <img
         src={skip <= 3 ? ad1 : land}
-        className="object-center w-screen h-[80vh]"
+        className="object-center object-cover w-screen h-screen"
         alt="land"
       />
 
       {/* Logo Section with Animation */}
-      <div className="flex flex-c justify-center items-center gap- relative py-[20px]">
+      <div className="fle hidden flex-c justify-center items-center gap- relative py-[20px]">
         {/* Mask Animation */}
         <motion.img
           src={mask}
