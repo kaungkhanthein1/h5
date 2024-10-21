@@ -54,7 +54,7 @@ const FilterMovie = () => {
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2 pt-5 pb-32 px-3">
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4 pt-5 pb-32 px-3">
                   {movieData?.map((movie: any) => (
                     <Link
                       to={`/player/${movie?.id}`}

@@ -9,8 +9,8 @@ import { setActiveNav } from "./slice/ExploreSlice";
 // import { useGetExploreListQuery } from "./services/explorerAPi";
 
 const Explorer: React.FC = () => {
-  const [activeTab, setActiveTab] = useState(0);
   const activeNav = useSelector((state: any) => state.explore.activeNav);
+  const [activeTab, setActiveTab] = useState(!activeNav ? 0 : -1);
   const dispatch = useDispatch();
 
   const tabs = [
@@ -32,9 +32,9 @@ const Explorer: React.FC = () => {
             // } `}
             // transition-all duration-200 ease-in-out 
             className={`inline-flex whitespace-nowrap border-b-2 border-transparent font-medium  ${
-              activeNav
-                && activeNav === index ? "text-white text-[24px]"
-                : activeTab === index ? "text-white text-[24px]"
+              ((activeNav
+                && activeNav === index) || activeTab === index)? "text-white text-[24px]"
+                // : activeTab === index ? "text-white text-[24px]"
                 : "text-unselectedColor text-[18px]"
             }`}
             onClick={() => {
