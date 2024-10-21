@@ -1,5 +1,6 @@
 export interface CommentProps {
   movieId: string;
+  lowerDivHeight: any;
 }
 
 export interface Comment {

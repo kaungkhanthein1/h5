@@ -19,7 +19,8 @@ module.exports = {
         sourceBack: 'rgba(22, 22, 25, 1)',
         episodeSelected: 'rgba(255, 255, 255, 0.04)',
         mainColor: 'rgba(245, 65, 0, 1)',
-        unselectedColor: 'rgba(255, 255, 255, 0.8)'
+        unselectedColor: 'rgba(255, 255, 255, 0.8)',
+        commentInput: 'rgba(32, 32, 34, 0.9)'
       },
       fontSize: {
         'xs': '0.75rem',   // Extra small text

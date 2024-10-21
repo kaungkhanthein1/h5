@@ -177,7 +177,7 @@ const DetailSection: React.FC<DetailSectionProps> = ({
       {/* Tabs */}
 
       {/* Tab content */}
-      <div className="bg-background p-4 rounded-b-lg">
+      <div className={`bg-background rounded-b-lg ${activeTab === "tab-1" && 'p-4'}`}>
         {activeTab === "tab-1" && (
           <div id="tab-1" className="block">
             {/* Movie Title and Info */}
@@ -279,7 +279,7 @@ const DetailSection: React.FC<DetailSectionProps> = ({
         {activeTab === "tab-2" ? (
           <div id="tab-2" className="block">
             {/* Comment section or other content */}
-            <CommentComponent movieId={id} />
+            <CommentComponent movieId={id} lowerDivHeight={lowerDivHeight}/>
           </div>
         ) : (
           <div className="mt-4">

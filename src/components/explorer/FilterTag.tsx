@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   setActiveTab,
   setArea,
@@ -8,8 +8,14 @@ import {
 } from "../../pages/explorer/slice/ExploreSlice";
 import { useGetHeaderTopicsQuery } from "../../pages/home/services/homeApi";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 
 const FilterTag = () => {
+  const location = useLocation();
+  // console.log(location, "location");
+  const selectedClassRef = useRef<any>(null);
+  const selectedYearRef = useRef<any>(null);
+  const selectedAreaRef = useRef<any>(null);
   const [activeClass, setActiveClass] = useState(0);
   const [activeArea, setActiveArea] = useState(0);
   const [activeYear, setActiveYear] = useState(0);
@@ -28,6 +34,35 @@ const FilterTag = () => {
     }
   );
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (selectedYearRef.current) {
+      selectedYearRef.current?.scrollIntoView({
+        behavior: "smooth",
+        inline: "center", // Ensure horizontal centering
+        block: "nearest", // Keep vertical positioning intact
+      });
+    }
+  }, [year]);
+  useEffect(() => {
+    if (selectedClassRef.current) {
+      selectedClassRef.current?.scrollIntoView({
+        behavior: "smooth",
+        inline: "center", // Ensure horizontal centering
+        block: "nearest", // Keep vertical positioning intact
+      });
+    }
+  }, [classData]);
+
+  useEffect(() => {
+    if (selectedAreaRef.current) {
+      selectedAreaRef.current?.scrollIntoView({
+        behavior: "smooth",
+        inline: "center", // Ensure horizontal centering
+        block: "nearest", // Keep vertical positioning intact
+      });
+    }
+  }, [area]);
 
   return (
     <div className="flex flex-col gap-3 py-5">
@@ -78,7 +113,11 @@ const FilterTag = () => {
           (data: any) =>
             data?.class &&
             data?.class?.map((item: any, index: any) => (
-              <div className="relative" key={index}>
+              <div
+                className="relative"
+                key={item}
+                ref={classData === item ? selectedClassRef : null}
+              >
                 <p
                   onClick={() => {
                     setActiveClass(index);
@@ -105,7 +144,11 @@ const FilterTag = () => {
           (data: any) =>
             data?.area &&
             data?.area?.map((item: any, index: any) => (
-              <div className="relative" key={index}>
+              <div
+                className="relative"
+                key={item}
+                ref={area === item ? selectedAreaRef : null}
+              >
                 <p
                   onClick={() => {
                     setActiveArea(index);
@@ -127,13 +170,16 @@ const FilterTag = () => {
             ))
         )}
       </div>
-
       <div className="flex overflow-x-scroll px-3 gap-6 remove-scrollbar items-center">
         {filteredTags?.map(
           (data: any) =>
             data?.year &&
             data?.year?.map((item: any, index: any) => (
-              <div className="relative" key={index}>
+              <div
+                className="relative"
+                key={item}
+                ref={year === item ? selectedYearRef : null}
+              >
                 <p
                   onClick={() => {
                     setActiveYear(index);

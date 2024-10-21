@@ -13,7 +13,7 @@ import { setAuthModel } from "../../../features/login/ModelSlice";
 import {CommentProps, Comment } from '../../../model/commentModel';
 import { showToast } from "../../../pages/profile/error/ErrorSlice";
 
-const CommentComponent: React.FC<CommentProps> = ({ movieId }) => {
+const CommentComponent: React.FC<CommentProps> = ({ movieId, lowerDivHeight }) => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState("");
   const [replyingTo, setReplyingTo] = useState<number | null>(null);
@@ -226,7 +226,7 @@ const CommentComponent: React.FC<CommentProps> = ({ movieId }) => {
   }, [replyingTo]);
 
   return (
-    <div className="comment-section h-auto flex flex-col rounded-md">
+    <div className="comment-section flex flex-col rounded-md" style={{height: lowerDivHeight}}>
       {
         comments && comments.length > 0 ? 
         <InfiniteScroll
@@ -234,6 +234,7 @@ const CommentComponent: React.FC<CommentProps> = ({ movieId }) => {
         next={() => setPage((prevPage) => prevPage + 1)}
         hasMore={hasMore}
         loader={<h4 className="text-white">Loading...</h4>}
+        style={{height: lowerDivHeight}}
         // endMessage={<p className="text-white">No more comments</p>}
       >
         {comments.map((comment) => (
@@ -327,7 +328,7 @@ const CommentComponent: React.FC<CommentProps> = ({ movieId }) => {
           </div>
         ))}
       </InfiniteScroll> : 
-      <div className="flex justify-center items-center text-center h-[60vh]">
+      <div className="flex justify-center items-center text-center" style={{height: lowerDivHeight}}>
       <div>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -528,7 +529,7 @@ const CommentComponent: React.FC<CommentProps> = ({ movieId }) => {
       
 
       {/* Create new comment or reply */}
-      {isLoggedIn ? <div className="create-comment sticky bg-background left-0 bottom-0 p-2 flex items-center justify-center rounded-lg w-full">
+      {isLoggedIn ? <div className="create-comment sticky bg-commentInput left-0 bottom-0 p-2 flex items-center justify-center rounded-lg w-full">
         <img
           src={ProfileImg}
           alt="User Avatar"
@@ -539,8 +540,8 @@ const CommentComponent: React.FC<CommentProps> = ({ movieId }) => {
           type="text"
           value={newComment}
           onChange={(e) => setNewComment(e.target.value)}
-          className="flex-grow bg-gray-700 text-white p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder={"回复 小熊吹奶盖"}
+          className="flex-grow bg-source text-white p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder={"确认过眼神，你是发言人！"}
         />
         {newComment && (
           <button

@@ -85,7 +85,7 @@ const Tab4 = () => {
           ))}
         </nav>
       </div>
-      <div className="px-3">
+      <div className="px-3 flex flex-col gap-7">
         {data?.data[activeRank ? activeRank : activeTab]?.movie_data?.length
           ? data?.data[activeRank ? activeRank : activeTab]?.movie_data?.map(
               (item: any, index: any) => (
