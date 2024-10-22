@@ -1,12 +1,18 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import he from "he";
 // import videoIcon from "../../assets/videoIcon.svg";
 import LazyLoadImage from "../../../components/home/LazyLoadImage";
 
-const MovieCard = ({ movie, height='185px', width = '114px' }) => {
+const MovieCard = ({ movie, height='185px', width = '114px', showRecommandMovie }) => {
+  const navigate = useNavigate();
+  const showMovie = () => {
+    console.log('heeeee')
+    // navigate(`/player/${movie?.id}`);
+    showRecommandMovie(movie?.id);
+  }
   return (
     <div className={`movie-item max-sm:h-auto cursor-default relative mt-2`} style={{width: '100%'}}>
-      <Link className="block relative zoom-effect" to={`/player/${movie?.id}`}>
+      <div className="block relative zoom-effect" onClick={showMovie}>
         <div
           className={`relative img_a border-none ${
             height ? `max-sm:h-[${height}]` : "max-sm:h-[185px]"
@@ -32,7 +38,7 @@ const MovieCard = ({ movie, height='185px', width = '114px' }) => {
         <div className="top-0 right-0 search_card_score z-1 absolute">
             <span>{movie?.dynamic}</span>
         </div>
-      </Link>
+      </div>
 
       <div className="text-container">
         <div className="movie-info">

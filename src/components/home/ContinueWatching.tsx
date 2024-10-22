@@ -19,7 +19,6 @@ const ContinueWatching = () => {
   const latestMovies = allMovies
     ?.sort((a: any, b: any) => b.update_time - a.update_time) // Sort by update_time (newest first)
     ?.slice(0, 10); // Take the latest 10 movies
-
   const isLoggedIn = localStorage.getItem("authToken");
   const parsedLoggedIn = isLoggedIn ? JSON.parse(isLoggedIn) : null;
   const token = parsedLoggedIn?.data?.access_token;
@@ -47,7 +46,7 @@ const ContinueWatching = () => {
           <div className="flex overflow-x-scroll whitespace-nowrap scrollbar-hide gap-4 mt-5">
             {latestMovies?.map((movie: any) => (
               <Link
-                to={`/player/${movie?.id}`}
+                to={`/player/${movie?.movie_id}`}
                 key={movie.id}
                 className="w-[136px]"
               >

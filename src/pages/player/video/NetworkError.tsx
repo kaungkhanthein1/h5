@@ -4,7 +4,7 @@ import SorryUnableToPlay from "../../../assets/unhappy.svg"; // Import the backg
 import { useParams, useNavigate } from "react-router-dom";
 import noPlayImage from "../../../assets/noplay.svg";
 
-const NetworkError: React.FC<any> = ({ switchNow, refresh }) => {
+const NetworkError: React.FC<any> = ({ switchNow, refresh, onBack }) => {
   const navigate = useNavigate();
 
   return (
@@ -19,7 +19,7 @@ const NetworkError: React.FC<any> = ({ switchNow, refresh }) => {
   >
           {/* Back Arrow */}
     <div className="absolute top-4 left-4 z-50">
-      <button className="text-white text-2xl" onClick={()=>navigate('/home')}>
+      <button className="text-white text-2xl" onClick={onBack}>
         ← {/* Replace with your actual back arrow component or icon */}
       </button>
     </div>

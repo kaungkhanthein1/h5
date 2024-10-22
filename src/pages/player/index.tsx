@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import VideoPlayer from "./video/VideoPlayer";
 import SourceSelector from "./video/SourceSelector";
 import DetailSection from "./video/DetailSection";
@@ -29,7 +29,7 @@ const DetailPage: React.FC = () => {
   const [errorVideoUrl, setErrorVideoUrl] = useState("");
   const abortControllerRef = useRef<AbortController | null>(null);
   const [episodes, setEpisodes] = useState<any>([]);
-
+  const [forwardedCount, setForwardedCount] = useState(-1);
   const navigate = useNavigate();
 
   const autoPlayNextEpisode = async () => {
@@ -53,7 +53,6 @@ const DetailPage: React.FC = () => {
         console.error("Error auto-playing next episode:", error);
       }
     }
-    console.log('here');
     setWholePageError(true);
   };
 
@@ -74,9 +73,9 @@ const DetailPage: React.FC = () => {
     }
   };
 
-  const fetchMovieDetail = async () => {
+  const fetchMovieDetail = async (movieId = "") => {
     try {
-      const res = await getMovieDetail(id || "");
+      const res = await getMovieDetail(movieId || id || "");
       setMovieDetail(res?.data);
       setInitialEpisode(res?.data);
     } catch (error) {
@@ -126,6 +125,9 @@ const DetailPage: React.FC = () => {
           setWholePageError(true);
           setErrorVideoUrl(mvDetail?.play_from?.[0]?.list?.[0].play_url);
         }
+        if(mvDetail?.play_from && mvDetail?.play_from.length === 0) {
+          setWholePageError(true);
+        }
       }
     }
   };
@@ -144,7 +146,10 @@ const DetailPage: React.FC = () => {
     if (currentEpisode) {
       reportProgress(currentEpisode);
     }
-    navigate("/home");
+    console.log('hello');
+    setCurrentEpisode(null);
+    navigate(forwardedCount);
+    // navigate("/home");
   };
 
   const reportProgress = async (episode: Episode) => {
@@ -170,6 +175,7 @@ const DetailPage: React.FC = () => {
   const handleVideoError = (errorUrl: string) => {
     if (errorVideoUrl !== errorUrl && errorUrl) {
       setWholePageError(true);
+      setCurrentEpisode(null);
       setErrorVideoUrl(errorUrl);
     }
   };
@@ -197,6 +203,10 @@ const DetailPage: React.FC = () => {
     fetchMovieDetail();
   }
 
+  const showRecommandMovie = (id: string) => {
+    setCurrentEpisode(null);
+    fetchMovieDetail(id);
+  }
   return (
     <div className="bg-background min-h-screen">
       {!movieDetail || !currentEpisode ? (
@@ -218,7 +228,7 @@ const DetailPage: React.FC = () => {
                 handleVideoError={handleVideoError}
               />
             ) : (
-              <NetworkError switchNow={switchNow} refresh={refresh} />
+              <NetworkError switchNow={switchNow} refresh={refresh} onBack={navigateBackFunction}/>
             )}
             </div>
             <div className="relative flex px-2 justify-between items-center bg-background pb-2">
@@ -280,7 +290,7 @@ const DetailPage: React.FC = () => {
                 <div className="mt-8 px-4">
                 {adsData && <AdsSection adsData={adsData?.player_recommend_up} />}
                 </div>
-                <RecommendedList data={movieDetail} />
+                <RecommendedList data={movieDetail} showRecommandMovie={showRecommandMovie}/>
               </>
             )}
           </div>
