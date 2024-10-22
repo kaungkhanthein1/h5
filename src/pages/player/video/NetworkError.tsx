@@ -4,7 +4,7 @@ import SorryUnableToPlay from "../../../assets/unhappy.svg"; // Import the backg
 import { useParams, useNavigate } from "react-router-dom";
 import noPlayImage from "../../../assets/noplay.svg";
 
-const NetworkError: React.FC<any> = ({ switchNow }) => {
+const NetworkError: React.FC<any> = ({ switchNow, refresh }) => {
   const navigate = useNavigate();
 
   return (
@@ -33,7 +33,7 @@ const NetworkError: React.FC<any> = ({ switchNow }) => {
         <button
           className="px-6 py-2 text-white font-semibold rounded-md shadow-md hover:bg-gray-600 transition-all duration-300 ease-in-out"
           style={{background: 'rgba(255, 255, 255, 0.2)'}}
-          onClick={()=>window.location.reload()}
+          onClick={refresh}
         >
           刷新一下
         </button>

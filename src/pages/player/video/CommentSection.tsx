@@ -558,7 +558,7 @@ const CommentComponent: React.FC<CommentProps> = ({ movieId, lowerDivHeight }) =
         )}
       </div> : 
       <div className="create-comment mt-6 flex items-center justify-center rounded-lg w-full">
-        <button onClick={()=>dispatch(setAuthModel(true))} className="bg-red-600 text-white w-full px-4 py-3 rounded-md">登录后发布评论</button>
+        <button onClick={()=>dispatch(setAuthModel(true))} className="bg-red-600 text-white w-full px-4 py-3 mx-2 rounded-md">登录后发布评论</button>
       </div>
       }
     </div>

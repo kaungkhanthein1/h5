@@ -192,6 +192,11 @@ const DetailPage: React.FC = () => {
     }
   };
 
+  const refresh = () => {
+    setMovieDetail(null);
+    fetchMovieDetail();
+  }
+
   return (
     <div className="bg-background min-h-screen">
       {!movieDetail || !currentEpisode ? (
@@ -213,7 +218,7 @@ const DetailPage: React.FC = () => {
                 handleVideoError={handleVideoError}
               />
             ) : (
-              <NetworkError switchNow={switchNow} />
+              <NetworkError switchNow={switchNow} refresh={refresh} />
             )}
             </div>
             <div className="relative flex px-2 justify-between items-center bg-background pb-2">
