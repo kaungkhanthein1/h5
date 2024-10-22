@@ -34,6 +34,7 @@ const DetailPage: React.FC = () => {
 
   const autoPlayNextEpisode = async () => {
     if (!movieDetail?.play_from) return;
+    setCurrentEpisode(null);
     for (let i = selectedSource + 1; i < movieDetail.play_from.length; i++) {
       const nextSource = movieDetail.play_from[i];
       try {
@@ -162,7 +163,6 @@ const DetailPage: React.FC = () => {
   };
 
   const switchNow = () => {
-    console.log('hello');
     setWholePageError(false);
     autoPlayNextEpisode();
   };
@@ -193,7 +193,7 @@ const DetailPage: React.FC = () => {
   };
 
   const refresh = () => {
-    setMovieDetail(null);
+    setCurrentEpisode(null);
     fetchMovieDetail();
   }
 
