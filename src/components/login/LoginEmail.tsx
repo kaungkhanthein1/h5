@@ -46,13 +46,13 @@ const LoginEmail: React.FC<LoginEmailProps> = ({ handleBack }) => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateEmail(email)) {
-      console.log('not correct')
-    dispatch(showToast({ message: '请输入5-25位用户名', type: "error" }))
+      console.log("not correct");
+      dispatch(showToast({ message: "请输入5-25位用户名", type: "error" }));
       return;
     }
     try {
       dispatch(setCaptchaOpen(true));
-      setIsVisible(false)
+      setIsVisible(false);
     } catch (err) {
       setError("Login failed. Please check your credentials.");
     }
@@ -92,7 +92,14 @@ const LoginEmail: React.FC<LoginEmailProps> = ({ handleBack }) => {
   return (
     <div className="min-h-screen w-screen flex items-center justify-center overflow-hidden">
       {/* Conditionally render the ForgotPass component if `forgot` is true */}
-      {openCaptcha && <Captch setIsVisible={setIsVisible} isLogin={true} username={email} password={password} />}
+      {openCaptcha && (
+        <Captch
+          setIsVisible={setIsVisible}
+          isLogin={true}
+          username={email}
+          password={password}
+        />
+      )}
       {forgot ? (
         <ForgotPass forgot={forgot} setForgot={setForgot} />
       ) : (
@@ -119,7 +126,7 @@ const LoginEmail: React.FC<LoginEmailProps> = ({ handleBack }) => {
                     onClick={handleBack}
                   />
                   <h2 className="text-[18px] font-[600] leading-[20px] text-white">
-                    Login
+                    登录
                   </h2>
                   <img
                     className="close_btn p-3 cursor-pointer"
@@ -152,7 +159,7 @@ const LoginEmail: React.FC<LoginEmailProps> = ({ handleBack }) => {
                           : "top-1/2 transform -translate-y-1/2"
                       }`}
                     >
-                      Enter Account Name, Phone Number, Email
+                      请输入账号，手机号，邮箱
                     </label>
                   </div>
 
@@ -175,7 +182,7 @@ const LoginEmail: React.FC<LoginEmailProps> = ({ handleBack }) => {
                           : "top-1/2 -translate-y-1/2"
                       }`}
                     >
-                      Please Enter Your Password
+                     请输入密码
                     </label>
                     <img
                       onClick={show}
@@ -189,7 +196,7 @@ const LoginEmail: React.FC<LoginEmailProps> = ({ handleBack }) => {
                     onClick={() => setForgot(true)} // When clicked, set `forgot` to true to show the ForgotPass component
                     className="text-left mt-[-10px] text-blue-500 text-sm cursor-pointer"
                   >
-                    Forgot Your Password?
+                    找回密码
                   </div>
 
                   <button

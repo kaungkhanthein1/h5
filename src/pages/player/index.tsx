@@ -30,11 +30,11 @@ const DetailPage: React.FC = () => {
   const abortControllerRef = useRef<AbortController | null>(null);
   const [episodes, setEpisodes] = useState<any>([]);
   const [forwardedCount, setForwardedCount] = useState(-1);
+  const [movieReload, setMovieReload] = useState(false);
   const navigate = useNavigate();
 
   const autoPlayNextEpisode = async () => {
     if (!movieDetail?.play_from) return;
-    setCurrentEpisode(null);
     for (let i = selectedSource + 1; i < movieDetail.play_from.length; i++) {
       const nextSource = movieDetail.play_from[i];
       try {
@@ -76,10 +76,13 @@ const DetailPage: React.FC = () => {
   const fetchMovieDetail = async (movieId = "") => {
     try {
       const res = await getMovieDetail(movieId || id || "");
-      setMovieDetail(res?.data);
-      setInitialEpisode(res?.data);
+      await setMovieDetail(res?.data);
+      await setInitialEpisode(res?.data);
+      setWholePageError(false)
+      setMovieReload(false);
     } catch (error) {
       console.error("Error fetching movie details:", error);
+      setMovieReload(false);
     }
   };
 
@@ -146,7 +149,6 @@ const DetailPage: React.FC = () => {
     if (currentEpisode) {
       reportProgress(currentEpisode);
     }
-    console.log('hello');
     setCurrentEpisode(null);
     navigate(forwardedCount);
     // navigate("/home");
@@ -174,9 +176,8 @@ const DetailPage: React.FC = () => {
 
   const handleVideoError = (errorUrl: string) => {
     if (errorVideoUrl !== errorUrl && errorUrl) {
-      setWholePageError(true);
-      setCurrentEpisode(null);
       setErrorVideoUrl(errorUrl);
+      setWholePageError(true);
     }
   };
 
@@ -199,12 +200,14 @@ const DetailPage: React.FC = () => {
   };
 
   const refresh = () => {
-    setCurrentEpisode(null);
+    // setCurrentEpisode(null);
+    setMovieReload(true);
     fetchMovieDetail();
   }
 
   const showRecommandMovie = (id: string) => {
     setCurrentEpisode(null);
+    setMovieDetail(null);
     fetchMovieDetail(id);
   }
   return (
@@ -217,7 +220,7 @@ const DetailPage: React.FC = () => {
         <>
           <div className="sticky top-0 z-50">
             <div id='upper-div'>
-            {currentEpisode.ready_to_play && !wholePageError ? (
+            {(currentEpisode.ready_to_play && !wholePageError) || movieReload ? (
               <VideoPlayer
                 key={currentEpisode.episode_id}
                 videoUrl={currentEpisode.play_url}
@@ -230,6 +233,7 @@ const DetailPage: React.FC = () => {
             ) : (
               <NetworkError switchNow={switchNow} refresh={refresh} onBack={navigateBackFunction}/>
             )}
+            
             </div>
             <div className="relative flex px-2 justify-between items-center bg-background pb-2">
               <div className="flex">
@@ -239,7 +243,7 @@ const DetailPage: React.FC = () => {
                   }`}
                   onClick={() => setActiveTab("tab-1")}
                 >
-                  <span className="text-white">详情</span>
+                  <span className="text-white">详情{movieReload}</span>
                   {activeTab === "tab-1" && (
                     <div className="absolute bottom-0 left-0 w-full h-1 bg-mainColor"></div>
                   )}
@@ -251,8 +255,8 @@ const DetailPage: React.FC = () => {
                   onClick={() => setActiveTab("tab-2")}
                 >
                   <span>评论</span>
-                  <span className="text-gray-500">
-                    {movieDetail.comments_count || "0"}
+                  <span className="text-gray-500 ml-1.5 text-sm">
+                    {parseInt(movieDetail.comments_count || '0') > 0 ? (movieDetail.comments_count && (parseInt(movieDetail.comments_count) > 99) ? '99+' : movieDetail.comments_count) : ""}
                   </span>
                   {activeTab === "tab-2" && (
                     <div className="absolute bottom-0 left-0 w-full h-1 bg-mainColor"></div>

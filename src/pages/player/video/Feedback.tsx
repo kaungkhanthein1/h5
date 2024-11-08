@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { showToast } from "../../../pages/profile/error/ErrorSlice";
 import { useDispatch } from "react-redux";
-
+import { config } from '../../../services/config';
 interface FeedbackComponentProps {
   onClose: () => void;
   movieId: string;
@@ -66,7 +66,7 @@ const FeedbackComponent: React.FC<FeedbackComponentProps> = ({ onClose, movieId,
           : null;
       if(authorization) {
 
-        const response = await fetch('https://cc3e497d.qdhgtch.com:2345/api/v1/user/feedback/submit', {
+        const response = await fetch(`${config.apiUrl}/user/feedback/submit`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

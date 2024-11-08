@@ -67,11 +67,11 @@ const Login: React.FC = () => {
             <div className="flex flex-col gap-[10px]">
               <Button
                 onClick={() => toggleVisibility(true, false)}
-                text={"Login"}
+                text={"登录"} //login
               />
               <Button
                 onClick={() => toggleVisibility(false, true)}
-                text={"Sign Up"}
+                text={"注册"} //sign up
               />
             </div>
             {/* <p className="text-[#888] text-[12px] font-[500] leading-[18px]">

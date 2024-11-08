@@ -1,11 +1,11 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
+import { config } from '../../../services/config';
 export const searchApi = createApi({
   reducerPath: "searchApi",
   tagTypes: ["SearchMovie", "Autocomplete"],
 
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://cc3e497d.qdhgtch.com:2345/api/v1",
+    baseUrl: config.apiUrl,
     prepareHeaders: (headers) => {
       // Get the auth token from localStorage
 

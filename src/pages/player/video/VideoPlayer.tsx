@@ -6,7 +6,7 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import floatingScreen from '../../../assets/floatingScreen.png';
 import axios from 'axios';
 import { VideoPlayerProps } from '../../../model/videoModel';
-
+import { config } from '../../../services/config';
 const VideoPlayer: React.FC<VideoPlayerProps> = ({
   videoUrl,
   onBack,
@@ -33,7 +33,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
     try {
       await axios.post(
-        'https://cc3e497d.qdhgtch.com:2345/api/v1/movie_play/report',
+        `${config.apiUrl}/movie_play/report`,
         {
           movie_id: movieDetail.id, // Assuming movie_id is movie name
           episode_id: selectedEpisode?.episode_id,

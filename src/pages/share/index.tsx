@@ -94,10 +94,13 @@ const Share: React.FC<ShareProps> = ({}) => {
         <Link to="/profile">
           <img src={back} className=" p-[20px]" alt="" />
         </Link>
-        <div className="rule py-[8px] px-[16px] mt-[5px]">
-          <span className=" text-white text-[14px] font-[500]">
+        <div
+          // onClick={() => navigate("")}
+          className="rule py-[8px] px-[16px] mt-[5px]"
+        >
+          <a target="_blink" href="https://cc3e497d.qdhgtch.com:1333/help" className=" text-white text-[14px] font-[500]">
             Point Rules
-          </span>
+          </a>
         </div>
       </div>
       {/* tab */}
@@ -207,7 +210,10 @@ const Share: React.FC<ShareProps> = ({}) => {
         </div>
         <p className=" line"></p>
         {/* invited */}
-        <div onClick={() => navigate("/share/member")} className=" flex flex-col items-center justify-center gap-[8px]">
+        <div
+          onClick={() => navigate("/share/member")}
+          className=" flex flex-col items-center justify-center gap-[8px]"
+        >
           <h1 className=" text-[18px] font-[600] text-white/70">
             {userData?.data?.invite_user_num}
           </h1>
@@ -228,7 +234,7 @@ const Share: React.FC<ShareProps> = ({}) => {
           className=" flex gap-[8px] link_button px-[14px] py-[12px]"
         >
           <img src={link} alt="" />
-          <h1 className=" text-white text-[16px] font-[400]">复制分享链接</h1>
+          <h1 className=" text-white text-[16px] font-[500]">复制分享链接</h1>
         </div>
         {/* down and save qr card */}
         <div
@@ -236,7 +242,7 @@ const Share: React.FC<ShareProps> = ({}) => {
           className=" flex gap-[8px] link_button px-[14px] py-[12px]"
         >
           <img src={linkD} alt="" />
-          <h1 className=" text-white text-[16px] font-[400]">复制分享链接</h1>
+          <h1 className=" text-white text-[16px] font-[500]">手动截图保存</h1>
         </div>{" "}
       </div>
     </div>

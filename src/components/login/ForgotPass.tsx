@@ -75,11 +75,12 @@ const ForgotPass: React.FC<ForgotPassProps> = ({ setForgot }) => {
           )}
           <div className="p-[20px]">
             {/* head */}
-            <div className="flex justify-between w-2/3">
+            <div className="grid grid-cols-3 justify-between ">
               <img onClick={() => setForgot(false)} src={back} alt="Back" />
               <h1 className="text-white text-[16px] font-[600] leading-[20px]">
-                Forgot Password
+              找回密码 
               </h1>
+              <div className=""></div>
             </div>
             <form
               onSubmit={handleSubmit}
@@ -104,7 +105,7 @@ const ForgotPass: React.FC<ForgotPassProps> = ({ setForgot }) => {
                       : "top-1/2 transform -translate-y-1/2"
                   }`}
                 >
-                  Enter Your Mail or Phone Number
+                 请输入手机号/邮箱
                 </label>
               </div>
 
@@ -128,7 +129,7 @@ const ForgotPass: React.FC<ForgotPassProps> = ({ setForgot }) => {
                       : "top-1/2 -translate-y-1/2"
                   }`}
                 >
-                  Please Enter Your Password
+                 输入新密码
                 </label>
                 <img
                   onClick={show}
@@ -160,7 +161,7 @@ const ForgotPass: React.FC<ForgotPassProps> = ({ setForgot }) => {
                       : "top-1/2 -translate-y-1/2"
                   }`}
                 >
-                  Please Confirm Your Password
+                 再次输入新密码
                 </label>
                 <img
                   onClick={show}
@@ -171,11 +172,10 @@ const ForgotPass: React.FC<ForgotPassProps> = ({ setForgot }) => {
               </div>
 
               {/* Notice */}
-              <div className="mt-[-20px] text-[12px] font-[500] leading-[20px] text-[#888]">
-                <p>8-25 characters</p>
+              <div className="mt-[-20px] text-[14px] font-[500] leading-[20px] text-[#888] ">
+                {/* <p>8-25 characters</p> */}
                 <p>
-                  Must be a combination of at least two of the following:
-                  letters, numbers.
+                输入8-25个字符，必须为下列至少两种的组合：字母、数字。
                 </p>
               </div>
 

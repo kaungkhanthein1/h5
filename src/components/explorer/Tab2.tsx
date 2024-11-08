@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setActiveWeek } from "../../pages/explorer/slice/ExploreSlice";
 import Loader from "../../pages/search/components/Loader";
-
+import { config } from '../../services/config';
 const Tab2 = () => {
   const [currentIndex, setCurrentIndex] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -17,7 +17,7 @@ const Tab2 = () => {
   const getMovieData = async (week: any) => {
     setIsLoading(true);
     const res = await fetch(
-      `https://cc3e497d.qdhgtch.com:2345/api/v1/movie/weekly?week_day=${week}`
+      `${config.apiUrl}/movie/weekly?week_day=${week}`
     );
     const data = await res.json();
     setMovieData(data?.data);

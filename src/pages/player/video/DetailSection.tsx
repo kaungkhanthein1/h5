@@ -16,7 +16,7 @@ import { setAuthModel } from "../../../features/login/ModelSlice";
 import FeedbackComponent from "./Feedback";
 import AdsSection from "./AdsSection";
 import { DetailSectionProps } from '../../../model/videoModel';
-
+import { config } from '../../../services/config';
 const DetailSection: React.FC<DetailSectionProps> = ({
   movieDetail,
   adsData,
@@ -73,7 +73,7 @@ const DetailSection: React.FC<DetailSectionProps> = ({
     try {
       // Toggle collection API call
       const response = await fetch(
-        "https://cc3e497d.qdhgtch.com:2345/api/v1/movie/collect/action",
+        `${config.apiUrl}/movie/collect/action`,
         {
           method: "POST",
           headers: {
@@ -128,7 +128,7 @@ const DetailSection: React.FC<DetailSectionProps> = ({
     try {
       // Fetch share content API call
       const response = await fetch(
-        "https://cc3e497d.qdhgtch.com:2345/api/v1/user/get_share",
+        `${config.apiUrl}/user/get_share`,
         {
           method: "GET",
           headers: {

@@ -111,7 +111,8 @@ const Opt: React.FC<OptProps> = ({ email, password, phone, setIsVisible }) => {
             dispatch(showToast({ message: error.data.msg, type: "error" }));
           } else if (error.data.msg) {
             dispatch(setOtpOpen(false));
-            navigate("/profile");
+            // navigate("/profile");
+            closeAllModals()
             dispatch(showToast({ message: error.data.msg, type: "error" }));
           }
           // console.log("pok ka ya error :", error);
@@ -178,10 +179,10 @@ const Opt: React.FC<OptProps> = ({ email, password, phone, setIsVisible }) => {
 
   return (
     <div className=" fixed top-0 w-screen h-screen  z-[9090900909] bg-[#161619] p-[20px]">
-      <div className="flex justify-between w-2/3">
+      <div className=" grid grid-cols-3">
         <img src={back} alt="Back" onClick={handleBack} />
         <h1 className="text-white text-[16px] font-semibold leading-[20px]">
-          OTP Verification
+          验证码
         </h1>
       </div>
 
@@ -201,8 +202,9 @@ const Opt: React.FC<OptProps> = ({ email, password, phone, setIsVisible }) => {
         </div>
 
         <p className="text-[#888] text-[10px] font-light leading-[15px] p-3 text-center">
-          Verification code sent to <span className=" text-white">{email}</span>  <span className="text-white">{phone}</span> Please
-          check your messages and be sure to check your spam folder
+          验证码已发送至 <span className=" text-white">{email}</span>{" "}
+          <span className="text-white">{phone}</span> Please
+          检查您的邮件并确保检查您的垃圾邮件文件夹{" "}
         </p>
       </div>
 

@@ -104,7 +104,7 @@ const SignEmail: React.FC<SignEmailProps> = ({ handleBack2 }) => {
                     onClick={handleBack2}
                   />
                   <h2 className="text-[18px] font-[600] leading-[20px] text-white">
-                    Sign up with E-mail
+                  使用邮箱注册
                   </h2>
                   <img
                     className="close_btn p-3 cursor-pointer"
@@ -137,7 +137,7 @@ const SignEmail: React.FC<SignEmailProps> = ({ handleBack2 }) => {
                           : "top-1/2 transform -translate-y-1/2"
                       }`}
                     >
-                      Please Enter Your E-mail
+                    请输入邮箱地址
                     </label>
                   </div>
 
@@ -160,7 +160,7 @@ const SignEmail: React.FC<SignEmailProps> = ({ handleBack2 }) => {
                           : "top-1/2 -translate-y-1/2"
                       }`}
                     >
-                      Set Your Passwords
+                     设置密码
                     </label>
                     <img
                       onClick={show}
@@ -170,12 +170,11 @@ const SignEmail: React.FC<SignEmailProps> = ({ handleBack2 }) => {
                     />
                   </div>
                   {/* decs */}
-                  <div className={` mt-[-20px] text-[12px] font-[500] leading-[20px] text-[#888] `}>
-                    <p>8-25 characters</p>
+                  <div className={` mt-[-20px] text-[14px] font-[500] leading-[20px] text-[#888] `}>
+                    {/* <p>8-25 characters</p> */}
                     <p>
-                      Must be a combination of at least two of the following:
-                    </p>
-                    <p>letters, numbers.</p>
+                    输入8-25个字符，必须为下列至少两种的组合：字母、数字。                    </p>
+                    {/* <p>letters, numbers.</p> */}
                   </div>
 
                   <button

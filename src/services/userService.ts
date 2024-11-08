@@ -5,16 +5,8 @@ import {
   decryptWithAes,
 } from "./newEncryption";
 import { useDispatch } from "react-redux";
+import { config } from '../services/config'
 
-const API_URL = "https://cc3e497d.qdhgtch.com:2345/api/";
-const PUBLIC_KEY = `-----BEGIN RSA PUBLIC KEY-----
-  MIIBCgKCAQEA02F/kPg5A2NX4qZ5JSns+bjhVMCC6JbTiTKpbgNgiXU+Kkorg6Dj
-  76gS68gB8llhbUKCXjIdygnHPrxVHWfzmzisq9P9awmXBkCk74Skglx2LKHa/mNz
-  9ivg6YzQ5pQFUEWS0DfomGBXVtqvBlOXMCRxp69oWaMsnfjnBV+0J7vHbXzUIkqB
-  LdXSNfM9Ag5qdRDrJC3CqB65EJ3ARWVzZTTcXSdMW9i3qzEZPawPNPe5yPYbMZIo
-  XLcrqvEZnRK1oak67/ihf7iwPJqdc+68ZYEmmdqwunOvRdjq89fQMVelmqcRD9RY
-  e08v+xDxG9Co9z7hcXGTsUquMxkh29uNawIDAQAB
-  -----END RSA PUBLIC KEY-----`;
 // GET request
 
 /**
@@ -23,7 +15,7 @@ const PUBLIC_KEY = `-----BEGIN RSA PUBLIC KEY-----
  */
 export const getCaptcha = async () => {
   try {
-    const response = await fetch(`${API_URL}v1/user/get_captcha`, {
+    const response = await fetch(`${config.apiUrl}v1/user/get_captcha`, {
       method: "GET",
     });
 
@@ -59,7 +51,7 @@ export const login = async (
 ) => {
   try {
     // Step 1: Verify captcha
-    const captchaResult = await fetch(`${API_URL}v1/user/check_captcha`, {
+    const captchaResult = await fetch(`${config.apiUrl}v1/user/check_captcha`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -82,13 +74,13 @@ export const login = async (
     };
 
     // Step 2: Encrypt the data
-    const encryptedData = encryptWithRsa(JSON.stringify(formData), PUBLIC_KEY);
+    const encryptedData = encryptWithRsa(JSON.stringify(formData), config.publicKey);
 
     // Step 3: Generate signature
     const signature = generateSignature(encryptedData);
 
     // Step 4: Make the login API call
-    const loginResponse = await fetch(`${API_URL}v1/user/login`, {
+    const loginResponse = await fetch(`${config.apiUrl}v1/user/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -120,7 +112,7 @@ export const getOtp = async (
 ): Promise<void> => {
   try {
     // Step 1: Verify Captcha
-    const captchaResult = await axios.post(`${API_URL}v1/user/check_captcha`, {
+    const captchaResult = await axios.post(`${config.apiUrl}v1/user/check_captcha`, {
       code: captchaCode,
       key: keyStatus,
     });
@@ -140,13 +132,13 @@ export const getOtp = async (
     };
 
     // Step 3: Encrypt the data
-    const encryptedData = encryptWithRsa(JSON.stringify(formData), PUBLIC_KEY);
+    const encryptedData = encryptWithRsa(JSON.stringify(formData), config.publicKey);
 
     // Step 4: Generate signature for the encrypted data
     const signature = generateSignature(encryptedData);
 
     // Step 5: Make the GET request with encrypted data and signature as query parameters
-    const otpResponse = await axios.get(`${API_URL}v1/user/get_code`, {
+    const otpResponse = await axios.get(`${config.apiUrl}v1/user/get_code`, {
       params: {
         pack: encryptedData,
         signature: signature,
@@ -161,7 +153,7 @@ export const getOtp = async (
 export const getSocialLoginUrl = async (type: string, action: string) => {
   try {
     const response = await axios.get(
-      "https://cc3e497d.qdhgtch.com:2345/api/v1/user/get_social_login_url",
+      `${config.apiUrl}/user/get_social_login_url`,
       {
         params: {
           type: type,
@@ -190,7 +182,7 @@ export const handleSocialLoginCallback = async (
 ) => {
   try {
     const response = await axios.post(
-      "https://cc3e497d.qdhgtch.com:2345/api/v1/user/social_login_callback",
+      `${config.apiUrl}/user/social_login_callback`,
       {
         action: action, // e.g., "login"
         type: type, // e.g., "qq", "wx", "sina"
@@ -226,7 +218,7 @@ export const handleSocialLoginCredentials = async (
   social_id: string
 ) => {
   try {
-    const captchaResult = await axios.post(`${API_URL}v1/user/check_captcha`, {
+    const captchaResult = await axios.post(`${config.apiUrl}v1/user/check_captcha`, {
       code: captchaCode,
       key: keyStatus,
     });
@@ -247,12 +239,12 @@ export const handleSocialLoginCredentials = async (
       timestamp: new Date().getTime(),
     };
 
-    const encryptedData = encryptWithRsa(JSON.stringify(formData), PUBLIC_KEY);
+    const encryptedData = encryptWithRsa(JSON.stringify(formData), config.publicKey);
 
     const signature = generateSignature(encryptedData);
 
     const response = await axios.post(
-      "https://cc3e497d.qdhgtch.com:2345/api/v1/user/bind_social_with_credentials",
+      `${config.apiUrl}/user/bind_social_with_credentials`,
       {
         pack: encryptedData,
         signature: signature,
@@ -297,7 +289,7 @@ export const handleSocialSignUpCredentials = async (
   social_id: string
 ) => {
   try {
-    const captchaResult = await axios.post(`${API_URL}v1/user/check_captcha`, {
+    const captchaResult = await axios.post(`${config.apiUrl}v1/user/check_captcha`, {
       code: captchaCode,
       key: keyStatus,
     });
@@ -318,11 +310,11 @@ export const handleSocialSignUpCredentials = async (
       timestamp: new Date().getTime(),
     };
 
-    const encryptedData = encryptWithRsa(JSON.stringify(formData), PUBLIC_KEY);
+    const encryptedData = encryptWithRsa(JSON.stringify(formData), config.publicKey);
     const signature = generateSignature(encryptedData);
 
     const response = await axios.post(
-      "https://cc3e497d.qdhgtch.com:2345/api/v1/user/register/social",
+      `${config.apiUrl}/user/register/social`,
       {
         pack: encryptedData,
         signature,

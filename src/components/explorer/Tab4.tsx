@@ -8,7 +8,7 @@ import RatingCard from "./RatingCard";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setActiveRank } from "../../pages/explorer/slice/ExploreSlice";
-
+import { config } from '../../services/config';
 // Define the type for the movie data
 interface Movie {
   cover: string;
@@ -33,7 +33,7 @@ const Tab4 = () => {
 
   const getRankingById = async (id: any) => {
     const { data } = await axios(
-      `https://cc3e497d.qdhgtch.com:2345/api/v1//movie/ranking/data?id=${id}`
+      `${config.apiUrl}/movie/ranking/data?id=${id}`
     );
     setRankingDataById(data?.data);
     // console.log(data);

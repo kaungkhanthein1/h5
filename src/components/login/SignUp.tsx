@@ -101,7 +101,7 @@ const SignUp: React.FC<SignUpProps> = ({ handleBack }) => {
                   onClick={handleBack}
                 />
                 <h2 className="text-[18px] font-[600] leading-[20px] text-white">
-                  Sign Up
+                注册
                 </h2>
                 <img
                   className="close_btn p-3 cursor-pointer"
@@ -113,20 +113,20 @@ const SignUp: React.FC<SignUpProps> = ({ handleBack }) => {
               {/* decs */}
               <div className=" w-full">
                 <h1 className=" text-white text-[14px] font-[500]">
-                  Please select registration{" "}
+                选择注册方式{" "}
                 </h1>
                 <p className=" text-white/60 text-[14px] font-[400]">
-                  Overseas users please select your email address to register
+                海外用户请选择使用邮箱注册
                 </p>
               </div>
               <div className="flex flex-col gap-[13px]">
                 <Button
                   onClick={handleShowSignUpEmail}
-                  text={"Sign up with E-mail "}
+                  text={"使用邮箱注册 "}
                 />
                 <Button
                   onClick={handleShowSignUpPhone}
-                  text={"Sign up with Phone number"}
+                  text={"使用电话号码注册"}
                 />
               </div>
             </div>

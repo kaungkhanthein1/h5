@@ -1,9 +1,9 @@
 // api.ts
 import axios from 'axios';
-
+import { config } from '../services/config';
 // Create an instance of Axios
 const api = axios.create({
-  baseURL: 'https://cc3e497d.qdhgtch.com:2345/api/v1', // Base URL for your API
+  baseURL: config.apiUrl, // Base URL for your API
   headers: {
     'Content-Type': 'application/json',
   },

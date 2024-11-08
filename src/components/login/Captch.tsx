@@ -116,7 +116,7 @@ const Captch: React.FC<{
         <div className="bg-[#1C1B20] w-[320px] h-[170px] p-[20px]">
           <div className="flex justify-between items-center pb-[16px]">
             <h1 className="text-white text-[16px] font-[400] text-center">
-              Verify
+            核实
             </h1>
             <img
               onClick={handleClose}
@@ -128,7 +128,7 @@ const Captch: React.FC<{
           <div className="flex justify-center items-center gap-[4px]">
             <input
               type="text"
-              placeholder="Enter Code"
+              placeholder="输入代码"
               className="bg-[#333237] rounded-[4px] text-white px-[4px] py-[10px] focus:outline-none h-[40px]"
               value={captchaCode}
               onChange={(e) => setCaptchaCode(e.target.value)}
@@ -148,7 +148,7 @@ const Captch: React.FC<{
             disabled={isButtonDisabled}
             onClick={handleFunction}
           >
-            Sure
+            确定
           </button>
           {error && (
             <div className="text-red-500 mt-2 text-center">{error}</div>

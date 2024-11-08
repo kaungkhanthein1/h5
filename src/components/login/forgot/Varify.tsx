@@ -101,9 +101,7 @@ const Verify: React.FC<OptProps> = ({
     try {
       await resendOtpApi(); // Triggers the resend OTP API call
       setTimer(59); // Resets the timer to 59 seconds
-      dispatch(
-        showToast({ message: "验证码已成功重新发送", type: "success" })
-      );
+      dispatch(showToast({ message: "验证码已成功重新发送", type: "success" }));
     } catch (error) {
       dispatch(showToast({ message: "验证码重新发送失败", type: "error" }));
     }
@@ -117,10 +115,10 @@ const Verify: React.FC<OptProps> = ({
 
   return (
     <div className="w-screen h-screen absolute z-[90909099090] bg-[#161619] p-[20px]">
-      <div className="flex justify-between w-2/3">
+      <div className="grid grid-cols-3 w-full justify-between w-2/3">
         <img src={back} alt="Back" onClick={handleBack} />
         <h1 className="text-white text-[16px] font-semibold leading-[20px]">
-          OTP Verification
+          输入验证码
         </h1>
       </div>
 
@@ -140,10 +138,7 @@ const Verify: React.FC<OptProps> = ({
         </div>
 
         <p className="text-[#888] text-[10px] font-light leading-[15px] p-3 text-center">
-          Verification code sent ,{""}
-          {/* <span className="text-white">DevelopX10@gmail.com</span> /{" "} */}
-          {/* <span className="text-white">+868880818.</span> */}
-          Please check your messages and spam folder.
+          验证码已发送。请检查您的邮件，如果没收到，请务必再次检查您的垃圾邮件
         </p>
       </div>
 

@@ -95,6 +95,14 @@ const App: React.FC = () => {
 
     return () => clearTimeout(timer);
   }, [dispatch]);
+
+  useEffect(() => {
+    if (openAuthModel || openLoginModel || openSignupModel) {
+      document.body.style.overflow = "hidden"; // Disable scrolling
+    } else {
+      document.body.style.overflow = ""; // Restore scrolling
+    }
+  }, [openAuthModel, openLoginModel, openSignupModel]);
   // console.log(panding);
 
   // useEffect(() => {

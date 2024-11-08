@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux";
 import { setAuthModel } from "../../../features/login/ModelSlice";
 import {CommentProps, Comment } from '../../../model/commentModel';
 import { showToast } from "../../../pages/profile/error/ErrorSlice";
+import { config } from '../../../services/config';
 
 const CommentComponent: React.FC<CommentProps> = ({ movieId, lowerDivHeight }) => {
   const [comments, setComments] = useState<Comment[]>([]);
@@ -42,7 +43,8 @@ const CommentComponent: React.FC<CommentProps> = ({ movieId, lowerDivHeight }) =
   const fetchComments = async () => {
     try {
       const response = await fetch(
-        `https://cc3e497d.qdhgtch.com:2345/api/v1/movie/comments/index?movie_id=${movieId}&page=${page}&pageSize=10`
+        // `${config.apiUrl}/movie/comments/index?movie_id=${movieId}&page=${page}&pageSize=10`
+        'http://localhost:3000/comments'
       );
       const data = await response.json();
       if (data.data.list.length === 0) {
@@ -75,7 +77,7 @@ const CommentComponent: React.FC<CommentProps> = ({ movieId, lowerDivHeight }) =
     if (authorization) {
       try {
         const response = await fetch(
-          "https://cc3e497d.qdhgtch.com:2345/api/v1/movie/comments/like",
+          `${config.apiUrl}/movie/comments/like`,
           {
             method: "POST",
             headers: {
@@ -106,7 +108,7 @@ const CommentComponent: React.FC<CommentProps> = ({ movieId, lowerDivHeight }) =
   const loadReplies = async (commentId: number) => {
     try {
       const response = await fetch(
-        "https://cc3e497d.qdhgtch.com:2345/api/v1/movie/comments/replies",
+        `${config.apiUrl}/movie/comments/replies`,
         {
           method: "POST",
           headers: {
@@ -140,7 +142,7 @@ const CommentComponent: React.FC<CommentProps> = ({ movieId, lowerDivHeight }) =
     if (authorization) {
       try {
         const response = await fetch(
-          "https://cc3e497d.qdhgtch.com:2345/api/v1/movie/comments/delete",
+          `${config.apiUrl}/movie/comments/delete`,
           {
             method: "POST",
             headers: {
@@ -176,7 +178,7 @@ const CommentComponent: React.FC<CommentProps> = ({ movieId, lowerDivHeight }) =
     if (authorization) {
       try {
         const response = await fetch(
-          "https://cc3e497d.qdhgtch.com:2345/api/v1/movie/comments/create",
+          `${config.apiUrl}/movie/comments/create`,
           {
             method: "POST",
             headers: {
@@ -226,17 +228,17 @@ const CommentComponent: React.FC<CommentProps> = ({ movieId, lowerDivHeight }) =
   }, [replyingTo]);
 
   return (
-    <div className="comment-section flex flex-col rounded-md" style={{height: lowerDivHeight}}>
+    <div className="comment-section flex flex-col rounded-md p-3" style={{height: lowerDivHeight}}>
       {
         comments && comments.length > 0 ? 
-        <InfiniteScroll
-        dataLength={comments.length}
-        next={() => setPage((prevPage) => prevPage + 1)}
-        hasMore={hasMore}
-        loader={<h4 className="text-white">Loading...</h4>}
-        style={{height: lowerDivHeight}}
-        // endMessage={<p className="text-white">No more comments</p>}
-      >
+      //   <InfiniteScroll
+      //   dataLength={comments.length}
+      //   next={() => setPage((prevPage) => prevPage + 1)}
+      //   hasMore={hasMore}
+      //   loader={<h4 className="text-white">Loading...</h4>}
+      //   style={{height: lowerDivHeight}}
+      // >
+      <>
         {comments.map((comment) => (
           <div
             key={comment.id}
@@ -264,6 +266,7 @@ const CommentComponent: React.FC<CommentProps> = ({ movieId, lowerDivHeight }) =
                 className="h-6 w-auto ml-2"
               />
             </div>
+            <div style={{marginLeft: '48px', marginTop: '-16px'}}>
             <div className="comment-text text-gray-300 mb-2">{comment.content}</div>
             <div className="comment-actions flex items-center justify-between mt-2">
               <span className="time text-gray-500 text-sm">
@@ -284,7 +287,7 @@ const CommentComponent: React.FC<CommentProps> = ({ movieId, lowerDivHeight }) =
                 </button>
               </div> */}
             </div>
-
+            </div>
             {/* Replies */}
             {comment.replies && comment.replies.length > 0 && (
               <div className="reply-section mt-4 pl-10">
@@ -327,8 +330,10 @@ const CommentComponent: React.FC<CommentProps> = ({ movieId, lowerDivHeight }) =
             )}
           </div>
         ))}
-      </InfiniteScroll> : 
-      <div className="flex justify-center items-center text-center" style={{height: lowerDivHeight}}>
+      {/* </InfiniteScroll>  */}
+      </>
+      : 
+      <div className="flex justify-center items-center text-center comment-btn" style={{height: lowerDivHeight}}>
       <div>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -557,7 +562,7 @@ const CommentComponent: React.FC<CommentProps> = ({ movieId, lowerDivHeight }) =
           </button>
         )}
       </div> : 
-      <div className="create-comment mt-6 flex items-center justify-center rounded-lg w-full">
+      <div className="create-comment mt-6 flex items-center justify-center rounded-lg w-full comment-btn">
         <button onClick={()=>dispatch(setAuthModel(true))} className="bg-red-600 text-white w-full px-4 py-3 mx-2 rounded-md">登录后发布评论</button>
       </div>
       }

@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { config } from '../../../services/config';
 interface ChangeAvatarResponse {
   data: {
     url: string;
@@ -8,7 +9,7 @@ export const profileApi = createApi({
   reducerPath: "profileApi",
 
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://cc3e497d.qdhgtch.com:2345/api/v1",
+    baseUrl: config.apiUrl,
     prepareHeaders: (headers) => {
       const settings = JSON.parse(
         localStorage.getItem("movieAppSettings") || "{}"
