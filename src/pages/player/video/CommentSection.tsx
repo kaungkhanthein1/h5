@@ -43,8 +43,8 @@ const CommentComponent: React.FC<CommentProps> = ({ movieId, lowerDivHeight }) =
   const fetchComments = async () => {
     try {
       const response = await fetch(
-        // `${config.apiUrl}/movie/comments/index?movie_id=${movieId}&page=${page}&pageSize=10`
-        'http://localhost:3000/comments'
+        `${config.apiUrl}/movie/comments/index?movie_id=${movieId}&page=${page}&pageSize=10`
+        // 'http://localhost:3000/comments'
       );
       const data = await response.json();
       if (data.data.list.length === 0) {
