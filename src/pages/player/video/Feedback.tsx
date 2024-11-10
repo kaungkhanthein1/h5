@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import React, { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { showToast } from "../../../pages/profile/error/ErrorSlice";
 import { useDispatch } from "react-redux";
-import { config } from '../../../services/config';
+
 interface FeedbackComponentProps {
   onClose: () => void;
   movieId: string;
@@ -13,37 +13,43 @@ interface FeedbackComponentProps {
   height: any;
 }
 
-const FeedbackComponent: React.FC<FeedbackComponentProps> = ({ onClose, movieId, onActionComplete, isLoading, setIsLoading, height
- }) => {
+const FeedbackComponent: React.FC<FeedbackComponentProps> = ({
+  onClose,
+  movieId,
+  onActionComplete,
+  isLoading,
+  setIsLoading,
+  height,
+}) => {
   const [selectedIssue, setSelectedIssue] = useState<number>(0);
-  const [description, setDescription] = useState<string>('');
+  const [description, setDescription] = useState<string>("");
   const dispatch = useDispatch();
 
   const issues = [
     {
-      "name": "播放问题",
-      "value": 1000
+      name: "播放问题",
+      value: 1000,
     },
     {
-      "name": "集数不全",
-      "value": 1001
+      name: "集数不全",
+      value: 1001,
     },
     {
-      "name": "资源缺失",
-      "value": 1002
+      name: "资源缺失",
+      value: 1002,
     },
     {
-      "name": "信息有误",
-      "value": 1003
+      name: "信息有误",
+      value: 1003,
     },
     {
-      "name": "积分兑换",
-      "value": 1004
+      name: "积分兑换",
+      value: 1004,
     },
     {
-      "name": "BUG反馈",
-      "value": 1005
-    }
+      name: "BUG反馈",
+      value: 1005,
+    },
   ];
 
   const handleIssueSelect = (issue: number) => {
@@ -64,31 +70,35 @@ const FeedbackComponent: React.FC<FeedbackComponentProps> = ({ onClose, movieId,
         loginInfo && loginInfo.data && loginInfo.data.access_token
           ? `${loginInfo.data.token_type} ${loginInfo.data.access_token}`
           : null;
-      if(authorization) {
+      if (authorization) {
+        const response = await fetch(
+          `${process.env.REACT_APP_API_URL}/user/feedback/submit`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: authorization,
+            },
+            body: JSON.stringify({
+              extra: movieId,
+              type_id: selectedIssue,
+              content: description,
+            }),
+          }
+        );
 
-        const response = await fetch(`${config.apiUrl}/user/feedback/submit`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': authorization
-          },
-          body: JSON.stringify({
-            extra: movieId,
-            type_id: selectedIssue,
-            content: description,
-          }),
-        });
-
-      if (response.ok) {
-        dispatch(showToast({ message: "反馈提交成功", type: "success" }));
-        onClose();
-      } else {
-        dispatch(showToast({ message: "提交失败，请稍后重试", type: "error" }));
-      }
+        if (response.ok) {
+          dispatch(showToast({ message: "反馈提交成功", type: "success" }));
+          onClose();
+        } else {
+          dispatch(
+            showToast({ message: "提交失败，请稍后重试", type: "error" })
+          );
+        }
       }
     } catch (error) {
       dispatch(showToast({ message: "提交失败，请稍后重试", type: "error" }));
-      alert('提交失败，请稍后重试');
+      alert("提交失败，请稍后重试");
     } finally {
       setIsLoading(false);
     }
@@ -96,8 +106,10 @@ const FeedbackComponent: React.FC<FeedbackComponentProps> = ({ onClose, movieId,
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bottom-0">
-      <div className="bg-background backdrop-blur-md w-full max-w-md rounded-xl p-4 text-white"
-       style={{height: height}}>
+      <div
+        className="bg-background backdrop-blur-md w-full max-w-md rounded-xl p-4 text-white"
+        style={{ height: height }}
+      >
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-bold">反馈求片</h2>
           <button onClick={onClose} className="text-white">
@@ -113,8 +125,8 @@ const FeedbackComponent: React.FC<FeedbackComponentProps> = ({ onClose, movieId,
                 onClick={() => handleIssueSelect(issue.value)}
                 className={`px-4 py-2 rounded-md w-full text-center ${
                   selectedIssue === issue.value
-                    ? 'bg-orange-500 text-white'
-                    : 'bg-gray-800 text-gray-300'
+                    ? "bg-orange-500 text-white"
+                    : "bg-gray-800 text-gray-300"
                 }`}
               >
                 {issue.name}
@@ -139,7 +151,7 @@ const FeedbackComponent: React.FC<FeedbackComponentProps> = ({ onClose, movieId,
           className="w-full bg-orange-500 text-white py-2 rounded-md hover:bg-orange-600 focus:outline-none"
           disabled={isLoading}
         >
-          {isLoading ? '提交中...' : '提 交'}
+          {isLoading ? "提交中..." : "提 交"}
         </button>
       </div>
     </div>

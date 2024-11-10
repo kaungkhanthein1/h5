@@ -20,7 +20,8 @@ module.exports = {
         episodeSelected: 'rgba(255, 255, 255, 0.04)',
         mainColor: 'rgba(245, 65, 0, 1)',
         unselectedColor: 'rgba(255, 255, 255, 0.8)',
-        commentInput: 'rgba(32, 32, 34, 0.9)'
+        commentInput: 'rgba(32, 32, 34, 0.9)',
+        commentIcon: 'rgba(255, 255, 255, 0.6)',
       },
       fontSize: {
         'xs': '0.75rem',   // Extra small text

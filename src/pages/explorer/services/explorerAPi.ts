@@ -1,9 +1,9 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { config } from '../../../services/config';
+
 export const explorerAPi = createApi({
   reducerPath: "explorerAPi",
   baseQuery: fetchBaseQuery({
-    baseUrl: config.apiUrl,
+    baseUrl: process.env.REACT_APP_API_URL,
     prepareHeaders: (headers) => {
       const settings = JSON.parse(
         localStorage.getItem("movieAppSettings") || "{}"

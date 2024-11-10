@@ -4,8 +4,6 @@ import {
   generateSignature,
   decryptWithAes,
 } from "./newEncryption";
-import { useDispatch } from "react-redux";
-import { config } from '../services/config'
 
 // GET request
 
@@ -15,9 +13,12 @@ import { config } from '../services/config'
  */
 export const getCaptcha = async () => {
   try {
-    const response = await fetch(`${config.apiUrl}v1/user/get_captcha`, {
-      method: "GET",
-    });
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL}v1/user/get_captcha`,
+      {
+        method: "GET",
+      }
+    );
 
     const captchaData = await response.json();
 
@@ -51,14 +52,17 @@ export const login = async (
 ) => {
   try {
     // Step 1: Verify captcha
-    const captchaResult = await fetch(`${config.apiUrl}v1/user/check_captcha`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        code: captchaCode,
-        key: keyStatus,
-      }),
-    });
+    const captchaResult = await fetch(
+      `${process.env.REACT_APP_API_URL}v1/user/check_captcha`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          code: captchaCode,
+          key: keyStatus,
+        }),
+      }
+    );
 
     const captchaResponse = await captchaResult.json();
 
@@ -74,20 +78,33 @@ export const login = async (
     };
 
     // Step 2: Encrypt the data
-    const encryptedData = encryptWithRsa(JSON.stringify(formData), config.publicKey);
+    if (!process.env.REACT_APP_PUBLIC_KEY) {
+      throw new Error("Public key is not defined");
+    }
+    if (!process.env.REACT_APP_PUBLIC_KEY) {
+      throw new Error("Public key is not defined");
+    }
+    const publicKey = process.env.REACT_APP_PUBLIC_KEY;
+    if (!publicKey) {
+      throw new Error("Public key is not defined");
+    }
+    const encryptedData = encryptWithRsa(JSON.stringify(formData), publicKey);
 
     // Step 3: Generate signature
     const signature = generateSignature(encryptedData);
 
     // Step 4: Make the login API call
-    const loginResponse = await fetch(`${config.apiUrl}v1/user/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        pack: encryptedData,
-        signature,
-      }),
-    });
+    const loginResponse = await fetch(
+      `${process.env.REACT_APP_API_URL}v1/user/login`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          pack: encryptedData,
+          signature,
+        }),
+      }
+    );
 
     const dataIsEncrypt = loginResponse.headers.get("x-app-data-encrypt");
     const resultText = await loginResponse.text();
@@ -112,10 +129,13 @@ export const getOtp = async (
 ): Promise<void> => {
   try {
     // Step 1: Verify Captcha
-    const captchaResult = await axios.post(`${config.apiUrl}v1/user/check_captcha`, {
-      code: captchaCode,
-      key: keyStatus,
-    });
+    const captchaResult = await axios.post(
+      `${process.env.REACT_APP_API_URL}v1/user/check_captcha`,
+      {
+        code: captchaCode,
+        key: keyStatus,
+      }
+    );
 
     const captchaResponse = captchaResult.data;
 
@@ -132,18 +152,25 @@ export const getOtp = async (
     };
 
     // Step 3: Encrypt the data
-    const encryptedData = encryptWithRsa(JSON.stringify(formData), config.publicKey);
+    const publicKey = process.env.REACT_APP_PUBLIC_KEY;
+    if (!publicKey) {
+      throw new Error("Public key is not defined");
+    }
+    const encryptedData = encryptWithRsa(JSON.stringify(formData), publicKey);
 
     // Step 4: Generate signature for the encrypted data
     const signature = generateSignature(encryptedData);
 
     // Step 5: Make the GET request with encrypted data and signature as query parameters
-    const otpResponse = await axios.get(`${config.apiUrl}v1/user/get_code`, {
-      params: {
-        pack: encryptedData,
-        signature: signature,
-      },
-    });
+    const otpResponse = await axios.get(
+      `${process.env.REACT_APP_API_URL}v1/user/get_code`,
+      {
+        params: {
+          pack: encryptedData,
+          signature: signature,
+        },
+      }
+    );
   } catch (error: any) {
     // console.error("Error requesting OTP:", error);
     return error.response;
@@ -153,7 +180,7 @@ export const getOtp = async (
 export const getSocialLoginUrl = async (type: string, action: string) => {
   try {
     const response = await axios.get(
-      `${config.apiUrl}/user/get_social_login_url`,
+      `${process.env.REACT_APP_API_URL}/user/get_social_login_url`,
       {
         params: {
           type: type,
@@ -182,7 +209,7 @@ export const handleSocialLoginCallback = async (
 ) => {
   try {
     const response = await axios.post(
-      `${config.apiUrl}/user/social_login_callback`,
+      `${process.env.REACT_APP_API_URL}/user/social_login_callback`,
       {
         action: action, // e.g., "login"
         type: type, // e.g., "qq", "wx", "sina"
@@ -218,10 +245,13 @@ export const handleSocialLoginCredentials = async (
   social_id: string
 ) => {
   try {
-    const captchaResult = await axios.post(`${config.apiUrl}v1/user/check_captcha`, {
-      code: captchaCode,
-      key: keyStatus,
-    });
+    const captchaResult = await axios.post(
+      `${process.env.REACT_APP_API_URL}v1/user/check_captcha`,
+      {
+        code: captchaCode,
+        key: keyStatus,
+      }
+    );
 
     const captchaResponse = captchaResult.data;
 
@@ -239,12 +269,16 @@ export const handleSocialLoginCredentials = async (
       timestamp: new Date().getTime(),
     };
 
-    const encryptedData = encryptWithRsa(JSON.stringify(formData), config.publicKey);
+    const publicKey = process.env.REACT_APP_PUBLIC_KEY;
+    if (!publicKey) {
+      throw new Error("Public key is not defined");
+    }
+    const encryptedData = encryptWithRsa(JSON.stringify(formData), publicKey);
 
     const signature = generateSignature(encryptedData);
 
     const response = await axios.post(
-      `${config.apiUrl}/user/bind_social_with_credentials`,
+      `${process.env.REACT_APP_API_URL}/user/bind_social_with_credentials`,
       {
         pack: encryptedData,
         signature: signature,
@@ -255,27 +289,6 @@ export const handleSocialLoginCredentials = async (
         },
       }
     );
-
-    // const response = await fetch(
-    //   "https://cc3e497d.qdhgtch.com:2345/api/v1/user/bind_social_with_credentials",
-    //   {
-    //     method: "POST",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify({
-    //       pack: encryptedData,
-    //       signature,
-    //     }),
-    //   }
-    // );
-
-    // const dataIsEncrypt = response.headers.get("x-app-data-encrypt");
-    // const resultText = await response.text();
-
-    // if (!dataIsEncrypt) {
-    //   return JSON.parse(resultText);
-    // } else {
-    //   return decryptWithAes(resultText);
-    // }
   } catch (error) {}
 };
 
@@ -289,10 +302,13 @@ export const handleSocialSignUpCredentials = async (
   social_id: string
 ) => {
   try {
-    const captchaResult = await axios.post(`${config.apiUrl}v1/user/check_captcha`, {
-      code: captchaCode,
-      key: keyStatus,
-    });
+    const captchaResult = await axios.post(
+      `${process.env.REACT_APP_API_URL}v1/user/check_captcha`,
+      {
+        code: captchaCode,
+        key: keyStatus,
+      }
+    );
 
     const captchaResponse = captchaResult.data;
 
@@ -310,11 +326,15 @@ export const handleSocialSignUpCredentials = async (
       timestamp: new Date().getTime(),
     };
 
-    const encryptedData = encryptWithRsa(JSON.stringify(formData), config.publicKey);
+    const publicKey = process.env.REACT_APP_PUBLIC_KEY;
+    if (!publicKey) {
+      throw new Error("Public key is not defined");
+    }
+    const encryptedData = encryptWithRsa(JSON.stringify(formData), publicKey);
     const signature = generateSignature(encryptedData);
 
     const response = await axios.post(
-      `${config.apiUrl}/user/register/social`,
+      `${process.env.REACT_APP_API_URL}/user/register/social`,
       {
         pack: encryptedData,
         signature,
@@ -329,5 +349,3 @@ export const handleSocialSignUpCredentials = async (
     console.error("Error during social sign up:", error);
   }
 };
-
-

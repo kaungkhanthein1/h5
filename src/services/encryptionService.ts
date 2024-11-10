@@ -1,26 +1,20 @@
 import CryptoJS from "crypto-js";
 import forge from "node-forge";
 
-const SIGN_KEY = "635a580fcb5dc6e60caa39c31a7bde48";
-const PUBLIC_KEY = `-----BEGIN RSA PUBLIC KEY-----
-MIIBCgKCAQEA02F/kPg5A2NX4qZ5JSns+bjhVMCC6JbTiTKpbgNgiXU+Kkorg6Dj
-76gS68gB8llhbUKCXjIdygnHPrxVHWfzmzisq9P9awmXBkCk74Skglx2LKHa/mNz
-9ivg6YzQ5pQFUEWS0DfomGBXVtqvBlOXMCRxp69oWaMsnfjnBV+0J7vHbXzUIkqB
-LdXSNfM9Ag5qdRDrJC3CqB65EJ3ARWVzZTTcXSdMW9i3qzEZPawPNPe5yPYbMZIo
-XLcrqvEZnRK1oak67/ihf7iwPJqdc+68ZYEmmdqwunOvRdjq89fQMVelmqcRD9RY
-e08v+xDxG9Co9z7hcXGTsUquMxkh29uNawIDAQAB
------END RSA PUBLIC KEY-----`;
-
-const AES_KEY = "e6d5de5fcc51f53d";
-const AES_IV = "2f13eef7dfc6c613";
-
 // Function to generate signature (MD5 HMAC)
 export function generateSignature(str: string): string {
-  return CryptoJS.HmacMD5(str, SIGN_KEY).toString();
+  const signKey = process.env.REACT_APP_SIGN_KEY;
+  if (!signKey) {
+    throw new Error("REACT_APP_SIGN_KEY is not defined");
+  }
+  return CryptoJS.HmacMD5(str, signKey).toString();
 }
 
 // RSA encryption using a public key
-export function encryptWithRsa(data: string, key: string = PUBLIC_KEY): string {
+export function encryptWithRsa(
+  data: string,
+  key: string = process.env.REACT_APP_PUBLIC_KEY || ""
+): string {
   const publicKey = forge.pki.publicKeyFromPem(key);
   const encrypted = publicKey.encrypt(forge.util.encodeUtf8(data), "RSA-OAEP");
   return urlSafeB64encode(forge.util.encode64(encrypted));
@@ -39,8 +33,15 @@ export function decryptWithRsa(
 
 // AES decryption function
 export function decryptWithAes(data: string): object | null {
-  const key = CryptoJS.enc.Utf8.parse(AES_KEY);
-  const iv = CryptoJS.enc.Utf8.parse(AES_IV);
+  const aesKey = process.env.REACT_APP_AES_KEY;
+  const aesIv = process.env.REACT_APP_AES_IV;
+
+  if (!aesKey || !aesIv) {
+    throw new Error("REACT_APP_AES_KEY or REACT_APP_AES_IV is not defined");
+  }
+
+  const key = CryptoJS.enc.Utf8.parse(aesKey);
+  const iv = CryptoJS.enc.Utf8.parse(aesIv);
 
   try {
     const decrypted = CryptoJS.AES.decrypt(data, key, {

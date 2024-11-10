@@ -15,8 +15,8 @@ import { useDispatch } from "react-redux";
 import { setAuthModel } from "../../../features/login/ModelSlice";
 import FeedbackComponent from "./Feedback";
 import AdsSection from "./AdsSection";
-import { DetailSectionProps } from '../../../model/videoModel';
-import { config } from '../../../services/config';
+import { DetailSectionProps } from "../../../model/videoModel";
+
 const DetailSection: React.FC<DetailSectionProps> = ({
   movieDetail,
   adsData,
@@ -73,7 +73,7 @@ const DetailSection: React.FC<DetailSectionProps> = ({
     try {
       // Toggle collection API call
       const response = await fetch(
-        `${config.apiUrl}/movie/collect/action`,
+        `${process.env.REACT_APP_API_URL}/movie/collect/action`,
         {
           method: "POST",
           headers: {
@@ -128,7 +128,7 @@ const DetailSection: React.FC<DetailSectionProps> = ({
     try {
       // Fetch share content API call
       const response = await fetch(
-        `${config.apiUrl}/user/get_share`,
+        `${process.env.REACT_APP_API_URL}/user/get_share`,
         {
           method: "GET",
           headers: {
@@ -151,9 +151,8 @@ const DetailSection: React.FC<DetailSectionProps> = ({
     }
   };
 
-
   const customHeight = () => {
-    const upperDiv = document.getElementById('upper-div');
+    const upperDiv = document.getElementById("upper-div");
     const upperDivHeight = upperDiv?.offsetHeight || 0;
     const remainingHeight = window.innerHeight - upperDivHeight;
     return remainingHeight;
@@ -165,10 +164,10 @@ const DetailSection: React.FC<DetailSectionProps> = ({
     };
 
     updateHeight(); // Set initial height
-    window.addEventListener('resize', updateHeight); // Update height on window resize
+    window.addEventListener("resize", updateHeight); // Update height on window resize
 
     return () => {
-      window.removeEventListener('resize', updateHeight); // Cleanup event listener
+      window.removeEventListener("resize", updateHeight); // Cleanup event listener
     };
   }, []);
 
@@ -177,7 +176,11 @@ const DetailSection: React.FC<DetailSectionProps> = ({
       {/* Tabs */}
 
       {/* Tab content */}
-      <div className={`bg-background rounded-b-lg ${activeTab === "tab-1" && 'p-4'}`}>
+      <div
+        className={`bg-background rounded-b-lg ${
+          activeTab === "tab-1" && "p-4"
+        }`}
+      >
         {activeTab === "tab-1" && (
           <div id="tab-1" className="block">
             {/* Movie Title and Info */}
@@ -279,7 +282,7 @@ const DetailSection: React.FC<DetailSectionProps> = ({
         {activeTab === "tab-2" ? (
           <div id="tab-2" className="block">
             {/* Comment section or other content */}
-            <CommentComponent movieId={id} lowerDivHeight={lowerDivHeight}/>
+            <CommentComponent movieId={id} lowerDivHeight={lowerDivHeight} />
           </div>
         ) : (
           <div className="mt-4">

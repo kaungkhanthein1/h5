@@ -1,28 +1,17 @@
 import CryptoJS from "crypto-js";
 import JSEncrypt from "jsencrypt";
 
-const SIGN_KEY = "635a580fcb5dc6e60caa39c31a7bde48";
-
-export const PUBLIC_KEY = `-----BEGIN RSA PUBLIC KEY-----
-MIIBCgKCAQEA02F/kPg5A2NX4qZ5JSns+bjhVMCC6JbTiTKpbgNgiXU+Kkorg6Dj
-76gS68gB8llhbUKCXjIdygnHPrxVHWfzmzisq9P9awmXBkCk74Skglx2LKHa/mNz
-9ivg6YzQ5pQFUEWS0DfomGBXVtqvBlOXMCRxp69oWaMsnfjnBV+0J7vHbXzUIkqB
-LdXSNfM9Ag5qdRDrJC3CqB65EJ3ARWVzZTTcXSdMW9i3qzEZPawPNPe5yPYbMZIo
-XLcrqvEZnRK1oak67/ihf7iwPJqdc+68ZYEmmdqwunOvRdjq89fQMVelmqcRD9RY
-e08v+xDxG9Co9z7hcXGTsUquMxkh29uNawIDAQAB
------END RSA PUBLIC KEY-----`;
-
-const API_URL_TEST = "https://cc3e497d.qdhgtch.com:2345/api/";
-const AES_KEY = "e6d5de5fcc51f53d";
-const AES_IV = "2f13eef7dfc6c613";
-
 /**
  * Generate signature using HMAC MD5
  * @param {string} str
  * @returns {string}
  */
 export function generateSignature(str: string): string {
-  return CryptoJS.HmacMD5(str, SIGN_KEY).toString();
+  const signKey = process.env.REACT_APP_SIGN_KEY;
+  if (!signKey) {
+    throw new Error("REACT_APP_SIGN_KEY is not defined.");
+  }
+  return CryptoJS.HmacMD5(str, signKey).toString();
 }
 
 /**
@@ -59,9 +48,9 @@ export function decryptWithAes(data: string): object | null {
   try {
     const decrypted = CryptoJS.AES.decrypt(
       data,
-      CryptoJS.enc.Utf8.parse(AES_KEY),
+      CryptoJS.enc.Utf8.parse(process.env.REACT_APP_AES_KEY || ""),
       {
-        iv: CryptoJS.enc.Utf8.parse(AES_IV),
+        iv: CryptoJS.enc.Utf8.parse(process.env.REACT_APP_AES_IV || ""),
         mode: CryptoJS.mode.CBC,
         padding: CryptoJS.pad.Pkcs7,
       }

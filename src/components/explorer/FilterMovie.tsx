@@ -7,7 +7,6 @@ import Loader from "../../pages/search/components/Loader";
 import FilterTag from "./FilterTag";
 import { Link } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { config } from '../../services/config';
 const FilterMovie = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [movieData, setMovieData] = useState([]);
@@ -22,7 +21,7 @@ const FilterMovie = () => {
   const getMoviesByType = async (id: any) => {
     setIsLoading(true);
     const { data } = await axios.get(
-      `${config.apiUrl}/movie/explore/list?type_id=${id}&&sort=${sort}&&class=${classData}&&area=${area}&&year=${year}&&page=${page}&&pageSize=9`
+      `${process.env.REACT_APP_API_URL}/movie/explore/list?type_id=${id}&&sort=${sort}&&class=${classData}&&area=${area}&&year=${year}&&page=${page}&&pageSize=9`
     );
     if (data?.data?.list?.length >= 0) setIsLoading(false);
     setMovieData(data?.data?.list);
@@ -31,7 +30,7 @@ const FilterMovie = () => {
   const fetchData = async () => {
     setPage(page + 1);
     const { data } = await axios.get(
-      `${config.apiUrl}/movie/explore/list?type_id=${activeTab}&&sort=${sort}&&class=${classData}&&area=${area}&&year=${year}&&page=${page}&&pageSize=9`
+      `${process.env.REACT_APP_API_URL}/movie/explore/list?type_id=${activeTab}&&sort=${sort}&&class=${classData}&&area=${area}&&year=${year}&&page=${page}&&pageSize=9`
     );
     if (data?.data?.list?.length >= 0) setIsLoading(false);
     setMovieData(movieData.concat(data?.data?.list));

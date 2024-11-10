@@ -17,7 +17,7 @@ import {
   setArea,
   setYear,
 } from "../../pages/home/slice/HomeSlice";
-import { config } from '../../services/config';
+
 const FilteredByType = () => {
   const activeTab = useSelector((state: any) => state.home.activeTab);
   const [movieData, setMovieData] = useState([]);
@@ -34,7 +34,7 @@ const FilteredByType = () => {
     setIsLoading(true);
     try {
       const { data } = await axios.get(
-        `${config.apiUrl}/movie/screen/list?type_id=${id}&&sort=${sort}&&class=${classData}&&area=${area}&&year=${year}&&pageSize=${pageSize}&&page=${page}`
+        `${process.env.REACT_APP_API_URL}/movie/screen/list?type_id=${id}&&sort=${sort}&&class=${classData}&&area=${area}&&year=${year}&&pageSize=${pageSize}&&page=${page}`
       );
       if (data?.data?.list?.length >= 0) setIsLoading(false);
       setMovieData(data?.data?.list);
@@ -46,7 +46,7 @@ const FilteredByType = () => {
   const fetchData = async () => {
     setPage(page + 1);
     const { data } = await axios.get(
-      `${config.apiUrl}/movie/screen/list?type_id=${activeTab}&&sort=${sort}&&class=${classData}&&area=${area}&&year=${year}&&pageSize=${pageSize}&&page=${page}`
+      `${process.env.REACT_APP_API_URL}/movie/screen/list?type_id=${activeTab}&&sort=${sort}&&class=${classData}&&area=${area}&&year=${year}&&pageSize=${pageSize}&&page=${page}`
     );
     if (data?.data?.list?.length >= 0) setIsLoading(false);
     setMovieData(movieData.concat(data?.data?.list));

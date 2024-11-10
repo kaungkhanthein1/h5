@@ -3,7 +3,7 @@ import he from "he";
 // import videoIcon from "../../assets/videoIcon.svg";
 import LazyLoadImage from "../../../components/home/LazyLoadImage";
 
-const MovieCard = ({ movie, height='185px', width = '114px', showRecommandMovie }) => {
+const MovieCard = ({ movie, height='175px', width = '114px', showRecommandMovie }) => {
   const navigate = useNavigate();
   const showMovie = () => {
     console.log('heeeee')
@@ -15,14 +15,14 @@ const MovieCard = ({ movie, height='185px', width = '114px', showRecommandMovie 
       <div className="block relative zoom-effect" onClick={showMovie}>
         <div
           className={`relative img_a border-none ${
-            height ? `max-sm:h-[${height}]` : "max-sm:h-[185px]"
+            height ? `max-sm:h-[${height}]` : "max-sm:h-[175px]"
           }`}  style={{width: '100%'}}
         >
           <LazyLoadImage
             src={movie.cover}
             alt={movie.name}
-            className={`movie_img  h-[185px] rounded-lg border-none  ${
-              height ? `max-sm:h-[${height}]` : "max-sm:h-[185px]"
+            className={`movie_img  h-[175px] rounded-lg border-none  ${
+              height ? `max-sm:h-[${height}]` : "max-sm:h-[175px]"
             } cursor-default object-cover w-full`}
           />
           <div className="absolute rounded-bl-lg rounded-br-lg  h-full w-full inset-0 bg-gradient-to-b from-transparent via-black/5 to-black"></div>

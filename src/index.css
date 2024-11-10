@@ -356,3 +356,27 @@ input[type="range"]::-moz-range-thumb {
   margin-left: -13px;
   box-shadow: 3px 10px 1px 1px #000000;
 }
+
+.popup-custom {
+  width: 100%;
+  color: white;
+  position: fixed;
+  bottom: 0px;
+  text-align: center;
+  border-top-left-radius: 5%;
+  border-top-right-radius: 5%;
+}
+
+.popup-item {
+  width: 100%;
+  border-bottom: 1px solid #474747;
+  padding: 10px 0px;
+}
+
+.cancel-btn {
+  width: 100%;
+    margin-top: -1px;
+    padding: 10px 0px;
+    border-top: 8px solid #161619;
+    margin-bottom: 30px;
+}

@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import MovieCard from "../../components/explorer/MovieCard";
 import backArrow from "../../assets/back.svg";
 import Loader from "../search/components/Loader";
-import { config } from '../../services/config';
+
 const Detail = () => {
   const [details, setDetails] = useState<any>({});
   const [isLoading, setIsLoading] = useState(false);
@@ -13,7 +13,7 @@ const Detail = () => {
   const getDetails = async () => {
     setIsLoading(true);
     const res = await fetch(
-      `${config.apiUrl}/movie/topic/${id}`
+      `${process.env.REACT_APP_API_URL}/movie/topic/${id}`
     );
     const data = await res.json();
     setDetails(data?.data);

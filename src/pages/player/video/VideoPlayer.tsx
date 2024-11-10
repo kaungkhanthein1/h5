@@ -1,19 +1,19 @@
-import React, { useEffect, useRef, useState } from 'react';
-import Artplayer from 'artplayer';
-import Hls from 'hls.js'; // Import Hls.js
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
-import floatingScreen from '../../../assets/floatingScreen.png';
-import axios from 'axios';
-import { VideoPlayerProps } from '../../../model/videoModel';
-import { config } from '../../../services/config';
+import React, { useEffect, useRef, useState } from "react";
+import Artplayer from "artplayer";
+import Hls from "hls.js"; // Import Hls.js
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import floatingScreen from "../../../assets/floatingScreen.png";
+import axios from "axios";
+import { VideoPlayerProps } from "../../../model/videoModel";
+
 const VideoPlayer: React.FC<VideoPlayerProps> = ({
   videoUrl,
   onBack,
   movieDetail,
   selectedEpisode,
   resumeTime,
-  handleVideoError
+  handleVideoError,
 }) => {
   const playerRef = useRef<any>(null);
   const videoElementRef = useRef<HTMLDivElement>(null);
@@ -21,7 +21,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   // Function to get token from localStorage
   const getToken = () => {
-    const isLoggedIn = localStorage.getItem('authToken');
+    const isLoggedIn = localStorage.getItem("authToken");
     const parsedLoggedIn = isLoggedIn ? JSON.parse(isLoggedIn) : null;
     return parsedLoggedIn?.data?.access_token;
   };
@@ -33,7 +33,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
     try {
       await axios.post(
-        `${config.apiUrl}/movie_play/report`,
+        `${process.env.REACT_APP_API_URL}/movie_play/report`,
         {
           movie_id: movieDetail.id, // Assuming movie_id is movie name
           episode_id: selectedEpisode?.episode_id,
@@ -48,7 +48,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         }
       );
     } catch (error) {
-      console.error('Error reporting playback progress:', error);
+      console.error("Error reporting playback progress:", error);
     }
   };
 
@@ -58,45 +58,45 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         const art = new Artplayer({
           container: videoElementRef.current,
           url: videoUrl,
-        //   autoSize: true,
+          //   autoSize: true,
           autoplay: true,
           playbackRate: true,
           setting: true,
           fullscreen: true,
           airplay: true,
           // fullscreenWeb: true,
-        //   pip: true,
+          //   pip: true,
           moreVideoAttr: {
             playsInline: true,
           },
         });
 
         // Use Hls.js for HLS streams
-        if (Hls.isSupported() && videoUrl.includes('.m3u8')) {
+        if (Hls.isSupported() && videoUrl.includes(".m3u8")) {
           const hls = new Hls();
           hls.loadSource(videoUrl);
           hls.attachMedia(art.video);
-             // Handle Hls.js errors
+          // Handle Hls.js errors
           hls.on(Hls.Events.ERROR, (_, data) => {
-          if (data.fatal) {
-            setTimeout(() => {
-              handleVideoError(videoUrl);
-            }, 1000);
-          }
-        });
-        } else if (art.video.canPlayType('application/vnd.apple.mpegurl')) {
+            if (data.fatal) {
+              setTimeout(() => {
+                handleVideoError(videoUrl);
+              }, 1000);
+            }
+          });
+        } else if (art.video.canPlayType("application/vnd.apple.mpegurl")) {
           art.video.src = videoUrl; // For Safari and iOS
         }
 
         // Adjust video ratio based on the video's actual dimensions
-        art.once('video:loadedmetadata', () => {
+        art.once("video:loadedmetadata", () => {
           const videoWidth = art.video.videoWidth;
           const videoHeight = art.video.videoHeight;
           setVideoRatio(videoHeight / videoWidth); // Set the dynamic aspect ratio
         });
 
         // Set resume time if available
-        art.once('ready', () => {
+        art.once("ready", () => {
           if (resumeTime > 0) {
             art.currentTime = resumeTime;
           }
@@ -135,11 +135,12 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   };
 
   return (
-    <div id="my-player" className='relative w-full bg-black'>
+    <div id="my-player" className="relative w-full bg-black">
       {/* Back button */}
       <div className="absolute top-0 left-0 p-4 z-50">
         <button onClick={handleBack} className="text-white">
-          <FontAwesomeIcon icon={faArrowLeft} size="1x" /> {selectedEpisode?.episode_name}
+          <FontAwesomeIcon icon={faArrowLeft} size="1x" />{" "}
+          {selectedEpisode?.episode_name}
         </button>
       </div>
       {/* PiP button */}
@@ -150,9 +151,15 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       </div>
 
       {/* Video element wrapper */}
-      <div className="relative w-full" style={{ paddingTop: `${videoRatio * 100}%` }}>
+      <div
+        className="relative w-full"
+        style={{ paddingTop: `${videoRatio * 100}%` }}
+      >
         {/* Video element */}
-        <div ref={videoElementRef} className="absolute top-0 left-0 w-full h-full"></div>
+        <div
+          ref={videoElementRef}
+          className="absolute top-0 left-0 w-full h-full"
+        ></div>
       </div>
     </div>
   );
