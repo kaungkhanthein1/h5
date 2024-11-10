@@ -19,7 +19,13 @@ const Banner = ({ list }: { list: any }) => {
     <div className="mt-[120px] max-md:px-3 px-10">
       <div className="">
         <div className="relative">
-          <Carousel showThumbs={false} showArrows={false} showStatus={false}>
+          <Carousel
+            showThumbs={false}
+            showArrows={false}
+            showStatus={false}
+            autoPlay={true}
+            infiniteLoop={true}
+          >
             {list?.map((banner: any) => (
               <div
                 key={banner?.image}
