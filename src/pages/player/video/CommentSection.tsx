@@ -255,7 +255,7 @@ const CommentComponent: React.FC<CommentProps> = ({ movieId, lowerDivHeight }) =
               <img
                 src={comment.user?.avatar || ProfileImg}
                 alt={comment.user?.nickname}
-                className="w-10 h-10 rounded-full mr-2 mt-2"
+                className="w-9 h-9 rounded-full mr-2 mt-2"
               />
               <span className="username text-white font-bold">
                 {comment.user?.nickname}
@@ -271,6 +271,12 @@ const CommentComponent: React.FC<CommentProps> = ({ movieId, lowerDivHeight }) =
             <div className="comment-actions flex items-center justify-between mt-2">
               <span className="time text-gray-500 text-sm">
                 {new Date(comment.create_time).toLocaleDateString()}
+              </span>
+              <span className="time text-gray-500 text-sm">
+              回复
+              </span>
+              <span className="time text-gray-500 text-sm">
+              删除
               </span>
               {/* <div className="flex items-center">
                 <button

@@ -202,7 +202,7 @@ const DetailPage: React.FC = () => {
   const refresh = () => {
     // setCurrentEpisode(null);
     setMovieReload(true);
-    fetchMovieDetail();
+    fetchMovieDetail(movieDetail?.id);
   }
 
   const showRecommandMovie = (id: string) => {
@@ -212,7 +212,7 @@ const DetailPage: React.FC = () => {
   }
   return (
     <div className="bg-background min-h-screen">
-      {!movieDetail || !currentEpisode ? (
+      {!movieDetail ? (
         <div className="flex justify-center items-center pt-52 bg-background">
           <Loader />
         </div>
@@ -220,10 +220,10 @@ const DetailPage: React.FC = () => {
         <>
           <div className="sticky top-0 z-50">
             <div id='upper-div'>
-            {(currentEpisode.ready_to_play && !wholePageError) || movieReload ? (
+            {(currentEpisode && currentEpisode.ready_to_play && !wholePageError) || movieReload ? (
               <VideoPlayer
-                key={currentEpisode.episode_id}
-                videoUrl={currentEpisode.play_url}
+                key={currentEpisode?.episode_id}
+                videoUrl={currentEpisode?.play_url || ''}
                 onBack={navigateBackFunction}
                 movieDetail={movieDetail}
                 selectedEpisode={currentEpisode}
