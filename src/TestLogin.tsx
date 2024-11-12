@@ -31,7 +31,7 @@ const LoginForm: React.FC = () => {
 
   const getCaptcha = async () => {
     try {
-      const result = await fetch(`${API_URL}v1/user/get_captcha`, {
+      const result = await fetch(`${API_URL}/user/get_captcha`, {
         method: "GET",
       });
 

@@ -14,6 +14,7 @@ import { setAuthModel } from "../../../features/login/ModelSlice";
 import { CommentProps, Comment } from "../../../model/commentModel";
 import { showToast } from "../../../pages/profile/error/ErrorSlice";
 import Popup from "./Popup";
+import ReportPopup from "./ReportPopup";
 
 const CommentComponent: React.FC<CommentProps> = ({
   movieId,
@@ -28,6 +29,8 @@ const CommentComponent: React.FC<CommentProps> = ({
   const commentInputRef = useRef<HTMLInputElement>(null);
   const [isLoggedIn, setIsLoggedLogIn] = useState<boolean>(false);
   const [openPopup, setOpenPopup ] = useState(false);
+  const [openReportPopup, setOpenReportPopup ] = useState(false);
+  const [currentSelected, setCurrentSelected] = useState<any>(null);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -49,7 +52,7 @@ const CommentComponent: React.FC<CommentProps> = ({
     try {
       const response = await fetch(
         `${process.env.REACT_APP_API_URL}/movie/comments/index?movie_id=${movieId}&page=${page}&pageSize=10`
-        // "http://localhost:3000/comments"
+        // "http://localhost:3001/comments"
       );
       const data = await response.json();
       if (data.data.list.length === 0) {
@@ -165,6 +168,7 @@ const CommentComponent: React.FC<CommentProps> = ({
           setComments((prevComments) =>
             prevComments.filter((comment) => comment.id !== id)
           );
+          dispatch(showToast({ message: "已删除", type: "success" }));
         }
       } catch (error) {
         console.error("Error deleting comment/reply:", error);
@@ -286,14 +290,14 @@ const CommentComponent: React.FC<CommentProps> = ({
                     {new Date(comment.create_time).toISOString().split("T")[0]}
                   </span>
                   <div>
-                    <span className="time text-commentIcon text-sm mr-4">
+                    <span className="time text-commentIcon text-sm mr-4" onClick={() => setReplyingTo(comment.id)}                    >
                       回复
                     </span>
-                    <span className="time text-commentIcon text-sm">删除</span>
+                    <span className="time text-commentIcon text-sm" onClick={()=>deleteCommentOrReply(comment.id, false)}>删除</span>
                   </div>
                   <img
                     src={OptionIcon}
-                    onClick={()=>setOpenPopup(true)}
+                    onClick={()=>{setOpenPopup(true); setCurrentSelected(comment)}}
                     alt=""
                     className="w-9 h-5 rounded-sm mr-2 mt-0.5"
                   />
@@ -574,7 +578,7 @@ const CommentComponent: React.FC<CommentProps> = ({
 
       {/* Create new comment or reply */}
       {isLoggedIn ? (
-        <div className="create-comment sticky bg-commentInput left-0 bottom-0 p-2 flex items-center justify-center rounded-lg w-full">
+        <div className="create-comment bg-commentInput p-2 flex items-center justify-center rounded-lg w-full  comment-btn">
           <img
             src={ProfileImg}
             alt="User Avatar"
@@ -614,7 +618,8 @@ const CommentComponent: React.FC<CommentProps> = ({
       )}
 
       {/* Popup */}
-      {openPopup && <Popup setOpenPopup={setOpenPopup}/>}
+      {openPopup && <Popup setOpenPopup={setOpenPopup} setOpenReportPopup={setOpenReportPopup} currentSelected={currentSelected}/>}
+      {openReportPopup && <ReportPopup setOpenPopup={setOpenPopup} setOpenReportPopup={setOpenReportPopup}/>}
     </div>
   );
 };

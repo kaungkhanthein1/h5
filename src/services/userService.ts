@@ -14,7 +14,7 @@ import {
 export const getCaptcha = async () => {
   try {
     const response = await fetch(
-      `${process.env.REACT_APP_API_URL}v1/user/get_captcha`,
+      `${process.env.REACT_APP_API_URL}/user/get_captcha`,
       {
         method: "GET",
       }
@@ -53,7 +53,7 @@ export const login = async (
   try {
     // Step 1: Verify captcha
     const captchaResult = await fetch(
-      `${process.env.REACT_APP_API_URL}v1/user/check_captcha`,
+      `${process.env.REACT_APP_API_URL}/user/check_captcha`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -130,7 +130,7 @@ export const getOtp = async (
   try {
     // Step 1: Verify Captcha
     const captchaResult = await axios.post(
-      `${process.env.REACT_APP_API_URL}v1/user/check_captcha`,
+      `${process.env.REACT_APP_API_URL}/user/check_captcha`,
       {
         code: captchaCode,
         key: keyStatus,
@@ -246,7 +246,7 @@ export const handleSocialLoginCredentials = async (
 ) => {
   try {
     const captchaResult = await axios.post(
-      `${process.env.REACT_APP_API_URL}v1/user/check_captcha`,
+      `${process.env.REACT_APP_API_URL}/user/check_captcha`,
       {
         code: captchaCode,
         key: keyStatus,
@@ -303,7 +303,7 @@ export const handleSocialSignUpCredentials = async (
 ) => {
   try {
     const captchaResult = await axios.post(
-      `${process.env.REACT_APP_API_URL}v1/user/check_captcha`,
+      `${process.env.REACT_APP_API_URL}/user/check_captcha`,
       {
         code: captchaCode,
         key: keyStatus,
