@@ -31,8 +31,26 @@ const DetailPage: React.FC = () => {
   const [episodes, setEpisodes] = useState<any>([]);
   const [forwardedCount, setForwardedCount] = useState(-1);
   const [movieReload, setMovieReload] = useState(false);
+  const [commentCount, setCommentCount] = useState(0);
   const navigate = useNavigate();
 
+  useEffect(()=>{
+    fetchComments();
+  },[])
+
+  const fetchComments = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/movie/comments/index?movie_id=${id}&page=${1}&pageSize=10`
+        // "http://localhost:3001/comments"
+      );
+      const data = await response.json();
+      setCommentCount(data.data.total);
+      console.log('data is=>', data);
+    } catch (err) {
+      console.log('err is=>', err);
+    }
+  }
   const autoPlayNextEpisode = async () => {
     if (!movieDetail?.play_from) return;
     for (let i = selectedSource + 1; i < movieDetail.play_from.length; i++) {
@@ -256,7 +274,7 @@ const DetailPage: React.FC = () => {
                 >
                   <span>评论</span>
                   <span className="text-gray-500 ml-1.5 text-sm">
-                    {parseInt(movieDetail.comments_count || '0') > 0 ? (movieDetail.comments_count && (parseInt(movieDetail.comments_count) > 99) ? '99+' : movieDetail.comments_count) : ""}
+                    {commentCount > 99 ? '99+' : (commentCount || '')}
                   </span>
                   {activeTab === "tab-2" && (
                     <div className="absolute bottom-0 left-0 w-full h-1 bg-mainColor"></div>

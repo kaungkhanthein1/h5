@@ -9,7 +9,7 @@ import {
 import ProfileImg from "../../../assets/profile.png";
 import OptionIcon from "../../../assets/option.svg";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setAuthModel } from "../../../features/login/ModelSlice";
 import { CommentProps, Comment, Reply } from "../../../model/commentModel";
 import { showToast } from "../../../pages/profile/error/ErrorSlice";
@@ -31,6 +31,8 @@ const CommentComponent: React.FC<CommentProps> = ({
   const [openPopup, setOpenPopup ] = useState(false);
   const [openReportPopup, setOpenReportPopup ] = useState(false);
   const [currentSelected, setCurrentSelected] = useState<any>(null);
+  const user = useSelector((state: any) => state.user.user);
+  console.log('user is=>', user);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -52,14 +54,17 @@ const CommentComponent: React.FC<CommentProps> = ({
     try {
       const response = await fetch(
         `${process.env.REACT_APP_API_URL}/movie/comments/index?movie_id=${movieId}&page=${page}&pageSize=10`
-        // "http://localhost:3001/comments"
       );
       const data = await response.json();
-      if (data.data.list.length === 0) {
-        setHasMore(false);
-      } else {
-        setComments((prevComments) => [...prevComments, ...data.data.list]);
-      }
+  
+      // Concatenate new comments to existing ones using spread operator (...)
+      const updatedComments = comments && comments.length > 0 && comments.length < data.data.total && page > 1 ? [...comments, ...data.data.list] : data.data.list;
+  
+      console.log('updatedComments', updatedComments);
+      setComments(updatedComments);
+  
+      // Update hasMore based on total comments and fetched list length
+      setHasMore(data.data.total > updatedComments.length);
     } catch (error) {
       console.error("Error fetching comments:", error);
     }
@@ -208,22 +213,24 @@ const CommentComponent: React.FC<CommentProps> = ({
         );
 
         const data = await response.json();
-        if (replyingTo) {
-          setComments((prevComments) =>
-            prevComments.map((comment) =>
-              comment.id === replyingTo
-                ? {
-                    ...comment,
-                    replies: comment.replies
-                      ? [data.data, ...comment.replies]
-                      : [data.data],
-                  }
-                : comment
-            )
-          );
-        } else {
-          setComments([data.data, ...comments]);
-        }
+        console.log('dagta is=>', data);
+        // if (replyingTo) {
+        //   setComments((prevComments) =>
+        //     prevComments.map((comment) =>
+        //       comment.id === replyingTo
+        //         ? {
+        //             ...comment,
+        //             replies: comment.replies
+        //               ? [data.data.data, ...comment.replies.list]
+        //               : [data.data.data],
+        //           }
+        //         : comment
+        //     )
+        //   );
+        // } else {
+        //   setComments([data?.data?.data, ...comments]);
+        // }
+        fetchComments();
         setNewComment("");
         setReplyingTo(null);
         dispatch(showToast({ message: "已发布", type: "success" }));
@@ -244,28 +251,30 @@ const CommentComponent: React.FC<CommentProps> = ({
 
   return (
     <div
-      className="comment-section flex flex-col rounded-md p-3 overflow-y-auto"
-      style={{ height: lowerDivHeight - 100 }}
+     
     >
       {comments && comments.length > 0 ? (
-        //   <InfiniteScroll
-        //   dataLength={comments.length}
-        //   next={() => setPage((prevPage) => prevPage + 1)}
-        //   hasMore={hasMore}
-        //   loader={<h4 className="text-white">Loading...</h4>}
-        //   style={{height: lowerDivHeight}}
-        // >
+          <InfiniteScroll
+          dataLength={comments.length}
+          next={() => setPage((prevPage) => prevPage + 1)}
+          hasMore={hasMore}
+          loader={<h4 className="text-white">Loading...</h4>}
+          // style={{height: lowerDivHeight}}
+           className="comment-section flex flex-col rounded-md p-3 overflow-y-auto"
+      style={{ height: lowerDivHeight - 100 }}
+        >
         <>
           {comments.map((comment) => (
-            <div key={comment.id} className="comment pb-4 mb-4 relative">
+            <div key={comment.id} className="comment pb-4 relative">
               {/* Like button at the top right corner */}
-              <button
+              {comment.status !== 0 && <button
                 disabled={!isLoggedIn}
                 onClick={() => likeComment(comment.id)}
                 className="absolute top-0 right-0 m-2 text-gray-400 hover:text-blue-500"
               >
-                <FontAwesomeIcon icon={faThumbsUp} /> {comment.likes}
-              </button>
+                <FontAwesomeIcon icon={faThumbsUp} /> 
+                <p className="-mt-1">{comment.likes}</p>
+              </button>}
               <div className="profile flex items-center justify-items-center mb-2">
                 <img
                   src={comment.user?.avatar || ProfileImg}
@@ -287,27 +296,28 @@ const CommentComponent: React.FC<CommentProps> = ({
                 </div>
                 <div className="comment-actions flex items-center justify-start gap-4 mt-2">
                   <span className="time text-gray-500 text-sm">
-                    {new Date(comment.create_time).toISOString().split("T")[0]}
+                    {/* {new Date(comment.create_time * 1000)?.toISOString()?.split('T')[0]} */}
+                    {comment.create_time}
                   </span>
                   <div>
-                    <span className="time text-commentIcon text-sm mr-4" onClick={() => setReplyingTo(comment.id)}                    >
+                    {comment.status !== 0 && <span className="time text-commentIcon text-sm mr-4" onClick={() => setReplyingTo(comment.id)}                    >
                       回复
-                    </span>
-                    <span className="time text-commentIcon text-sm" onClick={()=>deleteCommentOrReply(comment.id, false)}>删除</span>
+                    </span>}
+                    {user && user.id && comment.user_id === user.id && <span className="time text-commentIcon text-sm" onClick={()=>deleteCommentOrReply(comment.id, false)}>删除</span>}
                   </div>
-                  <img
+                  {comment.status !== 0 && <img
                     src={OptionIcon}
                     onClick={()=>{setOpenPopup(true); setCurrentSelected(comment)}}
                     alt=""
                     className="w-9 h-5 rounded-sm mr-2 mt-0.5"
-                  />
+                  />}
                 </div>
               </div>
               {/* Replies */}
               {comment.replies && comment.replies?.list && comment.replies?.list.length > 0 && (
-                <div className="reply-section mt-4 pl-10">
+                <div className="reply-section mt-2 pl-10">
                   {comment.replies.list.map((reply: Reply) => (
-                    <div key={reply.id} className="reply mb-4">
+                    <div key={reply.id} className="reply">
                       <div className="profile flex items-center justify-items-center mb-2">
                         <img
                           src={reply.user?.avatar || ProfileImg}
@@ -328,21 +338,21 @@ const CommentComponent: React.FC<CommentProps> = ({
                           {reply.content}
                         </div>
                         <div className="comment-actions flex items-center justify-start gap-4 mt-2">
-                  <span className="time text-gray-500 text-sm">
-                    {new Date(reply.create_time).toISOString().split("T")[0]}
+                        <span className="time text-gray-500 text-sm">
+                    {new Date(reply.create_time * 1000)?.toISOString()?.split('T')[0]}
                   </span>
                   <div>
-                    <span className="time text-commentIcon text-sm mr-4" onClick={() => setReplyingTo(reply.id)}                    >
+                    {comment.status !== 0 && <span className="time text-commentIcon text-sm mr-4" onClick={() => setReplyingTo(comment.id)}                    >
                       回复
-                    </span>
-                    <span className="time text-commentIcon text-sm" onClick={()=>deleteCommentOrReply(reply.id, false)}>删除</span>
+                    </span>}
+                    {user && user.id && comment.user_id === user.id && <span className="time text-commentIcon text-sm" onClick={()=>deleteCommentOrReply(reply.id, true)}>删除</span>}
                   </div>
-                  <img
+                  {comment.status !== 0 && <img
                     src={OptionIcon}
-                    onClick={()=>{setOpenPopup(true); setCurrentSelected(reply)}}
+                    onClick={()=>{setOpenPopup(true); setCurrentSelected(comment)}}
                     alt=""
                     className="w-9 h-5 rounded-sm mr-2 mt-0.5"
-                  />
+                  />}
                 </div>
                       </div>
                     </div>
@@ -351,8 +361,8 @@ const CommentComponent: React.FC<CommentProps> = ({
               )}
             </div>
           ))}
-          {/* </InfiniteScroll>  */}
         </>
+        </InfiniteScroll> 
       ) : (
         <div
           className="flex justify-center items-center text-center comment-btn"

@@ -353,7 +353,6 @@ input[type="range"]::-moz-range-thumb {
   position: fixed;
   bottom: 0px;
   margin-bottom: 5px;
-  margin-left: -13px;
   box-shadow: 3px 10px 1px 1px #000000;
 }
 

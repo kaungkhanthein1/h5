@@ -15,8 +15,10 @@ export interface Comment {
   content: string;
   type: string;
   likes: number;
-  create_time: string;
+  create_time: number;
   replies?: any;
+  status: number;
+  user_id: number;
 }
 
 export interface Reply {
@@ -30,5 +32,5 @@ export interface Reply {
     level: string;
   };
   content: string;
-  create_time: string;
+  create_time: number;
 }
