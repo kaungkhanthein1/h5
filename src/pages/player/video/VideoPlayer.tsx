@@ -6,6 +6,7 @@ import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import floatingScreen from "../../../assets/floatingScreen.png";
 import axios from "axios";
 import { VideoPlayerProps } from "../../../model/videoModel";
+import { useGetRecordQuery } from "../../profile/services/profileApi";
 
 const VideoPlayer: React.FC<VideoPlayerProps> = ({
   videoUrl,
@@ -18,6 +19,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const playerRef = useRef<any>(null);
   const videoElementRef = useRef<HTMLDivElement>(null);
   const [videoRatio, setVideoRatio] = useState(9 / 16); // Default to 16:9 ratio
+  const { refetch } = useGetRecordQuery(); // Fetch favorite movies list from API
 
   // Function to get token from localStorage
   const getToken = () => {
@@ -121,6 +123,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       reportProgress(playerRef.current.currentTime, playerRef.current.duration);
       playerRef.current.pause();
     }
+    refetch();
     onBack();
   };
 

@@ -16,6 +16,7 @@ import { setAuthModel } from "../../../features/login/ModelSlice";
 import FeedbackComponent from "./Feedback";
 import AdsSection from "./AdsSection";
 import { DetailSectionProps } from "../../../model/videoModel";
+import { useGetListQuery } from "../../../pages/profile/services/profileApi";
 
 const DetailSection: React.FC<DetailSectionProps> = ({
   movieDetail,
@@ -30,6 +31,7 @@ const DetailSection: React.FC<DetailSectionProps> = ({
   const [isStarred, setIsStarred] = useState<boolean>(
     movieDetail && movieDetail.is_collect ? true : false
   );
+  const { refetch } = useGetListQuery({ page: 1 });
   const [showFeedbackModal, setShowFeedbackModal] = useState(false); // For triggering modal
   const [visible, setVisible] = useState(false);
   const [lowerDivHeight, setLowerDivHeight] = useState(0);
@@ -87,6 +89,7 @@ const DetailSection: React.FC<DetailSectionProps> = ({
         }
       );
       if (response.ok) {
+        refetch();
         setIsStarred(!isStarred);
       } else {
         alert("收藏操作失败，请稍后重试");

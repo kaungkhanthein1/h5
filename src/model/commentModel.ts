@@ -16,7 +16,7 @@ export interface Comment {
   type: string;
   likes: number;
   create_time: string;
-  replies?: Reply[];
+  replies?: any;
 }
 
 export interface Reply {

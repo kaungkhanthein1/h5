@@ -104,7 +104,7 @@ const Main: React.FC<any> = ({
                       }
                     } else {
                       // Not in edit mode, redirect to player
-                      navigate(`/player/${mov.id}`);
+                      navigate(`/player/${mov.movie_id}`);
                     }
                   }}
                 >

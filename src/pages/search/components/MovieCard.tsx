@@ -3,7 +3,10 @@ import { Link } from "react-router-dom";
 import ImageWithPlaceholder from "./ImgPlaceholder";
 import { useDispatch, useSelector } from "react-redux";
 import { selectFavData, setFavData } from "../slice/FavoriteSlice";
-import { useCollectMovieMutation } from "../../profile/services/profileApi";
+import {
+  useCollectMovieMutation,
+  useGetListQuery,
+} from "../../profile/services/profileApi";
 import { setAuthModel } from "../../../features/login/ModelSlice";
 
 const MovieCard = ({
@@ -17,6 +20,7 @@ const MovieCard = ({
   const [collectMovie] = useCollectMovieMutation();
   const favorites = useSelector(selectFavData);
   const { openAuthModel } = useSelector((state: any) => state.model);
+  const { refetch } = useGetListQuery({ page: 1 });
 
   const isLoggedIn = localStorage.getItem("authToken");
   const parsedLoggedIn = isLoggedIn ? JSON.parse(isLoggedIn) : null;
@@ -35,6 +39,8 @@ const MovieCard = ({
     };
   }, [openAuthModel]);
 
+  // You don’t need to use `data` here; you can just destructure `refetch`.
+
   const handleAddFavorite = async (e: any) => {
     e.preventDefault();
     if (!token) {
@@ -48,6 +54,7 @@ const MovieCard = ({
           is_collect: true,
         }).unwrap();
         updateMovieCollectStatus(movie.id, true); // Update the is_collect status in the UI
+        refetch(); // Call refetch when needed
       } catch (error) {
         console.error("Failed to add favorite:", error);
       }
@@ -67,6 +74,7 @@ const MovieCard = ({
           is_collect: false,
         }).unwrap();
         updateMovieCollectStatus(movie.id, false); // Update the is_collect status in the UI
+        refetch(); // Call refetch when needed
       } catch (error) {
         console.error("Failed to remove favorite:", error);
       }

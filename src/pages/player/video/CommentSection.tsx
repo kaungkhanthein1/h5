@@ -11,7 +11,7 @@ import OptionIcon from "../../../assets/option.svg";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useDispatch } from "react-redux";
 import { setAuthModel } from "../../../features/login/ModelSlice";
-import { CommentProps, Comment } from "../../../model/commentModel";
+import { CommentProps, Comment, Reply } from "../../../model/commentModel";
 import { showToast } from "../../../pages/profile/error/ErrorSlice";
 import Popup from "./Popup";
 import ReportPopup from "./ReportPopup";
@@ -301,27 +301,12 @@ const CommentComponent: React.FC<CommentProps> = ({
                     alt=""
                     className="w-9 h-5 rounded-sm mr-2 mt-0.5"
                   />
-
-                  {/* <div className="flex items-center">
-                <button
-                  onClick={() => setReplyingTo(comment.id)}
-                  className="text-gray-400 hover:text-blue-500 mr-4"
-                >
-                   Reply
-                </button>
-                <button
-                  onClick={() => deleteCommentOrReply(comment.id, false)}
-                  className="text-gray-400 hover:text-red-500"
-                >
-                   Delete
-                </button>
-              </div> */}
                 </div>
               </div>
               {/* Replies */}
-              {comment.replies && comment.replies.length > 0 && (
+              {comment.replies && comment.replies?.list && comment.replies?.list.length > 0 && (
                 <div className="reply-section mt-4 pl-10">
-                  {comment.replies.map((reply) => (
+                  {comment.replies.list.map((reply: Reply) => (
                     <div key={reply.id} className="reply mb-4">
                       <div className="profile flex items-center justify-items-center mb-2">
                         <img
@@ -343,27 +328,22 @@ const CommentComponent: React.FC<CommentProps> = ({
                           {reply.content}
                         </div>
                         <div className="comment-actions flex items-center justify-start gap-4 mt-2">
-                          <span className="time text-gray-500 text-sm">
-                            {
-                              new Date(reply.create_time)
-                                .toISOString()
-                                .split("T")[0]
-                            }
-                          </span>
-                          <div>
-                            <span className="time text-commentIcon text-sm mr-4">
-                              回复
-                            </span>
-                            <span className="time text-commentIcon text-sm">
-                              删除
-                            </span>
-                          </div>
-                          <img
-                            src={OptionIcon}
-                            alt=""
-                            className="w-9 h-5 rounded-sm mr-2 mt-0.5"
-                          />
-                        </div>
+                  <span className="time text-gray-500 text-sm">
+                    {new Date(reply.create_time).toISOString().split("T")[0]}
+                  </span>
+                  <div>
+                    <span className="time text-commentIcon text-sm mr-4" onClick={() => setReplyingTo(reply.id)}                    >
+                      回复
+                    </span>
+                    <span className="time text-commentIcon text-sm" onClick={()=>deleteCommentOrReply(reply.id, false)}>删除</span>
+                  </div>
+                  <img
+                    src={OptionIcon}
+                    onClick={()=>{setOpenPopup(true); setCurrentSelected(reply)}}
+                    alt=""
+                    className="w-9 h-5 rounded-sm mr-2 mt-0.5"
+                  />
+                </div>
                       </div>
                     </div>
                   ))}

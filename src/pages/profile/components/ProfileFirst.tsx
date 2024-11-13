@@ -154,8 +154,8 @@ const ProfileFirst = () => {
           <div className="flex overflow-x-scroll whitespace-nowrap watch_ten scrollbar-hide gap-4 ">
             {latestMovies?.map((movie: any) => (
               <Link
-                to={`/player/${movie?.id}`}
-                key={movie.id}
+                to={`/player/${movie?.movie_id}`}
+                key={movie?.movie_id}
                 className="w-[136px]"
               >
                 <div className="relative">
@@ -230,8 +230,8 @@ const ProfileFirst = () => {
           <div className="flex overflow-x-scroll whitespace-nowrap watch_ten scrollbar-hide gap-4 ">
             {favorites?.map((movie: any) => (
               <Link
-                to={`/player/${movie.id}`}
-                key={movie.id}
+                to={`/player/${movie?.movie_id}`}
+                key={movie?.movie_id}
                 className="w-[114px]"
               >
                 <div className="flex flex-col w-[114px] gap-2 transition-all duration-300 ease-in-out">
