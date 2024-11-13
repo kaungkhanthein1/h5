@@ -84,18 +84,20 @@ export const login = async (
     if (!process.env.REACT_APP_PUBLIC_KEY) {
       throw new Error("Public key is not defined");
     }
-    const publicKey = process.env.REACT_APP_PUBLIC_KEY;
+    const publicKey = process.env.REACT_APP_PUBLIC_KEY_LOGIN;
+    // console.log(publicKey)
     if (!publicKey) {
       throw new Error("Public key is not defined");
     }
     const encryptedData = encryptWithRsa(JSON.stringify(formData), publicKey);
+    // console.log(encryptedData)
 
     // Step 3: Generate signature
     const signature = generateSignature(encryptedData);
 
     // Step 4: Make the login API call
     const loginResponse = await fetch(
-      `${process.env.REACT_APP_API_URL}v1/user/login`,
+      `${process.env.REACT_APP_API_URL}/user/login`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
