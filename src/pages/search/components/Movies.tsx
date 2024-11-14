@@ -1,4 +1,6 @@
-import Ads from "./Ads";
+// import Ads from "./Ads";
+import NewAds from "../../../components/NewAds";
+import Ads from "../components/Ads";
 import MovieCard from "./MovieCard";
 
 const Movies = ({
@@ -23,7 +25,9 @@ const Movies = ({
         <div className="ads text-white"></div>
       ) : (
         <div className="my-3">
-          <Ads advert={advert} />
+          {/* <Ads advert={advert} /> */}
+          {/* <Ads /> */}
+          <NewAds section={'search_result_up'} />
         </div>
       )}
 

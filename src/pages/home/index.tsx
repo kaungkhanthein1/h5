@@ -9,7 +9,8 @@ import FilteredByType from "../../components/home/FilteredByType";
 import { setActiveTab } from "./slice/HomeSlice";
 import "../../components/home/home.css";
 import { useGetRecordQuery } from "../profile/services/profileApi";
-import Ads from "../../components/Ads";
+import Ads from "../../components/NewAds";
+import NewAds from "../../components/NewAds";
 
 const Home: React.FC = () => {
   const [adsData, setAdsData] = useState<any>([]);
@@ -37,7 +38,8 @@ const Home: React.FC = () => {
                     <>
                       <Banner key={index} list={movieData?.list} />
                       {movies?.length !== 0 && <ContinueWatching />}
-                      <Ads adsData={adsData} setAdsData={setAdsData} />
+                      {/* <Ads section={"start"} /> */}
+                      <NewAds section={"start"} />
                     </>
                   );
                 } else if (movieData?.layout === "base") {

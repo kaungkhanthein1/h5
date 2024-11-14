@@ -6,11 +6,9 @@ import Everyone from "./components/Everyone";
 import { useGetAdsQuery, useGetSearchLateQuery } from "./services/searchApi";
 import Rankings from "./components/Rankings";
 import Loader from "./components/Loader";
-import Ads from "../../components/Ads";
+import Ads from "../../components/NewAds";
 
 const Search: React.FC = () => {
-  const [adsData, setAdsData] = useState<any>([]);
-
   const {
     data: ads,
     isLoading: adLoading,
@@ -41,7 +39,7 @@ const Search: React.FC = () => {
             </div>
           ) : (
             // <Ads advert={advert} />
-            <Ads adsData={adsData} setAdsData={setAdsData} />
+            <Ads section={"search_input_under"} />
           )}
         </div>
         <History />
