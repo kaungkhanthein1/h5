@@ -78,6 +78,8 @@ export interface DetailSectionProps {
   id: string;
   activeTab: string;
   setActiveTab: (active: string) => void;
+  setCommentCount: (count: number) => void
+  commentCount: number;
 }
 
 export interface AdsData {

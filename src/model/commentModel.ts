@@ -1,6 +1,8 @@
 export interface CommentProps {
   movieId: string;
   lowerDivHeight: any;
+  setCommentCount: (count: number) => void;
+  commentCount: number;
 }
 
 export interface Comment {

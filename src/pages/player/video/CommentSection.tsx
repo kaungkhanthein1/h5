@@ -15,24 +15,27 @@ import { CommentProps, Comment, Reply } from "../../../model/commentModel";
 import { showToast } from "../../../pages/profile/error/ErrorSlice";
 import Popup from "./Popup";
 import ReportPopup from "./ReportPopup";
+import Loader from "../../../pages/search/components/Loader";
 
 const CommentComponent: React.FC<CommentProps> = ({
   movieId,
   lowerDivHeight,
+  setCommentCount,
+  commentCount
 }) => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState("");
   const [replyingTo, setReplyingTo] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
+  const [hasMore, setHasMore] = useState(false);
   const commentInputRef = useRef<HTMLInputElement>(null);
   const [isLoggedIn, setIsLoggedLogIn] = useState<boolean>(false);
   const [openPopup, setOpenPopup ] = useState(false);
   const [openReportPopup, setOpenReportPopup ] = useState(false);
   const [currentSelected, setCurrentSelected] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const user = useSelector((state: any) => state.user.user);
-  console.log('user is=>', user);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -46,27 +49,30 @@ const CommentComponent: React.FC<CommentProps> = ({
           : false
       );
     };
-
     fetchLoginInfo();
   }, []);
+
   // Fetch comments
   const fetchComments = async () => {
+    setIsLoading(true);
     try {
       const response = await fetch(
         `${process.env.REACT_APP_API_URL}/movie/comments/index?movie_id=${movieId}&page=${page}&pageSize=10`
       );
       const data = await response.json();
-  
+
       // Concatenate new comments to existing ones using spread operator (...)
       const updatedComments = comments && comments.length > 0 && comments.length < data.data.total && page > 1 ? [...comments, ...data.data.list] : data.data.list;
-  
-      console.log('updatedComments', updatedComments);
       setComments(updatedComments);
-  
+      setCommentCount(data.data.total);
       // Update hasMore based on total comments and fetched list length
       setHasMore(data.data.total > updatedComments.length);
     } catch (error) {
       console.error("Error fetching comments:", error);
+      setIsLoading(false);
+      setHasMore(false);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -212,25 +218,8 @@ const CommentComponent: React.FC<CommentProps> = ({
           }
         );
 
-        const data = await response.json();
-        console.log('dagta is=>', data);
-        // if (replyingTo) {
-        //   setComments((prevComments) =>
-        //     prevComments.map((comment) =>
-        //       comment.id === replyingTo
-        //         ? {
-        //             ...comment,
-        //             replies: comment.replies
-        //               ? [data.data.data, ...comment.replies.list]
-        //               : [data.data.data],
-        //           }
-        //         : comment
-        //     )
-        //   );
-        // } else {
-        //   setComments([data?.data?.data, ...comments]);
-        // }
-        fetchComments();
+        await response.json();
+        setPage(1);
         setNewComment("");
         setReplyingTo(null);
         dispatch(showToast({ message: "已发布", type: "success" }));
@@ -249,21 +238,24 @@ const CommentComponent: React.FC<CommentProps> = ({
     }
   }, [replyingTo]);
 
+  const handleLoad = () => {
+    setPage(prev => prev + 1);
+  }
+
   return (
-    <div
-     
-    >
+    <div>
+      <div  style={{ height: lowerDivHeight - 150, overflow: 'scroll'}}>
       {comments && comments.length > 0 ? (
           <InfiniteScroll
           dataLength={comments.length}
-          next={() => setPage((prevPage) => prevPage + 1)}
+          next={handleLoad}
           hasMore={hasMore}
-          loader={<h4 className="text-white">Loading...</h4>}
-          // style={{height: lowerDivHeight}}
-           className="comment-section flex flex-col rounded-md p-3 overflow-y-auto"
-      style={{ height: lowerDivHeight - 100 }}
+          loader={<div className="text-white flex justify-center pb-4 items-center text-center">
+            <Loader />
+          </div>}
+           className="comment-section flex flex-col rounded-md p-3"
+           height={lowerDivHeight - 148}
         >
-        <>
           {comments.map((comment) => (
             <div key={comment.id} className="comment pb-4 relative">
               {/* Like button at the top right corner */}
@@ -296,7 +288,7 @@ const CommentComponent: React.FC<CommentProps> = ({
                 </div>
                 <div className="comment-actions flex items-center justify-start gap-4 mt-2">
                   <span className="time text-gray-500 text-sm">
-                    {/* {new Date(comment.create_time * 1000)?.toISOString()?.split('T')[0]} */}
+                    {new Date(comment.create_time * 1000)?.toISOString()?.split('T')[0]}
                     {comment.create_time}
                   </span>
                   <div>
@@ -361,7 +353,6 @@ const CommentComponent: React.FC<CommentProps> = ({
               )}
             </div>
           ))}
-        </>
         </InfiniteScroll> 
       ) : (
         <div
@@ -565,7 +556,7 @@ const CommentComponent: React.FC<CommentProps> = ({
           </div>
         </div>
       )}
-
+      </div>
       {/* Create new comment or reply */}
       {isLoggedIn ? (
         <div className="create-comment bg-commentInput p-2 flex items-center justify-center rounded-lg w-full  comment-btn">

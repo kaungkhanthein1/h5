@@ -10,6 +10,27 @@
   z-index: -1;
 }
 
+.collect_active {
+  border-radius: 16px;
+  background: #f54100;
+}
+
+.collect-btn {
+  border-radius: 16px;
+  display: flex;
+  padding: 4px 8px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
+  text-align: right;
+  font-family: "PingFang SC";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
 @media screen and (min-width: 800px) {
   .profile-bg {
     background-size: cover;

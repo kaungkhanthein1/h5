@@ -24,7 +24,7 @@ const ProfileFirst = () => {
     data: favoriteMovies,
     // isLoading: isFavoritesLoading,
     // isFetching: isFavoritesFetching,
-  } = useGetListQuery({ page: 1 });
+  } = useGetListQuery({ page: 1, type_id: 0 });
   const { data, isLoading, isFetching, refetch } = useGetRecordQuery(); // Fetch favorite movies list from API
 
   // const [movies, setMovies] = useState<Movie[]>([]);

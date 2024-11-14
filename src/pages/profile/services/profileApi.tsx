@@ -50,9 +50,9 @@ export const profileApi = createApi({
         url: `/user/logout`,
       }),
     }),
-    getList: builder.query<any, { page: number }>({
-      query: ({ page }) => {
-        return `/user/movie_collect/list?page=${page}&pageSize=${12}`;
+    getList: builder.query<any, { page: number; type_id: number }>({
+      query: ({ page, type_id }) => {
+        return `/user/movie_collect/list?page=${page}&pageSize=${12}&type_id=${type_id}`;
       },
     }),
     collectMovie: builder.mutation<

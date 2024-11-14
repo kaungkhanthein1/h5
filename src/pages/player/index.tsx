@@ -291,6 +291,8 @@ const DetailPage: React.FC = () => {
               id={id || ""}
               activeTab={activeTab}
               setActiveTab={setActiveTab}
+              setCommentCount={setCommentCount}
+              commentCount={commentCount}
             />
             {activeTab === "tab-1" && (
               <>
