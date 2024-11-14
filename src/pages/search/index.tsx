@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
 import "./search.css";
 import Navbar from "./components/overlay/Navbar";
-import Ads from "./components/Ads";
 import History from "./components/History";
 import Everyone from "./components/Everyone";
 import { useGetAdsQuery, useGetSearchLateQuery } from "./services/searchApi";
 import Rankings from "./components/Rankings";
 import Loader from "./components/Loader";
+import Ads from "../../components/Ads";
 
 const Search: React.FC = () => {
+  const [adsData, setAdsData] = useState<any>([]);
+
   const {
     data: ads,
     isLoading: adLoading,
@@ -38,7 +40,8 @@ const Search: React.FC = () => {
               <Loader />
             </div>
           ) : (
-            <Ads advert={advert} />
+            // <Ads advert={advert} />
+            <Ads adsData={adsData} setAdsData={setAdsData} />
           )}
         </div>
         <History />

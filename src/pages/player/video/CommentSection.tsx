@@ -52,6 +52,9 @@ const CommentComponent: React.FC<CommentProps> = ({
     fetchLoginInfo();
   }, []);
 
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, []);
   // Fetch comments
   const fetchComments = async () => {
     setIsLoading(true);
@@ -312,7 +315,7 @@ const CommentComponent: React.FC<CommentProps> = ({
                       }
                     </span>
                     <div>
-                      {comment.status === 0 && (
+                      {comment.status !== 0 && (
                         <span
                           className="time text-commentIcon text-sm mr-4"
                           onClick={() => setReplyingTo(comment.id)}
@@ -382,7 +385,7 @@ const CommentComponent: React.FC<CommentProps> = ({
                                   }
                                 </span>
                                 <div>
-                                  {comment.status !== 0 && (
+                                  {reply.status !== 0 && (
                                     <span
                                       className="time text-commentIcon text-sm mr-4"
                                       onClick={() => setReplyingTo(comment.id)}
@@ -392,7 +395,7 @@ const CommentComponent: React.FC<CommentProps> = ({
                                   )}
                                   {user &&
                                     user.id &&
-                                    comment.user_id === user.id && (
+                                    reply.user.id === user.id && (
                                       <span
                                         className="time text-commentIcon text-sm"
                                         onClick={() =>
@@ -455,7 +458,7 @@ const CommentComponent: React.FC<CommentProps> = ({
                             </div>
                           </div>
                         ) : (
-                          <div className="text-white flex justify-center mt-4 pb-4 items-center text-center">
+                          <div className="text-white flex w-[300px] justify-center mt-4 pb-4 items-center text-center">
                             <Loader />
                           </div>
                         ))}
@@ -464,7 +467,10 @@ const CommentComponent: React.FC<CommentProps> = ({
               </div>
             ))}
           </InfiniteScroll>
-        ) : (
+        ) : isLoading ? 
+        <div className="text-white flex justify-center pb-4 items-center text-center mt-52">
+        <Loader />
+      </div> : (
           <div
             className="flex justify-center items-center text-center comment-btn"
             style={{ height: lowerDivHeight, width: "100%" }}

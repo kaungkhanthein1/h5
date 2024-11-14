@@ -13,7 +13,11 @@ export const getMovieDetail = async (id: string) => {
 
 export const getAdsData = async () => {
   try {
-    const response = await api.get('/advert/config');
+    const response = await api.get('/advert/config', {
+      headers: {
+        "X-Client-Version": 3098
+      },
+    });
     return response.data;
   } catch (error) {
     console.error('Error fetching ads data:', error);

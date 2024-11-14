@@ -176,6 +176,10 @@ const DetailSection: React.FC<DetailSectionProps> = ({
     };
   }, []);
 
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, []);
+
   return (
     <div className="flex flex-col w-full bg-background">
       {/* Tabs */}
@@ -291,8 +295,8 @@ const DetailSection: React.FC<DetailSectionProps> = ({
             commentCount={commentCount}/>
           </div>
         ) : (
-          <div className="mt-4">
-            {adsData && <AdsSection adsData={adsData?.player_episode_up} />}
+          <div className="mt-8">
+            {adsData && <AdsSection adsDataList={adsData?.player_episode_up} />}
           </div>
         )}
       </div>

@@ -192,6 +192,10 @@ const DetailPage: React.FC = () => {
     autoPlayNextEpisode();
   };
 
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, []);
+  
   const handleVideoError = (errorUrl: string) => {
     if (errorVideoUrl !== errorUrl && errorUrl) {
       setErrorVideoUrl(errorUrl);
@@ -312,7 +316,7 @@ const DetailPage: React.FC = () => {
                 />
 
                 <div className="mt-8 px-4">
-                {adsData && <AdsSection adsData={adsData?.player_recommend_up} />}
+                {adsData && <AdsSection adsDataList={adsData?.player_recommend_up} />}
                 </div>
                 <RecommendedList data={movieDetail} showRecommandMovie={showRecommandMovie}/>
               </>

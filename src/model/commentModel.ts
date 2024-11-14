@@ -35,4 +35,5 @@ export interface Reply {
   };
   content: string;
   create_time: number;
+  status: number;
 }

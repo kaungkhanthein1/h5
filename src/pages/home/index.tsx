@@ -9,8 +9,10 @@ import FilteredByType from "../../components/home/FilteredByType";
 import { setActiveTab } from "./slice/HomeSlice";
 import "../../components/home/home.css";
 import { useGetRecordQuery } from "../profile/services/profileApi";
+import Ads from "../../components/Ads";
 
 const Home: React.FC = () => {
+  const [adsData, setAdsData] = useState<any>([]);
   const { data, isLoading } = useGetRecommendedMoviesQuery();
   const activeTab = useSelector((state: any) => state.home.activeTab);
   const { data: movies } = useGetRecordQuery(); // Fetch favorite movies list from API
@@ -35,6 +37,7 @@ const Home: React.FC = () => {
                     <>
                       <Banner key={index} list={movieData?.list} />
                       {movies?.length !== 0 && <ContinueWatching />}
+                      <Ads adsData={adsData} setAdsData={setAdsData} />
                     </>
                   );
                 } else if (movieData?.layout === "base") {
