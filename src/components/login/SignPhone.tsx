@@ -136,7 +136,7 @@ const SignPhone: React.FC<SignPhoneProps> = ({ handleBack2 }) => {
                     onChange={(e) => setPhone(e.target.value)}
                     onFocus={() => setIsFocusedEmail(true)}
                     onBlur={() => setIsFocusedEmail(phone !== "")}
-                    className="w-full px-4 py-2 bg-transparent input_border focus:outline-none text-white placeholder-transparent"
+                    className="w-full px-4 py-2 bg-[#2B2B2D] input_border focus:outline-none text-white placeholder-transparent"
                     required
                     placeholder=""
                   />
@@ -159,7 +159,7 @@ const SignPhone: React.FC<SignPhoneProps> = ({ handleBack2 }) => {
                     onChange={(e) => setPassword(e.target.value)}
                     onFocus={() => setIsFocusedPassword(true)}
                     onBlur={() => setIsFocusedPassword(password !== "")}
-                    className="w-full px-4 py-2 bg-transparent input_border focus:outline-none text-white placeholder-transparent"
+                    className="w-full px-4 py-2 bg-[#2B2B2D] input_border focus:outline-none text-white placeholder-transparent"
                     required
                     placeholder=""
                   />
@@ -190,11 +190,11 @@ const SignPhone: React.FC<SignPhoneProps> = ({ handleBack2 }) => {
                 <button
                   disabled={!validatePassword(password)}
                   type="submit"
-                  className={`w-full  mt-[20px] py-2 px-4 rounded-lg ${
+                  className={`w-full  mt-[20px] py-2 px-4 rounded-lg text-white ${
                     validatePassword(password) ? "login_button" : "next_button"
                   } transition duration-300 ease-in-out`}
                 >
-                  Sign Up
+                 注册
                 </button>
               </form>
 

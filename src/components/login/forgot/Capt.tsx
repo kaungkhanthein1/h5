@@ -145,7 +145,7 @@ const Capt: React.FC<CaptProp> = ({ email, password, confirmPassword }) => {
               className={`mt-[16px] w-full rounded-[4px] p-[10px] text-[14px] font-[400] ${
                 isButtonDisabled
                   ? "bg-[#333237] text-[#777]"
-                  : "bg-white text-black"
+                  : "bg-[#F54100] text-white"
               }`}
               disabled={isButtonDisabled}
               // onClick={handleFunction}

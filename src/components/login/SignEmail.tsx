@@ -9,6 +9,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { setCaptchaOpen } from "../../features/login/ModelSlice";
 import axios from "axios";
 import UserName from "./UserName";
+import '../../pages/login/login.css'
+
 interface SignEmailProps {
   handleBack2: () => void; // Accept handleBack as a prop
 }
@@ -125,7 +127,7 @@ const SignEmail: React.FC<SignEmailProps> = ({ handleBack2 }) => {
                       onChange={(e) => setEmail(e.target.value)}
                       onFocus={() => setIsFocusedEmail(true)}
                       onBlur={() => setIsFocusedEmail(email !== "")}
-                      className="w-full px-4 py-2 bg-[#161619] input_border focus:outline-none text-white placeholder-transparen"
+                      className="w-full px-4 py-2 bg-[#2B2B2D] input_border focus:outline-none text-white placeholder-transparen"
                       required
                       placeholder=""
                     />
@@ -148,7 +150,7 @@ const SignEmail: React.FC<SignEmailProps> = ({ handleBack2 }) => {
                       onChange={(e) => setPassword(e.target.value)}
                       onFocus={() => setIsFocusedPassword(true)}
                       onBlur={() => setIsFocusedPassword(password !== "")}
-                      className="w-full px-4 py-2 bg-[#161619] input_border focus:outline-none text-white placeholder-transparent"
+                      className="w-full px-4 py-2 bg-[#2B2B2D] input_border focus:outline-none text-white placeholder-transparent"
                       required
                       placeholder=""
                     />
@@ -180,13 +182,13 @@ const SignEmail: React.FC<SignEmailProps> = ({ handleBack2 }) => {
                   <button
                     disabled={!validatePassword(password)}
                     type="submit"
-                    className={`w-full  mt-[20px] py-2 px-4 rounded-lg ${
+                    className={`w-full  mt-[20px] py-2 px-4 rounded-lg text-white ${
                       validatePassword(password)
                         ? "login_button"
                         : "next_button"
                     } transition duration-300 ease-in-out`}
                   >
-                    Sign Up
+                   注册
                   </button>
                 </form>
 

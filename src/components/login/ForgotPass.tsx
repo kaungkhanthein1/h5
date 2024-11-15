@@ -182,7 +182,7 @@ const ForgotPass: React.FC<ForgotPassProps> = ({ setForgot }) => {
               <button
                 disabled={!validatePassword(password)}
                 type="submit"
-                className={`w-full  mt-[20px] py-2 px-4 rounded-lg ${
+                className={`w-full  mt-[20px] py-2 px-4 rounded-lg text-white ${
                   validatePassword(password) ? "login_button" : "next_button"
                 } transition duration-300 ease-in-out`}
               >

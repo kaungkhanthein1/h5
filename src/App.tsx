@@ -182,13 +182,13 @@ const App: React.FC = () => {
 
           {(openAuthModel || openLoginModel || openSignupModel) && (
             <div
-              className="fixed inset-0 bg-black opacity-50 z-[99899] h-screen" // Overlay with 50% opacity
+              className="fixed inset-0 bg-black/40 opacity-50 z-[99899] h-screen" // Overlay with 50% opacity
               onClick={closeAllModals} // Close all modals on click
             ></div>
           )}
           {/* <div className=" fixed h-screen flex flex-col justify-center items-center"> */}
-          {openAuthModel && <Login />}
-          {openLoginModel && <LoginEmail handleBack={handleBack} />}
+          {openAuthModel && <LoginEmail handleBack={handleBack} /> }
+          {/* {openLoginModel && <LoginEmail handleBack={handleBack} />} */}
           {openSignupModel && <SignUp handleBack={handleBack} />}
           {/* </div> */}
         </div>

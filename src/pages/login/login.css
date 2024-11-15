@@ -1,6 +1,6 @@
 .login_box {
   border-radius: 32px 32px 0px 0px;
-  background: #161619;
+  background: #2b2b2d;
 }
 
 .whole {
@@ -14,7 +14,8 @@
 
 .login_button {
   border-radius: var(--Height-And-Sizes-80, 80px);
-  background: #fff;
+  border: 1px solid rgba(0, 149, 255, 0.12);
+  background: #f54100;
 }
 
 .close_btn {
@@ -23,12 +24,12 @@
 }
 
 .input_border {
-  border-bottom: 0.5px solid #888;
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.6);
 }
 
 .next_button {
   border-radius: var(--Height-And-Sizes-80, 80px);
-  background: rgba(255, 255, 255, 0.08);
+  background: #393939;
 }
 
 .otp_button {
@@ -38,4 +39,9 @@
 
 .capt_box {
   background: rgba(255, 255, 255, 0.04);
+}
+
+.new_css_button {
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.12);
 }

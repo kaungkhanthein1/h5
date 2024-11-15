@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { startTransition, useState } from "react";
 import back from "../../assets/login/back.svg";
 import close from "../../assets/login/close.svg";
 import eye from "../../assets/login/eye.svg";
 import { motion, AnimatePresence } from "framer-motion";
 import ForgotPass from "./ForgotPass";
 import { useDispatch, useSelector } from "react-redux";
+import '../../pages/login/login.css'
 import {
   setAuthModel,
   setCaptchaOpen,
@@ -41,6 +42,14 @@ const LoginEmail: React.FC<LoginEmailProps> = ({ handleBack }) => {
 
   const validateEmail = (email: string) => {
     return email.length >= 6 && email.length <= 40;
+  };
+
+  const toggleVisibility = (login: boolean, signup: boolean) => {
+    startTransition(() => {
+      dispatch(setAuthModel(false));
+      dispatch(setLoginOpen(login));
+      dispatch(setSignupOpen(signup));
+    });
   };
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -106,7 +115,7 @@ const LoginEmail: React.FC<LoginEmailProps> = ({ handleBack }) => {
         <AnimatePresence>
           {isVisible && (
             <motion.div
-              className="login_box h-[480px] fixed bottom-0 z-[99999] w-screen  py-4 px-[20px] bg-gray-800 rounded-t-2xl"
+              className="login_box h-[480px] fixed bottom-0 z-[99999] w-screen  py-4 px-[20px] bg-[#2B2B2D] rounded-t-2xl"
               initial="hidden"
               animate="visible"
               exit="exit"
@@ -117,19 +126,20 @@ const LoginEmail: React.FC<LoginEmailProps> = ({ handleBack }) => {
               onDragEnd={handleDragEnd}
             >
               <div className="flex flex-col justify-center items-center gap-[16px]">
-                <motion.p className="w-[60px] h-[4px] drag_line mt-[12px] cursor-pointer bg-gray-400"></motion.p>
-                <div className="flex justify-between items-center w-full pb-[20px]">
-                  <img
+                <motion.p className="w-[60px] h-[4px] drag_line mt-[12px] cursor-pointer bg-[#2B2B2D]"></motion.p>
+                <div className=" flex justify-center items-center w-full pb-[20px] relative">
+                  {/* <img
                     className="p-3 cursor-pointer"
                     src={back}
                     alt="Back"
                     onClick={handleBack}
-                  />
+                  /> */}
+                  <div className=""></div>
                   <h2 className="text-[18px] font-[600] leading-[20px] text-white">
                     登录
                   </h2>
                   <img
-                    className="close_btn p-3 cursor-pointer"
+                    className="close_btn p-3 cursor-pointer fixed z-[999991] right-[30px]"
                     src={close}
                     alt="Close"
                     onClick={handleClose}
@@ -147,7 +157,7 @@ const LoginEmail: React.FC<LoginEmailProps> = ({ handleBack }) => {
                       onChange={(e) => setEmail(e.target.value)}
                       onFocus={() => setIsFocusedEmail(true)}
                       onBlur={() => setIsFocusedEmail(email !== "")}
-                      className="w-full px-4 py-2 bg-[#161619] input_border focus:outline-none text-white placeholder-transparent"
+                      className="w-full px-4 py-2 bg-[#2B2B2D] input_border focus:outline-none text-white placeholder-transparent"
                       required
                       placeholder=""
                     />
@@ -170,7 +180,7 @@ const LoginEmail: React.FC<LoginEmailProps> = ({ handleBack }) => {
                       onChange={(e) => setPassword(e.target.value)}
                       onFocus={() => setIsFocusedPassword(true)}
                       onBlur={() => setIsFocusedPassword(password !== "")}
-                      className="w-full px-4 py-2 bg-[#161619] input_border focus:outline-none text-white placeholder-transparent"
+                      className="w-full px-4 py-2 bg-[#2B2B2D] input_border focus:outline-none text-white placeholder-transparent"
                       required
                       placeholder="Please Enter Your Password"
                     />
@@ -182,7 +192,7 @@ const LoginEmail: React.FC<LoginEmailProps> = ({ handleBack }) => {
                           : "top-1/2 -translate-y-1/2"
                       }`}
                     >
-                     请输入密码
+                      请输入密码
                     </label>
                     <img
                       onClick={show}
@@ -191,18 +201,25 @@ const LoginEmail: React.FC<LoginEmailProps> = ({ handleBack }) => {
                       alt="Show Password"
                     />
                   </div>
-
-                  <div
-                    onClick={() => setForgot(true)} // When clicked, set `forgot` to true to show the ForgotPass component
-                    className="text-left mt-[-10px] text-blue-500 text-sm cursor-pointer"
-                  >
-                    找回密码
+                  <div className=" flex justify-between">
+                    <div
+                      onClick={() => toggleVisibility(false, true)}
+                      className="text-left mt-[-10px] text-white text-sm cursor-pointer"
+                    >
+                      注册账号
+                    </div>
+                    <div
+                      onClick={() => setForgot(true)} // When clicked, set `forgot` to true to show the ForgotPass component
+                      className="text-left mt-[-10px] text-[#FF4E00] text-sm cursor-pointer"
+                    >
+                      忘记密码？
+                    </div>
                   </div>
 
                   <button
                     disabled={!validatePassword(password)}
                     type="submit"
-                    className={`w-full  mt-[20px] py-2 px-4 rounded-lg ${
+                    className={`w-full  mt-[20px] py-2 px-4 rounded-lg text-white ${
                       validatePassword(password)
                         ? "login_button"
                         : "next_button"

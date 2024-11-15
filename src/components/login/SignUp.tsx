@@ -10,6 +10,10 @@ import { useDispatch } from "react-redux";
 import { setLoginOpen } from "../../features/login/ModelSlice";
 import { setSignupOpen } from "../../features/login/ModelSlice";
 import { setAuthModel } from "../../features/login/ModelSlice";
+import phone from "../../assets/login/phone.svg";
+import email from "../../assets/login/email.svg";
+import "../../pages/login/login.css";
+
 interface SignUpProps {
   handleBack: () => void; // Accept handleBack as a prop
 }
@@ -90,7 +94,7 @@ const SignUp: React.FC<SignUpProps> = ({ handleBack }) => {
             dragElastic={0.2}
             onDragEnd={handleDragEnd}
           >
-            <div className="flex flex-col justify-cente items-center gap-[25px] px-[20px]">
+            <div className="flex flex-col justify-cente items-center gap-[30px] px-[20px]">
               <motion.p className="w-[60px] h-[4px] drag_line mt-[12px] cursor-pointer"></motion.p>
               {/* header */}
               <div className="flex justify-between items-center w-full pb-[px]">
@@ -101,7 +105,7 @@ const SignUp: React.FC<SignUpProps> = ({ handleBack }) => {
                   onClick={handleBack}
                 />
                 <h2 className="text-[18px] font-[600] leading-[20px] text-white">
-                注册
+                  注册
                 </h2>
                 <img
                   className="close_btn p-3 cursor-pointer"
@@ -113,21 +117,35 @@ const SignUp: React.FC<SignUpProps> = ({ handleBack }) => {
               {/* decs */}
               <div className=" w-full">
                 <h1 className=" text-white text-[14px] font-[500]">
-                选择注册方式{" "}
+                  选择注册方式{" "}
                 </h1>
                 <p className=" text-white/60 text-[14px] font-[400]">
-                海外用户请选择使用邮箱注册
+                  海外用户请选择使用邮箱注册
                 </p>
               </div>
               <div className="flex flex-col gap-[13px]">
-                <Button
+                {/* <Button
                   onClick={handleShowSignUpEmail}
                   text={"使用邮箱注册 "}
-                />
-                <Button
+                /> */}
+                <button
+                  onClick={handleShowSignUpPhone}
+                  className="new_css_button relative text-[14px] font-[600] leading-[22px] w-[320px] px-[16px] py-[8px] flex justify-center items-center gap-[8px] text-white"
+                >
+                  <img className=" absolute left-[20px]" src={phone} alt="" />
+                  使用手机号注册
+                </button>
+                <button
+                  onClick={handleShowSignUpEmail}
+                  className="new_css_button relative text-[14px] font-[600] leading-[22px] w-[320px] px-[16px] py-[8px] flex justify-center items-center gap-[8px] text-white"
+                >
+                  <img className=" absolute left-[20px]" src={email} alt="" />
+                  使用邮箱注册
+                </button>
+                {/* <Button
                   onClick={handleShowSignUpPhone}
                   text={"使用电话号码注册"}
-                />
+                /> */}
               </div>
             </div>
           </motion.div>
