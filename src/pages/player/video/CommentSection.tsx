@@ -6,7 +6,7 @@ import {
   faSpinner,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
-import ProfileImg from "../../../assets/profile.png";
+import ProfileImg from "../../../assets/share/user.svg";
 import OptionIcon from "../../../assets/option.svg";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useDispatch, useSelector } from "react-redux";
@@ -297,7 +297,7 @@ const CommentComponent: React.FC<CommentProps> = ({
                   <img
                     src={comment.user?.avatar || ProfileImg}
                     alt={comment.user?.nickname}
-                    className="w-9 h-9 rounded-full mr-2 mt-3"
+                    className="w-8 h-8 rounded-full mr-2 mt-3"
                   />
                   <span className="username text-commentIcon font-bold">
                     {comment.user?.nickname}
@@ -365,7 +365,7 @@ const CommentComponent: React.FC<CommentProps> = ({
                               <img
                                 src={reply.user?.avatar || ProfileImg}
                                 alt={reply.user?.nickname}
-                                className="w-9 h-9 rounded-full mr-2 mt-3"
+                                className="w-8 h-8 rounded-full mr-2 mt-3"
                               />
                               <span className="username text-commentIcon font-bold">
                                 {reply.user?.nickname}
@@ -685,7 +685,7 @@ const CommentComponent: React.FC<CommentProps> = ({
           <img
             src={user?.avatar || ProfileImg}
             alt="User Avatar"
-            className={`w-9 h-9 rounded-full mr-1 ${user?.avatar ? '' : 'mt-2'}`}
+            className={`w-8 h-8 rounded-full mr-1`}
           />
           <input
             ref={commentInputRef}
