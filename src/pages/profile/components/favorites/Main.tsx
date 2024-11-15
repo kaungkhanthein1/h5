@@ -4,6 +4,7 @@ import Ads from "../../../search/components/Ads";
 import Loader from "../../../search/components/Loader";
 import ImageWithPlaceholder from "../../../search/components/ImgPlaceholder";
 import { useDeleteCollectMutation } from "../../services/profileApi"; // Import delete mutation
+import NewAds from "../../../../components/NewAds";
 
 interface MainProps {
   isEditMode: boolean;
@@ -99,7 +100,8 @@ const Main: React.FC<MainProps> = ({
           </div>
         ) : (
           <>
-            <Ads advert={advert} />
+            {/* <Ads advert={advert} /> */}
+            <NewAds section="collect_up" />
           </>
         )}
 
