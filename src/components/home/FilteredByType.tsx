@@ -31,6 +31,7 @@ const FilteredByType = () => {
   const classData = useSelector((state: any) => state.home.class);
   const area = useSelector((state: any) => state.home.area);
   const year = useSelector((state: any) => state.home.year);
+  const [nomoredata, setNomoredata] = useState(false);
   const dispatch = useDispatch();
 
   const getMoviesByType = async (id: any) => {
@@ -39,7 +40,12 @@ const FilteredByType = () => {
       const { data } = await axios.get(
         `${process.env.REACT_APP_API_URL}/movie/screen/list?type_id=${id}&&sort=${sort}&&class=${classData}&&area=${area}&&year=${year}&&pageSize=${pageSize}&&page=${page}`
       );
-      if (data?.data?.list?.length >= 0) setIsLoading(false);
+      if (data?.data?.list?.length >= 0) {
+        setIsLoading(false);
+      } else {
+        setIsLoading(false);
+        setNomoredata(true);
+      }
       setMovieData(data?.data?.list);
       setTotalPage(data?.data?.total);
     } catch (err) {
@@ -92,8 +98,6 @@ const FilteredByType = () => {
     return null; // Ensure you return null instead of undefined
   }
 
-  console.log(movieData?.length, totalPage);
-
   return (
     <>
       <div className="home-bg"></div>
@@ -104,45 +108,37 @@ const FilteredByType = () => {
             sort={configData?.data?.movie_screen?.sort}
           />
 
-          {movieData?.length ? (
+          {isLoading ? (
+            <div className="mt-10 flex justify-center items-center w-full">
+              <Loader />
+            </div>
+          ) : movieData?.length ? (
             <>
-              {isLoading ? (
-                <div className="mt-10 flex justify-center items-center w-full">
-                  <Loader />
-                </div>
-              ) : (
-                <>
-                  <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 pl-3 lg:grid-cols-8 gap-y-5 gap-2 mt-0 pt-5 pb-32 px-3">
-                    {movieData?.map((movie: any) => (
-                      <div key={movie?.id} className="mx-auto w-full">
-                        <MovieCard movie={movie} height={"200px"} />
-                      </div>
-                    ))}
+              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 pl-3 lg:grid-cols-8 gap-y-5 gap-2 mt-0 pt-5 pb-32 px-3">
+                {movieData?.map((movie: any) => (
+                  <div key={movie?.id} className="mx-auto w-full">
+                    <MovieCard movie={movie} height={"200px"} />
                   </div>
-                  <InfiniteScroll
-                    dataLength={movieData.length} //This is important field to render the next data
-                    next={fetchData}
-                    hasMore={hasMore}
-                    loader={
-                      <div className="flex justify-center items-center w-full pb-20">
-                        {/* {hasMore ? <Loader /> : "No More data"} */}
-                        <Loader />
-                      </div>
-                    }
-                  >
-                    <></>
-                    {/* {item} */}
-                  </InfiniteScroll>
-                </>
-              )}
+                ))}
+              </div>
+              <InfiniteScroll
+                dataLength={movieData.length} //This is important field to render the next data
+                next={fetchData}
+                hasMore={hasMore}
+                loader={
+                  <div className="flex justify-center items-center w-full pb-20">
+                    {/* {hasMore ? <Loader /> : "No More data"} */}
+                    <Loader />
+                  </div>
+                }
+              >
+                <></>
+                {/* {item} */}
+              </InfiniteScroll>
             </>
           ) : (
             <div className="text-center flex justify-center flex-col items-center w-full pt-32 px-3">
-              {/* <Loader /> */}
               <img src={nodata} className="w-[110px]" alt="" />
-              {/* <h1 className="text-white font-semibold text-[16px]">
-                这里什么都没有...
-              </h1> */}
             </div>
           )}
         </div>
