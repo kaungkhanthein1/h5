@@ -5,6 +5,7 @@ import { useDeleteRecordMutation } from "../../services/profileApi";
 import { useGetAdsQuery } from "../../../search/services/searchApi";
 import Loader from "../../../search/components/Loader";
 import Ads from "../../../search/components/Ads";
+import NewAds from "../../../../components/NewAds";
 
 const Main: React.FC<any> = ({
   isEditMode,
@@ -60,9 +61,10 @@ const Main: React.FC<any> = ({
           <Loader />
         </div>
       ) : (
-        <>
-          <Ads advert={advert} />
-        </>
+        <div className=" py-2">
+          {/* <Ads advert={advert} /> */}
+          <NewAds section="play_record_up" />
+        </div>
       )}
       {movies?.map((movie: any, index: number) => (
         <div className="mt-5" key={index}>

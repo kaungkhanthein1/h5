@@ -7,6 +7,7 @@ import { useGetAdsQuery, useGetSearchLateQuery } from "./services/searchApi";
 import Rankings from "./components/Rankings";
 import Loader from "./components/Loader";
 import Ads from "../../components/NewAds";
+import { useLocation } from "react-router-dom";
 
 const Search: React.FC = () => {
   const {
@@ -22,10 +23,11 @@ const Search: React.FC = () => {
   } = useGetSearchLateQuery();
 
   const advert = ads?.data?.search_result_up?.data;
+  const location = useLocation();
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+  }, [location]);
 
   return (
     <>

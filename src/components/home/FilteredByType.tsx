@@ -18,6 +18,7 @@ import {
   setArea,
   setYear,
 } from "../../pages/home/slice/HomeSlice";
+import NewAds from "../NewAds";
 
 const FilteredByType = () => {
   const activeTab = useSelector((state: any) => state.home.activeTab);
@@ -107,7 +108,7 @@ const FilteredByType = () => {
             data={filteredTags}
             sort={configData?.data?.movie_screen?.sort}
           />
-
+          {/* <NewAds section="start" /> */}
           {isLoading ? (
             <div className="mt-10 flex justify-center items-center w-full">
               <Loader />

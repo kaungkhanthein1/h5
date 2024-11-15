@@ -4,11 +4,14 @@ import { Link } from "react-router-dom";
 import { setCaptchaOpen } from "../../features/login/ModelSlice";
 import Captcha from "./components/email/Captcha";
 import Otp from "./components/email/Otp";
+import { useGetUserQuery } from "./services/profileApi";
 
 const Phnumber: React.FC = () => {
   const dispatch = useDispatch();
   const { openCaptcha, openOtp } = useSelector((state: any) => state.model); // OpenCaptcha and OpenOtp states
-  const user = useSelector((state: any) => state.user.user);
+  const { data: userData } = useGetUserQuery(undefined);
+  const user = userData?.data;
+  // const user = useSelector((state: any) => state.user.user);
   const [text, setText] = useState(user?.phone); // Email value
   const [active, setActive] = useState(false);
 

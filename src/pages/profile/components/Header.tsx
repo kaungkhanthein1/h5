@@ -15,58 +15,60 @@ const Header = () => {
   const token = parsedLoggedIn?.data?.access_token;
 
   // Use Redux to get user data from slice (persisted)
-  const user = useSelector((state: any) => state.user.user);
+  //const user = useSelector((state: any) => state.user.user);
 
   // Conditionally call the `useGetUserQuery` only if token exists and no user data in slice
   const { data: userData, error } = useGetUserQuery(undefined, {
-    skip: user || !token, // Skip API call if user data exists in slice or no token present
+    skip: !token, // Skip API call if user data exists in slice or no token present
   });
 
-  useEffect(() => {
-    if (!user && userData) {
-      // If user data comes from the API, dispatch it to the Redux slice
-      const {
-        id,
-        username,
-        nickname,
-        avatar,
-        level,
-        integral,
-        email,
-        phone,
-        active,
-        social_accounts,
-        inviter_id,
-        invite_code,
-        invite_user_num,
-      } = userData.data;
+  // useEffect(() => {
+  //   if (userData) {
+  //     // If user data comes from the API, dispatch it to the Redux slice
+  //     const {
+  //       id,
+  //       username,
+  //       nickname,
+  //       avatar,
+  //       level,
+  //       integral,
+  //       email,
+  //       phone,
+  //       active,
+  //       social_accounts,
+  //       inviter_id,
+  //       invite_code,
+  //       invite_user_num,
+  //     } = userData.data;
 
-      // Dispatch the user data to Redux store
-      dispatch(
-        setUser({
-          id,
-          username,
-          nickname,
-          avatar,
-          level,
-          integral,
-          social_accounts,
-          email,
-          phone,
-          active,
-          inviter_id,
-          invite_code,
-          invite_user_num,
-        })
-      );
-    }
-  }, [user, userData, dispatch]);
+  //     // Dispatch the user data to Redux store
+  //     dispatch(
+  //       setUser({
+  //         id,
+  //         username,
+  //         nickname,
+  //         avatar,
+  //         level,
+  //         integral,
+  //         social_accounts,
+  //         email,
+  //         phone,
+  //         active,
+  //         inviter_id,
+  //         invite_code,
+  //         invite_user_num,
+  //       })
+  //     );
+  //   }
+  // }, [userData, dispatch]);
 
   const handleLoginClick = () => {
     if (!token) {
       dispatch(setAuthModel(true)); // Open the login modal if not logged in
     }
   };
+
+  const user = userData?.data;
 
   return (
     <div className="profile-header">
@@ -153,7 +155,7 @@ const Header = () => {
             )}
           </div>
           <div className="flex flex-col gap-0">
-            <h1>{user?.username}</h1>
+            <h1>{user?.nickname}</h1>
             <div className="flex gap-2 mt-1 items-center">
               {user?.level && (
                 <img src={user?.level} className="w-[80px] h-[30px]" />

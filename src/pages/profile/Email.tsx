@@ -5,11 +5,13 @@ import { setCaptchaOpen } from "../../features/login/ModelSlice";
 import Captcha from "./components/email/Captcha";
 import Otp from "./components/email/Otp";
 import { showToast } from "./error/ErrorSlice";
+import { useGetUserQuery } from "./services/profileApi";
 
 const Email: React.FC = () => {
   const dispatch = useDispatch();
   const { openCaptcha, openOtp } = useSelector((state: any) => state.model); // OpenCaptcha and OpenOtp states
-  const user = useSelector((state: any) => state.user.user);
+  const { data: userData } = useGetUserQuery(undefined);
+  const user = userData?.data;
   const [active, setActive] = useState(false);
   const [text, setText] = useState(user?.email); // Email value
 

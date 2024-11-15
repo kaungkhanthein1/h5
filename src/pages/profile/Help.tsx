@@ -40,8 +40,6 @@
 const Help = () => {
   // const { data } = useGetArticesQuery();
 
-  // console.log(data);
-
   // const navigate = useNavigate();
   // const location = useLocation();
 

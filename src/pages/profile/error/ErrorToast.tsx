@@ -9,7 +9,6 @@ const ErrorToast: React.FC = () => {
   const { message, type, showToast } = useSelector((state: any) => state.error);
 
   useEffect(() => {
-    console.log('appear')
     if (showToast) {
       const timer = setTimeout(() => {
         dispatch(hideToast());

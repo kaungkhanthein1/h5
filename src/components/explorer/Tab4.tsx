@@ -8,6 +8,7 @@ import RatingCard from "./RatingCard";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setActiveRank } from "../../pages/explorer/slice/ExploreSlice";
+import NewAds from "../NewAds";
 
 // Define the type for the movie data
 interface Movie {
@@ -84,8 +85,10 @@ const Tab4 = () => {
             </div>
           ))}
         </nav>
+
       </div>
-      <div className="px-3 flex flex-col gap-7">
+        <NewAds section="ranking" />
+      <div className="px-3 pt-5 flex flex-col gap-7">
         {data?.data[activeRank ? activeRank : activeTab]?.movie_data?.length
           ? data?.data[activeRank ? activeRank : activeTab]?.movie_data?.map(
               (item: any, index: any) => (

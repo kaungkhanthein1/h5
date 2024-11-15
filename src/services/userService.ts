@@ -85,12 +85,11 @@ export const login = async (
       throw new Error("Public key is not defined");
     }
     const publicKey = process.env.REACT_APP_PUBLIC_KEY_LOGIN;
-    // console.log(publicKey)
+
     if (!publicKey) {
       throw new Error("Public key is not defined");
     }
     const encryptedData = encryptWithRsa(JSON.stringify(formData), publicKey);
-    // console.log(encryptedData)
 
     // Step 3: Generate signature
     const signature = generateSignature(encryptedData);

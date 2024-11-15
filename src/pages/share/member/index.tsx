@@ -25,8 +25,6 @@ const Member: React.FC<MemberProps> = ({}) => {
     refetch(); // Refetch the data when the component renders
   }, [refetch]);
 
-  console.log("list", memberList);
-
   return (
     <div className="">
       <img
@@ -97,7 +95,7 @@ const Member: React.FC<MemberProps> = ({}) => {
                           now.getTime() - memberTime.getTime(); // Time difference in milliseconds
                         const minutesDifference = Math.floor(
                           timeDifference / (1000 * 60)
-                        ); 
+                        );
                         // If the time difference is less than 5 minutes, show "Just Now"
                         if (minutesDifference < 5) {
                           return "Just Now";

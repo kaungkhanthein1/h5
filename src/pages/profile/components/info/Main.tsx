@@ -1,14 +1,22 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useChangeAvatarMutation } from "../../services/profileApi"; // Your API
+import {
+  useChangeAvatarMutation,
+  useGetUserQuery,
+} from "../../services/profileApi"; // Your API
 import { setUser } from "../slice/UserSlice";
 import ImageWithPlaceholder from "./ImageWithPlaceholder";
 import { showToast } from "../../error/ErrorSlice";
 
 const Main = () => {
   const dispatch = useDispatch();
-  const user = useSelector((state: any) => state.user.user);
+
+  const { data: userData, refetch } = useGetUserQuery(undefined);
+
+  const user = userData?.data;
+
+  // const user = useSelector((state: any) => state.user.user);
   const [showBottomSheet, setShowBottomSheet] = useState(false);
 
   const [changeAvatar] = useChangeAvatarMutation(); // RTK mutation for avatar
@@ -33,12 +41,7 @@ const Main = () => {
 
       const response = await changeAvatar(formData).unwrap();
       const url = response?.data?.url;
-      dispatch(
-        setUser({
-          ...user,
-          avatar: url,
-        })
-      );
+      refetch();
       dispatch(
         showToast({
           message: "头像更新成功！",

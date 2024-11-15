@@ -23,7 +23,7 @@ interface ShareProps {}
 const Share: React.FC<ShareProps> = ({}) => {
   const dispatch = useDispatch();
   const { data } = useGetShareScanQuery({ qr_create: "1" });
-  console.log(data);
+
   const [copySuccess, setCopySuccess] = useState(false);
   const imageRef = useRef<HTMLDivElement>(null);
 
@@ -32,7 +32,7 @@ const Share: React.FC<ShareProps> = ({}) => {
   const token = parsedLoggedIn?.data?.access_token;
 
   const { data: userData, error } = useGetUserQuery(token);
-  console.log(userData);
+
   const navigate = useNavigate();
   const handleCopy = () => {
     if (userData) {
@@ -53,7 +53,7 @@ const Share: React.FC<ShareProps> = ({}) => {
   const handleShareLink = () => {
     if (data) {
       const link = data?.data?.link;
-      console.log(link);
+
       navigator.clipboard
         .writeText(link)
         .then(() => {
@@ -98,7 +98,11 @@ const Share: React.FC<ShareProps> = ({}) => {
           // onClick={() => navigate("")}
           className="rule py-[8px] px-[16px] mt-[5px]"
         >
-          <a target="_blink" href="https://cc3e497d.qdhgtch.com:1333/help" className=" text-white text-[14px] font-[500]">
+          <a
+            target="_blink"
+            href="https://cc3e497d.qdhgtch.com:1333/help"
+            className=" text-white text-[14px] font-[500]"
+          >
             Point Rules
           </a>
         </div>

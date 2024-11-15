@@ -2,7 +2,10 @@ import { useDispatch, useSelector } from "react-redux";
 import "./profile.css";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useChangeUsernameMutation } from "../profile/services/profileApi"; // import the hook
+import {
+  useChangeUsernameMutation,
+  useGetUserQuery,
+} from "../profile/services/profileApi"; // import the hook
 import { setUser } from "./components/slice/UserSlice";
 import { showToast } from "./error/ErrorSlice";
 
@@ -10,7 +13,8 @@ const Username = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const user = useSelector((state: any) => state.user.user);
+  const { data: userData, refetch } = useGetUserQuery(undefined);
+  const user = userData?.data;
   const [active, setActive] = useState(false);
   const [text, setText] = useState(user?.username);
 
@@ -21,12 +25,7 @@ const Username = () => {
     e.preventDefault();
     try {
       await changeUsername({ new_username: text }).unwrap();
-      dispatch(
-        setUser({
-          ...user,
-          username: text, // Update the Username
-        })
-      );
+      refetch();
       dispatch(
         showToast({
           message: "用户名修改成功！",

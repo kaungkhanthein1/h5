@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import MovieCard from "../../components/explorer/MovieCard";
 import backArrow from "../../assets/back.svg";
 import Loader from "../search/components/Loader";
+import NewAds from "../../components/NewAds";
 
 const Detail = () => {
   const [details, setDetails] = useState<any>({});
@@ -51,7 +52,8 @@ const Detail = () => {
           <p className="px-3 text-[12px] text-[#aaa] my-3">
             {details?.description}
           </p>
-          <p className="px-3 text-[12px] mb-3">
+          <NewAds section="topic_movies_top" />
+          <p className="px-3 text-[12px] mt-2 mb-3">
             Include {details?.movies?.length} Films
           </p>
           <div className="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-6 lg:gird-cols-8 gap-3 px-3">

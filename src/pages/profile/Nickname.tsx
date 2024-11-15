@@ -2,17 +2,22 @@ import { useDispatch, useSelector } from "react-redux";
 import "./profile.css";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useChangeNicknameMutation } from "../profile/services/profileApi"; // import the hook
+import {
+  useChangeNicknameMutation,
+  useGetUserQuery,
+} from "../profile/services/profileApi"; // import the hook
 import { setUser } from "./components/slice/UserSlice";
 import { showToast } from "./error/ErrorSlice";
 
 const Nickname = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const user = useSelector((state: any) => state.user.user);
+  const { data: userData, refetch } = useGetUserQuery(undefined);
+  const user = userData?.data;
+  // const user = useSelector((state: any) => state.user.user);
   const [text, setText] = useState(user?.nickname);
   const [active, setActive] = useState(false);
+
   const [changeNickname, { isLoading, isError, isSuccess }] =
     useChangeNicknameMutation(); // use the mutation hook
 
@@ -21,12 +26,7 @@ const Nickname = () => {
 
     try {
       await changeNickname({ new_nickname: text }).unwrap();
-      dispatch(
-        setUser({
-          ...user,
-          nickname: text, // Update the nickname
-        })
-      );
+      refetch();
       dispatch(
         showToast({
           message: "昵称修改成功！",

@@ -16,6 +16,7 @@ import { showToast } from "../../../pages/profile/error/ErrorSlice";
 import Popup from "./Popup";
 import ReportPopup from "./ReportPopup";
 import Loader from "../../../pages/search/components/Loader";
+import { useGetUserQuery } from "../../../pages/profile/services/profileApi";
 
 const CommentComponent: React.FC<CommentProps> = ({
   movieId,
@@ -35,7 +36,11 @@ const CommentComponent: React.FC<CommentProps> = ({
   const [openReportPopup, setOpenReportPopup] = useState(false);
   const [currentSelected, setCurrentSelected] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const user = useSelector((state: any) => state.user.user);
+  // const user = useSelector((state: any) => state.user.user);
+  const { data: userData } = useGetUserQuery(undefined);
+
+  const user = userData?.data;
+  console.log('user is=>', user);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -236,6 +241,7 @@ const CommentComponent: React.FC<CommentProps> = ({
         } else {
           setPage(1);
         }
+
         setNewComment("");
         setReplyingTo(null);
         dispatch(showToast({ message: "已发布", type: "success" }));
@@ -677,9 +683,9 @@ const CommentComponent: React.FC<CommentProps> = ({
       {isLoggedIn ? (
         <div className="create-comment bg-commentInput p-2 flex items-center justify-center rounded-lg w-full  comment-btn">
           <img
-            src={ProfileImg}
+            src={user?.avatar || ProfileImg}
             alt="User Avatar"
-            className="w-10 h-10 rounded-full mr-1 mt-2"
+            className={`w-9 h-9 rounded-full mr-1 ${user?.avatar ? '' : 'mt-2'}`}
           />
           <input
             ref={commentInputRef}

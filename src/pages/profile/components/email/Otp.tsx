@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import {
   useChangeEmailMutation,
   useChangePhnumberMutation,
+  useGetUserQuery,
   useLazySendCodeQuery, // Add the sendCode mutation
 } from "../../services/profileApi"; // Import your mutation
 import { useDispatch, useSelector } from "react-redux";
@@ -22,7 +23,8 @@ const Otp: React.FC<{ data: string; type: string }> = ({ data, type }) => {
   const [changeEmail] = useChangeEmailMutation(); // RTK Mutation for email change
   const [changePhumber] = useChangePhnumberMutation(); // RTK Mutation for phone number change
   const [triggerSendCode, { isLoading: isResending }] = useLazySendCodeQuery(); // Add sendCode mutation for resending OTP
-  const user = useSelector((state: any) => state.user.user);
+  // const user = useSelector((state: any) => state.user.user);
+  const { data: userData, refetch } = useGetUserQuery(undefined);
 
   // Countdown for resending OTP
   useEffect(() => {
@@ -75,13 +77,13 @@ const Otp: React.FC<{ data: string; type: string }> = ({ data, type }) => {
             new_email: data, // The email passed from the parent component
             email_code: otpString, // The 6-digit OTP
           }).unwrap();
-          dispatch(setUser({ ...user, email: data }));
+          refetch();
         } else {
           await changePhumber({
             new_phone: data, // The phone number passed from the parent component
             sms_code: otpString, // The 6-digit OTP
           }).unwrap();
-          dispatch(setUser({ ...user, phone: data }));
+          refetch();
         }
 
         dispatch(setOtpOpen(false));

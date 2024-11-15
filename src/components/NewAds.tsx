@@ -23,33 +23,31 @@ const NewAds: React.FC<NewAdsProps> = ({ section }) => {
   }, [data, section]);
 
   return (
-    <div className="max-md:px-3 px-10 flex justify-center">
+    <div className="max-md:px-3 px-10 flex flex-col justify-center">
       <div className="grid w-full grid-cols-5 justify-center items-center gap-2">
-        {isLoading ? (
-          Array.from({ length: 5 }).map((_, index) => (
-            <div key={index} className="flex flex-col items-center gap-[4px] animate-pulse">
-              <div className="w-[52px] h-[52px] bg-gray-300 rounded-[10px]" />
-              <div className="w-12 h-3 bg-gray-300 rounded"></div>
-            </div>
-          ))
-        ) : (
-          cur?.map((item, index) => (
-            <Link
-              className="flex flex-col justify-center items-center gap-[4px]"
-              to={item?.data?.url || "#"}
-              key={index}
-            >
-              <img
-                src={item?.data?.image}
-                className="w-[52px] h-[52px] object-cover rounded-[10px] mx-auto"
-                alt="ad"
-              />
-              <p className="text-[12px] font-[500] text-[#888]">
-                {item?.remarks || "No description"}
-              </p>
-            </Link>
-          ))
-        )}
+        {isLoading
+          ? Array.from({ length: 5 }).map((_, index) => (
+              <div className="flex flex-col items-center gap-[4px] animate-pulse">
+                <div className="w-[52px] h-[52px] bg-white/30 rounded-[10px]" />
+                <div className="w-12 h-3 text-white/30 rounded">小游戏</div>
+              </div>
+            ))
+          : cur?.map((item, index) => (
+              <Link
+                className="flex flex-col justify-center items-center gap-[4px]"
+                to={item?.data?.url || "#"}
+                key={index}
+              >
+                <img
+                  src={item?.data?.image}
+                  className="w-[52px] h-[52px] object-cover rounded-[10px] mx-auto"
+                  alt="ad"
+                />
+                <p className="text-[12px] font-[500] text-[#888]">
+                  {item?.remarks || "No description"}
+                </p>
+              </Link>
+            ))}
       </div>
     </div>
   );
