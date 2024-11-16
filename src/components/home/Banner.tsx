@@ -33,7 +33,7 @@ const Banner = ({ list }: { list: any }) => {
                 onClick={() => handleBannerClick(banner?.click)}
               >
                 <img
-                  className="relative h-[200px] lg:h-[400px] rounded-md"
+                  className="relative h-[200px] lg:h-[400px] object-cover rounded-md"
                   src={banner?.image}
                   alt=""
                 />

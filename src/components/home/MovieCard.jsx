@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
 import he from "he";
+import cardSkeleton from "../../assets/imgLoading.png"; // Placeholder image
 // import videoIcon from "../../assets/videoIcon.svg";
 import LazyLoadImage from "./LazyLoadImage";
 
-const MovieCard = ({ movie, height, width = '114px', showDynamic = false }) => {
+const MovieCard = ({ movie, height, width = "114px", showDynamic = false }) => {
+
   return (
     <div className="movie-item max-sm:h-auto cursor-default relative mt-2">
       <Link className="block relative zoom-effect" to={`/player/${movie?.id}`}>
@@ -21,17 +23,19 @@ const MovieCard = ({ movie, height, width = '114px', showDynamic = false }) => {
           />
           <div className="absolute rounded-bl-lg rounded-br-lg  h-full w-full inset-0 bg-gradient-to-b from-transparent via-black/5 to-black"></div>
           <div className="flex absolute text-[10px] justify-between items-center px-3 bottom-2 w-full">
-            <p>{movie?.dynamic}</p>
-            <p>{movie?.type_name}</p>
+            <p className="flex-1 truncate">{movie?.dynamic}</p>
+            <p className="flex-1 flex justify-end">{movie?.type_name}</p>
           </div>
         </div>
 
         <div className="overlay">
           {/* <img className="h-[40px]" src={videoIcon} alt="" /> */}
         </div>
-        {showDynamic && <div className="top-0 right-0 search_card_score z-1 absolute">
+        {showDynamic && (
+          <div className="top-0 right-0 search_card_score z-1 absolute">
             <span>{movie?.dynamic}</span>
-        </div>}
+          </div>
+        )}
       </Link>
 
       <div className="text-container">

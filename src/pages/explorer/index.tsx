@@ -20,8 +20,9 @@ const Explorer: React.FC = () => {
     { title: "排行榜", content: <Tab4 /> },
   ];
   return (
+    // bg-[#1f1f21]
     <div className="relative">
-      <nav className="flex flex-wrap gap-4 items-center py-2 px-3 bg-[#1f1f21] fixed top-0 w-full z-50">
+      <nav className="flex flex-wrap gap-4 items-center py-2 px-3  bg-background fixed top-0 w-full z-50">
         {tabs.map((tab, index) => (
           <button
             key={index}
@@ -30,12 +31,12 @@ const Explorer: React.FC = () => {
             //     ? "text-white text-[18px]"
             //     : "text-gray-600 text-[18px]"
             // } `}
-            // transition-all duration-200 ease-in-out 
+            // transition-all duration-200 ease-in-out
             className={`inline-flex whitespace-nowrap border-b-2 border-transparent font-medium  ${
-              ((activeNav
-                && activeNav === index) || activeTab === index)? "text-white text-[24px]"
-                // : activeTab === index ? "text-white text-[24px]"
-                : "text-unselectedColor text-[18px]"
+              (activeNav && activeNav === index) || activeTab === index
+                ? "text-white text-[24px]"
+                : // : activeTab === index ? "text-white text-[24px]"
+                  "text-unselectedColor text-[18px]"
             }`}
             onClick={() => {
               setActiveTab(index);

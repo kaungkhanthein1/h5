@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import back from "../../assets/login/back.svg";
 import close from "../../assets/login/close.svg";
 import eye from "../../assets/login/eye.svg";
+import eyeClose from "../../assets/login/eyeClose.svg";
+import '../../pages/login/login.css'
 import { motion, AnimatePresence } from "framer-motion";
 import Opt from "./Opt";
 import Captch from "./Captch";
@@ -43,13 +45,13 @@ const SignPhone: React.FC<SignPhoneProps> = ({ handleBack2 }) => {
   const variants = {
     hidden: { y: 300 },
     visible: {
-      opacity: 1,
+      // opacity: 1,
       y: 0,
       transition: { type: "spring", stiffness: 100, damping: 20 },
     },
     exit: {
       y: "100%",
-      transition: { type: "tween", duration: 0.5 },
+      transition: { type: "tween", duration: 0.2 },
     },
   };
 
@@ -90,7 +92,12 @@ const SignPhone: React.FC<SignPhoneProps> = ({ handleBack2 }) => {
         <Opt setIsVisible={setIsVisible} phone={phone} password={password} />
       )}
       {openCaptcha && (
-        <Captch  setIsVisible={setIsVisible} isLogin={false} username={phone} password={password} />
+        <Captch
+          setIsVisible={setIsVisible}
+          isLogin={false}
+          username={phone}
+          password={password}
+        />
       )}
       <AnimatePresence>
         {isVisible && (
@@ -115,7 +122,7 @@ const SignPhone: React.FC<SignPhoneProps> = ({ handleBack2 }) => {
                   onClick={handleBack2}
                 />
                 <h2 className="text-[18px] font-[600] leading-[20px] text-white">
-                使用手机号码注册
+                  使用手机号码注册
                 </h2>
                 <img
                   className="close_btn p-3 cursor-pointer"
@@ -136,11 +143,11 @@ const SignPhone: React.FC<SignPhoneProps> = ({ handleBack2 }) => {
                     onChange={(e) => setPhone(e.target.value)}
                     onFocus={() => setIsFocusedEmail(true)}
                     onBlur={() => setIsFocusedEmail(phone !== "")}
-                    className="w-full px-4 py-2 bg-[#2B2B2D] input_border focus:outline-none text-white placeholder-transparent"
+                    className="w-full px- py-2 bg-[#2B2B2D] input_border focus:outline-none text-white placeholder-[#5B5B5B]"
                     required
-                    placeholder=""
+                    placeholder="请输入您的电话号码"
                   />
-                  <label
+                  {/* <label
                     htmlFor="text"
                     className={`absolute text-[14px] left-4 text-gray-500 transition-all duration-300 pointer-events-none ${
                       isFocusedEmail || phone
@@ -149,7 +156,7 @@ const SignPhone: React.FC<SignPhoneProps> = ({ handleBack2 }) => {
                     }`}
                   >
                    请输入手机号
-                  </label>
+                  </label> */}
                 </div>
 
                 <div className="relative">
@@ -159,11 +166,11 @@ const SignPhone: React.FC<SignPhoneProps> = ({ handleBack2 }) => {
                     onChange={(e) => setPassword(e.target.value)}
                     onFocus={() => setIsFocusedPassword(true)}
                     onBlur={() => setIsFocusedPassword(password !== "")}
-                    className="w-full px-4 py-2 bg-[#2B2B2D] input_border focus:outline-none text-white placeholder-transparent"
+                    className="w-full px- py-2 bg-[#2B2B2D] input_border focus:outline-none text-white placeholder-[#5B5B5B]"
                     required
-                    placeholder=""
+                    placeholder="设置您的密码"
                   />
-                  <label
+                  {/* <label
                     htmlFor="password"
                     className={`absolute text-[14px] left-4 transition-all text-[#5B5B5B] pointer-events-none ${
                       isFocusedPassword || password
@@ -172,29 +179,35 @@ const SignPhone: React.FC<SignPhoneProps> = ({ handleBack2 }) => {
                     }`}
                   >
                     设置密码
-                  </label>
-                  <img
+                  </label> */}
+                  <div
                     onClick={show}
-                    className="absolute right-0 bottom-[15px]"
-                    src={eye}
-                    alt="Show Password"
-                  />
+                    className=" w-[50px] flex justify-end items-center absolute right-0 bottom-[15px] h-[20px]">
+                      <img
+                        
+                        className=""
+                        src={showPassword ? eye : eyeClose}
+                        alt="Show Password"
+                      />
+                    </div>
                 </div>
                 {/* decs */}
-                <div className=" mt-[-20px] text-[14px] font-[500] leading-[20px] text-[#888]">
-                  {/* <p>8-25 characters</p> */}
-                  <p>输入8-25个字符，必须为下列至少两种的组合：字母、数字。</p>
+                <div
+                  className={` mt-[-20px] text-[14px] font-[500] leading-[20px] text-[#888] `}
+                >
+                  <p>8-25个字符</p>
+                  <p>必须是以下两者中的至少两种组合：字母，数字</p>{" "}
                   {/* <p>letters, numbers.</p> */}
                 </div>
 
                 <button
                   disabled={!validatePassword(password)}
                   type="submit"
-                  className={`w-full  mt-[20px] py-2 px-4 rounded-lg text-white ${
-                    validatePassword(password) ? "login_button" : "next_button"
+                  className={`w-full text-[14px] font-[600] leading-[22px]  mt-[20px] py-[10px] px-[16px] rounded-[80px]  ${
+                    validatePassword(password) ? "login_button text-white" : "next_button text-[#777]"
                   } transition duration-300 ease-in-out`}
                 >
-                 注册
+                  注册
                 </button>
               </form>
 

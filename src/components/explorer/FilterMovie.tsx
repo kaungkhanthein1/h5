@@ -19,18 +19,41 @@ const FilterMovie = () => {
   const [page, setPage] = useState(1);
 
   const getMoviesByType = async (id: any) => {
+    // Retrieve settings from localStorage
+    const settings = JSON.parse(
+      localStorage.getItem("movieAppSettings") || "{}"
+    );
+
+    // Set the X-Client-Setting header dynamically
+    const headers = {
+      "X-Client-Setting": JSON.stringify({
+        "pure-mode": settings.filterToggle ? 1 : 0,
+      }),
+    };
     setIsLoading(true);
     const { data } = await axios.get(
-      `${process.env.REACT_APP_API_URL}/movie/explore/list?type_id=${id}&&sort=${sort}&&class=${classData}&&area=${area}&&year=${year}&&page=${page}&&pageSize=9`
+      `${process.env.REACT_APP_API_URL}/movie/explore/list?type_id=${id}&&sort=${sort}&&class=${classData}&&area=${area}&&year=${year}&&page=${page}&&pageSize=9`,
+      { headers }
     );
     if (data?.data?.list?.length >= 0) setIsLoading(false);
     setMovieData(data?.data?.list);
   };
 
   const fetchData = async () => {
+    const settings = JSON.parse(
+      localStorage.getItem("movieAppSettings") || "{}"
+    );
+
+    // Set the X-Client-Setting header dynamically
+    const headers = {
+      "X-Client-Setting": JSON.stringify({
+        "pure-mode": settings.filterToggle ? 1 : 0,
+      }),
+    };
     setPage(page + 1);
     const { data } = await axios.get(
-      `${process.env.REACT_APP_API_URL}/movie/explore/list?type_id=${activeTab}&&sort=${sort}&&class=${classData}&&area=${area}&&year=${year}&&page=${page}&&pageSize=9`
+      `${process.env.REACT_APP_API_URL}/movie/explore/list?type_id=${activeTab}&&sort=${sort}&&class=${classData}&&area=${area}&&year=${year}&&page=${page}&&pageSize=9`,
+      { headers }
     );
     if (data?.data?.list?.length >= 0) setIsLoading(false);
     setMovieData(movieData.concat(data?.data?.list));

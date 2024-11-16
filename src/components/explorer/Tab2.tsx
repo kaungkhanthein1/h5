@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setActiveWeek } from "../../pages/explorer/slice/ExploreSlice";
 import Loader from "../../pages/search/components/Loader";
+import axios from "axios";
 
 const Tab2 = () => {
   const [currentIndex, setCurrentIndex] = useState<any>(null);
@@ -15,11 +16,22 @@ const Tab2 = () => {
   // console.log(activeWeek, "active week");
 
   const getMovieData = async (week: any) => {
-    setIsLoading(true);
-    const res = await fetch(
-      `${process.env.REACT_APP_API_URL}/movie/weekly?week_day=${week}`
+    // Retrieve settings from localStorage
+    const settings = JSON.parse(
+      localStorage.getItem("movieAppSettings") || "{}"
     );
-    const data = await res.json();
+
+    // Set the X-Client-Setting header dynamically
+    const headers = {
+      "X-Client-Setting": JSON.stringify({
+        "pure-mode": settings.filterToggle ? 1 : 0,
+      }),
+    };
+    setIsLoading(true);
+    const { data } = await axios.get(
+      `${process.env.REACT_APP_API_URL}/movie/weekly?week_day=${week}`,
+      { headers }
+    );
     setMovieData(data?.data);
     setIsLoading(false);
     // console.log(data);

@@ -115,8 +115,13 @@ const Verify: React.FC<OptProps> = ({
 
   return (
     <div className="w-screen h-screen absolute z-[90909099090] bg-[#161619] p-[20px]">
-      <div className="grid grid-cols-3 w-full justify-between w-2/3">
-        <img src={back} alt="Back" onClick={handleBack} />
+      <div className=" flex justify-center items-center">
+        <img
+          className=" absolute top-[20px] left-[20px] z-[9090]"
+          onClick={handleBack}
+          src={back}
+          alt="Back"
+        />{" "}
         <h1 className="text-white text-[16px] font-semibold leading-[20px]">
           输入验证码
         </h1>
@@ -142,14 +147,12 @@ const Verify: React.FC<OptProps> = ({
         </p>
       </div>
 
-      <div className="w-full">
-        <button
+      <div className="w-full flex justify-center items-center">
+      <button
           disabled={timer > 0}
           onClick={resendOtp}
-          className={`w-full px-[15px] py-[10px] text-[16px] font-semibold leading-[22px] ${
-            timer > 0
-              ? "otp_button text-white"
-              : "bg-white rounded-full text-black"
+          className={`w-[320px] text-[14px] font-[600] leading-[22px]  mt-[20px] py-[10px] px-[16px] rounded-[80px] ${
+            timer > 0 ? "next_button text-[#777]" : "login_button text-white"
           }`}
         >
           {buttonText}

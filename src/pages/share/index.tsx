@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import "./share.css";
 import bg1 from "../../assets/share/bg1.png";
-import back from "../../assets/share/back.svg";
+import back from "../../assets/login/back.svg";
 import down from "../../assets/share/down.svg";
 import friend from "../../assets/share/friend.svg";
 import copy from "../../assets/share/copy.svg";
@@ -127,7 +127,7 @@ const Share: React.FC<ShareProps> = ({}) => {
           {/* down */}
           <div className=" flex flex-col items-center gap-[14px]">
             <img
-              className=" tab px-[14px] py-[12px] w-[50px]"
+              className=" tab px-[15px] py-[12px] w-[50px]"
               src={down}
               alt=""
             />
@@ -161,7 +161,7 @@ const Share: React.FC<ShareProps> = ({}) => {
         >
           <div className="scan py-6 px-10 flex flex-col justify-center items-center gap-[16px]">
             <img
-              className=" w-[180px] h-[180px]"
+              className=" w-[180px] h-[180px] rounded-[10px]"
               src={data.data.qrcode.data}
               alt="QR Code"
             />
@@ -194,7 +194,10 @@ const Share: React.FC<ShareProps> = ({}) => {
       {/* invited user */}
       <div className="flex invite_user mx-[20px] justify-around items-center mt-[20px] p-[20px]">
         {/* point */}
-        <div className=" flex flex-col items-center justify-center gap-[8px]">
+        <Link
+          to={"https://cc3e497d.qdhgtch.com:1333/"}
+          className=" flex flex-col items-center justify-center gap-[8px]"
+        >
           <img
             className=" w-[30px] h-[30px] dolar p-[8px]"
             src={dolar}
@@ -211,7 +214,7 @@ const Share: React.FC<ShareProps> = ({}) => {
             </div>
             <img src={go} alt="" />
           </div>
-        </div>
+        </Link>
         <p className=" line"></p>
         {/* invited */}
         <div

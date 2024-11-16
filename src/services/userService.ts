@@ -84,7 +84,7 @@ export const login = async (
     if (!process.env.REACT_APP_PUBLIC_KEY) {
       throw new Error("Public key is not defined");
     }
-    const publicKey = process.env.REACT_APP_PUBLIC_KEY;
+    const publicKey = process.env.REACT_APP_PUBLIC_KEY_LOGIN;
 
     if (!publicKey) {
       throw new Error("Public key is not defined");

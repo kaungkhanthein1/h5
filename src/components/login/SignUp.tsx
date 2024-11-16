@@ -84,7 +84,7 @@ const SignUp: React.FC<SignUpProps> = ({ handleBack }) => {
       <AnimatePresence>
         {isVisible && (
           <motion.div
-            className="login_box fixed h-[410px]  bottom-0 z-[99999] w-full max-w-md"
+            className="login_box fixed h-[480px]  bottom-0 z-[99999] w-full max-w-md"
             initial="hidden"
             animate="visible"
             exit="exit"
@@ -94,12 +94,12 @@ const SignUp: React.FC<SignUpProps> = ({ handleBack }) => {
             dragElastic={0.2}
             onDragEnd={handleDragEnd}
           >
-            <div className="flex flex-col justify-cente items-center gap-[30px] px-[20px]">
+            <div className="flex flex-col justify-cente items-center gap-[25px] px-[20px]">
               <motion.p className="w-[60px] h-[4px] drag_line mt-[12px] cursor-pointer"></motion.p>
               {/* header */}
               <div className="flex justify-between items-center w-full pb-[px]">
                 <img
-                  className="p-3 cursor-pointer"
+                  className="p-[6px] cursor-pointer"
                   src={back}
                   alt="Back"
                   onClick={handleBack}
@@ -115,7 +115,7 @@ const SignUp: React.FC<SignUpProps> = ({ handleBack }) => {
                 />
               </div>
               {/* decs */}
-              <div className=" w-full">
+              <div className=" w-full pl-2 py-[10px]">
                 <h1 className=" text-white text-[14px] font-[500]">
                   选择注册方式{" "}
                 </h1>

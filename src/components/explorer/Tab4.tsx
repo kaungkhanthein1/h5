@@ -35,9 +35,21 @@ const Tab4 = () => {
   const { data } = useGetMovieRankingListQuery();
 
   const getRankingById = async (id: any) => {
+    // Retrieve settings from localStorage
+    const settings = JSON.parse(
+      localStorage.getItem("movieAppSettings") || "{}"
+    );
+
+    // Set the X-Client-Setting header dynamically
+    const headers = {
+      "X-Client-Setting": JSON.stringify({
+        "pure-mode": settings.filterToggle ? 1 : 0,
+      }),
+    };
     setIsLoading(true);
     const { data } = await axios(
-      `${process.env.REACT_APP_API_URL}/movie/ranking/data?id=${id}`
+      `${process.env.REACT_APP_API_URL}/movie/ranking/data?id=${id}`,
+      { headers }
     );
     setRankingDataById(data?.data);
     // console.log(data);

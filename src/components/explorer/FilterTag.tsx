@@ -89,7 +89,7 @@ const FilterTag = () => {
             </div>
           ))}
       </div>
-      <div className="flex overflow-x-scroll px-3 gap-6 remove-scrollbar items-center">
+      <div className="flex overflow-x-scroll px-3 gap-1 remove-scrollbar items-center">
         {configData?.data?.movie_search_screen?.sort?.map(
           (item: any, index: any) => (
             <div className="relative" key={index}>
@@ -108,7 +108,7 @@ const FilterTag = () => {
         )}
       </div>
 
-      <div className="flex overflow-x-scroll px-3 gap-6 remove-scrollbar items-center">
+      <div className="flex overflow-x-scroll px-3 gap-1 remove-scrollbar items-center">
         {filteredTags?.map(
           (data: any) =>
             data?.class &&
@@ -139,7 +139,7 @@ const FilterTag = () => {
             ))
         )}
       </div>
-      <div className="flex overflow-x-scroll px-3 gap-6 remove-scrollbar items-center">
+      <div className="flex overflow-x-scroll px-3 gap-1 remove-scrollbar items-center">
         {filteredTags?.map(
           (data: any) =>
             data?.area &&
@@ -170,7 +170,7 @@ const FilterTag = () => {
             ))
         )}
       </div>
-      <div className="flex overflow-x-scroll px-3 gap-6 remove-scrollbar items-center">
+      <div className="flex overflow-x-scroll px-3 gap-1 remove-scrollbar items-center">
         {filteredTags?.map(
           (data: any) =>
             data?.year &&

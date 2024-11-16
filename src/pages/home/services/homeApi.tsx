@@ -5,6 +5,7 @@ export const homeApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.REACT_APP_API_URL,
     prepareHeaders: (headers) => {
+      headers.set("X-Client-Version", "3098");
       const settings = JSON.parse(
         localStorage.getItem("movieAppSettings") || "{}"
       );

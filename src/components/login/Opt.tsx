@@ -112,7 +112,7 @@ const Opt: React.FC<OptProps> = ({ email, password, phone, setIsVisible }) => {
           } else if (error.data.msg) {
             dispatch(setOtpOpen(false));
             // navigate("/profile");
-            closeAllModals()
+            closeAllModals();
             dispatch(showToast({ message: error.data.msg, type: "error" }));
           }
           // console.log("pok ka ya error :", error);
@@ -179,8 +179,13 @@ const Opt: React.FC<OptProps> = ({ email, password, phone, setIsVisible }) => {
 
   return (
     <div className=" fixed top-0 w-screen h-screen  z-[9090900909] bg-[#161619] p-[20px]">
-      <div className=" grid grid-cols-3">
-        <img src={back} alt="Back" onClick={handleBack} />
+      <div className=" flex justify-center items-center">
+        <img
+          className=" absolute top-[20px] left-[20px] z-[9999008819]"
+          onClick={handleBack}
+          src={back}
+          alt="Back"
+        />{" "}
         <h1 className="text-white text-[16px] font-semibold leading-[20px]">
           验证码
         </h1>
@@ -208,14 +213,12 @@ const Opt: React.FC<OptProps> = ({ email, password, phone, setIsVisible }) => {
         </p>
       </div>
 
-      <div className="w-full">
+      <div className="w-full flex justify-center items-center">
         <button
           disabled={timer > 0}
           onClick={resendOtp}
-          className={`w-full px-[15px] py-[10px] text-[16px] font-semibold leading-[22px] ${
-            timer > 0
-              ? "otp_button text-white"
-              : "bg-white rounded-full text-black"
+          className={`w-[320px] text-[14px] font-[600] leading-[22px]  mt-[20px] py-[10px] px-[16px] rounded-[80px] ${
+            timer > 0 ? "next_button text-[#777]" : "login_button text-white"
           }`}
         >
           {buttonText}

@@ -3,6 +3,8 @@ import back from "../../assets/login/back.svg";
 import eye from "../../assets/login/eye.svg";
 import Captch from "./Captch";
 import Opt from "./Opt";
+import eyeClose from "../../assets/login/eyeClose.svg";
+import "../../pages/login/login.css";
 import { useDispatch, useSelector } from "react-redux";
 import { setCaptchaOpen } from "../../features/login/ModelSlice";
 import axios from "axios";
@@ -26,6 +28,7 @@ const ForgotPass: React.FC<ForgotPassProps> = ({ setForgot }) => {
   const [panding, setPanding] = useState(false);
   const [accessToken, setToken] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [showRePassword, setShowRePassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -45,6 +48,10 @@ const ForgotPass: React.FC<ForgotPassProps> = ({ setForgot }) => {
 
   const show = () => {
     setShowPassword(!showPassword);
+  };
+
+  const Reshow = () => {
+    setShowRePassword(!showRePassword);
   };
 
   const passwordsMatch = (password: string, confirmPassword: string) => {
@@ -75,12 +82,17 @@ const ForgotPass: React.FC<ForgotPassProps> = ({ setForgot }) => {
           )}
           <div className="p-[20px]">
             {/* head */}
-            <div className="grid grid-cols-3 justify-between ">
-              <img onClick={() => setForgot(false)} src={back} alt="Back" />
+            <div className=" flex justify-center items-center ">
+              <img
+                className=" absolute top-[20px] left-[20px] z-[9090]"
+                onClick={() => setForgot(false)}
+                src={back}
+                alt="Back"
+              />
               <h1 className="text-white text-[16px] font-[600] leading-[20px]">
-              找回密码 
+                找回密码
               </h1>
-              <div className=""></div>
+              {/* <div className=""></div> */}
             </div>
             <form
               onSubmit={handleSubmit}
@@ -93,11 +105,11 @@ const ForgotPass: React.FC<ForgotPassProps> = ({ setForgot }) => {
                   onChange={(e) => setEmail(e.target.value)}
                   onFocus={() => setIsFocusedEmail(true)}
                   onBlur={() => setIsFocusedEmail(email !== "")}
-                  className="w-full px-4 py-2 bg-transparent input_border focus:outline-none text-white placeholder-transparent"
+                  className="w-full px- py-2 bg-transparent input_border focus:outline-none text-white placeholder-[#5B5B5B]"
                   required
-                  placeholder="Enter Account Name, Phone Number, Email"
+                  placeholder=" 请输入手机号/邮箱"
                 />
-                <label
+                {/* <label
                   htmlFor="email"
                   className={`absolute  text-[14px] left-4 transition-all text-[#5B5B5B] pointer-events-none ${
                     isFocusedEmail || email
@@ -106,7 +118,7 @@ const ForgotPass: React.FC<ForgotPassProps> = ({ setForgot }) => {
                   }`}
                 >
                  请输入手机号/邮箱
-                </label>
+                </label> */}
               </div>
 
               {/* Password input */}
@@ -117,11 +129,11 @@ const ForgotPass: React.FC<ForgotPassProps> = ({ setForgot }) => {
                   onChange={(e) => setPassword(e.target.value)}
                   onFocus={() => setIsFocusedPassword(true)}
                   onBlur={() => setIsFocusedPassword(password !== "")}
-                  className="w-full px-4 py-2 bg-transparent input_border focus:outline-none text-white placeholder-transparent"
+                  className="w-full px- py-2 bg-transparent input_border focus:outline-none text-white placeholder-[#5B5B5B]"
                   required
-                  placeholder="Please Enter Your Password"
+                  placeholder="输入新密码"
                 />
-                <label
+                {/* <label
                   htmlFor="password"
                   className={`absolute text-[14px] left-4 transition-all text-[#5B5B5B] pointer-events-none ${
                     isFocusedPassword || password
@@ -130,30 +142,34 @@ const ForgotPass: React.FC<ForgotPassProps> = ({ setForgot }) => {
                   }`}
                 >
                  输入新密码
-                </label>
-                <img
+                </label> */}
+                <div
                   onClick={show}
-                  className="absolute right-0 bottom-[15px]"
-                  src={eye}
-                  alt="Show Password"
-                />
+                  className=" w-[50px] flex justify-end items-center absolute right-0 bottom-[15px] h-[10px]"
+                >
+                  <img
+                    className=""
+                    src={showPassword ? eye : eyeClose}
+                    alt="Show Password"
+                  />
+                </div>
               </div>
 
               {/* Confirm Password input */}
               <div className="relative">
                 <input
-                  type={showPassword ? "text" : "password"}
+                  type={showRePassword ? "text" : "password"}
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   onFocus={() => setIsFocusedConfirmPassword(true)}
                   onBlur={() =>
                     setIsFocusedConfirmPassword(confirmPassword !== "")
                   }
-                  className="w-full px-4 py-2 bg-transparent input_border focus:outline-none text-white placeholder-transparent"
+                  className="w-full px- py-2 bg-transparent input_border focus:outline-none text-white placeholder-[#5B5B5B]"
                   required
-                  placeholder="Please Confirm Your Password"
+                  placeholder="再次输入新密码"
                 />
-                <label
+                {/* <label
                   htmlFor="confirm-password"
                   className={`absolute text-[14px] left-4 transition-all text-[#5B5B5B] pointer-events-none ${
                     isFocusedConfirmPassword || confirmPassword
@@ -162,31 +178,37 @@ const ForgotPass: React.FC<ForgotPassProps> = ({ setForgot }) => {
                   }`}
                 >
                  再次输入新密码
-                </label>
-                <img
-                  onClick={show}
-                  className="absolute right-0 bottom-[15px]"
-                  src={eye}
-                  alt="Show Password"
-                />
+                </label> */}
+                <div
+                  onClick={Reshow}
+                  className=" w-[50px] flex justify-end items-center absolute right-0 bottom-[15px] h-[10px]"
+                >
+                  <img
+                    className=""
+                    src={showRePassword ? eye : eyeClose}
+                    alt="Show Password"
+                  />
+                </div>
               </div>
 
               {/* Notice */}
-              <div className="mt-[-20px] text-[14px] font-[500] leading-[20px] text-[#888] ">
-                {/* <p>8-25 characters</p> */}
-                <p>
-                输入8-25个字符，必须为下列至少两种的组合：字母、数字。
-                </p>
+              <div
+                className={` mt-[-20px] text-[14px] font-[500] leading-[20px] text-[#888] `}
+              >
+                <p>8-25个字符</p>
+                <p>必须是以下两者中的至少两种组合：字母，数字</p>{" "}
+                {/* <p>letters, numbers.</p> */}
               </div>
-
               <button
                 disabled={!validatePassword(password)}
                 type="submit"
-                className={`w-full  mt-[20px] py-2 px-4 rounded-lg text-white ${
-                  validatePassword(password) ? "login_button" : "next_button"
+                className={`w-full text-[14px] font-[600] leading-[22px]  mt-[20px] py-[10px] px-[16px] rounded-[80px] ${
+                  validatePassword(password)
+                    ? "login_button text-white"
+                    : "next_button text-[#777]"
                 } transition duration-300 ease-in-out`}
               >
-                Next
+                下一步
               </button>
             </form>
           </div>

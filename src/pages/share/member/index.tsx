@@ -1,6 +1,11 @@
 import React, { useEffect } from "react";
 import bg2 from "../../../assets/share/bg2.png";
-import back from "../../../assets/share/back.svg";
+// import bg3 from "../../../assets/share/bg3.png";
+// import bg4 from "../../../assets/share/bg4.png";
+import BG from "../../../assets/share/BG.png";
+import rain from "../../../assets/share/rain.gif";
+import dust from "../../../assets/share/dust.png";
+import back from "../../../assets/login/back.svg";
 import user from "../../../assets/share/user.svg";
 import { Link } from "react-router-dom";
 import "../share.css";
@@ -28,10 +33,11 @@ const Member: React.FC<MemberProps> = ({}) => {
   return (
     <div className="">
       <img
-        className=" absolute top-0 z-[-1] w-screen h-[350px] object-center object-cover"
-        src={bg2}
+        className=" absolute top-0 z-[-1] w-screen h-screen h-[350px object-center object-cover"
+        src={BG}
         alt=""
       />
+      {/* <img src={dust} className=" absolute z-[-2" alt="" /> */}
       {/* header */}
       <div className=" flex justify-between items-center px-[20px] py-[10px]">
         <Link to="/share">
@@ -40,17 +46,21 @@ const Member: React.FC<MemberProps> = ({}) => {
         <h1 className=" text-white text-[18px] pl-[16px] font-[400]">
           Invitation
         </h1>
-        <div className=" py-[8px] px-[10px mt-[5px">
+        <a
+          target="_blink"
+          href="https://cc3e497d.qdhgtch.com:1333/help"
+          className=" py-[8px] px-[10px mt-[5px"
+        >
           <span className=" text-white text-[14px] font-[500]">
             Point Rules
           </span>
-        </div>
+        </a>
       </div>
 
       {/* member list */}
-      <div className="text-white text-2xl px-4 mt-[160px] h-fit ">
+      <div className="text-white text-2xl px-4 mt-[0px] h-fit ">
         {isFetching ? (
-          <div className=" h-[500px] member_page">
+          <div className=" h-[500px] member_pag">
             <div className="flex flex-col h-full justify-center items-center w-full gap-2">
               <img src={user} alt="" />
               <h1 className=" text-[#888] text-[14px] font-[400]">加载中</h1>
@@ -59,7 +69,7 @@ const Member: React.FC<MemberProps> = ({}) => {
         ) : isError ? (
           <div className="text-red-500 text-xl">Error fetching data</div>
         ) : memberList?.data?.list.length === 0 ? (
-          <div className=" h-[500px] member_page">
+          <div className=" h-[600px] member_pag">
             <div className="flex flex-col h-full justify-center items-center w-full gap-2">
               <img src={user} alt="" />
               <h1 className=" text-[#888] text-[14px] font-[400]">
