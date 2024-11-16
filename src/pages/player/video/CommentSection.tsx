@@ -558,8 +558,8 @@ const CommentComponent: React.FC<CommentProps> = ({
         />
       )}
       {showDeleteConfirmation && (
-        <div className="fixed inset-0 z-20 bg-black bg-opacity-80 flex justify-center items-center">
-          <div className="bg-[#242428] confirm rounded-2xl mx-10 text-center shadow-lg">
+        <div className="fixed inset-0 z-20 bg-black bg-opacity-80 flex justify-center items-center mt-20">
+          <div className="bg-[#242428] confirm w-full rounded-2xl mx-10 text-center shadow-lg">
             <h2 className="p-5">您确定要删除吗?</h2>
             <div className="flex justify-between">
               <button
