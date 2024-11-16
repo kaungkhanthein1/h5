@@ -16,12 +16,13 @@ import {
 const RegisterApi = createApi({
   reducerPath: "RegisterSignApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://cc3e497d.qdhgtch.com:2345/api",
+    // baseUrl: "https://cc3e497d.qdhgtch.com:2345/api",
+    baseUrl: process.env.REACT_APP_API_URL,
   }),
   endpoints: (builder) => ({
     signUpEmail: builder.mutation<SignUpResponse, SignUpEmailArgs>({
       query: ({ email, password, email_code }) => ({
-        url: "/v1/user/register/email",
+        url: "/user/register/email",
         method: "POST",
         body: {
           email,
@@ -45,7 +46,7 @@ const RegisterApi = createApi({
     }),
     signUpPhone: builder.mutation<SignUpResponse, SignUpPhoneArgs>({
       query: ({ phone, password, sms_code }) => ({
-        url: "/v1/user/register/phone",
+        url: "/user/register/phone",
         method: "POST",
         body: {
           phone,
@@ -69,7 +70,7 @@ const RegisterApi = createApi({
     }),
     confirmCaptchaForgot: builder.mutation<comfirmResponse, ConfirmArgs>({
       query: ({ captchaCode, keyStatus }) => ({
-        url: "/v1/user/check_captcha",
+        url: "/user/check_captcha",
         method: "POST",
         body: {
           code: captchaCode,
@@ -93,7 +94,7 @@ const RegisterApi = createApi({
     }),
     getTokenForgot: builder.query<GetTokenResponse, GetTokenArgs>({
       query: ({ email, graphicKey }) => ({
-        url: `/v1/user/forget/get_token`,
+        url: `/user/forget/get_token`,
         method: "GET",
         params: {
           username: email,
@@ -103,7 +104,7 @@ const RegisterApi = createApi({
     }),
     getCodeForgot: builder.query<GetTCodeResponse, GetCodeArgs>({
       query: ({ send_type, session_token }) => ({
-        url: `/v1/user/forget/send_code`,
+        url: `/user/forget/send_code`,
         method: "GET",
         params: {
           send_type: send_type,
@@ -113,7 +114,7 @@ const RegisterApi = createApi({
     }),
     passwordRecovery: builder.mutation<RecoverPassResponse, RecoverPassArgs>({
       query: ({ password, repassword, session_token, forget_code }) => ({
-        url: "v1/user/forget/set_pass",
+        url: "/user/forget/set_pass",
         method: "POST",
         body: {
           password: password,

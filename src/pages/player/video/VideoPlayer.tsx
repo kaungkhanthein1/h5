@@ -117,11 +117,12 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     };
   }, [videoUrl, resumeTime]);
 
-  const handleBack = () => {
+  const handleBack = async() => {
     if (playerRef.current) {
       // Report progress before going back
-      reportProgress(playerRef.current.currentTime, playerRef.current.duration);
+      await reportProgress(playerRef.current.currentTime, playerRef.current.duration);
       playerRef.current.pause();
+      refetch();
     }
     refetch();
     onBack();

@@ -39,7 +39,8 @@ const CommentComponent: React.FC<CommentProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   // const user = useSelector((state: any) => state.user.user);
   const { data: userData } = useGetUserQuery(undefined);
-
+  const [ showDeleteConfirmation, setShowDeleteConfirmation ] = useState(false);
+  const [deleteParams, setDeleteParams] = useState<any>(null);
   const user = userData?.data;
   console.log('user is=>', user);
   const dispatch = useDispatch();
@@ -205,6 +206,21 @@ const CommentComponent: React.FC<CommentProps> = ({
     }
   };
 
+  const handleDelete = (id: number, isReply: boolean) => {
+    setDeleteParams({ id, isReply });
+    setShowDeleteConfirmation(true); // Open confirmation modal
+  };
+
+  const handleConfirm = () => {
+    if (deleteParams) {
+      deleteCommentOrReply(deleteParams.id, deleteParams.isReply);
+    }
+    setShowDeleteConfirmation(false);
+  };
+
+  const handleCancel = () => {
+    setShowDeleteConfirmation(false);
+  };
   // Post a new comment or reply
   const handleCreateCommentOrReply = async () => {
     if (!newComment) return;
@@ -334,7 +350,7 @@ const CommentComponent: React.FC<CommentProps> = ({
                         <span
                           className="time text-commentIcon text-sm"
                           onClick={() =>
-                            deleteCommentOrReply(comment.id, false)
+                            handleDelete(comment.id, false)
                           }
                         >
                           删除
@@ -406,7 +422,7 @@ const CommentComponent: React.FC<CommentProps> = ({
                                       <span
                                         className="time text-commentIcon text-sm"
                                         onClick={() =>
-                                          deleteCommentOrReply(reply.id, true)
+                                          handleDelete(reply.id, true)
                                         }
                                       >
                                         删除
@@ -540,6 +556,27 @@ const CommentComponent: React.FC<CommentProps> = ({
           setOpenPopup={setOpenPopup}
           setOpenReportPopup={setOpenReportPopup}
         />
+      )}
+      {showDeleteConfirmation && (
+        <div className="fixed inset-0 z-20 bg-black bg-opacity-80 flex justify-center items-center">
+          <div className="bg-[#242428] confirm rounded-2xl mx-10 text-center shadow-lg">
+            <h2 className="p-5">您确定要删除吗?</h2>
+            <div className="flex justify-between">
+              <button
+                className="text-white w-[50%] p-3 border-t-[1px] border-r-[1px] border-gray-500"
+                onClick={handleCancel}
+              >
+                取消
+              </button>
+              <button
+                className="text-[#f54100] w-[50%] p-3 border-t-[1px] border-gray-500"
+                onClick={handleConfirm}
+              >
+                删除全部
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
