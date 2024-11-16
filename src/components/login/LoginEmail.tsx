@@ -157,13 +157,13 @@ const LoginEmail: React.FC<LoginEmailProps> = ({ handleBack }) => {
                       onChange={(e) => setEmail(e.target.value)}
                       onFocus={() => setIsFocusedEmail(true)}
                       onBlur={() => setIsFocusedEmail(email !== "")}
-                      className="w-full px-4 py-2 bg-[#2B2B2D] input_border focus:outline-none text-white placeholder-transparent"
+                      className="w-full py-2 bg-[#2B2B2D] input_border focus:outline-none text-white placeholder-transparent"
                       required
                       placeholder=""
                     />
                     <label
                       htmlFor="email"
-                      className={`absolute text-[12px] left-4 text-[#5B5B5B] transition-all duration-300 pointer-events-none ${
+                      className={`absolute text-[12px] left-0 text-[#5B5B5B] transition-all duration-300 pointer-events-none ${
                         isFocusedEmail || email
                           ? "top-[-8px] text-xs text-blue-500"
                           : "top-1/2 transform -translate-y-1/2"
@@ -180,13 +180,13 @@ const LoginEmail: React.FC<LoginEmailProps> = ({ handleBack }) => {
                       onChange={(e) => setPassword(e.target.value)}
                       onFocus={() => setIsFocusedPassword(true)}
                       onBlur={() => setIsFocusedPassword(password !== "")}
-                      className="w-full px-4 py-2 bg-[#2B2B2D] input_border focus:outline-none text-white placeholder-transparent"
+                      className="w-full py-2 bg-[#2B2B2D] input_border focus:outline-none text-white placeholder-transparent"
                       required
                       placeholder="Please Enter Your Password"
                     />
                     <label
                       htmlFor="password"
-                      className={`absolute text-[12px] left-4 transition-all text-[#5B5B5B] pointer-events-none ${
+                      className={`absolute text-[12px] left-0 transition-all text-[#5B5B5B] pointer-events-none ${
                         isFocusedPassword || password
                           ? "top-0 text-xs text-blue-500 -translate-y-full"
                           : "top-1/2 -translate-y-1/2"
