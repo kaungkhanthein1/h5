@@ -75,6 +75,7 @@ const FilterMovie = () => {
                   }
                 >
                   {/* {item} */}
+                  <></>
                 </InfiniteScroll>
               </>
             )}

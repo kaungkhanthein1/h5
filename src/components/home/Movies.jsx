@@ -44,11 +44,11 @@ const Movies = ({ movieData }) => {
           }}
           breakpoints={{
             320: {
-              slidesPerView: 3,
+              slidesPerView: 3.5,
               spaceBetween: 8,
             },
             350: {
-              slidesPerView: 3,
+              slidesPerView: 3.5,
               spaceBetween: 8,
             },
             480: {

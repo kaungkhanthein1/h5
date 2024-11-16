@@ -1,18 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useGetMovieTopicListQuery } from "../../pages/explorer/services/explorerAPi";
+import Loader from "../../pages/search/components/Loader";
 
 const Tab3 = () => {
-  const { data: topicData } = useGetMovieTopicListQuery();
+  const { data: topicData, isLoading } = useGetMovieTopicListQuery();
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pb-32 px-3 pt-5 min-h-screen">
-      {topicData?.data?.list?.map((item: any) => (
-        <Link to={`/explorer/${item?.id}`} key={item?.id}>
-          <Card item={item} />
-        </Link>
-      ))}
-    </div>
+    <>
+      {isLoading ? (
+        <div className="flex items-center justify-center h-[70vh]">
+          <Loader />
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pb-32 px-3 pt-5 min-h-screen">
+          {topicData?.data?.list?.map((item: any) => (
+            <Link to={`/explorer/${item?.id}`} key={item?.id}>
+              <Card item={item} />
+            </Link>
+          ))}
+        </div>
+      )}
+    </>
   );
 };
 

@@ -18,6 +18,8 @@ const NewAds: React.FC<NewAdsProps> = ({ section }) => {
   const [cur, setCur] = useState<AdItem[] | undefined>([]);
   const { data, isLoading } = useGetAdsTotalQuery("");
 
+  // console.log(data);
+
   useEffect(() => {
     setCur(data?.data?.[section] as AdItem[]);
   }, [data, section]);

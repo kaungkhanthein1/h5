@@ -39,7 +39,7 @@ const Home: React.FC = () => {
                       <Banner key={index} list={movieData?.list} />
                       {movies?.length !== 0 && <ContinueWatching />}
                       {/* <Ads section={"start"} /> */}
-                      <NewAds section={"start"} />
+                      <NewAds section={"screen_index"} />
                     </>
                   );
                 } else if (movieData?.layout === "base") {

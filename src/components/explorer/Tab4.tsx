@@ -9,6 +9,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setActiveRank } from "../../pages/explorer/slice/ExploreSlice";
 import NewAds from "../NewAds";
+import Loader from "../../pages/search/components/Loader";
 
 // Define the type for the movie data
 interface Movie {
@@ -25,6 +26,7 @@ interface RankingItem {
 }
 
 const Tab4 = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
   const activeRank = useSelector((state: any) => state?.explore?.activeRank);
   const dispatch = useDispatch();
@@ -33,11 +35,13 @@ const Tab4 = () => {
   const { data } = useGetMovieRankingListQuery();
 
   const getRankingById = async (id: any) => {
+    setIsLoading(true);
     const { data } = await axios(
       `${process.env.REACT_APP_API_URL}/movie/ranking/data?id=${id}`
     );
     setRankingDataById(data?.data);
     // console.log(data);
+    if (data?.data) setIsLoading(false);
   };
 
   useEffect(() => {
@@ -85,20 +89,25 @@ const Tab4 = () => {
             </div>
           ))}
         </nav>
-
       </div>
-        <NewAds section="ranking" />
-      <div className="px-3 pt-5 flex flex-col gap-7">
-        {data?.data[activeRank ? activeRank : activeTab]?.movie_data?.length
-          ? data?.data[activeRank ? activeRank : activeTab]?.movie_data?.map(
-              (item: any, index: any) => (
-                <RatingCard movie={item} key={index} index={index} />
+      <NewAds section="ranking" />
+      {isLoading ? (
+        <div className="w-full flex justify-center items-center h-[70vh]">
+          <Loader />
+        </div>
+      ) : (
+        <div className="px-3 pt-5 flex flex-col gap-7">
+          {data?.data[activeRank ? activeRank : activeTab]?.movie_data?.length
+            ? data?.data[activeRank ? activeRank : activeTab]?.movie_data?.map(
+                (item: any, index: any) => (
+                  <RatingCard movie={item} key={index} index={index} />
+                )
               )
-            )
-          : rankingDataById?.map((item: any, index: any) => (
-              <RatingCard movie={item} key={index} index={index} />
-            ))}
-      </div>
+            : rankingDataById?.map((item: any, index: any) => (
+                <RatingCard movie={item} key={index} index={index} />
+              ))}
+        </div>
+      )}
     </div>
   );
 };
