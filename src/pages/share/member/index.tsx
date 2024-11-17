@@ -33,17 +33,17 @@ const Member: React.FC<MemberProps> = ({}) => {
   return (
     <div className="">
       <img
-        className=" absolute top-0 z-[-1] w-screen h-screen h-[350px object-center object-cover"
+        className=" absolute top-0 z-[-1] w-screen h-scree h-[350px object-center object-cover"
         src={BG}
         alt=""
       />
-      {/* <img src={dust} className=" absolute z-[-2" alt="" /> */}
+      <img src={dust} className=" absolute z-[-2 rain_effect_thuHtoo" alt="" />
       {/* header */}
       <div className=" flex justify-between items-center px-[20px] py-[10px]">
         <Link to="/share">
           <img src={back} className=" p-[20px" alt="" />
         </Link>
-        <h1 className=" text-white text-[18px] pl-[16px] font-[400]">
+        <h1 className=" text-white text-[18px] pl-[16px] font-[600]">
           Invitation
         </h1>
         <a

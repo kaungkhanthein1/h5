@@ -32,6 +32,7 @@ const DetailPage: React.FC = () => {
   const [forwardedCount, setForwardedCount] = useState(-1);
   const [movieReload, setMovieReload] = useState(false);
   const [commentCount, setCommentCount] = useState(0);
+  const [visible, setVisible] = useState(false);
   const navigate = useNavigate();
 
   useEffect(()=>{
@@ -71,7 +72,14 @@ const DetailPage: React.FC = () => {
         console.error("Error auto-playing next episode:", error);
       }
     }
-    setWholePageError(true);
+    // console.log('hello')
+    setTimeout(()=>{
+      setVisible(true);
+      setWholePageError(true);
+    }, 1000);
+    setTimeout(()=>{
+      setVisible(false);
+    }, 3000)
   };
 
   useEffect(() => {
@@ -324,6 +332,11 @@ const DetailPage: React.FC = () => {
           </div>
         </>
       )}
+      {visible && (
+          <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-background text-white text-lg font-medium px-4 py-2 rounded-lg shadow-md">
+            没有更多资源了
+          </div>
+        )}
     </div>
   );
 };

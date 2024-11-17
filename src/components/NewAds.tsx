@@ -42,7 +42,7 @@ const NewAds: React.FC<NewAdsProps> = ({ section }) => {
               >
                 <img
                   src={item?.data?.image}
-                  className="w-[52px] h-[52px] object-cover rounded-[10px] mx-auto"
+                  className="w-[52px] h-[52px] object-cover rounded-[4px] mx-auto"
                   alt="ad"
                 />
                 <p className="text-[12px] font-[500] text-[#888]">

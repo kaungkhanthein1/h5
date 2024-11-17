@@ -46,8 +46,8 @@ const Password = React.lazy(() => import("./pages/profile/Password"));
 const Bind = React.lazy(() => import("./pages/profile/Bind"));
 const Contact = React.lazy(() => import("./pages/profile/Contact"));
 const Invite = React.lazy(() => import("./pages/profile/Invite"));
-const Share = React.lazy(() =>import("./pages/share"))
-const Member = React.lazy(() =>import("./pages/share/member"))
+const Share = React.lazy(() => import("./pages/share"));
+const Member = React.lazy(() => import("./pages/share/member"));
 
 // ProtectedRoute component to handle route guarding
 // const ProtectedRoute: React.FC<{ children: JSX.Element }> = ({ children }) => {
@@ -83,7 +83,7 @@ const App: React.FC = () => {
     location.pathname.startsWith("/bind") ||
     location.pathname.startsWith("/contact") ||
     location.pathname.startsWith("/share") ||
-    location.pathname.startsWith("/invite")||
+    location.pathname.startsWith("/invite") ||
     location.pathname.startsWith("/share/member");
 
   const hideHeader = location.pathname.startsWith("/explorer");
@@ -127,6 +127,13 @@ const App: React.FC = () => {
       dispatch(setSignupOpen(false));
     });
   };
+
+  useEffect(() => {
+    // Use a slight delay to ensure layout adjusts properly
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+    }, 100);
+  }, [location]);
 
   return (
     <>
@@ -187,7 +194,7 @@ const App: React.FC = () => {
             ></div>
           )}
           {/* <div className=" fixed h-screen flex flex-col justify-center items-center"> */}
-          {openAuthModel && <LoginEmail handleBack={handleBack} /> }
+          {openAuthModel && <LoginEmail handleBack={handleBack} />}
           {/* {openLoginModel && <LoginEmail handleBack={handleBack} />} */}
           {openSignupModel && <SignUp handleBack={handleBack} />}
           {/* </div> */}
