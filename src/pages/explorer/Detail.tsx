@@ -37,9 +37,9 @@ const Detail = () => {
               alt=""
               className="w-full h-auto object-cover"
             />
-            <h1 className="text-[16px] font-semibold absolute bottom-2 left-2">
-              {details?.name}
-            </h1>
+            <div className=" bg-gradient-to-t from-black via-black/5 to-transparent absolute  bottom-0 py-1 w-full">
+              <p className="text-[16px] font-semibold px-2">{details?.name}</p>
+            </div>
             <div className="absolute top-2 left-2">
               <img
                 onClick={() => navigate(-1)}
