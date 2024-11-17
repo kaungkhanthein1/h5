@@ -394,3 +394,13 @@ input[type="radio"]:checked {
 .rank3-bg {
   background: linear-gradient(180deg, #ff6332 0%, #ffa132 100%);
 }
+
+.art-bottom .art-progress .art-control-progress .art-control-progress-inner {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.art-controls {
+  margin-left: 5px;
+  margin-right: 10px;
+}

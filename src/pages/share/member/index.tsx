@@ -7,13 +7,14 @@ import rain from "../../../assets/share/rain.gif";
 import dust from "../../../assets/share/dust.png";
 import back from "../../../assets/login/back.svg";
 import user from "../../../assets/share/user.svg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../share.css";
 import { useGetInvitedDetailsQuery } from "../../../features/share/ShareApi";
 
 interface MemberProps {}
 
 const Member: React.FC<MemberProps> = ({}) => {
+  const navigate = useNavigate()
   const {
     data: memberList,
     refetch,
@@ -31,18 +32,21 @@ const Member: React.FC<MemberProps> = ({}) => {
   }, [refetch]);
 
   return (
-    <div className="">
+    <div className=" relative">
       <img
         className=" absolute top-0 z-[-1] w-screen h-scree h-[350px object-center object-cover"
         src={BG}
         alt=""
       />
-      <img src={dust} className=" absolute z-[-2 rain_effect_thuHtoo" alt="" />
+      <img src={dust} className=" absolute left-0 right-0 top-0 z-[-1] rain_effect_thuHtoo" alt="" />
+      <div className=" absolute hidden">
+        <div className="rain_effect_thuHtoo"></div>
+      </div>
       {/* header */}
       <div className=" flex justify-between items-center px-[20px] py-[10px]">
-        <Link to="/share">
+        <div onClick={() => navigate(-1)}>
           <img src={back} className=" p-[20px" alt="" />
-        </Link>
+        </div>
         <h1 className=" text-white text-[18px] pl-[16px] font-[600]">
           Invitation
         </h1>

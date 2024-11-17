@@ -1,28 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useGetAdsTotalQuery } from "../features/share/AdsApi";
 
-interface AdItem {
-  data?: {
-    url?: string;
-    image?: string;
-  };
-  remarks?: string;
-}
+const HomeAds = ({ data, isLoading }: any) => {
+  const [cur, setCur] = useState<any>([]);
 
-interface NewAdsProps {
-  section: string;
-}
-
-const NewAds: React.FC<NewAdsProps> = ({ section }) => {
-  const [cur, setCur] = useState<AdItem[] | undefined>([]);
-  const { data, isLoading } = useGetAdsTotalQuery("");
-
-  // console.log(data);
 
   useEffect(() => {
-    setCur(data?.data?.[section] as AdItem[]);
-  }, [data, section]);
+    setCur(data);
+  }, [data]);
 
   return (
     <div className="max-md:px-3 px-10 flex flex-col justify-center">
@@ -30,11 +15,11 @@ const NewAds: React.FC<NewAdsProps> = ({ section }) => {
         {isLoading
           ? Array.from({ length: 5 }).map((_, index) => (
               <div className="flex flex-col items-center gap-[4px] animate-pulse">
-                <div className="w-[58px] h-[58px] bg-white/30 rounded-[4px]" />
+                <div className="w-[52px] h-[52px] bg-white/30 rounded-[10px]" />
                 <div className="w-12 h-3 text-white/30 rounded">小游戏</div>
               </div>
             ))
-          : cur?.map((item, index) => (
+          : cur?.map((item: any, index: any) => (
               <Link
                 className="flex flex-col justify-center items-center gap-[4px]"
                 to={item?.data?.url || "#"}
@@ -42,7 +27,7 @@ const NewAds: React.FC<NewAdsProps> = ({ section }) => {
               >
                 <img
                   src={item?.data?.image}
-                  className="w-[58px] h-[58px] object-cover rounded-[4px] mx-auto"
+                  className="w-[52px] h-[52px] object-cover rounded-[10px] mx-auto"
                   alt="ad"
                 />
                 <p className="text-[12px] font-[500] text-[#888]">
@@ -55,4 +40,4 @@ const NewAds: React.FC<NewAdsProps> = ({ section }) => {
   );
 };
 
-export default NewAds;
+export default HomeAds;

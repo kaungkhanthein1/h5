@@ -11,17 +11,20 @@ import "../../components/home/home.css";
 import { useGetRecordQuery } from "../profile/services/profileApi";
 import Ads from "../../components/NewAds";
 import NewAds from "../../components/NewAds";
+import HomeAds from "../../components/home/HomeAds";
 
 const Home: React.FC = () => {
   const [adsData, setAdsData] = useState<any>([]);
   const { data, isLoading } = useGetRecommendedMoviesQuery();
   const activeTab = useSelector((state: any) => state.home.activeTab);
-  const { data: movies } = useGetRecordQuery(); // Fetch favorite movies list from API
+  const { data: movies } = useGetRecordQuery();
 
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(setActiveTab(0));
   }, []);
+
+  const ads = data?.data?.filter((item: any) => item?.layout === "advert_self");
 
   return (
     <>
@@ -39,7 +42,8 @@ const Home: React.FC = () => {
                       <Banner key={index} list={movieData?.list} />
                       {movies?.length !== 0 && <ContinueWatching />}
                       {/* <Ads section={"start"} /> */}
-                      <NewAds section={"screen_index"} />
+                      {/* <NewAds section={"screen_index"} /> */}
+                      <HomeAds data={ads[0]?.data} isLoading={isLoading} />
                     </>
                   );
                 } else if (movieData?.layout === "base") {

@@ -108,4 +108,6 @@
   opacity: 0.32;
   background: url('../../assets//share/rain.gif') lightgray 50% / cover no-repeat;
   mix-blend-mode: plus-lighter;
+  width: 100%;
+height: 155px;
 }
