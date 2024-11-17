@@ -36,7 +36,7 @@ const Tab1 = () => {
   }, [sort, classData, activeTab, area, year]);
 
   return (
-    <div className="pb-32 min-h-screen px-3">
+    <div className="pb-32 min-h-screen">
       <FilterMovie />
     </div>
   );

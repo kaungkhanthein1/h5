@@ -237,6 +237,8 @@ const Main = () => {
                 </svg>
               </div>
             </a>
+            </div>
+            <div className="info-main-first mt-3">
             <Link to={"/nickname"} className="info-first1">
               <div className="flex gap-1 max-w-[230px] ">
                 <h1 className="info-text">昵称</h1>

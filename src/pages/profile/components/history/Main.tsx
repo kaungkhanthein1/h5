@@ -25,7 +25,6 @@ const Main: React.FC<any> = ({
   };
 
   const handleMovieSelect = (movieId: string) => {
-    console.log('... is=>', movieId)
     setSelectedMovies((prevSelected) =>
       prevSelected.includes(movieId)
         ? prevSelected.filter((id) => id !== movieId)
