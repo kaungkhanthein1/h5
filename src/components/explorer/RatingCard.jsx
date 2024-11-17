@@ -10,7 +10,14 @@ const RatingCard = ({ movie, index }) => {
           className="w-[80px] h-[111px] md:w-[160px] md:h-[222px] rounded-md object-cover"
           alt=""
         />
-        <div className="absolute top-0 left-0 bg-orange-600 rounded-tl-md rounded-br-md text-white px-2 py-0.5">
+        <div
+          className={`absolute top-0 left-0 ${
+            (index + 1 == 1 && "rank1-bg") ||
+            (index + 1 == 2 && "rank2-bg") ||
+            (index + 1 == 3 && "rank3-bg") ||
+            "bg-[#00000066]"
+          }  rounded-tl-md rounded-br-md text-[12px] flex justify-center items-center text-white w-[22px] h-[18px]`}
+        >
           {index + 1}
         </div>
         <div className="absolute rounded-bl-md rounded-br-md  h-full w-full inset-0 bg-gradient-to-b from-transparent via-black/5 to-black"></div>

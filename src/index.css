@@ -385,3 +385,12 @@ input[type="radio"]:checked {
   background-size: 100% 100%;
 }
 
+.rank1-bg {
+  background: linear-gradient(180deg, #ff1f47 0%, #ff326f 100%);
+}
+.rank2-bg {
+  background: linear-gradient(180deg, #ff480e 0%, #ff5c00 100%);
+}
+.rank3-bg {
+  background: linear-gradient(180deg, #ff6332 0%, #ffa132 100%);
+}

@@ -108,7 +108,7 @@ const Tab4 = () => {
           <Loader />
         </div>
       ) : (
-        <div className="px-3 pt-5 flex flex-col gap-7">
+        <div className="px-3 pt-5 flex flex-col gap-3">
           {data?.data[activeRank ? activeRank : activeTab]?.movie_data?.length
             ? data?.data[activeRank ? activeRank : activeTab]?.movie_data?.map(
                 (item: any, index: any) => (

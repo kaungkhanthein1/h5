@@ -15,6 +15,31 @@
   background: #f54100;
 }
 
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px; /* Increase hit area width */
+  height: 48px; /* Increase hit area height */
+  cursor: pointer;
+}
+
+.no-spinner {
+  -moz-appearance: textfield; /* Firefox */
+  -webkit-appearance: none; /* Chrome, Safari, Edge */
+  appearance: none; /* Standard */
+}
+
+.no-spinner::-webkit-inner-spin-button,
+.no-spinner::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0; /* Remove margin for consistency */
+}
+
+.back-button svg {
+  pointer-events: none; /* Ensure the hit area is the container, not the SVG */
+}
+
 .collect-btn {
   border-radius: 16px;
   display: flex;
