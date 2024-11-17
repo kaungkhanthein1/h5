@@ -34,7 +34,14 @@ const Movies = ({ movieData }) => {
         <h1 className="">{movieData?.navigator?.title}</h1>
       </div>
       <div className="max-md:mt-5 mt-5">
-        <Swiper
+        <div className="flex overflow-x-scroll whitespace-nowrap scrollbar-hide gap-2 mt-5">
+          {apiMovie?.map((movie) => (
+            <div key={movie.id}>
+              <MovieCard movie={movie} height={"200px"} isSlider={true} />
+            </div>
+          ))}
+        </div>
+        {/* <Swiper
           modules={[Navigation]}
           slidesPerView={2}
           spaceBetween={8}
@@ -86,7 +93,7 @@ const Movies = ({ movieData }) => {
               <MovieCard movie={movie} height={"200px"} />
             </SwiperSlide>
           ))}
-        </Swiper>
+        </Swiper> */}
       </div>
     </div>
   );

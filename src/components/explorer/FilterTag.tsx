@@ -89,7 +89,7 @@ const FilterTag = () => {
             </div>
           ))}
       </div>
-      <div className="flex overflow-x-scroll px-3 gap-1 remove-scrollbar items-center">
+      <div className="flex overflow-x-scroll px-3 gap-5 remove-scrollbar items-center">
         {configData?.data?.movie_search_screen?.sort?.map(
           (item: any, index: any) => (
             <div className="relative" key={index}>
@@ -98,8 +98,8 @@ const FilterTag = () => {
                 className={`${
                   sort === item?.value
                     ? "bg-gray-500/35 px-4 py-1 text-[14px]"
-                    : "text-[14px]  px-4 py-1"
-                } whitespace-nowrap py-2 rounded-full hover:text-white transition-colors`}
+                    : "text-[14px]"
+                } whitespace-nowrap py-1 rounded-full hover:text-white transition-colors`}
               >
                 {item?.name}
               </p>
@@ -108,7 +108,7 @@ const FilterTag = () => {
         )}
       </div>
 
-      <div className="flex overflow-x-scroll px-3 gap-1 remove-scrollbar items-center">
+      <div className="flex overflow-x-scroll px-3 gap-5 remove-scrollbar items-center">
         {filteredTags?.map(
           (data: any) =>
             data?.class &&
@@ -127,11 +127,11 @@ const FilterTag = () => {
                     classData
                       ? classData === item
                         ? "bg-gray-500/35 px-4 py-1 text-[14px]"
-                        : "text-[14px]  px-4 py-1"
+                        : "text-[14px]"
                       : activeClass === index
                       ? "bg-gray-500/35 px-4 py-1 text-[14px]"
-                      : "text-[14px]  px-4 py-1"
-                  } whitespace-nowrap py-2 rounded-full hover:text-white transition-colors`}
+                      : "text-[14px]"
+                  } whitespace-nowrap py-1 rounded-full hover:text-white transition-colors`}
                 >
                   {item}
                 </p>
@@ -139,7 +139,7 @@ const FilterTag = () => {
             ))
         )}
       </div>
-      <div className="flex overflow-x-scroll px-3 gap-1 remove-scrollbar items-center">
+      <div className="flex overflow-x-scroll px-3 gap-5 remove-scrollbar items-center">
         {filteredTags?.map(
           (data: any) =>
             data?.area &&
@@ -158,11 +158,11 @@ const FilterTag = () => {
                     area
                       ? area === item
                         ? "bg-gray-500/35 px-4 py-1 text-[14px]"
-                        : "text-[14px]  px-4 py-1"
+                        : "text-[14px]"
                       : activeArea === index
                       ? "bg-gray-500/35 px-4 py-1 text-[14px]"
-                      : "text-[14px]  px-4 py-1"
-                  } whitespace-nowrap py-2 rounded-full hover:text-white transition-colors`}
+                      : "text-[14px]"
+                  } whitespace-nowrap py-1 rounded-full hover:text-white transition-colors`}
                 >
                   {item}
                 </p>
@@ -170,7 +170,7 @@ const FilterTag = () => {
             ))
         )}
       </div>
-      <div className="flex overflow-x-scroll px-3 gap-1 remove-scrollbar items-center">
+      <div className="flex overflow-x-scroll px-3 gap-5 remove-scrollbar items-center">
         {filteredTags?.map(
           (data: any) =>
             data?.year &&
@@ -189,11 +189,11 @@ const FilterTag = () => {
                     year
                       ? year === item
                         ? "bg-gray-500/35 px-4 py-1 text-[14px]"
-                        : "text-[14px]  px-4 py-1"
+                        : "text-[14px]"
                       : activeYear === index
                       ? "bg-gray-500/35 px-4 py-1 text-[14px]"
-                      : "text-[14px]  px-4 py-1"
-                  } whitespace-nowrap py-2 rounded-full hover:text-white transition-colors`}
+                      : "text-[14px]"
+                  } whitespace-nowrap py-1 rounded-full hover:text-white transition-colors`}
                 >
                   {item}
                 </p>
