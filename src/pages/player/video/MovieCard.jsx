@@ -44,8 +44,8 @@ const MovieCard = ({
         <div className="overlay">
           {/* <img className="h-[40px]" src={videoIcon} alt="" /> */}
         </div>
-        <div className="top-0 right-0 search_card_score z-1 absolute w-[50px] px-1">
-          <span className="truncate">{movie?.dynamic}</span>
+        <div className="top-0 right-0 search_card_score truncate z-1 absolute">
+          {movie?.dynamic}
         </div>
       </div>
 

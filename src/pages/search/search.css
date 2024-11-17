@@ -161,6 +161,7 @@
 }
 
 .search_card_score {
+  max-width: 70px;
   color: #fff;
   text-align: right;
   font-family: "PingFang SC";
@@ -170,7 +171,7 @@
   line-height: normal;
   border-radius: 0px 4px;
   background: linear-gradient(180deg, #ff6332 0%, #ffa132 100%);
-  display: inline-flex;
+  /* display: inline-flex; */
   padding: 1px 6px 2px 6px;
   align-items: flex-start;
   gap: 10px;

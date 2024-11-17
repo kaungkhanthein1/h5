@@ -40,8 +40,8 @@ const MovieCard = ({
           {/* <img className="h-[40px]" src={videoIcon} alt="" /> */}
         </div>
         {showDynamic && (
-          <div className="top-0 right-0 search_card_score z-1 absolute">
-            <span>{movie?.dynamic}</span>
+          <div className="top-0 right-0 search_card_score truncate z-1 absolute">
+            {movie?.dynamic}
           </div>
         )}
       </Link>
