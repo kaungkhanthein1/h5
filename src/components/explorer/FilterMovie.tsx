@@ -81,7 +81,7 @@ const FilterMovie = () => {
                     <Link
                       to={`/player/${movie?.id}`}
                       key={movie?.id}
-                      className="mx-auto"
+                      className="mx-auto w-full"
                     >
                       <MovieCard movie={movie} height={"200px"} />
                     </Link>

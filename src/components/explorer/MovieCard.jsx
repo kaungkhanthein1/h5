@@ -32,7 +32,7 @@ const MovieCard = ({ movie, height }) => {
 
       <div className="text-container">
         <div className="movie-info">
-          <h2 className="text-[12px] mt-3 leading-[18px] font-confortFont font-[400] text-white text-truncate">
+          <h2 className="text-[12px] mt-3 leading-[18px] font-confortFont font-[400] text-white truncate">
             {he.decode(movie?.name || "Unknown Title")}
           </h2>
         </div>

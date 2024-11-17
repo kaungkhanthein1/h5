@@ -3,26 +3,35 @@ import he from "he";
 // import videoIcon from "../../assets/videoIcon.svg";
 import LazyLoadImage from "../../../components/home/LazyLoadImage";
 
-const MovieCard = ({ movie, height='150px', width = '114px', showRecommandMovie }) => {
+const MovieCard = ({
+  movie,
+  height = "165px",
+  width = "114px",
+  showRecommandMovie,
+}) => {
   const navigate = useNavigate();
   const showMovie = () => {
-    console.log('heeeee')
+    console.log("heeeee");
     // navigate(`/player/${movie?.id}`);
     showRecommandMovie(movie?.id);
-  }
+  };
   return (
-    <div className={`movie-item max-sm:h-auto cursor-default relative mt-2`} style={{width: '100%'}}>
+    <div
+      className={`movie-item max-sm:h-auto cursor-default relative mt-2`}
+      style={{ width: "100%" }}
+    >
       <div className="block relative zoom-effect" onClick={showMovie}>
         <div
           className={`relative img_a border-none ${
-            height ? `max-sm:h-[${height}]` : "max-sm:h-[150px]"
-          }`}  style={{width: '100%'}}
+            height ? `max-sm:h-[${height}]` : "max-sm:h-[165px]"
+          }`}
+          style={{ width: "100%" }}
         >
           <LazyLoadImage
             src={movie.cover}
             alt={movie.name}
-            className={`movie_img  h-[150px] rounded-lg border-none  ${
-              height ? `max-sm:h-[${height}]` : "max-sm:h-[150px]"
+            className={`movie_img  h-[165px] rounded-lg border-none  ${
+              height ? `max-sm:h-[${height}]` : "max-sm:h-[165px]"
             } cursor-default object-cover w-full`}
           />
           <div className="absolute rounded-bl-lg rounded-br-lg  h-full w-full inset-0 bg-gradient-to-b from-transparent via-black/5 to-black"></div>
@@ -35,8 +44,8 @@ const MovieCard = ({ movie, height='150px', width = '114px', showRecommandMovie 
         <div className="overlay">
           {/* <img className="h-[40px]" src={videoIcon} alt="" /> */}
         </div>
-        <div className="top-0 right-0 search_card_score z-1 absolute">
-            <span>{movie?.dynamic}</span>
+        <div className="top-0 right-0 search_card_score z-1 absolute w-[50px] px-1">
+          <span className="truncate">{movie?.dynamic}</span>
         </div>
       </div>
 
