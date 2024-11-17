@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect, useRef, startTransition } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   useChangeAvatarMutation,
@@ -8,13 +8,19 @@ import {
 import { setUser } from "../slice/UserSlice";
 import ImageWithPlaceholder from "./ImageWithPlaceholder";
 import { showToast } from "../../error/ErrorSlice";
+import { setAuthModel } from "../../../../features/login/ModelSlice";
 
 const Main = () => {
   const dispatch = useDispatch();
+  const isLoggedIn = localStorage.getItem("authToken");
+  const parsedLoggedIn = isLoggedIn ? JSON.parse(isLoggedIn) : null;
+  const token = parsedLoggedIn?.data?.access_token;
 
   const { data: userData, refetch } = useGetUserQuery(undefined);
 
   const user = userData?.data;
+
+  const navigate = useNavigate();
 
   // const user = useSelector((state: any) => state.user.user);
   const [showBottomSheet, setShowBottomSheet] = useState(false);
@@ -93,6 +99,27 @@ const Main = () => {
       bottomSheet.classList.add("slide-out");
       overlay?.classList.add("hidden"); // Hide the overlay
       setShowBottomSheet(false); // Close the bottom sheet after animation completes
+    }
+  };
+
+  const handleInviteClick = () => {
+    if (!token) {
+      // If not logged in, open the login modal
+      startTransition(() => {
+        dispatch(setAuthModel(true));
+      });
+    } else {
+      if (user?.inviter_id !== 0) {
+        dispatch(
+          showToast({
+            message: "Already invited",
+            type: "success",
+          })
+        );
+      } else {
+        navigate("/invite");
+      }
+      // If logged in, redirect to the favorites page
     }
   };
 
@@ -183,6 +210,33 @@ const Main = () => {
             </div>
           </div>
           <div className="info-main-first mt-3">
+            <a
+              className="cursor-pointer info-first1"
+              onClick={handleInviteClick}
+            >
+              <div className="flex gap-1 max-w-[230px] ">
+                <div className="profile-text">我的推广达人</div>
+              </div>
+              <div className="flex gap-1 items-center">
+                <div className="text-[12px] text-[#d0bc94]">
+                  {token && user?.inviter_id !== 0
+                    ? user?.inviter_id
+                    : "输入邀请码得积分"}
+                </div>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="6"
+                  height="8"
+                  viewBox="0 0 6 8"
+                  fill="none"
+                >
+                  <path
+                    d="M0.778157 0.156564C0.836612 0.106935 0.906056 0.0675604 0.982509 0.0406946C1.05896 0.0138289 1.14092 0 1.2237 0C1.30647 0 1.38843 0.0138289 1.46488 0.0406946C1.54134 0.0675604 1.61078 0.106935 1.66924 0.156564L5.85277 3.69938C5.89944 3.73882 5.93647 3.78567 5.96173 3.83724C5.987 3.88882 6 3.94411 6 3.99994C6 4.05578 5.987 4.11107 5.96173 4.16264C5.93647 4.21422 5.89944 4.26107 5.85277 4.30051L1.66924 7.84332C1.42255 8.05223 1.02484 8.05223 0.778157 7.84332C0.531474 7.63442 0.531474 7.29762 0.778157 7.08872L4.42302 3.99781L0.773123 0.906907C0.531475 0.702268 0.531474 0.361203 0.778157 0.156564Z"
+                    fill="white"
+                  />
+                </svg>
+              </div>
+            </a>
             <Link to={"/nickname"} className="info-first1">
               <div className="flex gap-1 max-w-[230px] ">
                 <h1 className="info-text">昵称</h1>
@@ -323,6 +377,11 @@ const Main = () => {
             ref={bottomSheetRef}
           >
             <div className="bottom-sheet-content">
+              <div className="flex justify-between items-center">
+                <div></div>
+                <div className="w-[50px] h-[4px] bg-white my-3 rounded-[4px]"></div>
+                <div></div>
+              </div>
               <button
                 className="bottom-sheet-option"
                 onClick={() => document.getElementById("fileInput")?.click()}

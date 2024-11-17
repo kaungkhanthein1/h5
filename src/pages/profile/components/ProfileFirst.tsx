@@ -3,7 +3,11 @@ import { Link, useNavigate } from "react-router-dom";
 import ImageWithPlaceholder from "../../search/components/ImgPlaceholder";
 import { setAuthModel } from "../../../features/login/ModelSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { useGetListQuery, useGetRecordQuery } from "../services/profileApi";
+import {
+  useGetListQuery,
+  useGetRecordQuery,
+  useGetUserQuery,
+} from "../services/profileApi";
 import { showToast } from "../error/ErrorSlice";
 
 interface Movie {
@@ -18,7 +22,16 @@ interface Movie {
 }
 
 const ProfileFirst = () => {
-  const user = useSelector((state: any) => state.user.user);
+  // Check for token in localStorage
+  const isLoggedIn = localStorage.getItem("authToken");
+  const parsedLoggedIn = isLoggedIn ? JSON.parse(isLoggedIn) : null;
+  const token = parsedLoggedIn?.data?.access_token;
+
+  const { data: userData, error } = useGetUserQuery(undefined, {
+    skip: !token,
+  });
+
+  const user = userData?.data;
 
   const {
     data: favoriteMovies,
@@ -44,10 +57,6 @@ const ProfileFirst = () => {
   const latestMovies = allMovies
     ?.sort((a: any, b: any) => b.update_time - a.update_time) // Sort by update_time (newest first)
     ?.slice(0, 10); // Take the latest 10 movies
-
-  const isLoggedIn = localStorage.getItem("authToken");
-  const parsedLoggedIn = isLoggedIn ? JSON.parse(isLoggedIn) : null;
-  const token = parsedLoggedIn?.data?.access_token;
 
   function formatDuration(durationInSeconds: any) {
     const hours = Math.floor(durationInSeconds / 3600);
@@ -107,6 +116,8 @@ const ProfileFirst = () => {
       navigate("/history");
     }
   };
+
+  console.log(latestMovies);
 
   return (
     <div className="profile-div">
@@ -168,6 +179,12 @@ const ProfileFirst = () => {
                   />
                   <div className="absolute watchedDuration bottom-[2px] right-[3px] ">
                     {formatDuration(movie?.current_time)}
+                  </div>
+                  <div className="absolute watchedDuration bottom-[2px] left-[3px] ">
+                    {movie?.episode_name}
+                  </div>
+                  <div className="absolute watchedDuration top-[2px] right-[3px] ">
+                    {movie?.dynamic}
                   </div>
                 </div>
 

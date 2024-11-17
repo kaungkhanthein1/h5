@@ -9,7 +9,7 @@ const RecommendedList = ({ data, showRecommandMovie }: any) => {
         className="grid gap-4 mb-5" 
         style={{ 
           gridTemplateColumns: 'repeat(3, 1fr)', 
-          gridGap: '8px' 
+          gridGap: '15px' 
         }}
       >
         {data?.recommendList?.map((movie: any) => (
