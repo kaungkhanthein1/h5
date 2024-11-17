@@ -16,7 +16,7 @@ const RatingCard = ({ movie, index }) => {
             (index + 1 == 2 && "rank2-bg") ||
             (index + 1 == 3 && "rank3-bg") ||
             "bg-[#00000066]"
-          }  rounded-tl-md rounded-br-md text-[12px] flex justify-center items-center text-white w-[22px] h-[18px]`}
+          }  rounded-tl-md rounded-br-md text-[12px] flex justify-center items-center text-white w-[25px] h-[21px] font-bold`}
         >
           {index + 1}
         </div>

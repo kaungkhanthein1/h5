@@ -36,9 +36,14 @@ const Card = ({ item }: any) => {
           alt=""
           className="h-[110px] md:h-[180px] w-full object-cover object-center rounded-tl-[8px] rounded-tr-[8px]"
         />
-        <p className="text-white text-[14px] absolute bottom-2 truncate w-[90%] px-3">
-          {item?.name}
-        </p>
+        <div className="absolute bottom-0 w-full">
+          <div className="w-full py-1 relative">
+            <p className="text-white font-bold text-[14px] truncate w-[90%] px-3">
+              {item?.name}
+            </p>
+            <div className="absolute  h-full w-full inset-0 bg-gradient-to-t from-black via-black/5 to-transparent"></div>
+          </div>
+        </div>
       </div>
       <div className="flex text-[12px] text-gray-500 bg-[#1f1f21] p-3 gap-3 items-center rounded-bl-[8px] rounded-br-[8px]">
         <p>影片 {item?.movie_count}</p>
