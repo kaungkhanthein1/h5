@@ -4,6 +4,7 @@ import Main from "./components/history/Main";
 import "./profile.css";
 import { useGetRecordQuery } from "./services/profileApi";
 import Loader from "../search/components/Loader";
+import NewAds from "../../components/NewAds";
 
 const History = () => {
   const { data, isLoading, isFetching, refetch } = useGetRecordQuery(); // Fetch favorite movies list from API
@@ -37,8 +38,11 @@ const History = () => {
             refetch={refetch}
           />
         ) : (
-          <div className="flex justify-center items-center text-center h-screen">
-            <div>
+          <div className="h-[80vh] mt-20">
+                        <div className="w-full">
+            <NewAds section="play_record_up" />
+            </div>
+            <div className="flex flex-col justify-center items-center text-center h-[50vh]">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="118"

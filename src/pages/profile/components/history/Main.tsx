@@ -25,6 +25,7 @@ const Main: React.FC<any> = ({
   };
 
   const handleMovieSelect = (movieId: string) => {
+    console.log('... is=>', movieId)
     setSelectedMovies((prevSelected) =>
       prevSelected.includes(movieId)
         ? prevSelected.filter((id) => id !== movieId)
@@ -54,6 +55,20 @@ const Main: React.FC<any> = ({
     return "0";
   };
 
+  const handleSelectAllAndCancel = () => {
+    const allMovies = movies && movies.length > 0 ? 
+    movies.reduce((a: any, c: any) => {
+      c.list.map((x: any) => a.push(x.id))
+      return a;
+    },[])
+    : [];
+    if(selectedMovies  && selectedMovies?.length === allMovies?.length) {
+      setSelectedMovies([]);
+    } else {
+      setSelectedMovies(allMovies);
+    }
+  }
+
   return (
     <div className="bg-[#161619] mt-[60px]  pb-[50px]">
       {isLoading || isFetching ? (
@@ -61,7 +76,7 @@ const Main: React.FC<any> = ({
           <Loader />
         </div>
       ) : (
-        <div className=" py-2">
+        <div className="py-2">
           {/* <Ads advert={advert} /> */}
           <NewAds section="play_record_up" />
         </div>
@@ -178,9 +193,9 @@ const Main: React.FC<any> = ({
           >
             <button
               className="w-[50%] cancel-all"
-              onClick={() => setSelectedMovies([])}
+              onClick={() => handleSelectAllAndCancel()}
             >
-              全部取消
+              {selectedMovies  && selectedMovies.length === movie?.list?.length ?  '全部取消' : '选择全部'}
             </button>
             <button
               className="delete-all w-[50%]"
