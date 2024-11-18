@@ -75,25 +75,19 @@ const ModalComponent: React.FC<ModalComponentProps> = ({
           <div className="flex space-x-6 overflow-x-auto m-auto">
             {/* Episode Tab */}
             <button
-              className={`pb-2 border-b-4 ${
-                activeTab === "episodes"
-                  ? "border-orange-500"
-                  : "border-transparent text-gray-400"
-              }`}
+              className={`pb-2 text-gray-400`}
               onClick={() => setActiveTab("episodes")}
             >
-              Episodes
+              选集
+              {activeTab === "episodes" && <div className="absolute w-[32px] h-1 bg-mainColor rounded-md mt-1"></div>}
             </button>
             {/* Source Tab */}
             <button
-              className={`pb-2 border-b-4 ${
-                activeTab === "sources"
-                  ? "border-orange-500"
-                  : "border-transparent text-gray-400"
-              }`}
+              className={`pb-2 text-gray-400`}
               onClick={() => setActiveTab("sources")}
             >
-              Sources
+              播放源
+              {activeTab === "sources" && <div className="absolute w-[32px] h-1 bg-mainColor rounded-md mt-1 ml-2"></div>}
             </button>
           </div>
           <button onClick={onClose} className="text-white">
@@ -110,17 +104,16 @@ const ModalComponent: React.FC<ModalComponentProps> = ({
                   const start = index * 50;
                   const end = Math.min(start + 50, filteredEpisodes.length);
                   return (
+                    <>
                     <button
                       key={index}
-                      className={`px-4 whitespace-nowrap flex py-2 text-sm text-white ${
-                        episodeRange[0] === start
-                          ? "border-b-4 border-orange-500"
-                          : ""
-                      }`}
+                      className={`px-4 whitespace-nowrap py-2 text-sm`}
                       onClick={() => handleTabClick(start, end)}
                     >
-                      <span>{start + 1}-{end}集</span>
+                      <div className="mb-2">{start + 1}-{end}集</div>
+                      {episodeRange[0] === start && <div className="w-full h-1 bg-mainColor rounded-md"></div>}
                     </button>
+                    </>
                   );
                 })}
               </div>

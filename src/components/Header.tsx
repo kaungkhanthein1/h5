@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import logo from "../assets/logo.svg";
+import logo from "../assets/h5Logo.svg";
 import { useNavigate } from "react-router-dom";
 import { useGetHeaderTopicsQuery } from "../../src/pages/home/services/homeApi";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,9 +19,6 @@ const Header: FC = () => {
       <div className="flex items-center px-3 gap-3">
         <div className="flex items-center gap-1">
           <img src={logo} alt="" className="h-8 w-auto object-contain" />
-          <span className="text-white text-md font-semibold leading-none">
-            电影手
-          </span>
         </div>
         <div className="flex-1 relative">
           <input

@@ -20,6 +20,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const videoElementRef = useRef<HTMLDivElement>(null);
   const [videoRatio, setVideoRatio] = useState(9 / 16); // Default to 16:9 ratio
   const { refetch } = useGetRecordQuery(); // Fetch favorite movies list from API
+  const [isControlsVisible, setIsControlsVisible] = useState(true);
+  const inactivityTimeout = useRef<number | null>(null);
 
   // Function to get token from localStorage
   const getToken = () => {
@@ -138,21 +140,61 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     }
   };
 
+  const handleUserActivity = () => {
+    // Show the controls when there's activity
+    setIsControlsVisible(true);
+
+    // Clear any existing timeout
+    if (inactivityTimeout.current) {
+      clearTimeout(inactivityTimeout.current);
+    }
+
+    // Set a timeout to hide controls after 3 seconds of inactivity
+    inactivityTimeout.current = window.setTimeout(() => {
+      setIsControlsVisible(false);
+    }, 3000);
+  };
+
+  useEffect(() => {
+    // Attach event listeners for user activity
+    const player = document.getElementById("my-player");
+    if (player) {
+      player.addEventListener("mousemove", handleUserActivity);
+      player.addEventListener("keydown", handleUserActivity);
+      player.addEventListener("touchstart", handleUserActivity);
+    }
+
+    // Cleanup event listeners on unmount
+    return () => {
+      if (inactivityTimeout.current) {
+        clearTimeout(inactivityTimeout.current);
+      }
+      if (player) {
+        player.removeEventListener("mousemove", handleUserActivity);
+        player.removeEventListener("keydown", handleUserActivity);
+        player.removeEventListener("touchstart", handleUserActivity);
+      }
+    };
+  }, []);
+
   return (
     <div id="my-player" className="relative w-full bg-black">
       {/* Back button */}
+      {isControlsVisible && 
+      <>
       <div className="absolute top-0 left-0 p-4 z-50">
         <button onClick={handleBack} className="text-white">
           <FontAwesomeIcon icon={faArrowLeft} size="1x" />{" "}
           {selectedEpisode?.episode_name}
         </button>
       </div>
-      {/* PiP button */}
       <div className="absolute top-0 right-0 p-4 z-50">
         <button className="text-white" onClick={handlePiP}>
           <img src={floatingScreen} alt="PiP" className="h-5 w-5" />
         </button>
       </div>
+      </>
+      }
 
       {/* Video element wrapper */}
       <div

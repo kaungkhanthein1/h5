@@ -58,19 +58,19 @@ const SourceSelector: React.FC<SourceSelectorProps> = ({
       {/* Source Selector Area */}
       {/* Source Selector Area */}
       {movieDetail && movieDetail.play_from && <div className="p-4 flex justify-between items-center rounded-lg shadow-sm mt-5" style={{background: "linear-gradient(100deg, #FEE4B3 0%, #FFD993 100%)"}}>
-        <div className="text-black leading-tight">
+        <div className="text-channel leading-tight">
           {/* Display current playFrom source and number of videos */}
           <span className="text-sm">
             <span className="font-bold">
               {movieDetail.play_from.filter(x => x.code === selectedEpisode?.from_code)[0]?.name || "No Source Selected"}
             </span>{" "}
-            {movieDetail.play_from.filter(x => x.code === selectedEpisode?.from_code)[0]?.total || 0} videos
+            <span className="text-channelSecondary">{movieDetail.play_from.filter(x => x.code === selectedEpisode?.from_code)[0]?.total || 0} videos</span>
           </span>
         </div>
 
         {/* Right Side: Switch resource (切换资源) button triggers the modal */}
         <button
-          className="text-[#4B4B4B] flex items-center"
+          className="text-channel flex items-center"
           onClick={() => {
             openModal();
             setSource("sources");

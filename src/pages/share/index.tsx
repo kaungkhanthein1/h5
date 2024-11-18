@@ -113,7 +113,7 @@ const Share: React.FC<ShareProps> = ({}) => {
           {/* friend */}
           <div className=" flex flex-col items-center gap-[14px]">
             <img
-              className=" tab px-[12px] py-[12px] w-[52px]"
+              className=" tab px-[12px] py-[12px] w-[58px]"
               src={friend}
               alt=""
             />
@@ -140,7 +140,7 @@ const Share: React.FC<ShareProps> = ({}) => {
           </div>
           <div className=" flex flex-col items-center gap-[14px]">
             <img
-              className=" tab px-[12px] py-[12px] w-[52px]"
+              className=" tab px-[12px] py-[12px] w-[58px]"
               src={form}
               alt=""
             />

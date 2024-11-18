@@ -22,6 +22,8 @@ module.exports = {
         unselectedColor: 'rgba(255, 255, 255, 0.8)',
         commentInput: 'rgba(32, 32, 34, 0.9)',
         commentIcon: 'rgba(255, 255, 255, 0.6)',
+        channel: '#522B0F',
+        channelSecondary: '#522B0F99',
       },
       fontSize: {
         'xs': '0.75rem',   // Extra small text
