@@ -41,6 +41,7 @@ const CommentComponent: React.FC<CommentProps> = ({
   const { data: userData } = useGetUserQuery(undefined);
   const [ showDeleteConfirmation, setShowDeleteConfirmation ] = useState(false);
   const [deleteParams, setDeleteParams] = useState<any>(null);
+  const [numberOfRow, setNumberOfRow] = useState<number>(1);
   const user = userData?.data;
   console.log('user is=>', user);
   const dispatch = useDispatch();
@@ -349,9 +350,7 @@ const CommentComponent: React.FC<CommentProps> = ({
                       {user && user.id && comment.user_id === user.id && (
                         <span
                           className="time text-commentIcon text-sm"
-                          onClick={() =>
-                            handleDelete(comment.id, false)
-                          }
+                          onClick={() => handleDelete(comment.id, false)}
                         >
                           删除
                         </span>
@@ -490,15 +489,16 @@ const CommentComponent: React.FC<CommentProps> = ({
               </div>
             ))}
           </InfiniteScroll>
-        ) : isLoading ? 
-        <div className="text-white flex justify-center pb-4 items-center text-center mt-52">
-        <Loader />
-      </div> : (
+        ) : isLoading ? (
+          <div className="text-white flex justify-center pb-4 items-center text-center mt-52">
+            <Loader />
+          </div>
+        ) : (
           <div
             className="flex justify-center items-center text-center comment-btn"
             style={{ height: lowerDivHeight, width: "100%" }}
           >
-            <img src={NoData} alt='nodata' width={120}/>
+            <img src={NoData} alt="nodata" width={120} />
           </div>
         )}
       </div>
@@ -510,14 +510,29 @@ const CommentComponent: React.FC<CommentProps> = ({
             alt="User Avatar"
             className={`w-8 h-8 rounded-full mr-1`}
           />
-          <input
-            ref={commentInputRef}
-            type="text"
+          <textarea
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
+            onKeyDown={(e) => {
+              console.log("e.key is=>", e.key);
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault(); // Prevent default submit behavior
+                setNewComment((prev) => prev + "\n"); // Add a new line
+                setNumberOfRow((prev) => prev + 1); // Increment rows
+              } else if (e.key === "Backspace") {
+                // Calculate the number of newlines in the comment
+                const newNumberOfRows =
+                  (newComment.match(/\n/g) || []).length + 1;
+
+                // Update the number of rows dynamically
+                setNumberOfRow(newNumberOfRows > 1 ? newNumberOfRows : 1);
+              }
+            }}
             className="flex-grow bg-source text-white p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder={"确认过眼神，你是发言人！"}
+            rows={numberOfRow} // Dynamically adjust the rows
           />
+
           {newComment && (
             <button
               onClick={handleCreateCommentOrReply}
