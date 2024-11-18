@@ -49,6 +49,7 @@ const FilteredByType = () => {
       }
       setMovieData(data?.data?.list);
       setTotalPage(data?.data?.total);
+      if (data?.data?.total > page) setHasMore(true);
     } catch (err) {
       console.log("err is=>", err);
     }
