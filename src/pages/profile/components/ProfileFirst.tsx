@@ -292,7 +292,7 @@ const ProfileFirst = () => {
                 fill="#A3A3A4"
               />
             </svg>
-            <div className="profile-text">Invitation code</div>
+            <div className="profile-text">我的推广达人</div>
           </div>
           <div className="flex gap-1 items-center">
             <div className="text-[12px] text-[#d0bc94]">

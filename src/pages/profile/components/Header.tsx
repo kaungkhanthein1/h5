@@ -208,7 +208,7 @@ const Header = () => {
             </svg>
           </div>
           <div className="flex gap-2 items-center">
-            <p>Login Or Sign Up</p>
+            <p>点击登录</p>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="6"
