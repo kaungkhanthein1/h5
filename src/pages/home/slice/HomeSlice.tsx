@@ -5,10 +5,12 @@ const HomeSlice = createSlice({
   initialState: {
     activeTab: 0,
     sort: "",
+    sortName: "",
     class: "",
     area: "",
     year: "",
     activeNav: 0,
+    showFilterTag: false,
   },
   reducers: {
     setActiveTab: (state, { payload }) => {
@@ -20,6 +22,9 @@ const HomeSlice = createSlice({
     setSort: (state, { payload }) => {
       state.sort = payload;
     },
+    setSortName: (state, { payload }) => {
+      state.sortName = payload;
+    },
     setClass: (state, { payload }) => {
       state.class = payload;
     },
@@ -28,6 +33,9 @@ const HomeSlice = createSlice({
     },
     setYear: (state, { payload }) => {
       state.year = payload;
+    },
+    setShowFilterTag: (state, { payload }) => {
+      state.showFilterTag = payload;
     },
   },
 });
@@ -39,5 +47,7 @@ export const {
   setArea,
   setYear,
   setActiveNav,
+  setShowFilterTag,
+  setSortName
 } = HomeSlice.actions;
 export default HomeSlice.reducer;

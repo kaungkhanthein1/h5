@@ -265,7 +265,7 @@ const DetailPage: React.FC = () => {
             )}
             
             </div>
-            <div className="relative flex px-2 justify-between items-center bg-background">
+            <div className="relative flex px-2 justify-between items-center bg-background" style={{paddingBottom: '10px', borderBottom: '2px solid #2a2a2a'}}>
               <div className="flex">
                 <div
                   className={`px-4 py-3 bg-background text-gray-400 rounded-t-lg cursor-pointer relative ${
@@ -289,7 +289,7 @@ const DetailPage: React.FC = () => {
                     {commentCount > 99 ? '99+' : (commentCount || '')}
                   </span>
                   {activeTab === "tab-2" && (
-                    <div className="absolute bottom-0 left-3 w-3/6 h-1 bg-mainColor rounded-md"></div>
+                    <div className="absolute bottom-0 left-3.5 w-3/6 h-1 bg-mainColor rounded-md"></div>
                   )}
                 </div>
               </div>

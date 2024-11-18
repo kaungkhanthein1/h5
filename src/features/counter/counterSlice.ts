@@ -1,31 +1,30 @@
 // src/features/counterSlice.ts
 
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface CounterState {
   value: number;
+  showFilterTag: boolean;
 }
 
 const initialState: CounterState = {
   value: 0,
+  showFilterTag: false,
 };
 
 const counterSlice = createSlice({
-  name: 'counter',
+  name: "counter",
   initialState,
   reducers: {
     increment(state) {
       state.value += 1;
     },
-    decrement(state) {
-      state.value -= 1;
-    },
-    incrementByAmount(state, action: PayloadAction<number>) {
-      state.value += action.payload;
+    setShowFilterTag: (state, { payload }) => {
+      state.showFilterTag = payload;
     },
   },
 });
 
-export const { increment, decrement, incrementByAmount } = counterSlice.actions;
+export const { increment, setShowFilterTag } = counterSlice.actions;
 
 export default counterSlice.reducer;

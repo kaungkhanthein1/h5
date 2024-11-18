@@ -17,6 +17,7 @@ import {
   setClass,
   setArea,
   setYear,
+  setSortName
 } from "../../pages/home/slice/HomeSlice";
 import NewAds from "../NewAds";
 
@@ -91,6 +92,7 @@ const FilteredByType = () => {
 
   useEffect(() => {
     dispatch(setSort(configData?.data?.movie_screen?.sort[0]?.value));
+    dispatch(setSortName(configData?.data?.movie_screen?.sort[0]?.name));
     dispatch(setClass(filteredTags && filteredTags[0]?.class[0]));
     dispatch(setArea(filteredTags && filteredTags[0]?.area[0]));
     dispatch(setYear(filteredTags && filteredTags[0]?.year[0]));

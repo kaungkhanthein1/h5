@@ -1,17 +1,31 @@
 import { FC, useEffect, useState } from "react";
+// import logo from "../assets/h5Logo.svg";
+import downh from "../assets/downh.svg";
 import logo from "../assets/logo.svg";
 import { useNavigate } from "react-router-dom";
 import { useGetHeaderTopicsQuery } from "../../src/pages/home/services/homeApi";
 import { useDispatch, useSelector } from "react-redux";
 import { setActiveTab } from "../../src/pages/home/slice/HomeSlice";
+import { setShowFilterTag } from "../../src/features/counter/counterSlice";
 
 const Header: FC = () => {
   const { data } = useGetHeaderTopicsQuery();
   const configData = data?.data?.index_top_nav;
   const activeTab = useSelector((state: any) => state.home.activeTab);
+  const sortData = useSelector((state: any) => state.home.sort);
+  const sortName = useSelector((state: any) => state.home.sortName);
+  const classData = useSelector((state: any) => state.home.class);
+  const area = useSelector((state: any) => state.home.area);
+  const year = useSelector((state: any) => state.home.year);
+  const showFilterTag = useSelector(
+    (state: any) => state.counter.showFilterTag
+  );
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const filterTagHandler = () => {
+    dispatch(setShowFilterTag(false));
+    window.scrollTo(0, 0);
+  };
   return (
     <header
       className={`w-full z-[99999] fixed top-0 gradient-bg-home pt-4 pb-2`}
@@ -55,7 +69,9 @@ const Header: FC = () => {
             >
               <p
                 className={`${
-                  activeTab === item?.id ? "text-white font-bold text-[24px]" : "text-white/80 text-[16px]"
+                  activeTab === item?.id
+                    ? "text-white font-bold text-[24px]"
+                    : "text-white/80 text-[16px]"
                 } whitespace-nowrap py-2 rounded-lg hover:text-white transition-colors`}
               >
                 {item?.name}
@@ -63,6 +79,26 @@ const Header: FC = () => {
             </div>
           ))}
         </nav>
+      </div>
+
+      <div className="w-full flex items-center justify-center">
+        {activeTab !== 0 ? (
+          <>
+            {showFilterTag && (
+              <div
+                className="text-white text-[14px] flex items-center gap-1"
+                onClick={filterTagHandler}
+              >
+                <span>
+                  {sortName}.{classData}.{area}.{year}
+                </span>
+                <img src={downh} alt="" />
+              </div>
+            )}
+          </>
+        ) : (
+          <></>
+        )}
       </div>
     </header>
   );
