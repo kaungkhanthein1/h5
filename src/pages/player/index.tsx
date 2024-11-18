@@ -265,7 +265,7 @@ const DetailPage: React.FC = () => {
             )}
             
             </div>
-            <div className="relative flex px-2 justify-between items-center bg-background" style={{borderBottom: '1px solid gray'}}>
+            <div className="relative flex px-2 justify-between items-center bg-background">
               <div className="flex">
                 <div
                   className={`px-4 py-3 bg-background text-gray-400 rounded-t-lg cursor-pointer relative ${
