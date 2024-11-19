@@ -7,9 +7,11 @@ import { useGetHeaderTopicsQuery } from "../../src/pages/home/services/homeApi";
 import { useDispatch, useSelector } from "react-redux";
 import { setActiveTab } from "../../src/pages/home/slice/HomeSlice";
 import { setShowFilterTag } from "../../src/features/counter/counterSlice";
+import FilterByTag from "./home/FilterByTag";
 
 const Header: FC = () => {
   const { data } = useGetHeaderTopicsQuery();
+  const [isShowMenu, setIsShowMenu] = useState(false);
   const configData = data?.data?.index_top_nav;
   const activeTab = useSelector((state: any) => state.home.activeTab);
   const sortData = useSelector((state: any) => state.home.sort);
@@ -23,9 +25,25 @@ const Header: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const filterTagHandler = () => {
+    // dispatch(setShowFilterTag(false));
+    setIsShowMenu(true);
+    // window.scrollTo(0, 0);
+  };
+  const filteredTags: any = data?.data?.movie_screen?.filter?.filter(
+    (data: any) => data?.id === activeTab
+  );
+
+  useEffect(() => {
+    if (!showFilterTag) {
+      setIsShowMenu(false);
+    }
+  }, [showFilterTag]);
+
+  useEffect(() => {
     dispatch(setShowFilterTag(false));
     window.scrollTo(0, 0);
-  };
+  }, [classData, area, year, activeTab, sortData, sortName]);
+
   return (
     <header
       className={`w-full z-[99999] fixed top-0 gradient-bg-home pt-4 pb-2`}
@@ -82,12 +100,20 @@ const Header: FC = () => {
         </nav>
       </div>
 
-      <div className="w-full flex items-center justify-center">
+      <>
+        {/* <FilterByTag
+          data={filteredTags}
+          sort={data?.data?.movie_screen?.sort}
+        /> */}
+      </>
+      <div className="w-full flex items-center justify-center text-white">
         {activeTab !== 0 ? (
           <>
             {showFilterTag && (
               <div
-                className="text-white text-[14px] flex items-center gap-1 transition"
+                className={`text-white text-[14px] ${
+                  isShowMenu ? "hidden" : "flex"
+                } items-center gap-1 transition`}
                 onClick={filterTagHandler}
               >
                 <span>
@@ -95,6 +121,12 @@ const Header: FC = () => {
                 </span>
                 <img src={downh} alt="" />
               </div>
+            )}
+            {isShowMenu && (
+              <FilterByTag
+                data={filteredTags}
+                sort={data?.data?.movie_screen?.sort}
+              />
             )}
           </>
         ) : (
