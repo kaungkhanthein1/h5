@@ -65,7 +65,7 @@ const FilterMovie = () => {
   }, [activeTab, sort, area, year, classData]);
 
   return (
-    <div className="bg-background text-text min-h-screen">
+    <div className="bg-background text-text min-h-screen relative">
       <div className="">
         <FilterTag />
         {movieData?.length ? (

@@ -5,11 +5,13 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 interface CounterState {
   value: number;
   showFilterTag: boolean;
+  showExploreFilterTag: boolean;
 }
 
 const initialState: CounterState = {
   value: 0,
   showFilterTag: false,
+  showExploreFilterTag: false,
 };
 
 const counterSlice = createSlice({
@@ -22,9 +24,13 @@ const counterSlice = createSlice({
     setShowFilterTag: (state, { payload }) => {
       state.showFilterTag = payload;
     },
+    setShowExploreFilterTag: (state, { payload }) => {
+      state.showFilterTag = payload;
+    },
   },
 });
 
-export const { increment, setShowFilterTag } = counterSlice.actions;
+export const { increment, setShowFilterTag, setShowExploreFilterTag } =
+  counterSlice.actions;
 
 export default counterSlice.reducer;

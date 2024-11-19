@@ -5,6 +5,7 @@ const ExploreSlice = createSlice({
   initialState: {
     activeTab: 1,
     sort: "by_default",
+    sortName: "综合",
     class: "",
     area: "",
     year: "",
@@ -28,6 +29,9 @@ const ExploreSlice = createSlice({
     setSort: (state, { payload }) => {
       state.sort = payload;
     },
+    setSortName: (state, { payload }) => {
+      state.sortName = payload;
+    },
     setClass: (state, { payload }) => {
       state.class = payload;
     },
@@ -48,6 +52,7 @@ export const {
   setYear,
   setActiveNav,
   setActiveRank,
-  setActiveWeek
+  setActiveWeek,
+  setSortName,
 } = ExploreSlice.actions;
 export default ExploreSlice.reducer;

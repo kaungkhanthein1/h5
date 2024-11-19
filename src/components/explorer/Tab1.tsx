@@ -5,9 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import FilterMovie from "./FilterMovie";
 
-
 const Tab1 = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const activeTab = useSelector((state: any) => state.explore.activeTab);
   const sort = useSelector((state: any) => state.explore.sort);
   const classData = useSelector((state: any) => state.explore.class);
@@ -37,6 +36,7 @@ const Tab1 = () => {
 
   return (
     <div className="pb-32 min-h-screen">
+      {/* <h1>Hello</h1> */}
       <FilterMovie />
     </div>
   );

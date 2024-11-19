@@ -32,7 +32,8 @@ const Header: FC = () => {
     >
       <div className="flex items-center px-3 gap-3">
         <div className="flex items-center gap-1">
-          <img src={logo} alt=""/> <span style={{color: 'white', fontWeight: 'bold'}}>电影猪手</span>
+          <img src={logo} alt="" />{" "}
+          <span style={{ color: "white", fontWeight: "bold" }}>电影猪手</span>
         </div>
         <div className="flex-1 relative">
           <input
@@ -86,7 +87,7 @@ const Header: FC = () => {
           <>
             {showFilterTag && (
               <div
-                className="text-white text-[14px] flex items-center gap-1"
+                className="text-white text-[14px] flex items-center gap-1 transition"
                 onClick={filterTagHandler}
               >
                 <span>
