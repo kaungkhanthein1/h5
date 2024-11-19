@@ -46,6 +46,13 @@ const ForgotPass: React.FC<ForgotPassProps> = ({ setForgot }) => {
     return lengthValid && containsLetters && containsNumbers;
   };
 
+  const RevalidatePassword = (password: string) => {
+    const lengthValid = confirmPassword.length >= 8 && password.length <= 25;
+    const containsLetters = /[a-zA-Z]/.test(password);
+    const containsNumbers = /\d/.test(password);
+    return lengthValid && containsLetters && containsNumbers;
+  };
+
   const show = () => {
     setShowPassword(!showPassword);
   };
@@ -203,7 +210,7 @@ const ForgotPass: React.FC<ForgotPassProps> = ({ setForgot }) => {
                 disabled={!validatePassword(password)}
                 type="submit"
                 className={`w-full text-[14px] font-[600] leading-[22px]  mt-[20px] py-[10px] px-[16px] rounded-[80px] ${
-                  validatePassword(password)
+                  validatePassword(password) && RevalidatePassword(confirmPassword)
                     ? "login_button text-white"
                     : "next_button text-[#777]"
                 } transition duration-300 ease-in-out`}

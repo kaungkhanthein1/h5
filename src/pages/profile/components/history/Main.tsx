@@ -4,7 +4,6 @@ import ImageWithPlaceholder from "../../../search/components/ImgPlaceholder";
 import { useDeleteRecordMutation } from "../../services/profileApi";
 import { useGetAdsQuery } from "../../../search/services/searchApi";
 import Loader from "../../../search/components/Loader";
-import Ads from "../../../search/components/Ads";
 import NewAds from "../../../../components/NewAds";
 
 const Main: React.FC<any> = ({
@@ -17,7 +16,7 @@ const Main: React.FC<any> = ({
   const [selectedMovies, setSelectedMovies] = useState<any[]>([]);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [deleteRecord] = useDeleteRecordMutation(); // Use the delete mutation
-
+  const [filterToggle, setFilterToggle] = useState(false);
   const navigate = useNavigate(); // Hook for navigation
 
   const handleDelete = () => {
@@ -55,60 +54,76 @@ const Main: React.FC<any> = ({
   };
 
   const handleSelectAllAndCancel = () => {
-    const allMovies = movies && movies.length > 0 ? 
-    movies.reduce((a: any, c: any) => {
-      c.list.map((x: any) => a.push(x.id))
-      return a;
-    },[])
-    : [];
-    if(selectedMovies  && selectedMovies?.length === allMovies?.length) {
+    const allMovies =
+      movies && movies.length > 0
+        ? movies.reduce((a: any, c: any) => {
+            c.list.map((x: any) => a.push(x.id));
+            return a;
+          }, [])
+        : [];
+    if (selectedMovies && selectedMovies?.length === allMovies?.length) {
       setSelectedMovies([]);
     } else {
       setSelectedMovies(allMovies);
     }
-  }
+  };
+
+  const handleToggle = () => {
+    setFilterToggle(!filterToggle);
+  };
 
   return (
-    <div className="bg-[#161619] mt-[60px]  pb-[50px]">
+    <div className="bg-[#161619] mt-[60px] pb-[50px]">
       {isLoading || isFetching ? (
         <div className="flex justify-center items-center h-[126px]">
           <Loader />
         </div>
       ) : (
         <div className="py-2">
-          {/* <Ads advert={advert} /> */}
           <NewAds section="play_record_up" />
         </div>
       )}
-      {movies?.map((movie: any, index: number) => (
-        <div className="mt-5" key={index}>
-          <div className="flex items-center justify-between bg-[#1B1B1F] px-4 py-1">
-            <div className="history-text">{movie?.title}</div>
-            <div className="flex gap-2 items-center">
-              {/* <p className="filter-text">Filter the watched videos</p> */}
-              {/* 
-            <label className="relative inline-flex items-center cursor-pointer">
-              <input
-                type="checkbox"
-                checked={filterToggle}
-                onChange={handleToggle}
-                className="sr-only peer"
-              />
-              <div
-                className={`w-9 h-5 bg-[#606060] hover:bg-[#606060] peer-focus:outline-0 peer-focus:ring-transparent rounded-full peer transition-all ease-in-out duration-500 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all ${
-                  filterToggle
-                    ? "peer-checked:bg-[#F54100] hover:peer-checked:bg-[#F54100]"
-                    : "peer-checked:bg-[#606060]"
-                }`}
-              ></div>
-            </label> */}
-            </div>
-          </div>
+      {movies?.map((movie: any, index: number) => {
+        // Filter the movies based on the filterToggle state
+        const filteredList = filterToggle
+          ? movie?.list?.filter(
+              (mov: any) =>
+                calculateViewPercentage(mov.current_time, mov.duration) !==
+                "100.00"
+            )
+          : movie?.list;
 
-          <div className="py-3">
-            {/* Movie Cards */}
-            {movie?.list?.length !== 0 &&
-              movie?.list?.map((mov: any, index: any) => (
+        // If the filtered list is empty, skip rendering the section
+        if (!filteredList || filteredList.length === 0) return null;
+
+        return (
+          <div className="mt-5" key={index}>
+            <div className="flex items-center justify-between bg-[#1B1B1F] px-4 py-1">
+              <div className="history-text">{movie?.title}</div>
+              <div className="flex gap-2 items-center">
+                <p className="filter-text">过滤已观看完视频</p>
+
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={filterToggle}
+                    onChange={handleToggle}
+                    className="sr-only peer"
+                  />
+                  <div
+                    className={`w-9 h-5 bg-[#606060] hover:bg-[#606060] peer-focus:outline-0 peer-focus:ring-transparent rounded-full peer transition-all ease-in-out duration-500 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all ${
+                      filterToggle
+                        ? "peer-checked:bg-[#F54100] hover:peer-checked:bg-[#F54100]"
+                        : "peer-checked:bg-[#606060]"
+                    }`}
+                  ></div>
+                </label>
+              </div>
+            </div>
+
+            <div className="py-3">
+              {/* Render filtered movie list */}
+              {filteredList.map((mov: any, index: any) => (
                 <div
                   key={index}
                   className="history-card transition-all duration-300 ease-in-out"
@@ -142,7 +157,7 @@ const Main: React.FC<any> = ({
                   </div>
 
                   <div
-                    className={` transition-transform flex items-center justify-between  duration-300 ease-in-out transform ${
+                    className={`transition-transform flex items-center justify-between duration-300 ease-in-out transform ${
                       isEditMode ? "translate-x-[25px]" : "translate-x-0"
                     } `}
                   >
@@ -183,29 +198,32 @@ const Main: React.FC<any> = ({
                   </div>
                 </div>
               ))}
-          </div>
+            </div>
 
-          <div
-            className={`fixed z-10 bottom-0 gap-3 w-full bg-[#1B1B1F] p-6 flex justify-between items-center transition-transform duration-300 ease-in-out ${
-              isEditMode ? "translate-y-0" : "translate-y-full"
-            }`}
-          >
-            <button
-              className="w-[50%] cancel-all"
-              onClick={() => handleSelectAllAndCancel()}
+            <div
+              className={`fixed z-10 bottom-0 gap-3 w-full bg-[#1B1B1F] p-6 flex justify-between items-center transition-transform duration-300 ease-in-out ${
+                isEditMode ? "translate-y-0" : "translate-y-full"
+              }`}
             >
-              {selectedMovies  && selectedMovies.length === movie?.list?.length ?  '全部取消' : '选择全部'}
-            </button>
-            <button
-              className="delete-all w-[50%]"
-              onClick={handleDelete}
-              disabled={selectedMovies.length === 0}
-            >
-              删除 {selectedMovies.length > 0 && `${selectedMovies.length}`}
-            </button>
+              <button
+                className="w-[50%] cancel-all"
+                onClick={() => handleSelectAllAndCancel()}
+              >
+                {selectedMovies && selectedMovies.length === movie?.list?.length
+                  ? "全部取消"
+                  : "选择全部"}
+              </button>
+              <button
+                className="delete-all w-[50%]"
+                onClick={handleDelete}
+                disabled={selectedMovies.length === 0}
+              >
+                删除 {selectedMovies.length > 0 && `${selectedMovies.length}`}
+              </button>
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
 
       {/* Confirmation Modal */}
       {showConfirmation && (

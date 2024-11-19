@@ -62,7 +62,7 @@ const LoginEmail: React.FC<LoginEmailProps> = ({ handleBack }) => {
     }
     try {
       dispatch(setCaptchaOpen(true));
-      setIsVisible(false);
+      // setIsVisible(false);
     } catch (err) {
       setError("Login failed. Please check your credentials.");
     }

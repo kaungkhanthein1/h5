@@ -1,11 +1,20 @@
 import { useState, useEffect } from "react";
 
 const SettingFirst = () => {
-  const [filterToggle, setFilterToggle] = useState(false); // Teen Mode
-  const [pipMode, setPipMode] = useState(false); // Picture-in-Picture Mode
-  const [vibrantMode, setVibrantMode] = useState(false); // Vibrant Mode
+  // Retrieve initial settings from localStorage or set defaults
+  const initialSettings = JSON.parse(
+    localStorage.getItem("movieAppSettings") || "{}"
+  );
 
-  // Save the settings to localStorage
+  const [filterToggle, setFilterToggle] = useState(
+    initialSettings.filterToggle || false
+  ); // Teen Mode
+  const [pipMode, setPipMode] = useState(initialSettings.pipMode || false); // Picture-in-Picture Mode
+  const [vibrantMode, setVibrantMode] = useState(
+    initialSettings.vibrantMode || false
+  ); // Vibrant Mode
+
+  // Save the settings to localStorage whenever they change
   useEffect(() => {
     const settings = {
       filterToggle,
@@ -18,6 +27,7 @@ const SettingFirst = () => {
   return (
     <div className="profile-div">
       <div className="profile-div-main w-full">
+        {/* Teen Mode */}
         <div className="p-first">
           <div className="flex gap-1 max-w-[230px] flex-col ">
             <h1>青少年模式</h1>
@@ -28,7 +38,7 @@ const SettingFirst = () => {
               <input
                 type="checkbox"
                 checked={filterToggle}
-                onChange={() => setFilterToggle((prev) => !prev)}
+                onChange={() => setFilterToggle((prev: any) => !prev)}
                 className="sr-only peer"
               />
               <div
@@ -53,7 +63,7 @@ const SettingFirst = () => {
               <input
                 type="checkbox"
                 checked={pipMode}
-                onChange={() => setPipMode((prev) => !prev)}
+                onChange={() => setPipMode((prev: any) => !prev)}
                 className="sr-only peer"
               />
               <div
@@ -78,7 +88,7 @@ const SettingFirst = () => {
               <input
                 type="checkbox"
                 checked={vibrantMode}
-                onChange={() => setVibrantMode((prev) => !prev)}
+                onChange={() => setVibrantMode((prev: any) => !prev)}
                 className="sr-only peer"
               />
               <div

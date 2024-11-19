@@ -83,7 +83,7 @@ const Captch: React.FC<{
       // Manually redirect to the home page after login
       setTimeout(() => {
         closeAllModals();
-      }, 1000);
+      }, 700);
     } catch (err) {
       setError("Login failed");
       console.error("Login error:", err);
@@ -111,7 +111,7 @@ const Captch: React.FC<{
   }
 
   return (
-    <div className="fixed inset-0 z-[99999] bg-black/50 backdrop-blur-[12px] w-screen h-screen flex justify-center items-center">
+    <div className="fixed inset-0 z-[999998] bg-black/50 backdrop-blur-[12px] w-screen h-screen flex justify-center items-center">
       {captchaImage && (
         <div className="bg-[#1C1B20] w-[320px] h-[170px] p-[20px]">
           <div className="flex justify-between items-center pb-[16px]">

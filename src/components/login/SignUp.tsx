@@ -130,14 +130,14 @@ const SignUp: React.FC<SignUpProps> = ({ handleBack }) => {
                 /> */}
                 <button
                   onClick={handleShowSignUpPhone}
-                  className="new_css_button relative text-[14px] font-[600] leading-[22px] w-[320px] px-[16px] py-[8px] flex justify-center items-center gap-[8px] text-white"
+                  className="new_css_button relative text-[14px] font-[600] leading-[22px] w-[320px] px-[16px] py-[10px] flex justify-center items-center gap-[8px] text-white"
                 >
                   <img className=" absolute left-[20px]" src={phone} alt="" />
                   使用手机号注册
                 </button>
                 <button
                   onClick={handleShowSignUpEmail}
-                  className="new_css_button relative text-[14px] font-[600] leading-[22px] w-[320px] px-[16px] py-[8px] flex justify-center items-center gap-[8px] text-white"
+                  className="new_css_button relative text-[14px] font-[600] leading-[22px] w-[320px] px-[16px] py-[10px] flex justify-center items-center gap-[8px] text-white"
                 >
                   <img className=" absolute left-[20px]" src={email} alt="" />
                   使用邮箱注册

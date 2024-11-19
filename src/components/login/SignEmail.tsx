@@ -63,7 +63,7 @@ const SignEmail: React.FC<SignEmailProps> = ({ handleBack2 }) => {
     try {
       dispatch(setCaptchaOpen(true));
       // setShowOtp(true);
-      setIsVisible(false);
+      // setIsVisible(false);
     } catch (err) {
       setError("Login failed. Please check your credentials.");
     }
