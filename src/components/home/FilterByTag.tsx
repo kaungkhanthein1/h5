@@ -85,8 +85,7 @@ const FilterByTag = ({
   return (
     <>
       <div className="w-full pt-5 pb-2 flex flex-col gap-3">
-        <div className="flex overflow-x-scroll px-3 gap-5 remove-scrollbar items-center">
-          <h1>Hi </h1>
+        <div className="flex overflow-x-scroll px-3 gap-5 remove-scrollbar items-center pt-2">
           {sort?.map((item: any, index: any) => (
             <div className="relative" key={index}>
               <p

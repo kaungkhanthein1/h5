@@ -16,7 +16,7 @@ const Banner = ({ list }: { list: any }) => {
   };
 
   return (
-    <div className="mt-[120px] max-md:px-3 px-10">
+    <div className="mt-[120px] max-md:px-3 px-10 pt-2">
       <div className="">
         <div className="relative">
           <Carousel
