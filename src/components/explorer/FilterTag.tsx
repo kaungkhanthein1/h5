@@ -48,7 +48,7 @@ const FilterTag = () => {
     const handleScroll = () => {
       if (filterTagRef.current) {
         const rect = filterTagRef.current.getBoundingClientRect();
-        if (rect.top === 0) {
+        if (rect.top < 100) {
           // dispatch(setShowExploreFilterTag(true));
           setShow(true);
         } else {

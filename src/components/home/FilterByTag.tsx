@@ -30,7 +30,8 @@ const FilterByTag = ({
     const handleScroll = () => {
       if (secondDivRef.current) {
         const rect = secondDivRef.current.getBoundingClientRect();
-        if (rect.top === 0) {
+
+        if (rect.top < 121) {
           setIsSecondDivAtTop(true);
           dispatch(setShowFilterTag(true));
         } else {
@@ -85,6 +86,7 @@ const FilterByTag = ({
     <>
       <div className="w-full pt-5 pb-2 flex flex-col gap-3">
         <div className="flex overflow-x-scroll px-3 gap-5 remove-scrollbar items-center">
+          <h1>Hi </h1>
           {sort?.map((item: any, index: any) => (
             <div className="relative" key={index}>
               <p
