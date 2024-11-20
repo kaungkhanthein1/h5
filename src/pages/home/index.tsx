@@ -21,7 +21,7 @@ const Home: React.FC = () => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(setActiveTab(0));
+    // dispatch(setActiveTab(0));
   }, []);
 
   const ads = data?.data?.filter((item: any) => item?.layout === "advert_self");
