@@ -1,5 +1,5 @@
 // SignUp.tsx
-import React, { useState } from "react";
+import React, { startTransition, useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Button from "../../components/login/Button";
 import back from "../../assets/login/back.svg";
@@ -13,6 +13,7 @@ import { setAuthModel } from "../../features/login/ModelSlice";
 import phone from "../../assets/login/phone.svg";
 import email from "../../assets/login/email.svg";
 import "../../pages/login/login.css";
+import { useLocation } from "react-router-dom";
 
 interface SignUpProps {
   handleBack: () => void; // Accept handleBack as a prop
@@ -25,6 +26,25 @@ const SignUp: React.FC<SignUpProps> = ({ handleBack }) => {
   const [isVisible, setIsVisible] = useState(true);
   const [isEmailVisible, setEmailVisible] = useState(false);
   const [isPhoneVisible, setPhoneVisible] = useState(false);
+
+  const currentLocation = useLocation(); // Use the `useLocation` hook from react-router-dom
+  const previousPathname = useRef(currentLocation.pathname);
+
+  useEffect(() => {
+    if (previousPathname.current !== currentLocation.pathname) {
+      setIsVisible(false);
+      closeAllModals()
+    }
+    previousPathname.current = currentLocation.pathname; 
+  }, [currentLocation.pathname]);
+
+  const closeAllModals = () => {
+    startTransition(() => {
+      dispatch(setAuthModel(false));
+      dispatch(setLoginOpen(false));
+      dispatch(setSignupOpen(false));
+    });
+  };
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();

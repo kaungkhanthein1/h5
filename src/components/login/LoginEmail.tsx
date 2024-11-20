@@ -1,4 +1,4 @@
-import React, { startTransition, useState } from "react";
+import React, { startTransition, useEffect, useRef, useState } from "react";
 import back from "../../assets/login/back.svg";
 import close from "../../assets/login/close.svg";
 import eye from "../../assets/login/eye.svg";
@@ -14,7 +14,7 @@ import {
   setSignupOpen,
 } from "../../features/login/ModelSlice";
 import Captch from "./Captch";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { showToast } from "../../pages/profile/error/ErrorSlice";
 
 interface LoginEmailProps {
@@ -33,6 +33,24 @@ const LoginEmail: React.FC<LoginEmailProps> = ({ handleBack }) => {
   const [isFocusedEmail, setIsFocusedEmail] = useState(false);
   const [isFocusedPassword, setIsFocusedPassword] = useState(false);
   const navigate = useNavigate();
+  const currentLocation = useLocation(); // Use the `useLocation` hook from react-router-dom
+  const previousPathname = useRef(currentLocation.pathname);
+
+  useEffect(() => {
+    if (previousPathname.current !== currentLocation.pathname) {
+      setIsVisible(false);
+      closeAllModals()
+    }
+    previousPathname.current = currentLocation.pathname; 
+  }, [currentLocation.pathname]);
+
+  const closeAllModals = () => {
+    startTransition(() => {
+      dispatch(setAuthModel(false));
+      dispatch(setLoginOpen(false));
+      dispatch(setSignupOpen(false));
+    });
+  };
 
   const validatePassword = (password: string) => {
     const lengthValid = password.length >= 8 && password.length <= 25;
@@ -196,10 +214,10 @@ const LoginEmail: React.FC<LoginEmailProps> = ({ handleBack }) => {
                       请输入密码
                     </label> */}
                     <div
-                    onClick={show}
-                    className=" w-[50px] flex justify-end items-center absolute right-0 bottom-[15px] h-[10px]">
+                      onClick={show}
+                      className=" w-[50px] flex justify-end items-center absolute right-0 bottom-[15px] h-[10px]"
+                    >
                       <img
-                        
                         className=""
                         src={showPassword ? eye : eyeClose}
                         alt="Show Password"
@@ -230,7 +248,7 @@ const LoginEmail: React.FC<LoginEmailProps> = ({ handleBack }) => {
                         : "next_button text-[#777]"
                     } transition duration-300 ease-in-out`}
                   >
-                  登录
+                    登录
                   </button>
                 </form>
 

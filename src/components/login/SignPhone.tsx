@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { startTransition, useEffect, useRef, useState } from "react";
 import back from "../../assets/login/back.svg";
 import close from "../../assets/login/close.svg";
 import eye from "../../assets/login/eye.svg";
@@ -15,6 +15,7 @@ import {
   setSignupOpen,
 } from "../../features/login/ModelSlice";
 import { showToast } from "../../pages/profile/error/ErrorSlice";
+import { useLocation } from "react-router-dom";
 
 interface SignPhoneProps {
   handleBack2: () => void; // Accept handleBack as a prop
@@ -33,6 +34,25 @@ const SignPhone: React.FC<SignPhoneProps> = ({ handleBack2 }) => {
   const [isFocusedPassword, setIsFocusedPassword] = useState(false);
   const show = () => {
     setShowPassword(!showPassword);
+  };
+
+  const currentLocation = useLocation(); // Use the `useLocation` hook from react-router-dom
+  const previousPathname = useRef(currentLocation.pathname);
+
+  useEffect(() => {
+    if (previousPathname.current !== currentLocation.pathname) {
+      setIsVisible(false);
+      closeAllModals()
+    }
+    previousPathname.current = currentLocation.pathname; 
+  }, [currentLocation.pathname]);
+
+  const closeAllModals = () => {
+    startTransition(() => {
+      dispatch(setAuthModel(false));
+      dispatch(setLoginOpen(false));
+      dispatch(setSignupOpen(false));
+    });
   };
 
   // Password validation function

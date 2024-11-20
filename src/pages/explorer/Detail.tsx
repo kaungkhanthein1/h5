@@ -40,7 +40,7 @@ const Detail = () => {
             <div className=" bg-gradient-to-t from-black via-black/5 to-transparent absolute  bottom-0 py-1 w-full">
               <p className="text-[16px] font-semibold px-2">{details?.name}</p>
             </div>
-            <div className="absolute top-2 left-2">
+            <div className="absolute top-4 left-4">
               <img
                 onClick={() => navigate(-1)}
                 src={backArrow}

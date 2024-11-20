@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { startTransition, useEffect, useRef, useState } from "react";
 import back from "../../assets/login/back.svg";
 import close from "../../assets/login/close.svg";
 import eye from "../../assets/login/eye.svg";
@@ -7,10 +7,11 @@ import eyeClose from "../../assets/login/eyeClose.svg";
 import Opt from "./Opt";
 import Captch from "./Captch";
 import { useDispatch, useSelector } from "react-redux";
-import { setCaptchaOpen } from "../../features/login/ModelSlice";
+import { setAuthModel, setCaptchaOpen, setLoginOpen, setSignupOpen } from "../../features/login/ModelSlice";
 import axios from "axios";
 import UserName from "./UserName";
 import '../../pages/login/login.css'
+import { useLocation } from "react-router-dom";
 
 interface SignEmailProps {
   handleBack2: () => void; // Accept handleBack as a prop
@@ -28,6 +29,26 @@ const SignEmail: React.FC<SignEmailProps> = ({ handleBack2 }) => {
   const [isVisible, setIsVisible] = useState(true);
   const [isFocusedEmail, setIsFocusedEmail] = useState(false);
   const [isFocusedPassword, setIsFocusedPassword] = useState(false);
+
+  const currentLocation = useLocation(); // Use the `useLocation` hook from react-router-dom
+  const previousPathname = useRef(currentLocation.pathname);
+
+  useEffect(() => {
+    if (previousPathname.current !== currentLocation.pathname) {
+      setIsVisible(false);
+      closeAllModals()
+    }
+    previousPathname.current = currentLocation.pathname; 
+  }, [currentLocation.pathname]);
+
+  const closeAllModals = () => {
+    startTransition(() => {
+      dispatch(setAuthModel(false));
+      dispatch(setLoginOpen(false));
+      dispatch(setSignupOpen(false));
+    });
+  };
+
   const show = () => {
     setShowPassword(!showPassword);
   };
