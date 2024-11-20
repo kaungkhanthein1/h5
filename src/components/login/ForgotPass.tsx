@@ -200,7 +200,9 @@ const ForgotPass: React.FC<ForgotPassProps> = ({ setForgot }) => {
 
               {/* Notice */}
               <div
-                className={` mt-[-20px] text-[14px] font-[500] leading-[20px] text-[#888] `}
+                className={` mt-[-20px] text-[14px] font-[500] leading-[20px] ${
+                  validatePassword(password) ? " text-[#00A048]" : "text-[#888]"
+                }  `}
               >
                 <p>8-25个字符</p>
                 <p>必须是以下两者中的至少两种组合：字母，数字</p>{" "}
@@ -210,7 +212,8 @@ const ForgotPass: React.FC<ForgotPassProps> = ({ setForgot }) => {
                 disabled={!validatePassword(password)}
                 type="submit"
                 className={`w-full text-[14px] font-[600] leading-[22px]  mt-[20px] py-[10px] px-[16px] rounded-[80px] ${
-                  validatePassword(password) && RevalidatePassword(confirmPassword)
+                  validatePassword(password) &&
+                  RevalidatePassword(confirmPassword)
                     ? "login_button text-white"
                     : "next_button text-[#777]"
                 } transition duration-300 ease-in-out`}

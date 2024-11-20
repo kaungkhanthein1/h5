@@ -125,11 +125,11 @@ const Captch: React.FC<{
               alt="Close"
             />
           </div>
-          <div className="flex justify-center items-center gap-[4px]">
+          <div className="flex justify-center w-full items-center gap-[4px]">
             <input
-              type="text"
+              type="number"
               placeholder="输入代码"
-              className="bg-[#333237] rounded-[4px] text-white px-[4px] py-[10px] focus:outline-none h-[40px]"
+              className="bg-[#333237] w-full rounded-[4px] text-white px-[4px] py-[10px] focus:outline-none h-[40px]"
               value={captchaCode}
               onChange={(e) => setCaptchaCode(e.target.value)}
             />

@@ -3,7 +3,7 @@ import back from "../../assets/login/back.svg";
 import close from "../../assets/login/close.svg";
 import eye from "../../assets/login/eye.svg";
 import eyeClose from "../../assets/login/eyeClose.svg";
-import '../../pages/login/login.css'
+import "../../pages/login/login.css";
 import { motion, AnimatePresence } from "framer-motion";
 import Opt from "./Opt";
 import Captch from "./Captch";
@@ -42,9 +42,9 @@ const SignPhone: React.FC<SignPhoneProps> = ({ handleBack2 }) => {
   useEffect(() => {
     if (previousPathname.current !== currentLocation.pathname) {
       setIsVisible(false);
-      closeAllModals()
+      closeAllModals();
     }
-    previousPathname.current = currentLocation.pathname; 
+    previousPathname.current = currentLocation.pathname;
   }, [currentLocation.pathname]);
 
   const closeAllModals = () => {
@@ -202,18 +202,22 @@ const SignPhone: React.FC<SignPhoneProps> = ({ handleBack2 }) => {
                   </label> */}
                   <div
                     onClick={show}
-                    className=" w-[50px] flex justify-end items-center absolute right-0 bottom-[15px] h-[20px]">
-                      <img
-                        
-                        className=""
-                        src={showPassword ? eye : eyeClose}
-                        alt="Show Password"
-                      />
-                    </div>
+                    className=" w-[50px] flex justify-end items-center absolute right-0 bottom-[15px] h-[20px]"
+                  >
+                    <img
+                      className=""
+                      src={showPassword ? eye : eyeClose}
+                      alt="Show Password"
+                    />
+                  </div>
                 </div>
                 {/* decs */}
                 <div
-                  className={` mt-[-20px] text-[14px] font-[500] leading-[20px] text-[#888] `}
+                  className={` mt-[-20px] text-[14px] font-[500] leading-[20px] ${
+                    validatePassword(password)
+                      ? " text-[#00A048]"
+                      : "text-[#888]"
+                  }  `}
                 >
                   <p>8-25个字符</p>
                   <p>必须是以下两者中的至少两种组合：字母，数字</p>{" "}
@@ -224,7 +228,9 @@ const SignPhone: React.FC<SignPhoneProps> = ({ handleBack2 }) => {
                   disabled={!validatePassword(password)}
                   type="submit"
                   className={`w-full text-[14px] font-[600] leading-[22px]  mt-[20px] py-[10px] px-[16px] rounded-[80px]  ${
-                    validatePassword(password) ? "login_button text-white" : "next_button text-[#777]"
+                    validatePassword(password)
+                      ? "login_button text-white"
+                      : "next_button text-[#777]"
                   } transition duration-300 ease-in-out`}
                 >
                   注册

@@ -11,6 +11,7 @@ import {
 import { showToast } from "../../../pages/profile/error/ErrorSlice";
 
 interface OptProps {
+  email : string;
   send_type: string;
   password: string;
   confirmPassword: string;
@@ -24,6 +25,7 @@ const Verify: React.FC<OptProps> = ({
   accessToken,
   setShowVerify,
   send_type,
+  email
 }) => {
   // console.log(send_type, accessToken);
   const { data: codeData, refetch: resendOtpApi } = useGetCodeForgotQuery(
@@ -143,7 +145,7 @@ const Verify: React.FC<OptProps> = ({
         </div>
 
         <p className="text-[#888] text-[10px] font-light leading-[15px] p-3 text-center">
-          验证码已发送。请检查您的邮件，如果没收到，请务必再次检查您的垃圾邮件
+          验证码已发送 {email}。请检查您的邮件，如果没收到，请务必再次检查您的垃圾邮件
         </p>
       </div>
 

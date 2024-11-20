@@ -73,90 +73,54 @@ const Opt: React.FC<OptProps> = ({ email, password, phone, setIsVisible }) => {
     const updatedOTP = [...otpDigits];
     updatedOTP[index] = value;
     setOtpDigits(updatedOTP);
-
+  
     if (value && index < inputRefs.current.length - 1) {
       inputRefs.current[index + 1]?.focus();
     }
     if (!value && index > 0) {
       inputRefs.current[index - 1]?.focus();
     }
-
+  
     // Handle OTP submission when all digits are filled
     if (updatedOTP.every((digit) => digit)) {
+      // Remove focus from all inputs
+      inputRefs.current.forEach((input) => input?.blur());
+  
       const otpCode = updatedOTP.join("");
-
-      if (email && password) {
-        try {
+      try {
+        if (email && password) {
           const result = await signUpEmail({
             email,
             password,
             email_code: otpCode,
-          }).unwrap(); // Unwrap the promise to handle errors
+          }).unwrap();
           if (result && result.msg) {
-            // console.log("Result message:", result.msg);
             dispatch(setOtpOpen(false));
-            // navigate("/profile");
-            dispatch(showToast({ message: result?.msg, type: "error" }));
+            dispatch(showToast({ message: result.msg, type: "error" }));
             localStorage.setItem("authToken", JSON.stringify(result));
-            setTimeout(() => {
-              closeAllModals();
-            }, 1000);
+            setTimeout(() => closeAllModals(), 1000);
           }
-          // console.log("Result", result);
-
-          // console.log(result?.msg)
-        } catch (error: any) {
-          if (error.data.msg === "无效验证码") {
-            // console.log("code error", error.data.msg);
-            dispatch(showToast({ message: error.data.msg, type: "error" }));
-          } else if (error.data.msg) {
-            dispatch(setOtpOpen(false));
-            // navigate("/profile");
-            closeAllModals();
-            dispatch(showToast({ message: error.data.msg, type: "error" }));
-          }
-          // console.log("pok ka ya error :", error);
-        }
-      } else if (phone && password) {
-        try {
-          // console.log(phone, otpCode);
-          // console.log(otpCode)
+        } else if (phone && password) {
           const result = await signUpPhone({
             phone,
             password,
             sms_code: otpCode,
           }).unwrap();
           if (result && result.msg) {
-            // console.log("Result message:", result.msg);
             dispatch(setOtpOpen(false));
-            // navigate("/profile");
-            dispatch(showToast({ message: result?.msg, type: "success" }));
+            dispatch(showToast({ message: result.msg, type: "success" }));
             localStorage.setItem("authToken", JSON.stringify(result));
-            setTimeout(() => {
-              closeAllModals();
-            }, 1000);
+            setTimeout(() => closeAllModals(), 1000);
           }
-          console.log("Result", result);
-
-          // console.log(result?.msg)
-        } catch (error: any) {
-          if (
-            error.data.msg === "无效验证码" ||
-            error.data.msg === "验证码不正确"
-          ) {
-            // console.log("code error", error.data.msg);
-            dispatch(showToast({ message: error.data.msg, type: "error" }));
-          } else if (error.data.msg) {
-            // console.log('nom=e')
-            dispatch(setOtpOpen(false));
-            navigate("/profile");
-            dispatch(showToast({ message: error.data.msg, type: "error" }));
-          }
-          // console.log("pok ka ya error :", error);
         }
+      } catch (error: any) {
+        const errorMessage = error.data?.msg || "An error occurred";
+        dispatch(showToast({ message: errorMessage, type: "error" }));
+        inputRefs.current.forEach((input) => input?.focus()); // Optional: Refocus on inputs if needed
       }
     }
   };
+  
 
   const resendOtp = () => {
     if (email) {

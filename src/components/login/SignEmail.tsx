@@ -7,10 +7,15 @@ import eyeClose from "../../assets/login/eyeClose.svg";
 import Opt from "./Opt";
 import Captch from "./Captch";
 import { useDispatch, useSelector } from "react-redux";
-import { setAuthModel, setCaptchaOpen, setLoginOpen, setSignupOpen } from "../../features/login/ModelSlice";
+import {
+  setAuthModel,
+  setCaptchaOpen,
+  setLoginOpen,
+  setSignupOpen,
+} from "../../features/login/ModelSlice";
 import axios from "axios";
 import UserName from "./UserName";
-import '../../pages/login/login.css'
+import "../../pages/login/login.css";
 import { useLocation } from "react-router-dom";
 
 interface SignEmailProps {
@@ -36,9 +41,9 @@ const SignEmail: React.FC<SignEmailProps> = ({ handleBack2 }) => {
   useEffect(() => {
     if (previousPathname.current !== currentLocation.pathname) {
       setIsVisible(false);
-      closeAllModals()
+      closeAllModals();
     }
-    previousPathname.current = currentLocation.pathname; 
+    previousPathname.current = currentLocation.pathname;
   }, [currentLocation.pathname]);
 
   const closeAllModals = () => {
@@ -101,7 +106,12 @@ const SignEmail: React.FC<SignEmailProps> = ({ handleBack2 }) => {
       )}
       <div className="min-h-screen flex items-center justify-center overflow-hidde fixed z-[99999]">
         {openCaptcha && (
-          <Captch  setIsVisible={setIsVisible} isLogin={false} username={email} password={password} />
+          <Captch
+            setIsVisible={setIsVisible}
+            isLogin={false}
+            username={email}
+            password={password}
+          />
         )}
         {openUserNameForm && <UserName />}
 
@@ -128,7 +138,7 @@ const SignEmail: React.FC<SignEmailProps> = ({ handleBack2 }) => {
                     onClick={handleBack2}
                   />
                   <h2 className="text-[18px] font-[600] leading-[20px] text-white">
-                  使用邮箱注册
+                    使用邮箱注册
                   </h2>
                   <img
                     className="close_btn p-3 cursor-pointer"
@@ -187,10 +197,10 @@ const SignEmail: React.FC<SignEmailProps> = ({ handleBack2 }) => {
                      设置密码
                     </label> */}
                     <div
-                    onClick={show}
-                    className=" w-[50px] flex justify-end items-center absolute right-0 bottom-[15px] h-[10px]">
+                      onClick={show}
+                      className=" w-[50px] flex justify-end items-center absolute right-0 bottom-[15px] h-[10px]"
+                    >
                       <img
-                        
                         className=""
                         src={showPassword ? eye : eyeClose}
                         alt="Show Password"
@@ -198,11 +208,16 @@ const SignEmail: React.FC<SignEmailProps> = ({ handleBack2 }) => {
                     </div>
                   </div>
                   {/* decs */}
-                  <div className={` mt-[-20px] text-[14px] font-[500] leading-[20px] text-[#888] `}>
+                  <div
+                    className={` mt-[-20px] text-[14px] font-[500] leading-[20px] ${
+                      validatePassword(password)
+                        ? " text-[#00A048]"
+                        : "text-[#888]"
+                    }  `}
+                  >
                     <p>8-25个字符</p>
-                    <p>
-                    必须是以下两者中的至少两种组合：字母，数字   
-                    </p>                 {/* <p>letters, numbers.</p> */}
+                    <p>必须是以下两者中的至少两种组合：字母，数字</p>{" "}
+                    {/* <p>letters, numbers.</p> */}
                   </div>
 
                   <button
@@ -214,7 +229,7 @@ const SignEmail: React.FC<SignEmailProps> = ({ handleBack2 }) => {
                         : "next_button text-[#777]"
                     } transition duration-300 ease-in-out`}
                   >
-                   注册
+                    注册
                   </button>
                 </form>
 

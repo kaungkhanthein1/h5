@@ -110,6 +110,7 @@ const Capt: React.FC<CaptProp> = ({ email, password, confirmPassword }) => {
           confirmPassword={confirmPassword}
           accessToken={accessToken}
           send_type={isemail}
+          email={email}
         />
       )}
       <div className="fixed inset-0 z-[99999] bg-black/50 backdrop-blur-[12px] w-screen h-screen flex justify-center items-center">
@@ -126,11 +127,11 @@ const Capt: React.FC<CaptProp> = ({ email, password, confirmPassword }) => {
                 alt="Close"
               />
             </div>
-            <div className="flex justify-center items-center gap-[4px]">
+            <div className="flex w-full justify-center items-center gap-[4px]">
             <input
               type="number"
               placeholder="输入代码"
-              className="bg-[#333237] rounded-[4px] text-white p-[10px] focus:outline-none h-[40px]"
+              className="bg-[#333237] w-full rounded-[4px] text-white p-[10px] focus:outline-none h-[40px]"
               value={captchaCode}
               onChange={(e) => setCaptchaCode(e.target.value)}
             />
