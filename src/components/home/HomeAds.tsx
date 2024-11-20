@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const HomeAds = ({ data, isLoading }: any) => {
   const [cur, setCur] = useState<any>([]);
-
+  const [load, setLoad] = useState(false);
 
   useEffect(() => {
     setCur(data);
@@ -25,11 +25,19 @@ const HomeAds = ({ data, isLoading }: any) => {
                 to={item?.data?.url || "#"}
                 key={index}
               >
-                <img
-                  src={item?.data?.image}
-                  className="w-[58px] h-[58px] object-cover rounded-[8px] mx-auto"
-                  alt="ad"
-                />
+                {!load && (
+                  <div className="w-[58px] h-[58px] object-cover rounded-[4px] mx-auto bg-white/15 animate-pulse flex justify-center items-center">
+                    <p className="text-[12px] font-[500] text-[#888]">
+                      {item?.remarks}
+                    </p>
+                  </div>
+                )}
+                  <img
+                    onLoad={() => setLoad(true)}
+                    src={item?.data?.image}
+                    className={`w-[58px] h-[58px] object-cover rounded-[4px] mx-auto ${!load && 'hidden'}`}
+                    alt="ad"
+                  />
                 <p className="text-[12px] font-[500] text-[#888]">
                   {item?.remarks || "No description"}
                 </p>

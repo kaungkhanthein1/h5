@@ -17,6 +17,8 @@ interface NewAdsProps {
 const NewAds: React.FC<NewAdsProps> = ({ section }) => {
   const [cur, setCur] = useState<AdItem[] | undefined>([]);
   const { data, isLoading } = useGetAdsTotalQuery("");
+  const [load, setLoad] = useState(false);
+
 
   // console.log(data);
 
@@ -35,20 +37,28 @@ const NewAds: React.FC<NewAdsProps> = ({ section }) => {
               </div>
             ))
           : cur?.map((item, index) => (
-              <Link
-                className="flex flex-col justify-center items-center gap-[4px]"
-                to={item?.data?.url || "#"}
-                key={index}
-              >
-                <img
-                  src={item?.data?.image}
-                  className="w-[58px] h-[58px] object-cover rounded-[4px] mx-auto"
-                  alt="ad"
-                />
+            <Link
+            className="flex flex-col justify-center items-center gap-[4px]"
+            to={item?.data?.url || "#"}
+            key={index}
+          >
+            {!load && (
+              <div className="w-[58px] h-[58px] object-cover rounded-[8px] mx-auto bg-white/15 animate-pulse flex justify-center items-center">
                 <p className="text-[12px] font-[500] text-[#888]">
-                  {item?.remarks || "No description"}
+                  {item?.remarks}
                 </p>
-              </Link>
+              </div>
+            )}
+              <img
+                onLoad={() => setLoad(true)}
+                src={item?.data?.image}
+                className={`w-[58px] h-[58px] object-cover rounded-[8px] mx-auto ${!load && 'hidden'}`}
+                alt="ad"
+              />
+            <p className="text-[12px] font-[500] text-[#888]">
+              {item?.remarks || "No description"}
+            </p>
+          </Link>
             ))}
       </div>
     </div>
