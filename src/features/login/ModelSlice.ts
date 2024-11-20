@@ -12,7 +12,7 @@ interface model {
   openSignUpPhoneModel: boolean;
   social_id: string;
   openUserNameForm : boolean,
-  panding : boolean
+  panding : number
 }
 
 const initialState: model = {
@@ -27,7 +27,7 @@ const initialState: model = {
   openSignUpPhoneModel: false,
   openUserNameForm: false,
   social_id: "",
-  panding : false
+  panding : 0
 };
 
 export const modelSlice = createSlice({

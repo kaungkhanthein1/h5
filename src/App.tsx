@@ -88,9 +88,9 @@ const App: React.FC = () => {
 
   const hideHeader = location.pathname.startsWith("/explorer");
   useEffect(() => {
-    dispatch(setPanding(true));
+    dispatch(setPanding(panding ? 1 : 0));
     const timer = setTimeout(() => {
-      dispatch(setPanding(false));
+      dispatch(setPanding(1));
     }, 6000);
 
     return () => clearTimeout(timer);
@@ -137,7 +137,7 @@ const App: React.FC = () => {
 
   return (
     <>
-      {panding ? (
+      {panding === 0 ? (
         <Landing />
       ) : (
         <div className="flex flex-col min-h-screen">

@@ -1,5 +1,5 @@
 .profile-bg {
-  background: url("./images/profileBg.png") #161619 50% / contain no-repeat;
+  background: url("../home/images/homebg.png") #161619 50% / contain no-repeat;
   background-position: top;
   width: 100%;
   position: fixed;
