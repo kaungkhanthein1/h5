@@ -46,7 +46,7 @@ const Movies = ({ movieData }) => {
     // </div>
     <div className="text-text">
       <div className="">
-        <div className="flex justify-between items-center px-3 text-[16px]">
+        <div className="flex justify-between items-center px-3 text-[16px] mb-3">
           <h1 className="uppercase text-white font-semibold flex items-center">
             <span className="text-white font-headerFont">
               {movieData?.title}

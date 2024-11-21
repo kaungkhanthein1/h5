@@ -34,7 +34,7 @@ const Home: React.FC = () => {
       ) : (
         <>
           {data && !isLoading ? (
-            <div className="text-text min-h-screen pb-24 flex flex-col gap-8">
+            <div className="text-text min-h-screen pb-24 flex flex-col gap-5">
               {data?.data?.map((movieData: any, index: any) => {
                 if (movieData?.layout === "index_recommend_carousel") {
                   return (
