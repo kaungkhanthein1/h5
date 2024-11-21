@@ -15,7 +15,7 @@ import ExplorerTags from "./ExplorerTags";
 
 const FilterTag = () => {
   const location = useLocation();
-  // console.log(location, "location");
+  // const []
   const selectedClassRef = useRef<any>(null);
   const selectedYearRef = useRef<any>(null);
   const selectedAreaRef = useRef<any>(null);
@@ -41,6 +41,7 @@ const FilterTag = () => {
   const dispatch = useDispatch();
 
   const filterTagRef = useRef<any>(null);
+  // console.log(filterTagRef?.current.getBoundingClientRect())
   const [show, setShow] = useState(false);
   const filterTagHandler = () => {
     setShowMenu(true);
@@ -51,14 +52,16 @@ const FilterTag = () => {
     const handleScroll = () => {
       if (filterTagRef.current) {
         const rect = filterTagRef.current.getBoundingClientRect();
-        if (rect.top < 100) {
+        console.log(rect);
+
+        if (rect.top < 100 ) {
           // dispatch(setShowExploreFilterTag(true));
           setShow(true);
           setShowMenu(false);
         } else {
           // dispatch(setShowExploreFilterTag(false));
           setShow(false);
-          setShowMenu(true);
+          // setShowMenu();
         }
       }
     };
@@ -184,6 +187,8 @@ const FilterTag = () => {
             <></>
           )}
         </div>
+        {/* {!showMenu && ( */}
+
         <div className="mt-5 flex flex-col gap-3 py-5">
           <ExplorerTags
             configData={configData}
@@ -209,6 +214,7 @@ const FilterTag = () => {
             activeYear={activeYear}
           />
         </div>
+        {/* )} */}
       </div>
       <div ref={filterTagRef} className="sticky top-0"></div>
     </>

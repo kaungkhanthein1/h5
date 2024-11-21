@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { Episode, ModalComponentProps } from '../../../model/videoModel';
@@ -66,10 +66,21 @@ const ModalComponent: React.FC<ModalComponentProps> = ({
     };
   }, []);
 
-
+  const modalRef = useRef<any>(null);
+  useEffect(() => {
+    const handleClickOutside = (event: any) => {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        onClose();
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [modalRef]);
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center">
-      <div className="bg-sourceBack backdrop-blur-md w-full max-w-md rounded-t-xl p-4 text-white"
+      <div className="bg-sourceBack backdrop-blur-md w-full max-w-md rounded-t-xl p-4 text-white" ref={modalRef}
         style={{ height: `${lowerDivHeight}px` }}>
         <div className="flex justify-between items-center mb-4">
           <div className="flex space-x-6 overflow-x-auto m-auto">
@@ -129,8 +140,8 @@ const ModalComponent: React.FC<ModalComponentProps> = ({
                           ? "bg-source text-white"
                           : "bg-episodeSelected  text-white"
                       }`}
-                    >
-                      {episode.episode_name}
+                    > 
+                      {episode.episode_name.length > 7 ? `${episode.episode_name.substring(0, 100)}...` : episode.episode_name}
                       {episode?.episode_id === selectedEpisodeId && (
                         <span className="transform -translate-x-1/2 loader ml-5 -mt-1.5">
                           <div></div>

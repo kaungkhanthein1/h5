@@ -34,8 +34,8 @@ const Movies = ({ movieData }) => {
         <h1 className="">{movieData?.navigator?.title}</h1>
         <img src={rightvg} alt="" />
       </div>
-      <div className="max-md:mt-5 mt-5">
-        <div className="flex overflow-x-scroll whitespace-nowrap scrollbar-hide gap-2 mt-5">
+      <div className="max-md:mt-3 mt-3">
+        <div className="flex overflow-x-scroll whitespace-nowrap scrollbar-hide gap-2 mt-0">
           {apiMovie?.map((movie) => (
             <div key={movie.id}>
               <MovieCard movie={movie} height={"200px"} isSlider={true} />

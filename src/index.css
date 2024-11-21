@@ -6,7 +6,7 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif, 'Inter';
+    sans-serif, "Inter";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -210,7 +210,7 @@ input[type="range"]::-moz-range-thumb {
   margin-top: 50px;
 }
 
-@media screen and (min-width: 800px) {
+@media screen and (min-width: 470px) {
   .home-bg {
     background-size: cover;
   }
@@ -405,4 +405,17 @@ input[type="radio"]:checked {
 .art-controls {
   margin-left: 5px;
   margin-right: 10px;
+}
+
+.img_a {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  aspect-ratio: 16 / 22 !important;
+}
+
+.movie_img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures the image fills the container without distortion */
 }

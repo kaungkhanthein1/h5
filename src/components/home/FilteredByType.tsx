@@ -17,7 +17,7 @@ import {
   setClass,
   setArea,
   setYear,
-  setSortName
+  setSortName,
 } from "../../pages/home/slice/HomeSlice";
 import NewAds from "../NewAds";
 
@@ -118,7 +118,7 @@ const FilteredByType = () => {
             </div>
           ) : movieData?.length ? (
             <>
-              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 pl-3 lg:grid-cols-8 gap-y-5 gap-2 mt-0 pt-5 pb-32 px-3">
+              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 pl-3 lg:grid-cols-8 gap-y-5 gap-2 mt-0 pt-5 pb-10 px-3">
                 {movieData?.map((movie: any) => (
                   <div key={movie?.id} className="mx-auto w-full">
                     <MovieCard movie={movie} height={"200px"} />
@@ -130,7 +130,7 @@ const FilteredByType = () => {
                 next={fetchData}
                 hasMore={hasMore}
                 loader={
-                  <div className="flex justify-center items-center w-full pb-20">
+                  <div className="flex justify-center items-center w-full pb-0">
                     {/* {hasMore ? <Loader /> : "No More data"} */}
                     <Loader />
                   </div>

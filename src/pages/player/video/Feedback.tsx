@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { showToast } from "../../../pages/profile/error/ErrorSlice";
@@ -19,11 +19,12 @@ const FeedbackComponent: React.FC<FeedbackComponentProps> = ({
   onActionComplete,
   isLoading,
   setIsLoading,
-  height,
+  height
 }) => {
   const [selectedIssue, setSelectedIssue] = useState<number>(0);
   const [description, setDescription] = useState<string>("");
   const dispatch = useDispatch();
+  const modalRef = useRef<any>(null);
 
   const issues = [
     {
@@ -55,6 +56,19 @@ const FeedbackComponent: React.FC<FeedbackComponentProps> = ({
   const handleIssueSelect = (issue: number) => {
     setSelectedIssue(issue);
   };
+
+
+  useEffect(() => {
+    const handleClickOutside = (event: any) => {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        onClose();
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [modalRef]);
 
   const handleSubmitFeedback = async () => {
     if (!selectedIssue || !description) {
@@ -108,7 +122,7 @@ const FeedbackComponent: React.FC<FeedbackComponentProps> = ({
     <div className="fixed inset-0 z-50 flex items-end justify-center bottom-0">
       <div
         className="bg-background backdrop-blur-md w-full max-w-md rounded-xl p-4 text-white"
-        style={{ height: height }}
+        style={{ height: height }} ref={modalRef}
       >
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-bold">反馈求片</h2>

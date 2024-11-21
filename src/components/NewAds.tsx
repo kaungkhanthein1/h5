@@ -12,9 +12,10 @@ interface AdItem {
 
 interface NewAdsProps {
   section: string;
+  fromMovie?: boolean;
 }
 
-const NewAds: React.FC<NewAdsProps> = ({ section }) => {
+const NewAds: React.FC<NewAdsProps> = ({ section, fromMovie = false }) => {
   const [cur, setCur] = useState<AdItem[] | undefined>([]);
   const { data, isLoading } = useGetAdsTotalQuery("");
   const [load, setLoad] = useState(false);
@@ -27,7 +28,7 @@ const NewAds: React.FC<NewAdsProps> = ({ section }) => {
   }, [data, section]);
 
   return (
-    <div className="max-md:px-3 px-10 flex flex-col justify-center">
+    <div className={`${fromMovie ? '' : 'max-md:px-3 px-10'} flex flex-col justify-center`}>
       <div className="grid w-full grid-cols-5 justify-center items-center gap-2">
         {isLoading
           ? Array.from({ length: 5 }).map((_, index) => (

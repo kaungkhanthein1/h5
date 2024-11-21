@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useGetWeeklyMoviesQuery } from "../../pages/explorer/services/explorerAPi";
-import MovieCard from "./MovieCard";
+import MovieCard from "../home/MovieCard";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setActiveWeek } from "../../pages/explorer/slice/ExploreSlice";

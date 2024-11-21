@@ -16,6 +16,7 @@ import {
   getEpisodesBySource,
   reportPlaybackProgress,
 } from "../../services/playerService";
+import NewAds from "../../components/NewAds";
 
 const DetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -324,7 +325,8 @@ const DetailPage: React.FC = () => {
                 />
 
                 <div className="mt-8 px-4">
-                {adsData && <AdsSection adsDataList={adsData?.player_recommend_up} />}
+                {/* {adsData && <AdsSection adsDataList={adsData?.player_recommend_up} />} */}
+                <NewAds section={"player_recommend_up"} fromMovie={true}/>
                 </div>
                 <RecommendedList data={movieDetail} showRecommandMovie={showRecommandMovie}/>
               </>

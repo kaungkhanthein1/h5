@@ -49,10 +49,10 @@ const Header: FC = () => {
       className={`w-full z-[99999] fixed top-0 gradient-bg-home pt-4 pb-2`}
     >
       <div className="flex items-center px-3 gap-3">
-        <div className="flex items-center gap-1">
+        {/* <div className="flex items-center gap-1"> */}
           {/* <img src={logo} alt="" />{" "} */}
-          <span style={{ color: "white", fontWeight: "bold" }}>电影猪手</span>
-        </div>
+          {/* <span style={{ color: "white", fontWeight: "bold" }}>电影猪手</span> */}
+        {/* </div> */}
         <div className="flex-1 relative">
           <input
             onFocus={() => navigate("/search_overlay")}

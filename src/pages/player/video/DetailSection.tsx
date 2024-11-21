@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import share from "../../../assets/share.png";
 import star from "../../../assets/star.png";
 import info from "../../../assets/info.png";
@@ -18,6 +18,7 @@ import AdsSection from "./AdsSection";
 import { DetailSectionProps } from "../../../model/videoModel";
 import { useGetListQuery } from "../../../pages/profile/services/profileApi";
 import NewAds from "../../../components/NewAds";
+import Fire from '../../../assets/Fire.png';
 
 const DetailSection: React.FC<DetailSectionProps> = ({
   movieDetail,
@@ -38,6 +39,7 @@ const DetailSection: React.FC<DetailSectionProps> = ({
   const [showFeedbackModal, setShowFeedbackModal] = useState(false); // For triggering modal
   const [visible, setVisible] = useState(false);
   const [lowerDivHeight, setLowerDivHeight] = useState(0);
+  const modalRef = useRef<any>(null);
 
   const handleCopy = () => {
     setVisible(true);
@@ -181,6 +183,18 @@ const DetailSection: React.FC<DetailSectionProps> = ({
     window.scrollTo(0, 0)
   }, []);
 
+  useEffect(() => {
+    const handleClickOutside = (event: any) => {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        setShowModal(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [modalRef]);
+
   return (
     <div className="flex flex-col w-full bg-background">
       {/* Tabs */}
@@ -297,8 +311,8 @@ const DetailSection: React.FC<DetailSectionProps> = ({
           </div>
         ) : (
           <div className="mt-4">
-            {adsData && <AdsSection adsDataList={adsData?.player_episode_up} />}
-            {/* <NewAds section={"player_episode_up"} /> */}
+            {/* {adsData && <AdsSection adsDataList={adsData?.player_episode_up} />} */}
+            <NewAds section={"player_episode_up"} fromMovie={true}/>
 
           </div>
         )}
@@ -307,13 +321,13 @@ const DetailSection: React.FC<DetailSectionProps> = ({
       {/* Modal for sharing */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-end">
-          <div
+          <div ref={modalRef}
             className="bg-background backdrop-blur-md w-full max-w-md bottom-0 rounded-lg p-6 text-white overflow-y-auto"
             style={{ height: `${lowerDivHeight}px` }}
           >
             {/* Modal Header */}
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold">Introduction</h2>
+              <h2 className="text-xl font-semibold">简介</h2>
               <button
                 onClick={handleCloseModal}
                 className="text-gray-300 hover:text-white"
@@ -326,11 +340,11 @@ const DetailSection: React.FC<DetailSectionProps> = ({
             <div className="modal-content">
               {/* Movie Title and Information */}
               <h2 className="text-2xl font-bold mb-2">
-                {movieDetail.name || "Unknown Title"}
+                {movieDetail.name || ""}
               </h2>
               <div className="flex items-center text-sm text-gray-400 mb-4">
                 <span className="text-orange-500 flex items-center">
-                  <FontAwesomeIcon icon={faFire} className="mr-1" />
+                  <img src={Fire} alt="" />
                   {movieDetail.popularity_score || 0}
                 </span>
                 <span className="mx-2">|</span>
@@ -342,12 +356,12 @@ const DetailSection: React.FC<DetailSectionProps> = ({
               </div>
 
               {/* Cast Section */}
-              <h3 className="text-lg font-semibold mt-4">Cast</h3>
+              <h3 className="text-lg font-semibold mt-4">演员表</h3>
               <div className="text-gray-400 text-sm mt-2">
                 <div className="flex space-x-4">
                   {/* Director */}
                   <span>
-                    Director:{" "}
+                  导演{" "}
                     <span className="text-white">
                       {movieDetail?.members?.find((member) => member.type === 3)
                         ?.name || "Unknown"}
@@ -355,7 +369,7 @@ const DetailSection: React.FC<DetailSectionProps> = ({
                   </span>
                   {/* Screenwriter */}
                   <span>
-                    Screenwriter:{" "}
+                  编剧{" "}
                     <span className="text-white">
                       {movieDetail?.members?.find((member) => member.type === 2)
                         ?.name || "Unknown"}
@@ -364,7 +378,7 @@ const DetailSection: React.FC<DetailSectionProps> = ({
                 </div>
                 {/* Actors */}
                 <div className="mt-2">
-                  <span>Actor(s): </span>
+                  <span>演员{" "}</span>
                   {movieDetail?.members
                     ?.filter((member) => member.type === 1)
                     .map((actor, index) => (
@@ -383,7 +397,7 @@ const DetailSection: React.FC<DetailSectionProps> = ({
               </div>
 
               {/* Introduction Section */}
-              <h3 className="text-lg font-semibold mt-6">Introduction</h3>
+              <h3 className="text-lg font-semibold mt-6">简介</h3>
               <p className="text-gray-300 mt-2 leading-relaxed">
                 {movieDetail.content || "No description available."}
               </p>

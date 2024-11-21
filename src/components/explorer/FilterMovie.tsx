@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetHeaderTopicsQuery } from "../../pages/home/services/homeApi";
-import MovieCard from "./MovieCard";
+import MovieCard from "../home/MovieCard";
 import Loader from "../../pages/search/components/Loader";
 import FilterTag from "./FilterTag";
 import { Link } from "react-router-dom";
@@ -76,7 +76,7 @@ const FilterMovie = () => {
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2 pt-1 pb-32 px-3">
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2 pt-1 pb-10 px-3">
                   {movieData?.map((movie: any) => (
                     <Link
                       to={`/player/${movie?.id}`}
@@ -92,7 +92,7 @@ const FilterMovie = () => {
                   next={fetchData}
                   hasMore={true}
                   loader={
-                    <div className="flex justify-center items-center pb-20 will mx-auto">
+                    <div className="flex justify-center items-center pb-0 will mx-auto">
                       <Loader />
                     </div>
                   }
@@ -104,7 +104,7 @@ const FilterMovie = () => {
             )}
           </>
         ) : (
-          <div className="text-center flex justify-center items-center w-full pt-32 px-3">
+          <div className="text-center flex justify-center items-center w-full pt-10 px-3">
             <Loader />
           </div>
         )}

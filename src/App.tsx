@@ -132,13 +132,6 @@ const App: React.FC = () => {
     });
   };
 
-  useEffect(() => {
-    // Use a slight delay to ensure layout adjusts properly
-    setTimeout(() => {
-      window.scrollTo(0, 0);
-    }, 100);
-  }, [location]);
-
   return (
     <>
       {panding ? (
