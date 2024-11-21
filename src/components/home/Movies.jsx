@@ -26,75 +26,41 @@ const Movies = ({ movieData }) => {
   }
 
   return (
-    <div className="px-10 max-md:px-3">
-      <div className="flex justify-between items-center">
-        <h1 className="text-sm uppercase text-white font-semibold flex items-center">
-          <span className="text-white font-headerFont">{movieData?.title}</span>
-        </h1>
-        <h1 className="">{movieData?.navigator?.title}</h1>
-        <img src={rightvg} alt="" />
-      </div>
-      <div className="max-md:mt-3 mt-3">
-        <div className="flex overflow-x-scroll whitespace-nowrap scrollbar-hide gap-2 mt-0">
+    // <div className="px-10 max-md:px-3">
+    //   <div className="flex justify-between items-center">
+    //     <h1 className="text-sm uppercase text-white font-semibold flex items-center">
+    //       <span className="text-white font-headerFont">{movieData?.title}</span>
+    //     </h1>
+    //     <h1 className="">{movieData?.navigator?.title}</h1>
+    //     <img src={rightvg} alt="" />
+    //   </div>
+    //   <div className="max-md:mt-3 mt-3">
+    //     <div className="flex overflow-x-scroll whitespace-nowrap scrollbar-hide gap-2 mt-0">
+    //       {apiMovie?.map((movie) => (
+    //         <div key={movie.id}>
+    //           <MovieCard movie={movie} height={"200px"} isSlider={true} />
+    //         </div>
+    //       ))}
+    //     </div>
+    //   </div>
+    // </div>
+    <div className="text-text">
+      <div className="">
+        <div className="flex justify-between items-center px-3 text-[16px]">
+          <h1 className="uppercase text-white font-semibold flex items-center">
+            <span className="text-white font-headerFont">
+              {movieData?.title}
+            </span>
+          </h1>
+          {/* <h1 className="">{movieData?.navigator?.title}</h1> */}
+        </div>
+        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 pl-3 lg:grid-cols-8 gap-y-5 gap-2 mt-0 pt-1 pb-2 px-3">
           {apiMovie?.map((movie) => (
-            <div key={movie.id}>
-              <MovieCard movie={movie} height={"200px"} isSlider={true} />
+            <div key={movie?.id} className="mx-auto w-full">
+              <MovieCard movie={movie} height={"200px"} />
             </div>
           ))}
         </div>
-        {/* <Swiper
-          modules={[Navigation]}
-          slidesPerView={2}
-          spaceBetween={8}
-          navigation={{
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
-          }}
-          breakpoints={{
-            320: {
-              slidesPerView: 3.5,
-              spaceBetween: 8,
-            },
-            350: {
-              slidesPerView: 3.5,
-              spaceBetween: 8,
-            },
-            480: {
-              slidesPerView: 3.5,
-              spaceBetween: 8,
-            },
-            640: {
-              slidesPerView: 4.5,
-              spaceBetween: 8,
-            },
-            768: {
-              slidesPerView: 5.5,
-              spaceBetween: 8,
-            },
-            1000: {
-              slidesPerView: 6.5,
-              spaceBetween: 10,
-            },
-            1268: {
-              slidesPerView: 8.5,
-              spaceBetween: 10,
-            },
-            1568: {
-              slidesPerView: 8.5,
-              spaceBetween: 10,
-            },
-            2068: {
-              slidesPerView: 7.5,
-              spaceBetween: 10,
-            },
-          }}
-        >
-          {apiMovie?.map((movie) => (
-            <SwiperSlide key={movie.id}>
-              <MovieCard movie={movie} height={"200px"} />
-            </SwiperSlide>
-          ))}
-        </Swiper> */}
       </div>
     </div>
   );

@@ -419,3 +419,7 @@ input[type="radio"]:checked {
   height: 100%;
   object-fit: cover; /* Ensures the image fills the container without distortion */
 }
+
+.to-black {
+  --tw-gradient-to: #00000075 var(--tw-gradient-to-position) !important;
+}

@@ -36,7 +36,7 @@ const MovieCard = ({
           {/* <img className="h-[40px]" src={videoIcon} alt="" /> */}
         </div>
         {movie?.label?.length ? (
-          <div className="absolute top-0 right-0 search_card_score w-[39px] z-10">
+          <div className="absolute top-0 right-0 search_card_score z-10">
             <p className="truncate text-center">{movie?.label}</p>
           </div>
         ) : (
