@@ -1,6 +1,6 @@
 import React from "react";
 // import MovieCard from "./MovieCard";
-import MovieCard from "../../../components/home/MovieCard";
+import MovieCard from "./MovieCard";
 
 const RecommendedList = ({ data, showRecommandMovie }: any) => {
   console.log(data?.recommendList, "dl");
@@ -13,7 +13,7 @@ const RecommendedList = ({ data, showRecommandMovie }: any) => {
             key={movie.id}
             movie={movie}
             height={"200px"}
-            // showRecommandMovie={showRecommandMovie}
+            showRecommandMovie={showRecommandMovie}
           />
         ))}
       </div>
