@@ -53,10 +53,11 @@ const LoginEmail: React.FC<LoginEmailProps> = ({ handleBack }) => {
   };
 
   const validatePassword = (password: string) => {
-    const lengthValid = password.length >= 8 && password.length <= 25;
-    const containsLetters = /[a-zA-Z]/.test(password);
-    const containsNumbers = /\d/.test(password);
-    return lengthValid && containsLetters && containsNumbers;
+    const lengthValid = password.length >= 6 && password.length <= 25;
+    // const containsLetters = /[a-zA-Z]/.test(password);
+    // const containsNumbers = /\d/.test(password);
+    // return lengthValid && containsLetters && containsNumbers;
+    return lengthValid
   };
 
   const validateEmail = (email: string) => {

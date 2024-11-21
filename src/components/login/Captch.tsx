@@ -74,6 +74,9 @@ const Captch: React.FC<{
         dispatch(showToast({ message: loginResponse.msg, type: "error" }));
       } else {
         localStorage.setItem("authToken", JSON.stringify(loginResponse));
+        setTimeout(() => {
+          closeAllModals();
+        }, 700);
       }
       // Set the token in localStorage
 
@@ -81,9 +84,6 @@ const Captch: React.FC<{
       dispatch(setCaptchaOpen(false));
 
       // Manually redirect to the home page after login
-      setTimeout(() => {
-        closeAllModals();
-      }, 700);
     } catch (err) {
       setError("Login failed");
       console.error("Login error:", err);
