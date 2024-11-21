@@ -1,7 +1,8 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import cardSkeleton from "../../assets/blur.png"; // Placeholder image
 const LazyLoadImage = ({ src, alt, width, height, className, ...props }) => {
   const imgRef = useRef(null);
+  const [loaded, setLoaded] = useState(false);
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -12,6 +13,7 @@ const LazyLoadImage = ({ src, alt, width, height, className, ...props }) => {
               imgRef.current.onload = () => {
                 if (imgRef.current && imgRef.current !== null) {
                   imgRef.current.style.opacity = "1";
+                  setLoaded(true);
                 }
               };
             }
@@ -41,7 +43,9 @@ const LazyLoadImage = ({ src, alt, width, height, className, ...props }) => {
         alt={alt}
         width={width}
         height={height}
-        className={`${className} image-placeholder`}
+        className={`${className} ${
+          loaded ? "image-loaded" : "image-placeholder"
+        }`}
         {...props}
       />
     </div>
