@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import MovieCard from "../../components/explorer/MovieCard";
+import MovieCard from "../../components/home/MovieCard";
 import backArrow from "../../assets/back.svg";
 import Loader from "../search/components/Loader";
 import NewAds from "../../components/NewAds";
