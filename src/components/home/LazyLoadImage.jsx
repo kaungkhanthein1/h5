@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import cardSkeleton from "../../assets/imgLoading.png"; // Placeholder image
+import cardSkeleton from "../../assets/blur.png"; // Placeholder image
 const LazyLoadImage = ({ src, alt, width, height, className, ...props }) => {
   const imgRef = useRef(null);
   useEffect(() => {

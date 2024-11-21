@@ -258,7 +258,7 @@
 }
 .image-container2 {
   position: relative;
-  background-image: url("../../assets/imgLoading.png");
+  background-image: url("../../assets/blur.png");
   background-size: cover;
   background-position: center;
   overflow: hidden;
