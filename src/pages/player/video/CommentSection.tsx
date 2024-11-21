@@ -551,7 +551,8 @@ const CommentComponent: React.FC<CommentProps> = ({
         <div className="create-comment mt-6 flex items-center justify-center rounded-lg w-full comment-btn">
           <button
             onClick={() => dispatch(setAuthModel(true))}
-            className="bg-red-600 text-white w-full px-4 py-3 mx-2 rounded-md"
+            className="text-white w-full px-4 py-3 mx-2 rounded-md"
+            style={{background: 'rgb(255 35 0)'}}
           >
             登录后发布评论
           </button>
