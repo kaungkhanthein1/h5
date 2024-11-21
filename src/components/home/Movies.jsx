@@ -5,7 +5,7 @@ import { Navigation } from "swiper/modules";
 import "swiper/css";
 import MovieCard from "./MovieCard";
 
-// import notfound from "../../assets/notfound.png";
+import rightvg from "../../assets/rightvg.svg";
 
 const Movies = ({ movieData }) => {
   const apiMovie = movieData?.list;
@@ -32,6 +32,7 @@ const Movies = ({ movieData }) => {
           <span className="text-white font-headerFont">{movieData?.title}</span>
         </h1>
         <h1 className="">{movieData?.navigator?.title}</h1>
+        <img src={rightvg} alt="" />
       </div>
       <div className="max-md:mt-5 mt-5">
         <div className="flex overflow-x-scroll whitespace-nowrap scrollbar-hide gap-2 mt-5">

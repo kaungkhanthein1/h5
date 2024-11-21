@@ -11,6 +11,7 @@ import { useGetHeaderTopicsQuery } from "../../pages/home/services/homeApi";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import downh from "../../assets/downh.svg";
+import ExplorerTags from "./ExplorerTags";
 
 const FilterTag = () => {
   const location = useLocation();
@@ -21,6 +22,7 @@ const FilterTag = () => {
   const [activeClass, setActiveClass] = useState(0);
   const [activeArea, setActiveArea] = useState(0);
   const [activeYear, setActiveYear] = useState(0);
+  const [showMenu, setShowMenu] = useState(false);
   const activeTab = useSelector((state: any) => state?.explore?.activeTab);
   const sort = useSelector((state: any) => state?.explore?.sort);
   const sortName = useSelector((state: any) => state?.explore?.sortName);
@@ -41,8 +43,9 @@ const FilterTag = () => {
   const filterTagRef = useRef<any>(null);
   const [show, setShow] = useState(false);
   const filterTagHandler = () => {
-    setShow(false);
-    window.scrollTo(0, 0);
+    setShowMenu(true);
+    setShow(true);
+    // window.scrollTo(0, 0);
   };
   useEffect(() => {
     const handleScroll = () => {
@@ -51,9 +54,11 @@ const FilterTag = () => {
         if (rect.top < 100) {
           // dispatch(setShowExploreFilterTag(true));
           setShow(true);
+          setShowMenu(false);
         } else {
           // dispatch(setShowExploreFilterTag(false));
           setShow(false);
+          setShowMenu(true);
         }
       }
     };
@@ -94,6 +99,17 @@ const FilterTag = () => {
     }
   }, [area]);
 
+  useEffect(() => {
+    // if (!show) setShowMenu(!showMenu);
+  }, [show]);
+
+  useEffect(() => {
+    setShow(false);
+    window.scrollTo(0, 0);
+  }, [classData, area, year, activeTab, sort, sortName]);
+
+  // console.log(show)
+
   return (
     <>
       <div className="flex flex-col gap-3 py-5">
@@ -122,133 +138,76 @@ const FilterTag = () => {
               ))}
           </div>
           {show ? (
-            <div
-              onClick={filterTagHandler}
-              className="mt-1 text-white text-[14px] flex items-center justify-center gap-1 transition"
-            >
-              <span>
-                {sortName}.{classData}.{area}.{year}
-              </span>
-              <img src={downh} alt="" />
+            <>
+              <div
+                onClick={filterTagHandler}
+                className={`mt-3 text-white text-[14px] ${
+                  showMenu ? "hidden" : "flex"
+                } items-center justify-center gap-1 transition`}
+              >
+                <span>
+                  {sortName} . {classData} . {area} . {year}
+                </span>
+                <img src={downh} alt="" />
+              </div>
+            </>
+          ) : (
+            <></>
+          )}
+          {showMenu ? (
+            <div className="flex flex-col gap-3 py-3">
+              <ExplorerTags
+                configData={configData}
+                dispatch={dispatch}
+                setSort={setSort}
+                setSortName={setSortName}
+                sort={sort}
+                filteredTags={filteredTags}
+                classData={classData}
+                selectedClassRef={selectedClassRef}
+                setActiveClass={setActiveClass}
+                setClass={setClass}
+                activeClass={activeClass}
+                area={area}
+                selectedAreaRef={selectedAreaRef}
+                setActiveArea={setActiveArea}
+                setArea={setArea}
+                activeArea={activeArea}
+                year={year}
+                selectedYearRef={selectedYearRef}
+                setActiveYear={setActiveYear}
+                setYear={setYear}
+                activeYear={activeYear}
+              />
             </div>
           ) : (
             <></>
           )}
         </div>
-        <div className="flex overflow-x-scroll px-3 gap-5 remove-scrollbar items-center mt-10">
-          {configData?.data?.movie_search_screen?.sort?.map(
-            (item: any, index: any) => (
-              <div className="relative" key={index}>
-                <p
-                  onClick={() => {
-                    dispatch(setSort(item?.value));
-                    dispatch(setSortName(item?.name));
-                  }}
-                  className={`${
-                    sort === item?.value
-                      ? "bg-gray-500/35 px-4 py-1 text-[14px]"
-                      : "text-[14px]"
-                  } whitespace-nowrap py-1 rounded-full hover:text-white transition-colors`}
-                >
-                  {item?.name}
-                </p>
-              </div>
-            )
-          )}
-        </div>
-
-        <div className="flex overflow-x-scroll px-3 gap-5 remove-scrollbar items-center">
-          {filteredTags?.map(
-            (data: any) =>
-              data?.class &&
-              data?.class?.map((item: any, index: any) => (
-                <div
-                  className="relative"
-                  key={item}
-                  ref={classData === item ? selectedClassRef : null}
-                >
-                  <p
-                    onClick={() => {
-                      setActiveClass(index);
-                      dispatch(setClass(item));
-                    }}
-                    className={`${
-                      classData
-                        ? classData === item
-                          ? "bg-gray-500/35 px-4 py-1 text-[14px]"
-                          : "text-[14px]"
-                        : activeClass === index
-                        ? "bg-gray-500/35 px-4 py-1 text-[14px]"
-                        : "text-[14px]"
-                    } whitespace-nowrap py-1 rounded-full hover:text-white transition-colors`}
-                  >
-                    {item}
-                  </p>
-                </div>
-              ))
-          )}
-        </div>
-        <div className="flex overflow-x-scroll px-3 gap-5 remove-scrollbar items-center">
-          {filteredTags?.map(
-            (data: any) =>
-              data?.area &&
-              data?.area?.map((item: any, index: any) => (
-                <div
-                  className="relative"
-                  key={item}
-                  ref={area === item ? selectedAreaRef : null}
-                >
-                  <p
-                    onClick={() => {
-                      setActiveArea(index);
-                      dispatch(setArea(item));
-                    }}
-                    className={`${
-                      area
-                        ? area === item
-                          ? "bg-gray-500/35 px-4 py-1 text-[14px]"
-                          : "text-[14px]"
-                        : activeArea === index
-                        ? "bg-gray-500/35 px-4 py-1 text-[14px]"
-                        : "text-[14px]"
-                    } whitespace-nowrap py-1 rounded-full hover:text-white transition-colors`}
-                  >
-                    {item}
-                  </p>
-                </div>
-              ))
-          )}
-        </div>
-        <div className="flex overflow-x-scroll px-3 gap-5 remove-scrollbar items-center">
-          {filteredTags?.map(
-            (data: any) =>
-              data?.year &&
-              data?.year?.map((item: any, index: any) => (
-                <div
-                  className="relative"
-                  key={item}
-                  ref={year === item ? selectedYearRef : null}
-                >
-                  <p
-                    onClick={() => {
-                      setActiveYear(index);
-                      dispatch(setYear(item));
-                    }}
-                    className={`${
-                      year
-                        ? year === item
-                          ? "bg-gray-500/35 px-4 py-1 text-[14px]"
-                          : "text-[14px]"
-                        : activeYear === index
-                        ? "bg-gray-500/35 px-4 py-1 text-[14px]"
-                        : "text-[14px]"
-                    } whitespace-nowrap py-1 rounded-full hover:text-white transition-colors`}
-                  >
-                    {item}
-                  </p>
-                </div>
-              ))
-          )}
+        <div className="mt-5 flex flex-col gap-3 py-5">
+          <ExplorerTags
+            configData={configData}
+            dispatch={dispatch}
+            setSort={setSort}
+            setSortName={setSortName}
+            sort={sort}
+            filteredTags={filteredTags}
+            classData={classData}
+            selectedClassRef={selectedClassRef}
+            setActiveClass={setActiveClass}
+            setClass={setClass}
+            activeClass={activeClass}
+            area={area}
+            selectedAreaRef={selectedAreaRef}
+            setActiveArea={setActiveArea}
+            setArea={setArea}
+            activeArea={activeArea}
+            year={year}
+            selectedYearRef={selectedYearRef}
+            setActiveYear={setActiveYear}
+            setYear={setYear}
+            activeYear={activeYear}
+          />
         </div>
       </div>
       <div ref={filterTagRef} className="sticky top-0"></div>

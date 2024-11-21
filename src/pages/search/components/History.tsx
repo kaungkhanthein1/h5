@@ -31,7 +31,7 @@ const History = () => {
   return (
     <div className="px-3 mt-5">
       <div className="flex justify-between items-center">
-        <h1 className="history-title">搜索历史</h1>
+        <h1 className="history-title1">搜索历史</h1>
         <button onClick={handleDelete}>
           <svg
             xmlns="http://www.w3.org/2000/svg"

@@ -117,7 +117,7 @@ const Header: FC = () => {
                 onClick={filterTagHandler}
               >
                 <span>
-                  {sortName}.{classData}.{area}.{year}
+                  {sortName} . {classData} . {area} . {year}
                   {/* {showFilterTag ? '1111' : '0000'} */}
                 </span>
                 <img src={downh} alt="" />

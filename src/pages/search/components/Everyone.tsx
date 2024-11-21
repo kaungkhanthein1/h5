@@ -25,7 +25,7 @@ const Everyone = ({
   return (
     <div className="px-3 mt-5">
       <div className="flex justify-between items-center">
-        <h1 className="history-title">大家都在搜</h1>
+        <h1 className="history-title1">大家都在搜</h1>
         <a
           className="cursor-pointer "
           onClick={() => {
