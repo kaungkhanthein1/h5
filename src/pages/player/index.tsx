@@ -203,7 +203,7 @@ const DetailPage: React.FC = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0)
-  }, []);
+  }, [movieDetail]);
   
   const handleVideoError = (errorUrl: string) => {
     if (errorVideoUrl !== errorUrl && errorUrl) {
