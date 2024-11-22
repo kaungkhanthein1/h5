@@ -183,7 +183,7 @@ const Main: React.FC<any> = ({
                           {mov.movie_name}
                         </h1>
                         <p className="text-sm text-gray-400 mt-1">
-                          ep {mov.episode_name}, Viewed
+                          {mov.episode_name} 已观看
                           <span>
                             {" "}
                             {calculateViewPercentage(
