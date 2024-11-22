@@ -103,7 +103,7 @@ const Share: React.FC<ShareProps> = ({}) => {
             href="https://cc3e497d.qdhgtch.com:1333/help"
             className=" text-white text-[14px] font-[500]"
           >
-            Point Rules
+            积分商城
           </a>
         </div>
       </div>

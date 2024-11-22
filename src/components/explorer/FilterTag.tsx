@@ -54,7 +54,7 @@ const FilterTag = () => {
         const rect = filterTagRef.current.getBoundingClientRect();
         console.log(rect);
 
-        if (rect.top < 100 ) {
+        if (rect.top < 100) {
           // dispatch(setShowExploreFilterTag(true));
           setShow(true);
           setShowMenu(false);
@@ -110,6 +110,14 @@ const FilterTag = () => {
     setShow(false);
     window.scrollTo(0, 0);
   }, [classData, area, year, activeTab, sort, sortName]);
+
+  useEffect(() => {
+    dispatch(setSort("by_default"));
+    dispatch(setSortName("综合"));
+    dispatch(setClass("类型"));
+    dispatch(setArea("地区"));
+    dispatch(setYear("年份"));
+  }, [activeTab]);
 
   // console.log(show)
 

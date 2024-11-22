@@ -4,11 +4,11 @@ const HomeSlice = createSlice({
   name: "home",
   initialState: {
     activeTab: 0,
-    sort: "",
-    sortName: "",
-    class: "",
-    area: "",
-    year: "",
+    sort: "by_default",
+    sortName: "综合",
+    class: "类型",
+    area: "地区",
+    year: "年份",
     activeNav: 0,
     showFilterTag: false,
   },
@@ -48,6 +48,6 @@ export const {
   setYear,
   setActiveNav,
   setShowFilterTag,
-  setSortName
+  setSortName,
 } = HomeSlice.actions;
 export default HomeSlice.reducer;

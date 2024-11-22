@@ -17,6 +17,7 @@ const FilterMovie = () => {
   const area = useSelector((state: any) => state.explore.area);
   const year = useSelector((state: any) => state.explore.year);
   const [page, setPage] = useState(1);
+  const [page2, setPage2] = useState(2);
 
   const getMoviesByType = async (id: any) => {
     // Retrieve settings from localStorage
@@ -50,9 +51,9 @@ const FilterMovie = () => {
         "pure-mode": settings.filterToggle ? 1 : 0,
       }),
     };
-    setPage(page + 1);
+    setPage2((prev) => prev + 1);
     const { data } = await axios.get(
-      `${process.env.REACT_APP_API_URL}/movie/explore/list?type_id=${activeTab}&&sort=${sort}&&class=${classData}&&area=${area}&&year=${year}&&page=${page}&&pageSize=9`,
+      `${process.env.REACT_APP_API_URL}/movie/explore/list?type_id=${activeTab}&&sort=${sort}&&class=${classData}&&area=${area}&&year=${year}&&page=${page2}&&pageSize=9`,
       { headers }
     );
     if (data?.data?.list?.length >= 0) setIsLoading(false);
@@ -62,6 +63,7 @@ const FilterMovie = () => {
   useEffect(() => {
     getMoviesByType(activeTab);
     setPage(1);
+    setPage2(2);
   }, [activeTab, sort, area, year, classData]);
 
   return (

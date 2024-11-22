@@ -28,8 +28,10 @@ const FilteredByType = () => {
   const [hasMore, setHasMore] = useState(true);
   const [pageSize, setPageSize] = useState(9);
   const [page, setPage] = useState(1);
+  const [page2, setPage2] = useState(2);
   const [isLoading, setIsLoading] = useState(false);
   const sort = useSelector((state: any) => state.home.sort);
+  const sortName = useSelector((state: any) => state.home.sortName);
   const classData = useSelector((state: any) => state.home.class);
   const area = useSelector((state: any) => state.home.area);
   const year = useSelector((state: any) => state.home.year);
@@ -57,9 +59,9 @@ const FilteredByType = () => {
   };
 
   const fetchData = async () => {
-    setPage((prev) => prev + 1);
+    setPage2((prev) => prev + 1);
     const { data } = await axios.get(
-      `${process.env.REACT_APP_API_URL}/movie/screen/list?type_id=${activeTab}&&sort=${sort}&&class=${classData}&&area=${area}&&year=${year}&&pageSize=${pageSize}&&page=${page}`
+      `${process.env.REACT_APP_API_URL}/movie/screen/list?type_id=${activeTab}&&sort=${sort}&&class=${classData}&&area=${area}&&year=${year}&&pageSize=${pageSize}&&page=${page2}`
     );
     if (data?.data?.list?.length >= 0) {
       setIsLoading(false);
@@ -81,6 +83,7 @@ const FilteredByType = () => {
     getMoviesByType(activeTab);
     window.scrollTo(0, 0);
     setPage(1);
+    setPage2(2);
     setHasMore(true);
   }, [activeTab, sort, area, year, classData]);
 
@@ -91,12 +94,12 @@ const FilteredByType = () => {
   }, [movieData]);
 
   useEffect(() => {
-    dispatch(setSort(configData?.data?.movie_screen?.sort[0]?.value));
-    dispatch(setSortName(configData?.data?.movie_screen?.sort[0]?.name));
-    dispatch(setClass(filteredTags && filteredTags[0]?.class[0]));
-    dispatch(setArea(filteredTags && filteredTags[0]?.area[0]));
-    dispatch(setYear(filteredTags && filteredTags[0]?.year[0]));
-  }, []);
+    dispatch(setSort("by_default"));
+    dispatch(setSortName("综合"));
+    dispatch(setClass("类型"));
+    dispatch(setArea("地区"));
+    dispatch(setYear("年份"));
+  }, [activeTab]);
 
   if (isloader || isFetching) {
     return null; // Ensure you return null instead of undefined

@@ -552,7 +552,7 @@ const CommentComponent: React.FC<CommentProps> = ({
           <button
             onClick={() => dispatch(setAuthModel(true))}
             className="text-white w-full px-4 py-3 mx-2 rounded-md"
-            style={{background: 'rgb(255 35 0)'}}
+            style={{background: '#f54000'}}
           >
             登录后发布评论
           </button>

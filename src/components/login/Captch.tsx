@@ -114,13 +114,13 @@ const Captch: React.FC<{
     <div className="fixed inset-0 z-[999998] bg-black/50 backdrop-blur-[12px] w-screen h-screen flex justify-center items-center">
       {captchaImage && (
         <div className="bg-[#1C1B20] w-[320px] h-[170px] p-[20px]">
-          <div className="flex justify-between items-center pb-[16px]">
+          <div className="flex justify-center items-center pb-[16px] relative">
             <h1 className="text-white text-[16px] font-[400] text-center">
-            核实
+            验证
             </h1>
             <img
               onClick={handleClose}
-              className="p-1 bg-white"
+              className="p-1 bg-white absolute right-0"
               src={capClose}
               alt="Close"
             />
@@ -128,7 +128,7 @@ const Captch: React.FC<{
           <div className="flex justify-center w-full items-center gap-[4px]">
             <input
               type="number"
-              placeholder="输入代码"
+              placeholder="请输入验证码"
               className="bg-[#333237] w-full rounded-[4px] text-white px-[4px] py-[10px] focus:outline-none h-[40px]"
               value={captchaCode}
               onChange={(e) => setCaptchaCode(e.target.value)}
