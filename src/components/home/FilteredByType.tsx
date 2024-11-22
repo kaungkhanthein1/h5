@@ -37,6 +37,14 @@ const FilteredByType = () => {
   const year = useSelector((state: any) => state.home.year);
   const [nomoredata, setNomoredata] = useState(false);
   const dispatch = useDispatch();
+  const {
+    data: configData,
+    isLoading: isloader,
+    isFetching,
+  } = useGetHeaderTopicsQuery();
+  const filteredTags: any = configData?.data?.movie_screen?.filter?.filter(
+    (data: any) => data?.id === activeTab
+  );
 
   const getMoviesByType = async (id: any) => {
     setIsLoading(true);
@@ -69,15 +77,6 @@ const FilteredByType = () => {
     // setMovieData(movieData.concat(data?.data?.list));
     setMovieData((prev: any) => [...prev, ...data?.data?.list]);
   };
-
-  const {
-    data: configData,
-    isLoading: isloader,
-    isFetching,
-  } = useGetHeaderTopicsQuery();
-  const filteredTags: any = configData?.data?.movie_screen?.filter?.filter(
-    (data: any) => data?.id === activeTab
-  );
 
   useEffect(() => {
     getMoviesByType(activeTab);

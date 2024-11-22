@@ -38,6 +38,10 @@ export const homeApi = createApi({
     getFilterByMoviesByTypeId: builder.query<any, any>({
       query: (id) => `/api/v1/movie/screen/list?type_id=${id}`,
     }),
+    getFilteredData: builder.query<any, any>({
+      query: ({ id, sort, classData, area, year, page, pageSize }: any) =>
+        `/movie/screen/list?type_id=${id}&&sort=${sort}&&class=${classData}&&area=${area}&&year=${year}&&pageSize=${pageSize}&&page=${page}`,
+    }),
   }),
 });
 
@@ -46,4 +50,5 @@ export const {
   useGetFilteredMovieByTopicQuery,
   useGetHeaderTopicsQuery,
   useGetFilterByMoviesByTypeIdQuery,
+  useGetFilteredDataQuery,
 } = homeApi;
