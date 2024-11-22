@@ -32,7 +32,7 @@ const Explorer: React.FC = () => {
             //     : "text-gray-600 text-[18px]"
             // } `}
             // transition-all duration-200 ease-in-out
-            className={`inline-flex whitespace-nowrap border-b-2 border-transparent font-medium  ${
+            className={`inline-flex whitespace-nowrap border-b-2 border-transparent font-semibold  ${
               (activeNav && activeNav === index) || activeTab === index
                 ? "text-white text-[24px]"
                 : // : activeTab === index ? "text-white text-[24px]"

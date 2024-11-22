@@ -21,7 +21,7 @@ const TopNav = () => {
           {tabs.map((tab, index) => (
             <button
               key={index}
-              className={`inline-flex whitespace-nowrap border-b-2 border-transparent font-medium  transition-all duration-200 ease-in-out hover:text-white ${
+              className={`inline-flex whitespace-nowrap border-b-2 border-transparent font-semibold  transition-all duration-200 ease-in-out hover:text-white ${
                 activeTab === index
                   ? "text-white text-[18px]"
                   : "text-gray-600 text-[18px]"
