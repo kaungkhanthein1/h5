@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 const Landing: React.FC = () => {
   const [cur, setCur] = useState<any>([]); // Default to an empty array
   const dispatch = useDispatch();
-  const [skip, setSkip] = useState(6);
+  const [skip, setSkip] = useState(3);
   const { data } = useGetAdsStartQuery("");
 
   useEffect(() => {
