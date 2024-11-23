@@ -74,6 +74,10 @@ const FilterMovie = () => {
   };
 
   useEffect(() => {
+    isLoading && window.scrollTo(0, 0);
+  }, [isLoading]);
+
+  useEffect(() => {
     getMoviesByType(activeTab);
     window.scrollTo(0, 0);
     setPage(1);
