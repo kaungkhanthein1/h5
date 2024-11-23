@@ -75,7 +75,7 @@ const Nickname = () => {
               />
             </svg>
           </Link>
-          <div className="history-title pr-10">昵称</div>
+          <div className="history-title pr-10">修改昵称</div>
           <div className="edit-title cursor-pointer"></div>{" "}
           {/* Trigger form submit */}
         </div>
@@ -84,7 +84,7 @@ const Nickname = () => {
             <input
               type="text"
               className="new-input"
-              placeholder="请输入邀请码"
+              placeholder="输入你的昵称"
               value={text}
               onChange={(e) => setText(e.target.value)}
               disabled={isLoading} // Disable input during submission

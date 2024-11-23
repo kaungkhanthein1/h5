@@ -63,7 +63,7 @@ const Phnumber: React.FC = () => {
               <input
                 type="number"
                 className="new-input no-spinner"
-                placeholder="请输入邀请码"
+                placeholder="请输入手机号"
                 value={text}
                 onChange={(e) => setText(e.target.value)}
               />

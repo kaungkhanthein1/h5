@@ -90,7 +90,7 @@ const Email: React.FC = () => {
               <input
                 type="text"
                 className="new-input"
-                placeholder="请输入邀请码"
+                placeholder="输入您的电子邮件"
                 value={text}
                 onChange={(e) => setText(e.target.value)}
               />
