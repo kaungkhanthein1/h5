@@ -1,17 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion"; // Import framer-motion
-import land from "../assets/login/land.png";
-import ad1 from "../assets/login/ad1.png";
-import mask from "../assets/login/mask.png";
-import text from "../assets/login/text.png";
+import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
 import { setPanding } from "../features/login/ModelSlice";
+import { useGetAdsStartQuery } from "../features/share/AdsApi";
+import land from "../assets/login/land.png";
 
-interface LandingProps {}
+import ad1 from "../assets/login/ad1.png";
+import { Link } from "react-router-dom";
 
-const Landing: React.FC<LandingProps> = ({}) => {
+const Landing: React.FC = () => {
+  const [cur, setCur] = useState<any>([]); // Default to an empty array
   const dispatch = useDispatch();
   const [skip, setSkip] = useState(6);
+  const { data } = useGetAdsStartQuery("");
+
+  useEffect(() => {
+    setCur(data?.data["start"]); // Set cur only if it's an array
+  }, [data]);
+  console.log(cur);
 
   useEffect(() => {
     const countdown = setInterval(() => {
@@ -22,40 +28,48 @@ const Landing: React.FC<LandingProps> = ({}) => {
 
     return () => clearInterval(countdown);
   }, [skip]);
+  const handleImageError = (event: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    event.currentTarget.src = land; // Set default image if API image fails
+  };
 
   return (
     <div className="relative min-h-[100svh] flex flex-col justify-center items-center">
-      {/* Adjusted Image Section */}
-      <img
-        src={skip <= 3 ? ad1 : land}
-        className="object-center object-cover w-screen h-screen"
-        alt="land"
-      />
+      {cur?.data?.image ? (
+        <Link to={cur?.data?.url}>
+          <img
+            className="object-center object-cover w-screen h-screen"
+            src={cur?.data?.image}
+            alt=""
+            onError={handleImageError}
+          />
+        </Link>
+      ) : (
+        <img
+          src={land}
+          className="object-center object-cover w-screen h-screen"
+          alt="land"
+        />
+      )}
 
-      {/* Logo Section with Animation */}
       <div className="fle hidden flex-c justify-center items-center gap- relative py-[20px]">
-        {/* Mask Animation */}
         <motion.img
-          src={mask}
+          src="/path/to/mask.png"
           className="w-[60px] py-[20px]"
           alt="mask"
-          initial={{ x: 20, width: "80px" }} 
-          animate={{ x: -10, width: "60px" }} 
+          initial={{ x: 20, width: "80px" }}
+          animate={{ x: -10, width: "60px" }}
           transition={{ duration: 0.8, ease: "easeInOut" }}
         />
-
-        {/* Text Animation */}
         <motion.img
-          src={text}
+          src="/path/to/text.png"
           className="w-[100px] py-[20px]"
           alt="text"
-          initial={{ opacity: 0 }} 
+          initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.5, ease: "easeInOut" }} // Smooth delayed appearance
+          transition={{ duration: 0.8, delay: 0.5, ease: "easeInOut" }}
         />
       </div>
 
-      {/* Countdown */}
       <div
         onClick={() => dispatch(setPanding(false))}
         style={{
