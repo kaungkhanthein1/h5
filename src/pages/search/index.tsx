@@ -3,11 +3,12 @@ import "./search.css";
 import Navbar from "./components/overlay/Navbar";
 import History from "./components/History";
 import Everyone from "./components/Everyone";
-import { useGetAdsQuery, useGetSearchLateQuery } from "./services/searchApi";
+import { useGetSearchLateQuery } from "./services/searchApi";
 import Rankings from "./components/Rankings";
 import Loader from "./components/Loader";
 import Ads from "../../components/NewAds";
 import { useLocation } from "react-router-dom";
+import { useGetAdsQuery } from "../../services/helperService";
 
 const Search: React.FC = () => {
   const {

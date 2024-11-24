@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { convertToSecureUrl } from "../../../services/newEncryption";
 
 interface ChangeAvatarResponse {
   data: {
@@ -181,7 +182,7 @@ export const profileApi = createApi({
     }),
     getRecord: builder.query<any, void>({
       query: () => {
-        return `/user/playback/list`;
+        return convertToSecureUrl(`/user/playback/list`);
       },
     }),
     deleteRecord: builder.mutation<void, { ids: string }>({

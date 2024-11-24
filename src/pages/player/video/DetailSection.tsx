@@ -19,6 +19,7 @@ import { DetailSectionProps } from "../../../model/videoModel";
 import { useGetListQuery } from "../../../pages/profile/services/profileApi";
 import NewAds from "../../../components/NewAds";
 import Fire from '../../../assets/Fire.png';
+import { convertToSecureUrl } from "../../../services/newEncryption";
 
 const DetailSection: React.FC<DetailSectionProps> = ({
   movieDetail,
@@ -136,7 +137,7 @@ const DetailSection: React.FC<DetailSectionProps> = ({
     try {
       // Fetch share content API call
       const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/user/get_share`,
+        convertToSecureUrl(`${process.env.REACT_APP_API_URL}/user/get_share`),
         {
           method: "GET",
           headers: {

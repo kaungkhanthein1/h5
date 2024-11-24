@@ -3,7 +3,7 @@ import { FC, useEffect, useState } from "react";
 import downh from "../assets/downh.svg";
 import logo from "../assets/logo.svg";
 import { useNavigate } from "react-router-dom";
-import { useGetHeaderTopicsQuery } from "../../src/pages/home/services/homeApi";
+import { useGetHeaderTopicsQuery } from "../../src/services/helperService";
 import { useDispatch, useSelector } from "react-redux";
 import { setActiveTab } from "../../src/pages/home/slice/HomeSlice";
 import { setShowFilterTag } from "../../src/features/counter/counterSlice";

@@ -24,7 +24,7 @@ const Home: React.FC = () => {
     // dispatch(setActiveTab(0));
   }, []);
 
-  const ads = data?.data?.filter((item: any) => item?.layout === "advert_self");
+  const ads = data?.data?.list?.filter((item: any) => item?.layout === "advert_self");
 
   return (
     <>
@@ -36,6 +36,7 @@ const Home: React.FC = () => {
           {data && !isLoading ? (
             <div className="text-text min-h-screen pb-24 flex flex-col gap-5">
               {data?.data?.map((movieData: any, index: any) => {
+                <h1>{movieData?.layout}</h1>
                 if (movieData?.layout === "index_recommend_carousel") {
                   return (
                     <>
@@ -43,7 +44,7 @@ const Home: React.FC = () => {
                       {movies?.length !== 0 && <ContinueWatching />}
                       {/* <Ads section={"start"} /> */}
                       {/* <NewAds section={"screen_index"} /> */}
-                      <HomeAds data={ads[0]?.data} isLoading={isLoading} />
+                      {ads && <HomeAds data={ads[0]?.data} isLoading={isLoading} />}
                     </>
                   );
                 } else if (movieData?.layout === "base") {

@@ -128,7 +128,7 @@ const FilterByTag = ({
             ))}
         </div>
         <div className="flex overflow-x-scroll px-3 gap-5 remove-scrollbar items-center">
-          {data[0]?.area?.map((item: any, index: any) => (
+          {data && data.length && data[0]?.area?.map((item: any, index: any) => (
             <div
               className="relative"
               key={item}
@@ -148,7 +148,7 @@ const FilterByTag = ({
           ))}
         </div>
         <div className="flex overflow-x-scroll px-3 gap-5 remove-scrollbar items-center">
-          {data[0]?.year?.map((item: any, index: any) => (
+          {data && data.length && data[0]?.year?.map((item: any, index: any) => (
             <div
               className="relative"
               key={item}

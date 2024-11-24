@@ -3,7 +3,6 @@ import Navbar from "./components/Navbar";
 import Movies from "./components/Movies";
 import Filter from "./components/Filter";
 import {
-  useGetAdsQuery,
   useLazyGetSearchMovieQuery,
   useGetTagsQuery,
 } from "./services/searchApi";
@@ -12,6 +11,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { setHistoryData } from "./slice/HistorySlice";
 import Loader from "./components/Loader";
 import { selectFavData } from "./slice/FavoriteSlice";
+import {
+  useGetHeaderTopicsQuery,
+  useGetAdsQuery,
+} from "../../services/helperService";
 
 const Main = () => {
   const [searchParams] = useSearchParams();
@@ -27,7 +30,12 @@ const Main = () => {
     data: tabs,
     isLoading: tabLoading,
     isFetching: tabFetching,
-  } = useGetTagsQuery();
+  } = useGetHeaderTopicsQuery();
+  // const {
+  // data: tabs,
+  // isLoading: tabLoading,
+  // isFetching: tabFetching,
+  // } = useGetTagsQuery();
 
   const res_type = tabs?.data?.movie_search_screen?.res_type;
   const sort = tabs?.data?.movie_search_screen?.sort;

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useGetAdsTotalQuery } from "../features/share/AdsApi";
+import { useGetAdsQuery } from "../services/helperService";
 
 interface AdItem {
   data?: {
@@ -17,14 +17,16 @@ interface NewAdsProps {
 
 const NewAds: React.FC<NewAdsProps> = ({ section, fromMovie = false }) => {
   const [cur, setCur] = useState<AdItem[] | undefined>([]);
-  const { data, isLoading } = useGetAdsTotalQuery("");
+  const { data, isLoading } = useGetAdsQuery();
   const [load, setLoad] = useState(false);
 
 
   // console.log(data);
 
   useEffect(() => {
-    setCur(data?.data?.[section] as AdItem[]);
+    if(data?.data?.[section]) {
+      setCur(data?.data?.[section] as AdItem[]);
+    }
   }, [data, section]);
 
   return (
@@ -37,7 +39,7 @@ const NewAds: React.FC<NewAdsProps> = ({ section, fromMovie = false }) => {
                 <div className="w-12 h-3 text-white/30 rounded">小游戏</div>
               </div>
             ))
-          : cur?.map((item, index) => (
+          : cur && cur.length > 0 && cur?.map((item, index) => (
             <Link
             className="flex flex-col justify-center items-center gap-[4px]"
             to={item?.data?.url || "#"}

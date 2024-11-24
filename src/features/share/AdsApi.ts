@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { convertToSecureUrl } from "../../services/newEncryption";
 
 const AdsApi = createApi({
   reducerPath: "adsApi",
@@ -12,7 +13,7 @@ const AdsApi = createApi({
   endpoints: (builder) => ({
     getAdsTotal: builder.query({
       query: () => ({
-        url: "/advert/config",
+        url: convertToSecureUrl("/advert/config"),
         method: "GET",
         headers: {
           "X-Client-Version": "3098", // Add your specific header here
@@ -21,7 +22,7 @@ const AdsApi = createApi({
     }),
     getAdsStart: builder.query({
       query: () => ({
-        url: "/advert/config",
+        url: convertToSecureUrl("/advert/config"),
         method: "GET",
         headers: {
           "X-Client-Version": "3098", // Add your specific header here

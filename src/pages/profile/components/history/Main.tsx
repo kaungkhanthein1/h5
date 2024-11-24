@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ImageWithPlaceholder from "../../../search/components/ImgPlaceholder";
 import { useDeleteRecordMutation } from "../../services/profileApi";
-import { useGetAdsQuery } from "../../../search/services/searchApi";
+//import { useGetAdsQuery } from "../../../search/services/searchApi";
 import Loader from "../../../search/components/Loader";
 import NewAds from "../../../../components/NewAds";
+import { useGetAdsQuery } from "../../../../services/helperService";
 
 const Main: React.FC<any> = ({
   isEditMode,

@@ -3,6 +3,7 @@ import {
   encryptWithRsa,
   generateSignature,
   decryptWithAes,
+  convertToSecureUrl,
 } from "./newEncryption";
 
 // GET request
@@ -14,7 +15,7 @@ import {
 export const getCaptcha = async () => {
   try {
     const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/user/get_captcha`,
+      convertToSecureUrl(`${process.env.REACT_APP_API_URL}/user/get_captcha`),
       {
         method: "GET",
       }
@@ -53,7 +54,7 @@ export const login = async (
   try {
     // Step 1: Verify captcha
     const captchaResult = await fetch(
-      `${process.env.REACT_APP_API_URL}/user/check_captcha`,
+      convertToSecureUrl(`${process.env.REACT_APP_API_URL}/user/check_captcha`),
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

@@ -18,6 +18,7 @@ import Popup from "./Popup";
 import ReportPopup from "./ReportPopup";
 import Loader from "../../../pages/search/components/Loader";
 import { useGetUserQuery } from "../../../pages/profile/services/profileApi";
+import { convertToSecureUrl } from "../../../services/newEncryption";
 
 const CommentComponent: React.FC<CommentProps> = ({
   movieId,
@@ -68,7 +69,7 @@ const CommentComponent: React.FC<CommentProps> = ({
     setIsLoading(true);
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/movie/comments/index?movie_id=${movieId}&page=${page}&pageSize=10`
+        convertToSecureUrl(`${process.env.REACT_APP_API_URL}/movie/comments/index?movie_id=${movieId}&page=${page}&pageSize=10`)
       );
       const data = await response.json();
 

@@ -4,19 +4,26 @@ import logo from "../../assets/ContactLogo.png";
 import { Link } from "react-router-dom";
 import { useGetTagsQuery } from "../search/services/searchApi";
 import Loader from "../search/components/Loader";
+import { useGetHeaderTopicsQuery } from "../../services/helperService";
 
 const Contact = () => {
   const [show, setshow] = useState(false);
   const handleClick = () => {
     setshow((prev) => !prev);
   };
+  // const {
+  //   data,
+  //   isLoading: isLoader,
+  //   isFetching: isFetch,
+  // } = useGetTagsQuery(undefined, {
+  //   skip: !show,
+  // });
   const {
     data,
     isLoading: isLoader,
     isFetching: isFetch,
-  } = useGetTagsQuery(undefined, {
-    skip: !show,
-  });
+  } = useGetHeaderTopicsQuery();
+
   const about = data?.data?.about;
 
   return (

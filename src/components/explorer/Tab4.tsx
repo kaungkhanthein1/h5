@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setActiveRank } from "../../pages/explorer/slice/ExploreSlice";
 import NewAds from "../NewAds";
 import Loader from "../../pages/search/components/Loader";
+import { convertToSecureUrl } from "../../services/newEncryption";
 
 // Define the type for the movie data
 interface Movie {
@@ -48,7 +49,7 @@ const Tab4 = () => {
     };
     setIsLoading(true);
     const { data } = await axios(
-      `${process.env.REACT_APP_API_URL}/movie/ranking/data?id=${id}`,
+      convertToSecureUrl(`${process.env.REACT_APP_API_URL}/movie/ranking/data?id=${id}`),
       { headers }
     );
     setRankingDataById(data?.data);

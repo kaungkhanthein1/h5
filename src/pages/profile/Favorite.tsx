@@ -2,8 +2,12 @@ import { useEffect, useState } from "react";
 import Navbar from "./components/favorites/Navbar";
 import Main from "./components/favorites/Main";
 import "./profile.css";
-import { useGetAdsQuery, useGetTagsQuery } from "../search/services/searchApi"; // Assuming the API service is here
+import { useGetTagsQuery } from "../search/services/searchApi"; // Assuming the API service is here
 import { useGetListQuery } from "../profile/services/profileApi";
+import {
+  useGetHeaderTopicsQuery,
+  useGetAdsQuery,
+} from "../../services/helperService";
 
 const Favorite = () => {
   const {
@@ -14,11 +18,16 @@ const Favorite = () => {
 
   const [currentPage, setcurrentPage] = useState(1);
   const [currentType, setcurrentType] = useState<number>(0);
+  // const {
+  //   data: tabs,
+  //   isLoading: tabLoading,
+  //   isFetching: tabFetching,
+  // } = useGetTagsQuery();
   const {
     data: tabs,
     isLoading: tabLoading,
     isFetching: tabFetching,
-  } = useGetTagsQuery();
+  } = useGetHeaderTopicsQuery();
 
   const types = tabs?.data?.movie_search_screen?.type;
 

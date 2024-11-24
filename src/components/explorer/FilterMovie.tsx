@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useGetHeaderTopicsQuery } from "../../pages/home/services/homeApi";
+import { useGetHeaderTopicsQuery } from "../../services/helperService";
 import MovieCard from "../home/MovieCard";
 import Loader from "../../pages/search/components/Loader";
 import FilterTag from "./FilterTag";
@@ -16,6 +16,7 @@ import {
   setSortName,
   setYear,
 } from "../../pages/explorer/slice/ExploreSlice";
+import { convertToSecureUrl } from "../../services/newEncryption";
 const FilterMovie = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [movieData, setMovieData] = useState<any>([]);
@@ -45,7 +46,7 @@ const FilterMovie = () => {
     setIsLoading(true);
     try {
       const { data } = await axios.get(
-        `${process.env.REACT_APP_API_URL}/movie/screen/list?type_id=${id}&&sort=${sort}&&class=${classData}&&area=${area}&&year=${year}&&pageSize=${pageSize}&&page=${page}`
+        convertToSecureUrl(`${process.env.REACT_APP_API_URL}/movie/screen/list?type_id=${id}&&sort=${sort}&&class=${classData}&&area=${area}&&year=${year}&&pageSize=${pageSize}&&page=${page}`)
       );
       if (data?.data?.list?.length >= 0) {
         setIsLoading(false);
@@ -64,7 +65,7 @@ const FilterMovie = () => {
   const fetchData = async () => {
     setPage2((prev) => prev + 1);
     const { data } = await axios.get(
-      `${process.env.REACT_APP_API_URL}/movie/screen/list?type_id=${activeTab}&&sort=${sort}&&class=${classData}&&area=${area}&&year=${year}&&pageSize=${pageSize}&&page=${page2}`
+      convertToSecureUrl(`${process.env.REACT_APP_API_URL}/movie/screen/list?type_id=${activeTab}&&sort=${sort}&&class=${classData}&&area=${area}&&year=${year}&&pageSize=${pageSize}&&page=${page2}`)
     );
     if (data?.data?.list?.length >= 0) {
       setIsLoading(false);

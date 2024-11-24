@@ -7,7 +7,7 @@ import {
   setSortName,
   setYear,
 } from "../../pages/explorer/slice/ExploreSlice";
-import { useGetHeaderTopicsQuery } from "../../pages/home/services/homeApi";
+import { useGetHeaderTopicsQuery } from "../../services/helperService";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import downh from "../../assets/downh.svg";

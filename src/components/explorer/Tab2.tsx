@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setActiveWeek } from "../../pages/explorer/slice/ExploreSlice";
 import Loader from "../../pages/search/components/Loader";
 import axios from "axios";
+import { convertToSecureUrl } from "../../services/newEncryption";
 
 const Tab2 = () => {
   const [currentIndex, setCurrentIndex] = useState<any>(null);
@@ -29,7 +30,7 @@ const Tab2 = () => {
     };
     setIsLoading(true);
     const { data } = await axios.get(
-      `${process.env.REACT_APP_API_URL}/movie/weekly?week_day=${week}`,
+      convertToSecureUrl(`${process.env.REACT_APP_API_URL}/movie/weekly?week_day=${week}`),
       { headers }
     );
     setMovieData(data?.data);

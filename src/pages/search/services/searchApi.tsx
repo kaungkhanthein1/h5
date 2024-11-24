@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { convertToSecureUrl } from "../../../services/newEncryption";
 
 export const searchApi = createApi({
   reducerPath: "searchApi",
@@ -36,7 +37,7 @@ export const searchApi = createApi({
       query: (data) => {
         const { keyword, page, sort, type_id, res_type } = data;
         return {
-          url: `movie/search?keyword=${keyword}&&page=${page}&&sort=${sort}&&type_id=${type_id}&&res_type=${res_type}`,
+          url: convertToSecureUrl(`movie/search?keyword=${keyword}&&page=${page}&&sort=${sort}&&type_id=${type_id}&&res_type=${res_type}`),
         };
       },
       providesTags: (result, error, arg): any[] => [
@@ -45,29 +46,29 @@ export const searchApi = createApi({
     }),
 
     getAutocomplete: builder.query<any, { keyword: string }>({
-      query: ({ keyword }) => `movie/search_complete?keyword=${keyword}`,
+      query: ({ keyword }) => convertToSecureUrl(`movie/search_complete?keyword=${keyword}`),
       providesTags: ["Autocomplete"],
     }),
 
     getTags: builder.query<any, void>({
       query: () => {
-        return `/app/config`;
+        return convertToSecureUrl(`/app/config`);
       },
     }),
 
     getAds: builder.query<any, void>({
       query: () => {
-        return `/advert/config`;
+        return convertToSecureUrl(`/advert/config`);
       },
     }),
     getSearchLate: builder.query<any, void>({
       query: () => {
-        return "/movie/search_lately_words";
+        return convertToSecureUrl("/movie/search_lately_words");
       },
     }),
     getSearchRanking: builder.query<any, void>({
       query: () => {
-        return "/movie/search_ranking";
+        return convertToSecureUrl("/movie/search_ranking");
       },
     }),
   }),

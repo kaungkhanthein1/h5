@@ -7,6 +7,7 @@ import floatingScreen from "../../../assets/floatingScreen.png";
 import axios from "axios";
 import { VideoPlayerProps } from "../../../model/videoModel";
 import { useGetRecordQuery } from "../../profile/services/profileApi";
+import { convertToSecurePayload } from "../../../services/newEncryption";
 
 const VideoPlayer: React.FC<VideoPlayerProps> = ({
   videoUrl,
@@ -38,13 +39,13 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     try {
       await axios.post(
         `${process.env.REACT_APP_API_URL}/movie_play/report`,
-        {
+        convertToSecurePayload({
           movie_id: movieDetail.id, // Assuming movie_id is movie name
           episode_id: selectedEpisode?.episode_id,
           movie_from: selectedEpisode?.from_code,
           duration: Math.floor(duration), // Report in seconds
           current_time: Math.floor(currentTime), // Report in seconds
-        },
+        }),
         {
           headers: {
             Authorization: `Bearer ${token}`,

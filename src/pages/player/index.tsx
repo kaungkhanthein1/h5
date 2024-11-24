@@ -17,6 +17,7 @@ import {
   reportPlaybackProgress,
 } from "../../services/playerService";
 import NewAds from "../../components/NewAds";
+import { convertToSecureUrl } from "../../services/newEncryption";
 
 const DetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -43,7 +44,7 @@ const DetailPage: React.FC = () => {
   const fetchComments = async () => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/movie/comments/index?movie_id=${id}&page=${1}&pageSize=10`
+        convertToSecureUrl(`${process.env.REACT_APP_API_URL}/movie/comments/index?movie_id=${id}&page=${1}&pageSize=10`)
         // "http://localhost:3001/comments"
       );
       const data = await response.json();
