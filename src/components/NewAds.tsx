@@ -33,10 +33,10 @@ const NewAds: React.FC<NewAdsProps> = ({ section, fromMovie = false }) => {
     <div className={`${fromMovie ? '' : 'max-md:px-3 px-10'} flex flex-col justify-center`}>
       <div className="grid w-full grid-cols-5 justify-center items-center gap-2">
         {isLoading
-          ? Array.from({ length: 5 }).map((_, index) => (
-              <div className="flex flex-col items-center gap-[4px] animate-pulse">
+          ? Array.from({ length: 10 }).map((_, index) => (
+              <div className="flex flex-col items-center gap-[4px] animate-pulse mb-1">
                 <div className="w-[58px] h-[58px] bg-white/30 rounded-[4px]" />
-                <div className="w-12 h-3 text-white/30 rounded">小游戏</div>
+                {/* <div className="w-12 h-3 text-white/30 rounded">小游戏</div> */}
               </div>
             ))
           : cur && cur.length > 0 && cur?.map((item, index) => (
