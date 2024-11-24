@@ -345,7 +345,7 @@ const DetailSection: React.FC<DetailSectionProps> = ({
               </h2>
               <div className="flex items-center text-sm text-gray-400 mb-4">
                 <span className="text-orange-500 flex items-center">
-                  <img src={Fire} alt="" />
+                  <img src={rate} alt="" />
                   {movieDetail.popularity_score || 0}
                 </span>
                 <span className="mx-2">|</span>

@@ -156,6 +156,29 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     }, 3000);
   };
 
+
+  useEffect(() => {
+    // Attach event listeners for user activity
+    const player = document.getElementById("my-player");
+    if (player) {
+      player.addEventListener("mousemove", handleUserActivity);
+      player.addEventListener("keydown", handleUserActivity);
+      player.addEventListener("touchstart", handleUserActivity);
+    }
+
+    // Cleanup event listeners on unmount
+    return () => {
+      if (inactivityTimeout.current) {
+        clearTimeout(inactivityTimeout.current);
+      }
+      if (player) {
+        player.removeEventListener("mousemove", handleUserActivity);
+        player.removeEventListener("keydown", handleUserActivity);
+        player.removeEventListener("touchstart", handleUserActivity);
+      }
+    };
+  }, []);
+  
   return (
     <div id="my-player" className="relative w-full bg-black">
       {/* Back button */}
