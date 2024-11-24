@@ -70,7 +70,7 @@ export const login = async (
     // );
 
     const captchaResult = await axios.post(convertToSecureUrl(`${process.env.REACT_APP_API_URL}/user/check_captcha`),gg)
-    console.log(captchaResult)
+    // console.log(captchaResult)
 
     const captchaResponse = await captchaResult.data;
     let newCap: { data?: any } = decryptWithAes(captchaResponse) || {};
@@ -122,7 +122,7 @@ export const login = async (
     console.log(dataIsEncrypt,'gg')
 
     const resultText = await loginResponse.data;
-    console.log(resultText)
+    // console.log(resultText)
 
     // Step 5: Handle the response (decrypt if needed)
     if (!dataIsEncrypt) {
