@@ -7,7 +7,7 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import ProfileImg from "../../../assets/share/user.svg";
-import NoData from '../../../assets/nodata.svg';
+import NoData from "../../../assets/nodata.svg";
 import OptionIcon from "../../../assets/option.svg";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,7 +18,10 @@ import Popup from "./Popup";
 import ReportPopup from "./ReportPopup";
 import Loader from "../../../pages/search/components/Loader";
 import { useGetUserQuery } from "../../../pages/profile/services/profileApi";
-import { convertToSecureUrl } from "../../../services/newEncryption";
+import {
+  convertToSecurePayload,
+  convertToSecureUrl,
+} from "../../../services/newEncryption";
 
 const CommentComponent: React.FC<CommentProps> = ({
   movieId,
@@ -40,11 +43,11 @@ const CommentComponent: React.FC<CommentProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   // const user = useSelector((state: any) => state.user.user);
   const { data: userData } = useGetUserQuery(undefined);
-  const [ showDeleteConfirmation, setShowDeleteConfirmation ] = useState(false);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [deleteParams, setDeleteParams] = useState<any>(null);
   const [numberOfRow, setNumberOfRow] = useState<number>(1);
   const user = userData?.data;
-  console.log('user is=>', user);
+  console.log("user is=>", user);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -62,14 +65,16 @@ const CommentComponent: React.FC<CommentProps> = ({
   }, []);
 
   useEffect(() => {
-    window.scrollTo(0, 0)
+    window.scrollTo(0, 0);
   }, []);
   // Fetch comments
   const fetchComments = async () => {
     setIsLoading(true);
     try {
       const response = await fetch(
-        convertToSecureUrl(`${process.env.REACT_APP_API_URL}/movie/comments/index?movie_id=${movieId}&page=${page}&pageSize=10`)
+        convertToSecureUrl(
+          `${process.env.REACT_APP_API_URL}/movie/comments/index?movie_id=${movieId}&page=${page}&pageSize=10`
+        )
       );
       const data = await response.json();
 
@@ -121,7 +126,9 @@ const CommentComponent: React.FC<CommentProps> = ({
               "Content-Type": "application/json",
               Authorization: authorization,
             },
-            body: JSON.stringify({ comment_id: commentId }),
+            body: JSON.stringify(
+              convertToSecurePayload({ comment_id: commentId })
+            ),
           }
         );
         if (response.ok) {
@@ -193,7 +200,9 @@ const CommentComponent: React.FC<CommentProps> = ({
               "Content-Type": "application/json",
               Authorization: authorization,
             },
-            body: JSON.stringify({ is_reply: isReply, id }),
+            body: JSON.stringify(
+              convertToSecurePayload({ is_reply: isReply, id })
+            ),
           }
         );
         if (response.ok) {
@@ -255,7 +264,7 @@ const CommentComponent: React.FC<CommentProps> = ({
         );
 
         await response.json();
-        if(page === 1) {
+        if (page === 1) {
           fetchComments();
         } else {
           setPage(1);
@@ -553,7 +562,7 @@ const CommentComponent: React.FC<CommentProps> = ({
           <button
             onClick={() => dispatch(setAuthModel(true))}
             className="text-white w-full px-4 py-3 mx-2 rounded-md"
-            style={{background: '#f54000'}}
+            style={{ background: "#f54000" }}
           >
             登录后发布评论
           </button>

@@ -1,5 +1,8 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { convertToSecureUrl } from "../../../services/newEncryption";
+import {
+  convertToSecurePayload,
+  convertToSecureUrl,
+} from "../../../services/newEncryption";
 
 interface ChangeAvatarResponse {
   data: {
@@ -38,22 +41,24 @@ export const profileApi = createApi({
   endpoints: (builder) => ({
     getNotification: builder.query<any, void>({
       query: () => {
-        return `notice_v2/list`;
+        return convertToSecureUrl(`notice_v2/list`);
       },
     }),
     getUser: builder.query<any, void>({
       query: () => {
-        return `/user/info`;
+        return convertToSecureUrl(`/user/info`);
       },
     }),
     logOutUser: builder.mutation<void, void>({
-      query: () => ({
-        url: `/user/logout`,
-      }),
+      query: () => {
+        return convertToSecureUrl(`/user/logout`);
+      },
     }),
     getList: builder.query<any, { page: number; type_id: number }>({
       query: ({ page, type_id }) => {
-        return `/user/movie_collect/list?page=${page}&pageSize=${12}&type_id=${type_id}`;
+        return convertToSecureUrl(
+          `/user/movie_collect/list?page=${page}&pageSize=${12}&type_id=${type_id}`
+        );
       },
     }),
     collectMovie: builder.mutation<
@@ -63,40 +68,44 @@ export const profileApi = createApi({
       query: (movie) => ({
         url: `/movie/collect/action`,
         method: "POST",
-        body: {
-          state: movie?.is_collect ? 1 : 0,
-          movie_id: movie.movie_id,
-        },
+        body: JSON.stringify(
+          convertToSecurePayload({
+            state: movie?.is_collect ? 1 : 0,
+            movie_id: movie.movie_id,
+          })
+        ),
       }),
     }),
     deleteCollect: builder.mutation<void, { ids: string }>({
       query: (data) => ({
         url: `/user/movie_collect/delete`,
         method: "POST",
-        body: {
-          ids: data.ids,
-        },
+        body: JSON.stringify(
+          convertToSecurePayload({
+            ids: data.ids,
+          })
+        ),
       }),
     }),
     changeNickname: builder.mutation<void, { new_nickname: string }>({
       query: ({ new_nickname }) => ({
         url: `/user/change/nickname`,
         method: "POST",
-        body: { new_nickname },
+        body: JSON.stringify(convertToSecurePayload({ new_nickname })),
       }),
     }),
     createInvite: builder.mutation<void, { invite_code: string }>({
       query: ({ invite_code }) => ({
         url: `/user/enter_invitation_code`,
         method: "POST",
-        body: { invite_code },
+        body: JSON.stringify(convertToSecurePayload({ invite_code })),
       }),
     }),
     changeUsername: builder.mutation<void, { new_username: string }>({
       query: ({ new_username }) => ({
         url: `/user/change/username`,
         method: "POST",
-        body: { new_username },
+        body: JSON.stringify(convertToSecurePayload({ new_username })),
       }),
     }),
     changeEmail: builder.mutation<
@@ -106,10 +115,12 @@ export const profileApi = createApi({
       query: ({ new_email, email_code }) => ({
         url: `/user/change/email`,
         method: "POST",
-        body: {
-          new_email,
-          email_code,
-        },
+        body: JSON.stringify(
+          convertToSecurePayload({
+            new_email,
+            email_code,
+          })
+        ),
       }),
     }),
     changePhnumber: builder.mutation<
@@ -119,30 +130,35 @@ export const profileApi = createApi({
       query: ({ new_phone, sms_code }) => ({
         url: `/user/change/phone`,
         method: "POST",
-        body: {
-          new_phone,
-          sms_code,
-        },
+        body: JSON.stringify(
+          convertToSecurePayload({
+            new_phone,
+            sms_code,
+          })
+        ),
       }),
     }),
     sendCode: builder.query<
       any,
       { send_type: string; to: string; captcha: string }
     >({
-      query: ({ send_type, to, captcha }) => ({
-        url: `/user/get_code?send_type=${send_type}&to=${to}&captcha=${captcha}`,
-        method: "GET",
-      }),
+      query: ({ send_type, to, captcha }) => {
+        return convertToSecureUrl(
+          `/user/get_code?send_type=${send_type}&to=${to}&captcha=${captcha}`
+        );
+      },
     }),
 
     checkCaptcha: builder.mutation<any, { code: string; key: string }>({
       query: ({ code, key }) => ({
         url: `/user/check_captcha`,
         method: "POST",
-        body: {
-          code,
-          key,
-        },
+        body: JSON.stringify(
+          convertToSecurePayload({
+            code,
+            key,
+          })
+        ),
       }),
     }),
     changePassword: builder.mutation<
@@ -152,32 +168,38 @@ export const profileApi = createApi({
       query: ({ password, repassword }) => ({
         url: `/user/change/password`,
         method: "POST",
-        body: {
-          password,
-          repassword,
-        },
+        body: JSON.stringify(
+          convertToSecurePayload({
+            password,
+            repassword,
+          })
+        ),
       }),
     }),
     changeAvatar: builder.mutation<ChangeAvatarResponse, FormData>({
       query: (formData) => ({
         url: `/user/change/avatar`,
         method: "POST",
-        body: formData, // Passing the FormData directly
+        body: JSON.stringify(convertToSecurePayload(formData)), // Passing the FormData directly
       }),
     }),
     getSocial: builder.query<any, { type: string; action: string }>({
       query: ({ type, action }) => {
-        return `/user/get_social_login_url?type=${type}&action=${action}`;
+        return convertToSecureUrl(
+          `/user/get_social_login_url?type=${type}&action=${action}`
+        );
       },
     }),
     socialCallback: builder.query<any, { type: string; code: string }>({
       query: ({ type, code }) => ({
         url: `/user/social_login_callback`,
         method: "POST",
-        body: {
-          type,
-          code,
-        },
+        body: JSON.stringify(
+          convertToSecurePayload({
+            type,
+            code,
+          })
+        ),
       }),
     }),
     getRecord: builder.query<any, void>({
@@ -189,9 +211,11 @@ export const profileApi = createApi({
       query: (data) => ({
         url: `/user/playback/delete`,
         method: "POST",
-        body: {
-          ids: data.ids,
-        },
+        body: JSON.stringify(
+          convertToSecurePayload({
+            ids: data.ids,
+          })
+        ),
       }),
     }),
   }),

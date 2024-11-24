@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { showToast } from "../../../pages/profile/error/ErrorSlice";
 import { useDispatch } from "react-redux";
+import { convertToSecurePayload } from "../../../services/newEncryption";
 
 interface FeedbackComponentProps {
   onClose: () => void;
@@ -19,7 +20,7 @@ const FeedbackComponent: React.FC<FeedbackComponentProps> = ({
   onActionComplete,
   isLoading,
   setIsLoading,
-  height
+  height,
 }) => {
   const [selectedIssue, setSelectedIssue] = useState<number>(0);
   const [description, setDescription] = useState<string>("");
@@ -57,7 +58,6 @@ const FeedbackComponent: React.FC<FeedbackComponentProps> = ({
     setSelectedIssue(issue);
   };
 
-
   useEffect(() => {
     const handleClickOutside = (event: any) => {
       if (modalRef.current && !modalRef.current.contains(event.target)) {
@@ -93,11 +93,13 @@ const FeedbackComponent: React.FC<FeedbackComponentProps> = ({
               "Content-Type": "application/json",
               Authorization: authorization,
             },
-            body: JSON.stringify({
-              extra: movieId,
-              type_id: selectedIssue,
-              content: description,
-            }),
+            body: JSON.stringify(
+              convertToSecurePayload({
+                extra: movieId,
+                type_id: selectedIssue,
+                content: description,
+              })
+            ),
           }
         );
 
@@ -122,7 +124,8 @@ const FeedbackComponent: React.FC<FeedbackComponentProps> = ({
     <div className="fixed inset-0 z-50 flex items-end justify-center bottom-0">
       <div
         className="bg-background backdrop-blur-md w-full max-w-md rounded-xl p-4 text-white"
-        style={{ height: height }} ref={modalRef}
+        style={{ height: height }}
+        ref={modalRef}
       >
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-bold">反馈求片</h2>

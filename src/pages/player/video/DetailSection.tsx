@@ -18,8 +18,11 @@ import AdsSection from "./AdsSection";
 import { DetailSectionProps } from "../../../model/videoModel";
 import { useGetListQuery } from "../../../pages/profile/services/profileApi";
 import NewAds from "../../../components/NewAds";
-import Fire from '../../../assets/Fire.png';
-import { convertToSecureUrl } from "../../../services/newEncryption";
+import Fire from "../../../assets/Fire.png";
+import {
+  convertToSecurePayload,
+  convertToSecureUrl,
+} from "../../../services/newEncryption";
 
 const DetailSection: React.FC<DetailSectionProps> = ({
   movieDetail,
@@ -28,7 +31,7 @@ const DetailSection: React.FC<DetailSectionProps> = ({
   activeTab,
   setActiveTab,
   setCommentCount,
-  commentCount
+  commentCount,
 }) => {
   const [showModal, setShowModal] = useState(false); // For triggering modal
   const dispatch = useDispatch();
@@ -88,10 +91,12 @@ const DetailSection: React.FC<DetailSectionProps> = ({
             "Content-Type": "application/json",
             Authorization: authorization,
           },
-          body: JSON.stringify({
-            movie_id: id,
-            state: isStarred ? 0 : 1,
-          }),
+          body: JSON.stringify(
+            convertToSecurePayload({
+              movie_id: id,
+              state: isStarred ? 0 : 1,
+            })
+          ),
         }
       );
       if (response.ok) {
@@ -181,7 +186,7 @@ const DetailSection: React.FC<DetailSectionProps> = ({
   }, []);
 
   useEffect(() => {
-    window.scrollTo(0, 0)
+    window.scrollTo(0, 0);
   }, []);
 
   useEffect(() => {
@@ -307,14 +312,17 @@ const DetailSection: React.FC<DetailSectionProps> = ({
         {activeTab === "tab-2" ? (
           <div id="tab-2" className="block">
             {/* Comment section or other content */}
-            <CommentComponent movieId={id} lowerDivHeight={lowerDivHeight} setCommentCount={setCommentCount} 
-            commentCount={commentCount}/>
+            <CommentComponent
+              movieId={id}
+              lowerDivHeight={lowerDivHeight}
+              setCommentCount={setCommentCount}
+              commentCount={commentCount}
+            />
           </div>
         ) : (
           <div className="mt-4">
             {/* {adsData && <AdsSection adsDataList={adsData?.player_episode_up} />} */}
-            <NewAds section={"player_episode_up"} fromMovie={true}/>
-
+            <NewAds section={"player_episode_up"} fromMovie={true} />
           </div>
         )}
       </div>
@@ -322,7 +330,8 @@ const DetailSection: React.FC<DetailSectionProps> = ({
       {/* Modal for sharing */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-end">
-          <div ref={modalRef}
+          <div
+            ref={modalRef}
             className="bg-background backdrop-blur-md w-full max-w-md bottom-0 rounded-lg p-6 text-white overflow-y-auto"
             style={{ height: `${lowerDivHeight}px` }}
           >
@@ -362,7 +371,7 @@ const DetailSection: React.FC<DetailSectionProps> = ({
                 <div className="flex space-x-4">
                   {/* Director */}
                   <span>
-                  导演{" "}
+                    导演{" "}
                     <span className="text-white">
                       {movieDetail?.members?.find((member) => member.type === 3)
                         ?.name || "Unknown"}
@@ -370,7 +379,7 @@ const DetailSection: React.FC<DetailSectionProps> = ({
                   </span>
                   {/* Screenwriter */}
                   <span>
-                  编剧{" "}
+                    编剧{" "}
                     <span className="text-white">
                       {movieDetail?.members?.find((member) => member.type === 2)
                         ?.name || "Unknown"}
@@ -379,7 +388,7 @@ const DetailSection: React.FC<DetailSectionProps> = ({
                 </div>
                 {/* Actors */}
                 <div className="mt-2">
-                  <span>演员{" "}</span>
+                  <span>演员 </span>
                   {movieDetail?.members
                     ?.filter((member) => member.type === 1)
                     .map((actor, index) => (

@@ -85,7 +85,7 @@ const Captch: React.FC<{
 
       // Manually redirect to the home page after login
     } catch (err) {
-      setError("Login failed");
+      dispatch(showToast({ message: '图形验证码错误"', type: "error" }));
       console.error("Login error:", err);
     }
   };

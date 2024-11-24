@@ -108,7 +108,7 @@ function convertUrlToFormData(url: string): Record<string, any> {
 }
 
 function createSecureUrl(base: string, formData: Record<string, any>): string {
-  const publicKey = process.env.REACT_APP_PUBLIC_KEY_LOGIN;
+  const publicKey = process.env.REACT_APP_PUBLIC_KEY;
 
   if (!publicKey) {
     throw new Error("Public key is not defined");
@@ -132,7 +132,7 @@ export function convertToSecureUrl(apiUrl: string): string {
 }
 
 export function convertToSecurePayload(formData: any): any {
-  const publicKey = process.env.REACT_APP_PUBLIC_KEY_LOGIN;
+  const publicKey = process.env.REACT_APP_PUBLIC_KEY;
 
   if (!publicKey) {
     throw new Error("Public key is not defined");
