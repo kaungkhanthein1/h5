@@ -125,6 +125,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       // Report progress before going back
       await reportProgress(playerRef.current.currentTime, playerRef.current.duration);
       playerRef.current.pause();
+      playerRef.current.destroy();
       refetch();
     }
     refetch();
@@ -141,43 +142,43 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     }
   };
 
-  const handleUserActivity = () => {
-    // Show the controls when there's activity
-    setIsControlsVisible(true);
+  // const handleUserActivity = () => {
+  //   // Show the controls when there's activity
+  //   setIsControlsVisible(true);
 
-    // Clear any existing timeout
-    if (inactivityTimeout.current) {
-      clearTimeout(inactivityTimeout.current);
-    }
+  //   // Clear any existing timeout
+  //   if (inactivityTimeout.current) {
+  //     clearTimeout(inactivityTimeout.current);
+  //   }
 
-    // Set a timeout to hide controls after 3 seconds of inactivity
-    inactivityTimeout.current = window.setTimeout(() => {
-      setIsControlsVisible(false);
-    }, 3000);
-  };
+  //   // Set a timeout to hide controls after 3 seconds of inactivity
+  //   inactivityTimeout.current = window.setTimeout(() => {
+  //     setIsControlsVisible(false);
+  //   }, 3000);
+  // };
 
 
-  useEffect(() => {
-    // Attach event listeners for user activity
-    const player = document.getElementById("my-player");
-    if (player) {
-      player.addEventListener("mousemove", handleUserActivity);
-      player.addEventListener("keydown", handleUserActivity);
-      player.addEventListener("touchstart", handleUserActivity);
-    }
+  // useEffect(() => {
+  //   // Attach event listeners for user activity
+  //   const player = document.getElementById("my-player");
+  //   if (player) {
+  //     player.addEventListener("mousemove", handleUserActivity);
+  //     player.addEventListener("keydown", handleUserActivity);
+  //     player.addEventListener("touchstart", handleUserActivity);
+  //   }
 
-    // Cleanup event listeners on unmount
-    return () => {
-      if (inactivityTimeout.current) {
-        clearTimeout(inactivityTimeout.current);
-      }
-      if (player) {
-        player.removeEventListener("mousemove", handleUserActivity);
-        player.removeEventListener("keydown", handleUserActivity);
-        player.removeEventListener("touchstart", handleUserActivity);
-      }
-    };
-  }, []);
+  //   // Cleanup event listeners on unmount
+  //   return () => {
+  //     if (inactivityTimeout.current) {
+  //       clearTimeout(inactivityTimeout.current);
+  //     }
+  //     if (player) {
+  //       player.removeEventListener("mousemove", handleUserActivity);
+  //       player.removeEventListener("keydown", handleUserActivity);
+  //       player.removeEventListener("touchstart", handleUserActivity);
+  //     }
+  //   };
+  // }, []);
   
   return (
     <div id="my-player" className="relative w-full bg-black">

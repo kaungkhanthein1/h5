@@ -10,33 +10,35 @@ import { convertToSecureUrl } from "../../services/newEncryption";
 
 const Tab2 = () => {
   const [currentIndex, setCurrentIndex] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   const [movieData, setMovieData] = useState([]);
   const activeWeek = useSelector((state: any) => state.explore.activeWeek);
   const dispatch = useDispatch();
   // console.log(activeWeek, "active week");
 
-  const getMovieData = async (week: any) => {
-    // Retrieve settings from localStorage
-    const settings = JSON.parse(
-      localStorage.getItem("movieAppSettings") || "{}"
-    );
+  // const getMovieData = async (week: any) => {
+  //   // Retrieve settings from localStorage
+  //   const settings = JSON.parse(
+  //     localStorage.getItem("movieAppSettings") || "{}"
+  //   );
 
-    // Set the X-Client-Setting header dynamically
-    const headers = {
-      "X-Client-Setting": JSON.stringify({
-        "pure-mode": settings.filterToggle ? 1 : 0,
-      }),
-    };
-    setIsLoading(true);
-    const { data } = await axios.get(
-      convertToSecureUrl(`${process.env.REACT_APP_API_URL}/movie/weekly?week_day=${week}`),
-      { headers }
-    );
-    setMovieData(data?.data);
-    setIsLoading(false);
-    // console.log(data);
-  };
+  //   // Set the X-Client-Setting header dynamically
+  //   const headers = {
+  //     "X-Client-Setting": JSON.stringify({
+  //       "pure-mode": settings.filterToggle ? 1 : 0,
+  //     }),
+  //   };
+  //   setIsLoading(true);
+  //   const { data } = await axios.get(
+  //     convertToSecureUrl(
+  //       `${process.env.REACT_APP_API_URL}/movie/weekly?week_day=${week}`
+  //     ),
+  //     { headers }
+  //   );
+  //   setMovieData(data?.data);
+  //   setIsLoading(false);
+  //   // console.log(data);
+  // };
 
   const today = new Date();
   const currentDate = today.getDate(); // Get only the day of the month
@@ -65,6 +67,9 @@ const Tab2 = () => {
 
   const weekdays = ["一", "二", "三", "四", "五", "六", "日"];
 
+  const { data, refetch, isFetching, isLoading } = useGetWeeklyMoviesQuery(activeWeek);
+
+  console.log('isLoading is+>,', isFetching);
   useEffect(() => {
     let index = -1;
     for (let i = 0; i < currentWeekDates.length; i++) {
@@ -75,12 +80,13 @@ const Tab2 = () => {
     }
     dispatch(setActiveWeek(index + 1));
     setCurrentIndex(index + 1);
-    getMovieData(index + 1);
+    // getMovieData(index + 1);
+    refetch();
   }, [currentDate]);
 
-  useEffect(() => {
-    getMovieData(activeWeek);
-  }, [activeWeek]);
+  // useEffect(() => {
+  //   getMovieData(activeWeek);
+  // }, [activeWeek]);
 
   // console.log(currentIndex, "ci");
 
@@ -129,13 +135,13 @@ const Tab2 = () => {
           ))}
         </div>
       </nav>
-      {isLoading ? (
+      {isFetching ? (
         <div className="flex justify-center items-center mt-10">
           <Loader />
         </div>
       ) : (
         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2 px-3">
-          {movieData?.map((list: any) => (
+          {data?.data?.map((list: any) => (
             <Link
               to={`/player/${list?.id}`}
               key={list?.id}
