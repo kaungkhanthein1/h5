@@ -4,6 +4,7 @@ import MovieCard from "../../components/home/MovieCard";
 import backArrow from "../../assets/back.svg";
 import Loader from "../search/components/Loader";
 import NewAds from "../../components/NewAds";
+import { convertToSecureUrl } from "../../services/newEncryption";
 
 const Detail = () => {
   const [details, setDetails] = useState<any>({});
@@ -14,7 +15,7 @@ const Detail = () => {
   const getDetails = async () => {
     setIsLoading(true);
     const res = await fetch(
-      `${process.env.REACT_APP_API_URL}/movie/topic/${id}`
+      convertToSecureUrl(`${process.env.REACT_APP_API_URL}/movie/topic/${id}`)
     );
     const data = await res.json();
     setDetails(data?.data);
