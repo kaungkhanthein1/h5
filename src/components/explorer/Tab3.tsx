@@ -9,7 +9,7 @@ const Tab3 = () => {
   return (
     <>
       {isLoading ? (
-        <div className="flex items-center justify-center h-[70vh]">
+        <div className="flex items-center justify-center h-[90vh]">
           <Loader />
         </div>
       ) : (
