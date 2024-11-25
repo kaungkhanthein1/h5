@@ -211,7 +211,7 @@ export const profileApi = createApi({
       query: (formData) => ({
         url: `/user/change/avatar`,
         method: "POST",
-        body: convertToSecurePayload(formData), // Passing the FormData directly
+        body: formData, // Passing the FormData directly
       }),
     }),
     getSocial: builder.query<any, { type: string; action: string }>({

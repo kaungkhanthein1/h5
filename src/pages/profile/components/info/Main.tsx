@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef, startTransition } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   useChangeAvatarMutation,
   useGetUserQuery,
-} from "../../services/profileApi"; // Your API
-import { setUser } from "../slice/UserSlice";
+} from "../../services/profileApi";
+
 import ImageWithPlaceholder from "./ImageWithPlaceholder";
 import { showToast } from "../../error/ErrorSlice";
 import { setAuthModel } from "../../../../features/login/ModelSlice";
@@ -17,19 +17,46 @@ const Main = () => {
   const token = parsedLoggedIn?.data?.access_token;
 
   const { data: userData, refetch } = useGetUserQuery(undefined);
-
   const user = userData?.data;
 
   const navigate = useNavigate();
 
-  // const user = useSelector((state: any) => state.user.user);
   const [showBottomSheet, setShowBottomSheet] = useState(false);
-
-  const [changeAvatar] = useChangeAvatarMutation(); // RTK mutation for avatar
+  const [changeAvatar] = useChangeAvatarMutation();
 
   const bottomSheetRef = useRef<HTMLDivElement | null>(null);
 
-  // Function to handle avatar submission
+  // Check if running on iOS
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+
+  // Request camera and file permissions
+  const requestPermissions = async () => {
+    try {
+      if (isIOS) {
+        // Explicit check for navigator.mediaDevices
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          throw new Error("Camera or file access is not supported on iOS.");
+        }
+
+        // Try accessing camera
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+        });
+
+        stream.getTracks().forEach((track) => track.stop()); // Close the stream
+      } else {
+        console.log("Permissions are not required on non-iOS devices.");
+      }
+    } catch (error) {
+      dispatch(
+        showToast({
+          message: "无法获取相机或文件权限。",
+          type: "error",
+        })
+      );
+    }
+  };
+
   const handleSubmit = async (file: any) => {
     if (!file) {
       dispatch(
@@ -66,7 +93,6 @@ const Main = () => {
     }
   };
 
-  // Handle file input change (from gallery)
   const handleFileInputChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -77,19 +103,18 @@ const Main = () => {
     closeBottomSheet();
   };
 
-  // Function to open the bottom sheet and show the overlay after animation
-  const openBottomSheet = () => {
-    setShowBottomSheet(true); // Start the animation by setting the state
+  const openBottomSheet = async () => {
+    await requestPermissions(); // Request permissions before opening bottom sheet
+    setShowBottomSheet(true);
 
     setTimeout(() => {
       const overlay = document.querySelector(".overlay_image");
       if (overlay) {
-        overlay.classList.remove("hidden"); // Show the overlay after the animation
+        overlay.classList.remove("hidden");
       }
-    }, 0); // Duration should match the CSS animation duration (0.3s)
+    }, 0);
   };
 
-  // Function to close the bottom sheet with animation and hide the overlay
   const closeBottomSheet = () => {
     const bottomSheet = bottomSheetRef.current;
     const overlay = document.querySelector(".overlay_image");
@@ -97,14 +122,13 @@ const Main = () => {
     if (bottomSheet) {
       bottomSheet.classList.remove("slide-in");
       bottomSheet.classList.add("slide-out");
-      overlay?.classList.add("hidden"); // Hide the overlay
-      setShowBottomSheet(false); // Close the bottom sheet after animation completes
+      overlay?.classList.add("hidden");
+      setShowBottomSheet(false);
     }
   };
 
   const handleInviteClick = () => {
     if (!token) {
-      // If not logged in, open the login modal
       startTransition(() => {
         dispatch(setAuthModel(true));
       });
@@ -119,7 +143,6 @@ const Main = () => {
       } else {
         navigate("/invite");
       }
-      // If logged in, redirect to the favorites page
     }
   };
 
@@ -135,7 +158,6 @@ const Main = () => {
             <div className="flex gap-1 max-w-[230px] flex-col ">
               <h1 className="info-text">头像设置</h1>
             </div>
-
             <div>
               <div className="profile-p">
                 {user?.avatar ? (
@@ -209,6 +231,7 @@ const Main = () => {
               </div>
             </div>
           </div>
+
           <div className="info-main-first mt-3">
             <a
               className="cursor-pointer info-first1"
@@ -237,8 +260,8 @@ const Main = () => {
                 </svg>
               </div>
             </a>
-            </div>
-            <div className="info-main-first mt-3">
+          </div>
+          <div className="info-main-first mt-3">
             <Link to={"/nickname"} className="info-first1">
               <div className="flex gap-1 max-w-[230px] ">
                 <h1 className="info-text">昵称</h1>
@@ -285,29 +308,6 @@ const Main = () => {
             </Link>
           </div>
           <div className="info-main-first mt-3">
-            <Link to={"/update_phone"} className="info-first1">
-              <div className="flex gap-1 max-w-[230px] ">
-                <h1 className="info-text">绑定电话号码</h1>
-              </div>
-              <div className="flex items-center gap-1">
-                <p className="info-main-text">
-                  {user?.phone ? user?.phone : "Not yet"}
-                </p>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="6"
-                  height="8"
-                  viewBox="0 0 6 8"
-                  fill="none"
-                >
-                  <path
-                    d="M0.778157 0.156564C0.836612 0.106935 0.906056 0.0675604 0.982509 0.0406946C1.05896 0.0138289 1.14092 0 1.2237 0C1.30647 0 1.38843 0.0138289 1.46488 0.0406946C1.54134 0.0675604 1.61078 0.106935 1.66924 0.156564L5.85277 3.69938C5.89944 3.73882 5.93647 3.78567 5.96173 3.83724C5.987 3.88882 6 3.94411 6 3.99994C6 4.05578 5.987 4.11107 5.96173 4.16264C5.93647 4.21422 5.89944 4.26107 5.85277 4.30051L1.66924 7.84332C1.42255 8.05223 1.02484 8.05223 0.778157 7.84332C0.531474 7.63442 0.531474 7.29762 0.778157 7.08872L4.42302 3.99781L0.773123 0.906907C0.531475 0.702268 0.531474 0.361203 0.778157 0.156564Z"
-                    fill="white"
-                  />
-                </svg>
-              </div>
-            </Link>
-
             <Link to={"/update_email"} className="info-first1">
               <div className="flex gap-1 max-w-[230px] flex-col ">
                 <h1 className="info-text">绑定邮箱</h1>
@@ -330,6 +330,33 @@ const Main = () => {
                 </svg>
               </div>
             </Link>
+            <Link to={"/update_phone"} className="info-first1">
+              <div className="flex gap-1 max-w-[230px] ">
+                <h1 className="info-text">绑定电话号码</h1>
+              </div>
+              <div className="flex items-center gap-1">
+                <p className="info-main-text">
+                  {user?.phone
+                    ? user?.phone !== "0"
+                      ? user?.phone
+                      : "Not yet"
+                    : "Not yet"}
+                </p>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="6"
+                  height="8"
+                  viewBox="0 0 6 8"
+                  fill="none"
+                >
+                  <path
+                    d="M0.778157 0.156564C0.836612 0.106935 0.906056 0.0675604 0.982509 0.0406946C1.05896 0.0138289 1.14092 0 1.2237 0C1.30647 0 1.38843 0.0138289 1.46488 0.0406946C1.54134 0.0675604 1.61078 0.106935 1.66924 0.156564L5.85277 3.69938C5.89944 3.73882 5.93647 3.78567 5.96173 3.83724C5.987 3.88882 6 3.94411 6 3.99994C6 4.05578 5.987 4.11107 5.96173 4.16264C5.93647 4.21422 5.89944 4.26107 5.85277 4.30051L1.66924 7.84332C1.42255 8.05223 1.02484 8.05223 0.778157 7.84332C0.531474 7.63442 0.531474 7.29762 0.778157 7.08872L4.42302 3.99781L0.773123 0.906907C0.531475 0.702268 0.531474 0.361203 0.778157 0.156564Z"
+                    fill="white"
+                  />
+                </svg>
+              </div>
+            </Link>
+
             {/* <Link to={"/bind"} className="info-first1">
               <div className="flex gap-1 max-w-[230px] flex-col ">
                 <h1 className="info-text">绑定快捷登录 </h1>
@@ -395,10 +422,9 @@ const Main = () => {
                 onClick={() => document.getElementById("cameraInput")?.click()}
               >
                 拍照
-              </button>{" "}
+              </button>
               <button
                 className="bottom-sheet-option text-[#717173]"
-                style={{ color: "#717173" }}
                 onClick={closeBottomSheet}
               >
                 取消
@@ -406,7 +432,6 @@ const Main = () => {
             </div>
           </div>
 
-          {/* Hidden file input for gallery */}
           <input
             id="fileInput"
             type="file"
@@ -414,7 +439,6 @@ const Main = () => {
             style={{ display: "none" }}
             onChange={handleFileInputChange}
           />
-          {/* Hidden file input for camera */}
           <input
             id="cameraInput"
             type="file"
