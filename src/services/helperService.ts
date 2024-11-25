@@ -3,28 +3,30 @@ import { getAdsData, getconfigData } from "./playerService";
 import { decryptWithAes } from "./newEncryption";
 
 export const useGetHeaderTopicsQuery = () => {
-  const [configData, setConfigData] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isFetching, setIsFetching] = useState<boolean>(false);
+  const [data, setData] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<any>(null);
+  const [isFetching, setIsFetching] = useState<boolean>(false);
 
   const fetchHeaderTopics = async () => {
-    setIsFetching(true);
     try {
-      const response = await getconfigData();
-
-      // console.log("response is=.", response);
-      if (response) {
-        const data = await decryptWithAes(response);
-        setConfigData(data);
+      const cachedData = localStorage.getItem('headerTopics');
+      if (cachedData) {
+        setData(JSON.parse(cachedData));
+        setIsLoading(false);
+        return;
       }
-      setError(null);
+
+      const response = await getconfigData();
+      const data = await decryptWithAes(response);
+
+      localStorage.setItem('headerTopics', JSON.stringify(data));
+      setData(data);
     } catch (err) {
       console.error("Failed to fetch header topics:", err);
       setError(err);
     } finally {
       setIsLoading(false);
-      setIsFetching(false);
     }
   };
 
@@ -32,12 +34,11 @@ export const useGetHeaderTopicsQuery = () => {
     fetchHeaderTopics();
   }, []);
 
-  // console.log("configData is=>", configData);
   return {
-    data: configData,
+    data,
     isLoading,
-    isFetching,
     error,
+    isFetching,
     refetch: fetchHeaderTopics,
   };
 };
@@ -51,10 +52,17 @@ export const useGetAdsQuery = () => {
   const fetchAdsTopics = async () => {
     setIsFetching(true);
     try {
+      const cachedData = localStorage.getItem('AdsQuery');
+      if (cachedData) {
+        setConfigData(JSON.parse(cachedData));
+        setIsLoading(false);
+        return;
+      }
       const response = await getAdsData();
 
       if (response) {
         const data = await decryptWithAes(response);
+        localStorage.setItem('AdsQuery', JSON.stringify(data));
         setConfigData(data);
       }
       setError(null);
