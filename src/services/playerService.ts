@@ -63,6 +63,12 @@ export const getEpisodesBySource = async (
   }
 };
 
+const getToken = () => {
+  const isLoggedIn = localStorage.getItem("authToken");
+  const parsedLoggedIn = isLoggedIn ? JSON.parse(isLoggedIn) : null;
+  return parsedLoggedIn?.data?.access_token;
+};
+
 export const reportPlaybackProgress = async (
   movieId: string,
   episodeId: string,
@@ -70,6 +76,8 @@ export const reportPlaybackProgress = async (
   duration: number,
   currentTime: number
 ) => {
+  const token = getToken();
+  if (!token) return;
   try {
     const response = await api.post(
       "/movie_play/report",
