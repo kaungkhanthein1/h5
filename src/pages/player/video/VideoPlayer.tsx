@@ -59,7 +59,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   useEffect(() => {
     let hls: Hls | null = null;
-  
+
     const initializePlayer = () => {
       if (videoElementRef.current && videoUrl) {
         const art = new Artplayer({
@@ -74,13 +74,13 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
             playsInline: true,
           },
         });
-  
+
         // Use Hls.js for HLS streams
         if (Hls.isSupported() && videoUrl.includes(".m3u8")) {
           hls = new Hls();
           hls.loadSource(videoUrl);
           hls.attachMedia(art.video);
-  
+
           // Handle HLS errors
           hls.on(Hls.Events.ERROR, (_, data) => {
             if (data.fatal) {
@@ -91,28 +91,28 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         } else if (art.video.canPlayType("application/vnd.apple.mpegurl")) {
           art.video.src = videoUrl; // For Safari and iOS
         }
-  
+
         // Adjust video ratio based on the video's actual dimensions
         art.once("video:loadedmetadata", () => {
           const videoWidth = art.video.videoWidth;
           const videoHeight = art.video.videoHeight;
           setVideoRatio(videoHeight / videoWidth); // Set the dynamic aspect ratio
-          setReHeight(videoWidth < videoHeight)
+          setReHeight(videoWidth < videoHeight);
         });
-  
+
         // Set resume time if available
         art.once("ready", () => {
           if (resumeTime > 0) {
             art.currentTime = resumeTime;
           }
         });
-  
+
         playerRef.current = art;
       }
     };
-  
+
     initializePlayer();
-  
+
     return () => {
       // Clean up HLS and ArtPlayer
       if (hls) {
@@ -127,7 +127,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       }
     };
   }, [videoUrl, resumeTime]);
-  
+
   const handleBack = async () => {
     if (playerRef.current) {
       // Report progress before navigating back
@@ -140,7 +140,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     }
     onBack();
   };
-  
 
   const handlePiP = () => {
     if (document.pictureInPictureEnabled && playerRef.current) {
@@ -167,7 +166,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     }, 3000);
   };
 
-
   useEffect(() => {
     // Attach event listeners for user activity
     const player = document.getElementById("my-player");
@@ -189,65 +187,70 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       }
     };
   }, []);
-  
-  useEffect(() => {
-    const handleScroll = () => {
-      const playerElement = videoElementRef.current;
-      if (!playerElement) return;
 
-      const rect = playerElement.getBoundingClientRect();
-      console.log('rect top is=>', rect);
-      // const isOutOfView = rect.top < 0;
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     const playerElement = videoElementRef.current;
+  //     if (!playerElement) return;
 
-      // Minimize player when scrolled out of view
-      // setIsMinimized(isOutOfView);
-    };
+  //     const rect = playerElement.getBoundingClientRect();
+  //     console.log('rect top is=>', rect);
+  //     // const isOutOfView = rect.top < 0;
 
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+  //     // Minimize player when scrolled out of view
+  //     // setIsMinimized(isOutOfView);
+  //   };
+
+  //   window.addEventListener("scroll", handleScroll);
+  //   return () => {
+  //     window.removeEventListener("scroll", handleScroll);
+  //   };
+  // }, []);
 
   return (
-    <div id="my-player" className={`relative w-full bg-black ${reHeight ? 'h-[40vh]' : ''}`}>
+    <div
+      id="my-player"
+      className={`relative w-full bg-black ${reHeight ? "h-[40vh]" : ""}`}
+    >
       {/* Back button */}
-      {isControlsVisible && 
-      <>
-      <div className="absolute top-0 left-0 p-4 z-50">
-        <button onClick={handleBack} className="text-white flex">
-        <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-            >
-              <path
-                d="M7.828 11H20V13H7.828L13.192 18.364L11.778 19.778L4 12L11.778 4.22198L13.192 5.63598L7.828 11Z"
-                fill="white"
-              />
-            </svg>
-          {selectedEpisode?.episode_name}
-        </button>
-      </div>
-      <div className="absolute top-0 right-0 p-4 z-50">
-        <button className="text-white" onClick={handlePiP}>
-          <img src={floatingScreen} alt="PiP" className="h-5 w-5" />
-        </button>
-      </div>
-      </>
-      }
+      {isControlsVisible && (
+        <>
+          <div className="absolute top-0 left-0 p-4 z-50">
+            <button onClick={handleBack} className="text-white flex">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+              >
+                <path
+                  d="M7.828 11H20V13H7.828L13.192 18.364L11.778 19.778L4 12L11.778 4.22198L13.192 5.63598L7.828 11Z"
+                  fill="white"
+                />
+              </svg>
+              {selectedEpisode?.episode_name}
+            </button>
+          </div>
+          <div className="absolute top-0 right-0 p-4 z-50">
+            <button className="text-white" onClick={handlePiP}>
+              <img src={floatingScreen} alt="PiP" className="h-5 w-5" />
+            </button>
+          </div>
+        </>
+      )}
 
       {/* Video element wrapper */}
       <div
-        className={`relative w-full ${reHeight ? 'h-[40vh]' : ''}`}
+        className={`relative w-full ${reHeight ? "h-[40vh]" : ""}`}
         style={{ paddingTop: `${videoRatio * 100}%` }}
       >
         {/* Video element */}
         <div
           ref={videoElementRef}
-          className={`absolute top-0 left-0 w-full ${reHeight ? 'h-[40vh]' : 'h-full'}`}
+          className={`absolute top-0 left-0 w-full ${
+            reHeight ? "h-[40vh]" : "h-full"
+          }`}
         ></div>
       </div>
     </div>

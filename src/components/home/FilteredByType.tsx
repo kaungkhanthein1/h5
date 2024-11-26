@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import nodata from "../../assets/nodata.png";
-
-import { useGetHeaderTopicsQuery } from "../../services/helperService";
-
-import Movies from "./Movies";
 import axios from "axios";
 import MovieCard from "./MovieCard";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,8 +13,8 @@ import {
   setYear,
   setSortName,
 } from "../../pages/home/slice/HomeSlice";
-import NewAds from "../NewAds";
 import { convertToSecureUrl } from "../../services/newEncryption";
+import { useGetFilteredDataQuery } from "../../pages/home/services/homeApi";
 
 const FilteredByType = () => {
   const activeTab = useSelector((state: any) => state.home.activeTab);
@@ -28,7 +24,7 @@ const FilteredByType = () => {
   const [pageSize, setPageSize] = useState(9);
   const [page, setPage] = useState(1);
   const [page2, setPage2] = useState(2);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   const sort = useSelector((state: any) => state.home.sort);
   const sortName = useSelector((state: any) => state.home.sortName);
   const classData = useSelector((state: any) => state.home.class);
@@ -36,42 +32,55 @@ const FilteredByType = () => {
   const year = useSelector((state: any) => state.home.year);
   const [nomoredata, setNomoredata] = useState(false);
   const dispatch = useDispatch();
-  const {
-    data: configData,
-    isLoading: isloader,
-    isFetching,
-  } = useGetHeaderTopicsQuery();
-  const filteredTags: any = configData?.data?.movie_screen?.filter?.filter(
-    (data: any) => data?.id === activeTab
-  );
 
-  const getMoviesByType = async (id: any) => {
-    setIsLoading(true);
-    try {
-      const { data } = await axios.get(
-        convertToSecureUrl(`${process.env.REACT_APP_API_URL}/movie/screen/list?type_id=${id}&&sort=${sort}&&class=${classData}&&area=${area}&&year=${year}&&pageSize=${pageSize}&&page=${page}`)
-      );
-      if (data?.data?.list?.length >= 0) {
-        setIsLoading(false);
-      } else {
-        setIsLoading(false);
-        setNomoredata(true);
-      }
-      setMovieData(data?.data?.list);
-      setTotalPage(data?.data?.total);
-      if (data?.data?.total > page) setHasMore(true);
-    } catch (err) {
-      console.log("err is=>", err);
+  const { data, isLoading, isFetching } = useGetFilteredDataQuery({
+    id: activeTab,
+    sort,
+    classData,
+    area,
+    year,
+    page,
+    pageSize,
+  });
+  console.log(data);
+  useEffect(() => {
+    if (data?.data?.list?.length) {
+      setMovieData(data.data.list);
     }
-  };
+  }, [data]);
+  // const fetchData = () => {};
+
+  // const getMoviesByType = async (id: any) => {
+  //   setIsLoading(true);
+  //   try {
+  //     const { data } = await axios.get(
+  //       convertToSecureUrl(
+  //         `${process.env.REACT_APP_API_URL}/movie/screen/list?type_id=${id}&&sort=${sort}&&class=${classData}&&area=${area}&&year=${year}&&pageSize=${pageSize}&&page=${page}`
+  //       )
+  //     );
+  //     if (data?.data?.list?.length >= 0) {
+  //       setIsLoading(false);
+  //     } else {
+  //       setIsLoading(false);
+  //       setNomoredata(true);
+  //     }
+  //     setMovieData(data?.data?.list);
+  //     setTotalPage(data?.data?.total);
+  //     if (data?.data?.total > page) setHasMore(true);
+  //   } catch (err) {
+  //     console.log("err is=>", err);
+  //   }
+  // };
 
   const fetchData = async () => {
     setPage2((prev) => prev + 1);
     const { data } = await axios.get(
-      convertToSecureUrl(`${process.env.REACT_APP_API_URL}/movie/screen/list?type_id=${activeTab}&&sort=${sort}&&class=${classData}&&area=${area}&&year=${year}&&pageSize=${pageSize}&&page=${page2}`)
+      convertToSecureUrl(
+        `${process.env.REACT_APP_API_URL}/movie/screen/list?type_id=${activeTab}&&sort=${sort}&&class=${classData}&&area=${area}&&year=${year}&&pageSize=${pageSize}&&page=${page2}`
+      )
     );
     if (data?.data?.list?.length >= 0) {
-      setIsLoading(false);
+      // setIsLoading(false);
     }
     // setMovieData(movieData.concat(data?.data?.list));
     setMovieData((prev: any) => [...prev, ...data?.data?.list]);
@@ -82,7 +91,6 @@ const FilteredByType = () => {
   }, [isLoading]);
 
   useEffect(() => {
-    getMoviesByType(activeTab);
     window.scrollTo(0, 0);
     setPage(1);
     setPage2(2);
@@ -103,21 +111,14 @@ const FilteredByType = () => {
     dispatch(setYear("年份"));
   }, [activeTab]);
 
-  if (isloader || isFetching) {
-    return null; // Ensure you return null instead of undefined
-  }
-
   return (
     <>
       <div className="home-bg"></div>
       <div className=" mt-[100px] text-text min-h-screen">
         <div className="">
-          <FilterByTag
-            data={filteredTags}
-            sort={configData?.data?.movie_screen?.sort}
-          />
+          <FilterByTag />
           {/* <NewAds section="start" /> */}
-          {isLoading ? (
+          {isLoading || isFetching ? (
             <div className="mt-10 flex justify-center items-center w-full">
               <Loader />
             </div>
@@ -135,9 +136,10 @@ const FilteredByType = () => {
                 next={fetchData}
                 hasMore={hasMore}
                 loader={
-                  <div className="flex justify-center items-center w-full pb-0">
+                  <div className="flex justify-center items-center w-full pb-5">
                     {/* {hasMore ? <Loader /> : "No More data"} */}
-                    <Loader />
+                    {data?.data?.list?.length >= 0 ? <></> : <Loader />}
+                    {/* <Loader /> */}
                   </div>
                 }
               >

@@ -88,7 +88,7 @@ export const homeApi = createApi({
     getFilteredData: builder.query<any, any>({
       query: ({ id, sort, classData, area, year, page, pageSize }: any) =>
         convertToSecureUrl(
-          `/movie/screen?type_id=${id}&&sort=${sort}&&class=${classData}&&area=${area}&&year=${year}&&pageSize=${pageSize}&&page=${page}`
+          `/movie/screen/list?type_id=${id}&&sort=${sort}&&class=${classData}&&area=${area}&&year=${year}&&pageSize=${pageSize}&&page=${page}`
         ),
     }),
   }),

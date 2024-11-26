@@ -21,7 +21,9 @@ import { useGetUserQuery } from "../../../pages/profile/services/profileApi";
 import {
   convertToSecurePayload,
   convertToSecureUrl,
+  decryptWithAes,
 } from "../../../services/newEncryption";
+import { fetchCommentData } from "../../../services/playerService";
 
 const CommentComponent: React.FC<CommentProps> = ({
   movieId,
@@ -71,12 +73,8 @@ const CommentComponent: React.FC<CommentProps> = ({
   const fetchComments = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(
-        convertToSecureUrl(
-          `${process.env.REACT_APP_API_URL}/movie/comments/index?movie_id=${movieId}&page=${page}&pageSize=10`
-        )
-      );
-      const data = await response.json();
+      const response: any = await fetchCommentData(movieId || '', page);
+      const data: any = response ? await decryptWithAes(response) : null;
 
       // Concatenate new comments to existing ones using spread operator (...)
       const updatedComments =
@@ -152,7 +150,7 @@ const CommentComponent: React.FC<CommentProps> = ({
   const loadReplies = async (comment: Comment) => {
     setIsLoading(true);
     try {
-      const response = await fetch(
+      const response: any = await fetch(
         `${process.env.REACT_APP_API_URL}/movie/comments/replies?comment_id=${
           comment.id
         }&last_reply_id=${
@@ -165,7 +163,7 @@ const CommentComponent: React.FC<CommentProps> = ({
           },
         }
       );
-      const data = await response.json();
+      const data: any = response ? await decryptWithAes(response) : null;
       const newComments = comments.map((c) => {
         if (c.id === comment.id) {
           c.replies.list = [...c.replies.list, ...data.data.list];

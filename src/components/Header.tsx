@@ -29,9 +29,6 @@ const Header: FC = () => {
     setIsShowMenu(true);
     // window.scrollTo(0, 0);
   };
-  const filteredTags: any = data?.data?.movie_screen?.filter?.filter(
-    (data: any) => data?.id === activeTab
-  );
 
   useEffect(() => {
     if (!showFilterTag) {
@@ -50,8 +47,8 @@ const Header: FC = () => {
     >
       <div className="flex items-center px-3 gap-3">
         {/* <div className="flex items-center gap-1"> */}
-          {/* <img src={logo} alt="" />{" "} */}
-          {/* <span style={{ color: "white", fontWeight: "bold" }}>电影猪手</span> */}
+        {/* <img src={logo} alt="" />{" "} */}
+        {/* <span style={{ color: "white", fontWeight: "bold" }}>电影猪手</span> */}
         {/* </div> */}
         <div className="flex-1 relative">
           <input
@@ -123,12 +120,7 @@ const Header: FC = () => {
                 <img src={downh} alt="" />
               </div>
             )}
-            {isShowMenu && (
-              <FilterByTag
-                data={filteredTags}
-                sort={data?.data?.movie_screen?.sort}
-              />
-            )}
+            {isShowMenu ? <FilterByTag /> : <></>}
           </>
         ) : (
           <></>

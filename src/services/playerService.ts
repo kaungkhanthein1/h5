@@ -46,6 +46,20 @@ export const getAdsData = async () => {
   }
 };
 
+export const fetchCommentData = async (id: string, page: number = 1) => {
+  try {
+    const response: any = await api.get(convertToSecureUrl(`${process.env.REACT_APP_API_URL}/movie/comments/index?movie_id=${id}&page=${page}&pageSize=10`), {
+      headers: {
+        "X-Client-Version": 3098,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching ads data:", error);
+    throw error;
+  }
+};
+
 export const getEpisodesBySource = async (
   fromCode: string,
   movieId: string
@@ -109,3 +123,22 @@ export const fetchNextEpisode = async (fromCode: string, movieId: string) => {
     throw error;
   }
 };
+
+export const parsePlaybackUrl = async (
+	episode_id: string,
+	from_code: string,
+	play_url: string,
+	refresh: string
+) => {
+  try {
+    const response = await api.get(
+      convertToSecureUrl(
+        `/movie_addr/parse_url?type=play&episode_id=${episode_id}&from_code=${from_code}&play_url=${play_url}&refresh=${refresh}`
+      )
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching next episode:", error);
+    throw error;
+  }
+}

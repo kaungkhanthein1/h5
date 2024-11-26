@@ -15,9 +15,12 @@ import {
   getAdsData,
   getEpisodesBySource,
   reportPlaybackProgress,
+  parsePlaybackUrl,
+  fetchCommentData
 } from "../../services/playerService";
 import NewAds from "../../components/NewAds";
-import { convertToSecureUrl } from "../../services/newEncryption";
+import { convertToSecureUrl, decryptWithAes } from "../../services/newEncryption";
+import PlayerLoading from './video/PlayerLoading';
 
 const DetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -43,13 +46,11 @@ const DetailPage: React.FC = () => {
 
   const fetchComments = async () => {
     try {
-      const response = await fetch(
-        convertToSecureUrl(`${process.env.REACT_APP_API_URL}/movie/comments/index?movie_id=${id}&page=${1}&pageSize=10`)
-        // "http://localhost:3001/comments"
-      );
-      const data = await response.json();
-      setCommentCount(data.data.total);
-      console.log('data is=>', data);
+      const response: any = await fetchCommentData(id || '');
+      if (response) {
+        const data: any = await decryptWithAes(response);
+        setCommentCount(data?.data?.total);
+      }
     } catch (err) {
       console.log('err is=>', err);
     }
@@ -63,25 +64,14 @@ const DetailPage: React.FC = () => {
         setCurrentEpisode(res.data[0]);
         setEpisodes(res.data);
         setSelectedSource(i);
-        if (res.data?.[0]?.ready_to_play) {
+        if (res.data?.[0]) {
           setWholePageError(false);
-        } else {
-          setWholePageError(true);
-          setErrorVideoUrl(res.data?.[0]?.play_url);
-        }
+        } 
         return;
       } catch (error) {
         console.error("Error auto-playing next episode:", error);
       }
     }
-    // console.log('hello')
-    setTimeout(()=>{
-      setVisible(true);
-      setWholePageError(true);
-    }, 1000);
-    setTimeout(()=>{
-      setVisible(false);
-    }, 3000)
   };
 
   useEffect(() => {
@@ -114,7 +104,7 @@ const DetailPage: React.FC = () => {
     }
   };
 
-  const setInitialEpisode = (mvDetail: any) => {
+  const setInitialEpisode = async (mvDetail: any) => {
     if (mvDetail) {
       const playBackInfo = mvDetail.last_playback;
       if (playBackInfo && playBackInfo.movie_from) {
@@ -125,36 +115,38 @@ const DetailPage: React.FC = () => {
           const episodeIndex = mvDetail?.play_from[
             sourceIndex
           ]?.list?.findIndex(
-            (x: any) => x.episode_id === playBackInfo.episode_id
+            // eslint-disable-next-line eqeqeq
+            (x: any) => x.episode_id == playBackInfo.episode_id
           );
+          console.log('episodeIndex is=>', episodeIndex);
           if (episodeIndex > -1) {
-            setCurrentEpisode(
-              mvDetail?.play_from[sourceIndex]?.list[episodeIndex]
-            );
+            const mvData = mvDetail?.play_from[sourceIndex]?.list[episodeIndex];
+            console.log('mvData is=>', mvData);
+            if(!mvData.ready_to_play) {
+              const parseData = await parsePlaybackUrl(mvData.episode_id, mvData.from_code, mvData.play_url, '1');
+              mvData.play_url = parseData?.data?.play_url;
+            }
+            setCurrentEpisode(mvData);
             setEpisodes(mvDetail?.play_from[sourceIndex]?.list);
             setResumeTime(playBackInfo.current_time);
             return;
+          } else {
+
           }
-        }
-        if (!playBackInfo.ready_to_play) {
-          setWholePageError(true);
-          setErrorVideoUrl(playBackInfo?.play_url);
         }
       } else {
         // Fallback to the first available episode
         if (mvDetail?.play_from?.[0]?.list?.[0]) {
-          setCurrentEpisode(mvDetail?.play_from[0].list[0]);
+          const mvData = mvDetail?.play_from[0].list[0];
+          if(!mvData.ready_to_play) {
+            const parseData = await parsePlaybackUrl(mvData.episode_id, mvData.from_code, mvData.play_url, '1');
+            mvData.play_url = parseData?.data?.play_url;
+          }
+          setCurrentEpisode(mvData);
           setResumeTime(0);
           setEpisodes(mvDetail?.play_from[0].list);
         } else {
           setWholePageError(true);
-        }
-        if (
-          mvDetail?.play_from?.[0]?.list?.[0] &&
-          !mvDetail?.play_from?.[0]?.list?.[0].ready_to_play
-        ) {
-          setWholePageError(true);
-          setErrorVideoUrl(mvDetail?.play_from?.[0]?.list?.[0].play_url);
         }
         if(mvDetail?.play_from && mvDetail?.play_from.length === 0) {
           setWholePageError(true);
@@ -217,14 +209,15 @@ const DetailPage: React.FC = () => {
     if (nextSource && nextSource.code && id) {
       try {
         const res = await getEpisodesBySource(nextSource.code, id || "");
+        const mvData = res.data?.[0];
+        setWholePageError(false);
+        if (!mvData?.ready_to_play) {
+          const data = mvData;
+          const response = await parsePlaybackUrl(data.episode_id, data.from_code, data.play_url, '1');
+          mvData.play_url = response?.data?.play_url;
+        }
         setCurrentEpisode(res.data[0]);
         setEpisodes(res.data);
-        if (res.data?.[0]?.ready_to_play) {
-          setWholePageError(false);
-        } else {
-          setWholePageError(true);
-          setErrorVideoUrl(res.data?.[0]?.play_url);
-        }
       } catch (error) {
         console.error("Error auto-playing next episode:", error);
       }
@@ -244,15 +237,18 @@ const DetailPage: React.FC = () => {
   }
   return (
     <div className="bg-background min-h-screen">
-      {!movieDetail ? (
-        <div className="flex justify-center items-center pt-52 bg-background">
-          <Loader />
-        </div>
+      {!movieDetail || !currentEpisode ? (
+        <>
+          <PlayerLoading />
+          <div className="flex justify-center items-center pt-52 bg-background">
+            <Loader />
+          </div>
+        </>
       ) : (
         <>
           <div className="sticky top-0 z-50">
-            <div id='upper-div'>
-            {(currentEpisode && currentEpisode.ready_to_play && !wholePageError) || movieReload ? (
+            <div id="upper-div">
+              {(currentEpisode && !wholePageError) || movieReload ? (
               <VideoPlayer
                 key={currentEpisode?.episode_id}
                 videoUrl={currentEpisode?.play_url || ''}
@@ -265,9 +261,14 @@ const DetailPage: React.FC = () => {
             ) : (
               <NetworkError switchNow={switchNow} refresh={refresh} onBack={navigateBackFunction}/>
             )}
-            
             </div>
-            <div className="relative flex px-2 justify-between items-center bg-background" style={{paddingBottom: '10px', borderBottom: '2px solid #2a2a2a'}}>
+            <div
+              className="relative flex px-2 justify-between items-center bg-background"
+              style={{
+                paddingBottom: "10px",
+                borderBottom: "2px solid #2a2a2a",
+              }}
+            >
               <div className="flex">
                 <div
                   className={`px-4 py-3 bg-background text-gray-400 rounded-t-lg cursor-pointer relative ${
@@ -288,7 +289,7 @@ const DetailPage: React.FC = () => {
                 >
                   <span>评论</span>
                   <span className="text-gray-500 ml-1.5 text-sm">
-                    {commentCount > 99 ? '99+' : (commentCount || '')}
+                    {commentCount > 99 ? "99+" : commentCount || ""}
                   </span>
                   {activeTab === "tab-2" && (
                     <div className="absolute bottom-0 left-3.5 w-3/6 h-1 bg-mainColor rounded-md"></div>
@@ -326,20 +327,23 @@ const DetailPage: React.FC = () => {
                 />
 
                 <div className="mt-8 px-4">
-                {/* {adsData && <AdsSection adsDataList={adsData?.player_recommend_up} />} */}
-                <NewAds section={"player_recommend_up"} fromMovie={true}/>
+                  {/* {adsData && <AdsSection adsDataList={adsData?.player_recommend_up} />} */}
+                  <NewAds section={"player_recommend_up"} fromMovie={true} />
                 </div>
-                <RecommendedList data={movieDetail} showRecommandMovie={showRecommandMovie}/>
+                <RecommendedList
+                  data={movieDetail}
+                  showRecommandMovie={showRecommandMovie}
+                />
               </>
             )}
           </div>
         </>
       )}
       {visible && (
-          <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-background text-white text-lg font-medium px-4 py-2 rounded-lg shadow-md">
-            没有更多资源了
-          </div>
-        )}
+        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-background text-white text-lg font-medium px-4 py-2 rounded-lg shadow-md">
+          没有更多资源了
+        </div>
+      )}
     </div>
   );
 };
