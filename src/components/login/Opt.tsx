@@ -9,7 +9,7 @@ import {
   setSignUpEmail,
   setSignupOpen,
 } from "../../features/login/ModelSlice";
-import { getOtp } from "../../services/userService";
+import { getOtp, signup, signupPh } from "../../services/userService";
 import back from "../../assets/login/back.svg";
 import { showToast } from "../../pages/profile/error/ErrorSlice";
 import {
@@ -38,8 +38,8 @@ const Opt: React.FC<OptProps> = ({
   key,
 }) => {
   const [signUpEmail, { isLoading, error }] = useSignUpEmailMutation();
-  const [signUpPhone , {isLoading : phload}] = useSignUpPhoneMutation();
-
+  const [signUpPhone, { isLoading: phload }] = useSignUpPhoneMutation();
+  const [panding,setPanding] = useState(false)
   const [otpDigits, setOtpDigits] = useState<string[]>(Array(6).fill(""));
   const [timer, setTimer] = useState<number>(59);
   const [buttonText, setButtonText] = useState<string>("59 s");
@@ -49,13 +49,13 @@ const Opt: React.FC<OptProps> = ({
   const { captchaCode, captchaKey, openSignUpEmailModel, GraphicKey } =
     useSelector((state: any) => state.model);
 
-    useEffect(() => {
-      if (email) {
-        getOtp(GraphicKey, email, "email");
-      } else if (phone) {
-        getOtp(GraphicKey, phone, "phone");
-      }
-    }, [email, phone]);
+  useEffect(() => {
+    if (email) {
+      getOtp(GraphicKey, email, "email");
+    } else if (phone) {
+      getOtp(GraphicKey, phone, "phone");
+    }
+  }, [email, phone]);
 
   useEffect(() => {
     const countdown = setInterval(() => {
@@ -96,42 +96,30 @@ const Opt: React.FC<OptProps> = ({
 
       const otpCode = updatedOTP.join("");
       try {
-        console.log(otpCode);
-        if (email && password) {
-          const data: any = await signUpEmail({
-            email,
-            password,
-            email_code: otpCode,
-          }).unwrap();
-
-          if (data) {
-            const result: any = decryptWithAes(data);
-            console.log(result);
+        if(email && password){
+          setPanding(true)
+          const data: any = await signup({ email, password, email_code: otpCode });
+          if(data){
             dispatch(setOtpOpen(false));
-            dispatch(showToast({ message: result.msg, type: "error" }));
-            localStorage.setItem("authToken", JSON.stringify(result));
+            localStorage.setItem("authToken", JSON.stringify(data));
             setTimeout(() => closeAllModals(), 1000);
           }
-        } else if (phone && password) {
-          const data: any = await signUpPhone({
-            phone,
-            password,
-            sms_code: otpCode,
-          }).unwrap();
-          if (data) {
-            const result: any = decryptWithAes(data);
-            console.log(result);
+
+        }else if(phone && password){
+          setPanding(true)
+          const data: any = await signupPh({ phone, password, sms_code: otpCode });
+          if(data){
             dispatch(setOtpOpen(false));
-            dispatch(showToast({ message: result.msg, type: "success" }));
-            localStorage.setItem("authToken", JSON.stringify(result));
+            localStorage.setItem("authToken", JSON.stringify(data));
             setTimeout(() => closeAllModals(), 1000);
           }
         }
-      } catch (error: any) {
-        const errorMessage = error.data?.msg || "An error occurred";
-        console.log("errorMessage", errorMessage);
-        dispatch(showToast({ message: errorMessage, type: "error" }));
-        inputRefs.current.forEach((input) => input?.focus()); // Optional: Refocus on inputs if needed
+      } catch (err : any) {
+        const Errmessage = err.response.data.msg;
+           dispatch(showToast({ message: Errmessage, type: "error" }));
+           setPanding(false)
+        inputRefs.current.forEach((input) => input?.focus()); // Optional: Refocus on inputs i
+        // console.log(err,'email')
       }
     }
   };
@@ -192,8 +180,11 @@ const Opt: React.FC<OptProps> = ({
       </div>
 
       <div className="w-full flex justify-center items-center">
-        {isLoading || phload ? (
-          <button disabled className="next_button text-[#777] w-[320px] text-[14px] font-[600] leading-[22px]  mt-[20px] py-[10px] px-[16px] rounded-[80px]">
+        { panding ? (
+          <button
+            disabled
+            className="next_button text-[#777] w-[320px] text-[14px] font-[600] leading-[22px]  mt-[20px] py-[10px] px-[16px] rounded-[80px]"
+          >
             加载中..
           </button>
         ) : (

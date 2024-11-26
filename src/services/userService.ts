@@ -141,6 +141,72 @@ export const login = async (
   }
 };
 
+export const signup = async ({ email, password, email_code }: any) => {
+  try {
+    let bd = convertToSecurePayload({
+      email,
+      password,
+      email_code,
+      timestamp: new Date().getTime(),
+    });
+    const { data } = await axios.post(
+      `${process.env.REACT_APP_API_URL}/user/register/email`,
+      bd
+    );
+    return decryptWithAes(data);
+  } catch (error) {
+    // console.log('error during email', error)
+    throw error;
+  }
+};
+
+export const signupPh = async ({ phone, password, sms_code }: any) => {
+  try {
+    let bd = convertToSecurePayload({
+      phone,
+      password,
+      sms_code,
+      timestamp: new Date().getTime(),
+    });
+    const { data } = await axios.post(
+      `${process.env.REACT_APP_API_URL}/user/register/phone`,
+      bd
+    );
+    return decryptWithAes(data);
+  } catch (error) {
+    // console.log('error during email', error)
+    throw error;
+  }
+};
+
+export const getTokenPass = async ({ email, graphicKey }: any) => {
+  try {
+    const { data } = await axios.get(
+      convertToSecureUrl(
+        `${process.env.REACT_APP_API_URL}/user/forget/get_token?username=${email}&captcha=${graphicKey}`
+      )
+    );
+    console.log(data);
+    return decryptWithAes(data);
+  } catch (error) {
+    throw error;
+    console.log(error);
+  }
+};
+
+export const getCodeForgotPass = async ({ send_type, session_token }: any) => {
+  try {
+    const { data } = await axios.get(
+      convertToSecureUrl(
+        `${process.env.REACT_APP_API_URL}/user/forget/send_code?send_type=${send_type}&session_token=${session_token}`
+      )
+    );
+    console.log(data)
+  } catch (error) {
+    throw error
+  }
+};
+
 export const check_captchaRegister = async (
   captchaCode: string,
   keyStatus: string
@@ -212,7 +278,7 @@ export const getOtp = async (
     );
     // console.log(otpResponse);
   } catch (error: any) {
-    console.error("Error requesting OTP:", error);
+    // console.error("Error requesting OTP:", error);
     return error.response;
   }
 };

@@ -239,7 +239,7 @@ const DetailPage: React.FC = () => {
     <div className="bg-background min-h-screen">
       {!movieDetail || !currentEpisode ? (
         <>
-          <PlayerLoading />
+          <PlayerLoading onBack={navigateBackFunction}/>
           <div className="flex justify-center items-center pt-52 bg-background">
             <Loader />
           </div>

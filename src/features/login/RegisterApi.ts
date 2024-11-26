@@ -31,11 +31,11 @@ const RegisterApi = createApi({
           email_code,
           timestamp: new Date().getTime(),
         }),
-      }), 
+      }),
       async onQueryStarted(arg, { queryFulfilled }) {
         try {
-          const  data  = await queryFulfilled;
-          console.log(data)
+          const data = await queryFulfilled;
+          console.log(data);
           // const msg = data.msg;
           // console.log("Registration successful:", msg);
         } catch (error: any) {
@@ -100,10 +100,11 @@ const RegisterApi = createApi({
       query: ({ email, graphicKey }) => ({
         url: `/user/forget/get_token`,
         method: "GET",
-        params: {
+        params: convertToSecurePayload({
           username: email,
           captcha: graphicKey,
-        },
+          timestamp: new Date().getTime(),
+        }),
       }),
     }),
     getCodeForgot: builder.query<GetTCodeResponse, GetCodeArgs>({
@@ -120,12 +121,12 @@ const RegisterApi = createApi({
       query: ({ password, repassword, session_token, forget_code }) => ({
         url: "/user/forget/set_pass",
         method: "POST",
-        body: {
+        body: convertToSecurePayload({
           password: password,
           repassword: repassword,
           session_token: session_token,
           forget_code: forget_code,
-        },
+        }),
       }),
       async onQueryStarted(arg, { queryFulfilled }) {
         try {

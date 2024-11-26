@@ -1,17 +1,25 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { startTransition, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import back from "../../../assets/login/back.svg";
 // import { setPasswordRecoveryFotgot } from "../../../services/userService";
-import { setCapCode, setOCapKey } from "../../../features/login/ModelSlice";
+import {
+  setAuthModel,
+  setCapCode,
+  setCaptchaOpen,
+  setLoginOpen,
+  setOCapKey,
+  setSignupOpen,
+} from "../../../features/login/ModelSlice";
 import {
   useGetCodeForgotQuery,
   usePasswordRecoveryMutation,
 } from "../../../features/login/RegisterApi";
 import { showToast } from "../../../pages/profile/error/ErrorSlice";
+import { getCodeForgotPass } from "../../../services/userService";
 
 interface OptProps {
-  email : string;
+  email: string;
   send_type: string;
   password: string;
   confirmPassword: string;
@@ -25,13 +33,13 @@ const Verify: React.FC<OptProps> = ({
   accessToken,
   setShowVerify,
   send_type,
-  email
+  email,
 }) => {
   // console.log(send_type, accessToken);
-  const { data: codeData, refetch: resendOtpApi } = useGetCodeForgotQuery(
-    { send_type, session_token: accessToken || "" },
-    { skip: !accessToken }
-  );
+  // const { data: codeData, refetch: resendOtpApi } = useGetCodeForgotQuery(
+  //   { send_type, session_token: accessToken || "" },
+  //   { skip: !accessToken }
+  // );
   // console.log(codeData);
 
   const [passwordRecovery, { error }] = usePasswordRecoveryMutation();
@@ -41,12 +49,11 @@ const Verify: React.FC<OptProps> = ({
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [panding, setPanding] = useState(false);
 
   useEffect(() => {
-    if (codeData) {
-      console.log("Code data fetched:", codeData);
-    }
-  }, [codeData]);
+    getCode();
+  }, [accessToken]);
 
   useEffect(() => {
     const countdown = setInterval(() => {
@@ -58,6 +65,31 @@ const Verify: React.FC<OptProps> = ({
 
     return () => clearInterval(countdown);
   }, [timer]);
+
+  const getCode = async () => {
+    if (accessToken) {
+      try {
+        const result: any = await getCodeForgotPass({
+          send_type,
+          session_token: accessToken,
+        });
+        // console.log(result)
+      } catch (error: any) {
+        console.log("code err", error);
+        const Errormsg = error.response?.data?.msg;
+        dispatch(showToast({ message: Errormsg, type: "error" }));
+      }
+    }
+  };
+
+  const closeAllModals = () => {
+    startTransition(() => {
+      dispatch(setAuthModel(false));
+      dispatch(setLoginOpen(false));
+      dispatch(setSignupOpen(false));
+      dispatch(setCaptchaOpen(false));
+    });
+  };
 
   const handleOTPChange = async (index: number, value: string) => {
     const updatedOTP = [...otpDigits];
@@ -77,6 +109,7 @@ const Verify: React.FC<OptProps> = ({
       const otpCode = updatedOTP.join("");
       if (otpCode) {
         try {
+          setPanding(true);
           const { data, error } = await passwordRecovery({
             password,
             repassword: confirmPassword,
@@ -85,12 +118,17 @@ const Verify: React.FC<OptProps> = ({
           });
           console.log(error);
           if (data) {
-            navigate("/profile");
+            dispatch(showToast({ message: "找回成功", type: "success" }));
+            closeAllModals();
+            setTimeout(() => {
+              dispatch(setAuthModel(true));
+            }, 300);
+            // navigate("/profile");
             console.log("set success");
           }
           if (error) {
+            setPanding(false);
             dispatch(showToast({ message: "验证码错误", type: "error" }));
-            // console.log("'", result.error);
           }
         } catch (error) {
           console.log(error);
@@ -101,7 +139,7 @@ const Verify: React.FC<OptProps> = ({
 
   const resendOtp = async () => {
     try {
-      await resendOtpApi(); // Triggers the resend OTP API call
+      await getCodeForgotPass({ send_type, session_token: accessToken }); // Triggers the resend OTP API call
       setTimer(59); // Resets the timer to 59 seconds
       dispatch(showToast({ message: "验证码已成功重新发送", type: "success" }));
     } catch (error) {
@@ -145,20 +183,30 @@ const Verify: React.FC<OptProps> = ({
         </div>
 
         <p className="text-[#888] text-[10px] font-light leading-[15px] p-3 text-center">
-          验证码已发送 {email}。请检查您的邮件，如果没收到，请务必再次检查您的垃圾邮件
+          验证码已发送 {email}
+          。请检查您的邮件，如果没收到，请务必再次检查您的垃圾邮件
         </p>
       </div>
 
       <div className="w-full flex justify-center items-center">
-      <button
-          disabled={timer > 0}
-          onClick={resendOtp}
-          className={`w-[320px] text-[14px] font-[600] leading-[22px]  mt-[20px] py-[10px] px-[16px] rounded-[80px] ${
-            timer > 0 ? "next_button text-[#777]" : "login_button text-white"
-          }`}
-        >
-          {buttonText}
-        </button>
+        {panding ? (
+          <button
+            disabled
+            className="next_button text-[#777] w-[320px] text-[14px] font-[600] leading-[22px]  mt-[20px] py-[10px] px-[16px] rounded-[80px]"
+          >
+            加载中..
+          </button>
+        ) : (
+          <button
+            disabled={timer > 0}
+            onClick={resendOtp}
+            className={`w-[320px] text-[14px] font-[600] leading-[22px]  mt-[20px] py-[10px] px-[16px] rounded-[80px] ${
+              timer > 0 ? "next_button text-[#777]" : "login_button text-white"
+            }`}
+          >
+            {buttonText}
+          </button>
+        )}
       </div>
     </div>
   );

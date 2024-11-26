@@ -8,7 +8,11 @@ import {
   setOCapKey,
 } from "../../../features/login/ModelSlice";
 import { useNavigate } from "react-router-dom";
-import { getCaptcha } from "../../../services/userService";
+import {
+  check_captchaRegister,
+  getCaptcha,
+  getTokenPass,
+} from "../../../services/userService";
 import {
   useConfirmCaptchaForgotMutation,
   useGetTokenForgotQuery,
@@ -26,7 +30,7 @@ interface CaptProp {
 const Capt: React.FC<CaptProp> = ({ email, password, confirmPassword }) => {
   const [confirmCaptchaForgot] = useConfirmCaptchaForgotMutation();
   const [showVerify, setShowVerify] = useState<boolean>(false);
-
+  const [panding, setPanding] = useState(false);
   const [graphicKey, setGraphicKey] = useState<string | null>(null);
   const { data: tokenData } = useGetTokenForgotQuery(
     { email, graphicKey: graphicKey || "" },
@@ -48,11 +52,34 @@ const Capt: React.FC<CaptProp> = ({ email, password, confirmPassword }) => {
   }, []);
 
   useEffect(() => {
-    if (tokenData) {
-      console.log("Token data:");
-      // Handle the token and proceed further
+    getToken();
+  }, [graphicKey]);
+
+  const getToken = async () => {
+    if (graphicKey) {
+      try {
+        setPanding(true);
+        const result: any = await getTokenPass({ email, graphicKey });
+        // console.log(result);
+        const { data } = result;
+        const { email : mail, phone, session_token } = data;
+          if (mail) {
+          setIsemail("email");
+        } else {
+          setIsemail("phone");
+        }
+        setToken(session_token);
+        setShowVerify(true);
+        // dispatch(setCaptchaOpen(false))
+        console.log(data);
+      } catch (error: any) {
+        const Errormsg = error.response?.data?.msg;
+        dispatch(setCaptchaOpen(false));
+        dispatch(showToast({ message: Errormsg, type: "error" }));
+      }
     }
-  }, [tokenData, graphicKey]);
+    setPanding(false);
+  };
 
   // Update button state based on captcha input
   useEffect(() => {
@@ -74,27 +101,32 @@ const Capt: React.FC<CaptProp> = ({ email, password, confirmPassword }) => {
 
   const handleSubmit = async () => {
     try {
-      const { data } = await confirmCaptchaForgot({ captchaCode, keyStatus });
+      // const { data } = await confirmCaptchaForgot({ captchaCode, keyStatus });
+      const data = await check_captchaRegister(captchaCode, keyStatus);
+
       // console.log(data);
-      if (data?.data) {
-        setGraphicKey(data.data.key);
+      if (!data.code) {
+        setGraphicKey(data);
+      } else {
+        dispatch(showToast({ message: "图形验证码错误", type: "error" }));
       }
-      if (tokenData) {
-        const { data } = tokenData;
-        const { email, phone, session_token } = data;
-        if (email) {
-          setIsemail("email");
-        } else {
-          setIsemail("phone");
-        }
-        setToken(session_token);
-        // console.log(" here is", email, phone, session_token);
-        setShowVerify(true);
-      } else if(!tokenData && graphicKey) {
-        // console.log("user not exist");
-        dispatch(setCaptchaOpen(false));
-        dispatch(showToast({ message: "找不到用户", type: "error" }));
-      }
+      // console.log(tokenData)
+
+      // if (tokenData) {
+      //   const { data } = tokenData;
+      //   const { email, phone, session_token } = data;
+      //   if (email) {
+      //     setIsemail("email");
+      //   } else {
+      //     setIsemail("phone");
+      //   }
+      //   setToken(session_token);
+      //   setShowVerify(true);
+      // } else if (!tokenData && graphicKey) {
+      //   // console.log("user not exist");
+      //   dispatch(setCaptchaOpen(false));
+      //   dispatch(showToast({ message: "找不到用户", type: "error" }));
+      // }
     } catch (error) {
       // console.log(error);
     }
@@ -118,7 +150,7 @@ const Capt: React.FC<CaptProp> = ({ email, password, confirmPassword }) => {
           <div className="bg-[#1C1B20] w-[310px] h-[170px] p-[20px]">
             <div className="flex justify-center items-center pb-[16px] relative">
               <h1 className="text-white text-[16px] font-[400] text-center">
-              核实
+                核实
               </h1>
               <img
                 onClick={() => dispatch(setCaptchaOpen(false))}
@@ -128,31 +160,40 @@ const Capt: React.FC<CaptProp> = ({ email, password, confirmPassword }) => {
               />
             </div>
             <div className="flex w-full justify-center items-center gap-[4px]">
-            <input
-              type="number"
-              placeholder="请输入验证码"
-              className="bg-[#333237] w-full rounded-[4px] text-white p-[10px] focus:outline-none h-[40px]"
-              value={captchaCode}
-              onChange={(e) => setCaptchaCode(e.target.value)}
-            />
-            <img
-              className="w-[87px] h-[40px]"
-              src={captchaImage}
-              alt="Captcha"
-            />
-          </div>
-            <button 
-              onClick={handleSubmit}
-              className={`mt-[16px] w-full rounded-[4px] p-[10px] text-[14px] font-[400] ${
-                isButtonDisabled
-                  ? "bg-[#333237] text-[#777]"
-                  : "bg-[#F54100] text-white"
-              }`}
-              disabled={isButtonDisabled}
-              // onClick={handleFunction}
-            >
-              确定
-            </button>
+              <input
+                type="number"
+                placeholder="请输入验证码"
+                className="bg-[#333237] w-full rounded-[4px] text-white p-[10px] focus:outline-none h-[40px]"
+                value={captchaCode}
+                onChange={(e) => setCaptchaCode(e.target.value)}
+              />
+              <img
+                className="w-[87px] h-[40px]"
+                src={captchaImage}
+                alt="Captcha"
+              />
+            </div>
+            {panding ? (
+              <button
+                disabled
+                className="bg-[#333237] text-[#777] mt-[16px] w-full rounded-[4px] p-[10px] text-[14px] font-[400]"
+              >
+                加载中..
+              </button>
+            ) : (
+              <button
+                onClick={handleSubmit}
+                className={`mt-[16px] w-full rounded-[4px] p-[10px] text-[14px] font-[400] ${
+                  isButtonDisabled
+                    ? "bg-[#333237] text-[#777]"
+                    : "bg-[#F54100] text-white"
+                }`}
+                disabled={isButtonDisabled}
+                // onClick={handleFunction}
+              >
+                确定
+              </button>
+            )}
             {/* {error && (
               <div className="text-red-500 mt-2 text-center">{error}</div>
             )} */}

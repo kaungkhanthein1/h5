@@ -21,7 +21,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const videoElementRef = useRef<HTMLDivElement>(null);
   const [videoRatio, setVideoRatio] = useState(9 / 16); // Default to 16:9 ratio
   const { refetch } = useGetRecordQuery(); // Fetch favorite movies list from API
-  const [isControlsVisible, setIsControlsVisible] = useState(true);
+  const [isControlsVisible, setIsControlsVisible] = useState(false);
   const inactivityTimeout = useRef<number | null>(null);
   const [reHeight, setReHeight] = useState(false);
   // Function to get token from localStorage
@@ -70,9 +70,10 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
           setting: true,
           fullscreen: true,
           airplay: true,
-          moreVideoAttr: {
-            playsInline: true,
-          },
+          // miniProgressBar: true,
+          // moreVideoAttr: {
+          //   playsInline: true,
+          // },
         });
 
         // Use Hls.js for HLS streams
@@ -102,6 +103,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
         // Set resume time if available
         art.once("ready", () => {
+          art.notice.show = '';
+
+          art.mask.show = false;
           if (resumeTime > 0) {
             art.currentTime = resumeTime;
           }
@@ -166,13 +170,25 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     }, 3000);
   };
 
+  const handleTouchMove = () => {
+    // Immediately hide the controls during a touch slide
+    setIsControlsVisible(false);
+  
+    // Optionally, clear any existing timeout to avoid re-showing the controls prematurely
+    if (inactivityTimeout.current) {
+      clearTimeout(inactivityTimeout.current);
+    }
+  };
+  
   useEffect(() => {
     // Attach event listeners for user activity
     const player = document.getElementById("my-player");
     if (player) {
+      player.addEventListener("touchmove", handleTouchMove);
       player.addEventListener("mousemove", handleUserActivity);
       player.addEventListener("keydown", handleUserActivity);
       player.addEventListener("touchstart", handleUserActivity);
+      player.addEventListener("touchmove", handleTouchMove);
     }
 
     // Cleanup event listeners on unmount
@@ -184,6 +200,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         player.removeEventListener("mousemove", handleUserActivity);
         player.removeEventListener("keydown", handleUserActivity);
         player.removeEventListener("touchstart", handleUserActivity);
+        player.addEventListener("touchmove", handleTouchMove);
       }
     };
   }, []);
