@@ -73,7 +73,7 @@ const ProfileSecond = () => {
                 fill-opacity="0.6"
               />
             </svg>
-            <div className="profile-text">在线客服</div>
+            <div className="profile-text">帮助中心</div>
           </div>
           <div>
             <svg
