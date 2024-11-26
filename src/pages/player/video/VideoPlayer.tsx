@@ -23,7 +23,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const { refetch } = useGetRecordQuery(); // Fetch favorite movies list from API
   const [isControlsVisible, setIsControlsVisible] = useState(true);
   const inactivityTimeout = useRef<number | null>(null);
-
+  const [reHeight, setReHeight] = useState(false);
   // Function to get token from localStorage
   const getToken = () => {
     const isLoggedIn = localStorage.getItem("authToken");
@@ -97,6 +97,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
           const videoWidth = art.video.videoWidth;
           const videoHeight = art.video.videoHeight;
           setVideoRatio(videoHeight / videoWidth); // Set the dynamic aspect ratio
+          setReHeight(videoWidth < videoHeight)
         });
   
         // Set resume time if available
@@ -151,46 +152,65 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     }
   };
 
-  // const handleUserActivity = () => {
-  //   // Show the controls when there's activity
-  //   setIsControlsVisible(true);
+  const handleUserActivity = () => {
+    // Show the controls when there's activity
+    setIsControlsVisible(true);
 
-  //   // Clear any existing timeout
-  //   if (inactivityTimeout.current) {
-  //     clearTimeout(inactivityTimeout.current);
-  //   }
+    // Clear any existing timeout
+    if (inactivityTimeout.current) {
+      clearTimeout(inactivityTimeout.current);
+    }
 
-  //   // Set a timeout to hide controls after 3 seconds of inactivity
-  //   inactivityTimeout.current = window.setTimeout(() => {
-  //     setIsControlsVisible(false);
-  //   }, 3000);
-  // };
+    // Set a timeout to hide controls after 3 seconds of inactivity
+    inactivityTimeout.current = window.setTimeout(() => {
+      setIsControlsVisible(false);
+    }, 3000);
+  };
 
 
-  // useEffect(() => {
-  //   // Attach event listeners for user activity
-  //   const player = document.getElementById("my-player");
-  //   if (player) {
-  //     player.addEventListener("mousemove", handleUserActivity);
-  //     player.addEventListener("keydown", handleUserActivity);
-  //     player.addEventListener("touchstart", handleUserActivity);
-  //   }
+  useEffect(() => {
+    // Attach event listeners for user activity
+    const player = document.getElementById("my-player");
+    if (player) {
+      player.addEventListener("mousemove", handleUserActivity);
+      player.addEventListener("keydown", handleUserActivity);
+      player.addEventListener("touchstart", handleUserActivity);
+    }
 
-  //   // Cleanup event listeners on unmount
-  //   return () => {
-  //     if (inactivityTimeout.current) {
-  //       clearTimeout(inactivityTimeout.current);
-  //     }
-  //     if (player) {
-  //       player.removeEventListener("mousemove", handleUserActivity);
-  //       player.removeEventListener("keydown", handleUserActivity);
-  //       player.removeEventListener("touchstart", handleUserActivity);
-  //     }
-  //   };
-  // }, []);
+    // Cleanup event listeners on unmount
+    return () => {
+      if (inactivityTimeout.current) {
+        clearTimeout(inactivityTimeout.current);
+      }
+      if (player) {
+        player.removeEventListener("mousemove", handleUserActivity);
+        player.removeEventListener("keydown", handleUserActivity);
+        player.removeEventListener("touchstart", handleUserActivity);
+      }
+    };
+  }, []);
   
+  useEffect(() => {
+    const handleScroll = () => {
+      const playerElement = videoElementRef.current;
+      if (!playerElement) return;
+
+      const rect = playerElement.getBoundingClientRect();
+      console.log('rect top is=>', rect);
+      // const isOutOfView = rect.top < 0;
+
+      // Minimize player when scrolled out of view
+      // setIsMinimized(isOutOfView);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
-    <div id="my-player" className="relative w-full bg-black">
+    <div id="my-player" className={`relative w-full bg-black ${reHeight ? 'h-[40vh]' : ''}`}>
       {/* Back button */}
       {isControlsVisible && 
       <>
@@ -221,13 +241,13 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
       {/* Video element wrapper */}
       <div
-        className="relative w-full"
+        className={`relative w-full ${reHeight ? 'h-[40vh]' : ''}`}
         style={{ paddingTop: `${videoRatio * 100}%` }}
       >
         {/* Video element */}
         <div
           ref={videoElementRef}
-          className="absolute top-0 left-0 w-full h-full"
+          className={`absolute top-0 left-0 w-full ${reHeight ? 'h-[40vh]' : 'h-full'}`}
         ></div>
       </div>
     </div>
