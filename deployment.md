@@ -1,5 +1,6 @@
 # H5 Frontend Deployment Document
 
+## Node Version: 20.9.0 LTS
 ## 1. Project Link
 [https://github.com/dfios/dyls-h5-frontend](https://github.com/dfios/dyls-h5-frontend)
 
