@@ -13,6 +13,7 @@ interface model {
   social_id: string;
   openUserNameForm : boolean,
   panding : number
+  GraphicKey : string
 }
 
 const initialState: model = {
@@ -27,7 +28,8 @@ const initialState: model = {
   openSignUpPhoneModel: false,
   openUserNameForm: false,
   social_id: "",
-  panding : 0
+  panding : 0,
+  GraphicKey : ''
 };
 
 export const modelSlice = createSlice({
@@ -70,6 +72,9 @@ export const modelSlice = createSlice({
     setSocial_id: (state, action) => {
       state.social_id = action.payload;
     },
+    setGraphicKey: (state, action) => {
+      state.GraphicKey = action.payload;
+    },
     setPanding: (state, action) => {            //no need
     state.panding = action.payload;
     },
@@ -88,6 +93,7 @@ export const {
   setSignUpPhone,
   setOpenUserNameForm,
   setSocial_id,
+  setGraphicKey,
   setPanding
 } = modelSlice.actions;
 

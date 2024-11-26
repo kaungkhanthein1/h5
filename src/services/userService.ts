@@ -58,7 +58,6 @@ export const login = async (
       code: captchaCode,
       key: keyStatus,
       timestamp: new Date().getTime(),
-
     });
     // const captchaResult = await fetch(
     //   convertToSecureUrl(`${process.env.REACT_APP_API_URL}/user/check_captcha`),
@@ -69,7 +68,10 @@ export const login = async (
     //   }
     // );
 
-    const captchaResult = await axios.post(convertToSecureUrl(`${process.env.REACT_APP_API_URL}/user/check_captcha`),gg)
+    const captchaResult = await axios.post(
+      convertToSecureUrl(`${process.env.REACT_APP_API_URL}/user/check_captcha`),
+      gg
+    );
     // console.log(captchaResult)
 
     const captchaResponse = await captchaResult.data;
@@ -99,7 +101,7 @@ export const login = async (
       throw new Error("Public key is not defined");
     }
     const encryptedData = encryptWithRsa(JSON.stringify(formData), publicKey);
-    const ll = convertToSecurePayload(formData)
+    const ll = convertToSecurePayload(formData);
 
     // Step 3: Generate signature
     const signature = generateSignature(encryptedData);
@@ -114,12 +116,15 @@ export const login = async (
     //   }
     // );
 
-    const loginResponse = await axios.post(convertToSecureUrl(`${process.env.REACT_APP_API_URL}/user/login`),ll)
+    const loginResponse = await axios.post(
+      convertToSecureUrl(`${process.env.REACT_APP_API_URL}/user/login`),
+      ll
+    );
 
-    const dataIsEncrypt = loginResponse.headers
+    const dataIsEncrypt = loginResponse.headers;
     // const dataIsEncrypt = loginResponse.headers["x-app-data-encrypt"];
-    
-    console.log(dataIsEncrypt,'gg')
+
+    console.log(dataIsEncrypt, "gg");
 
     const resultText = await loginResponse.data;
     // console.log(resultText)
@@ -136,58 +141,78 @@ export const login = async (
   }
 };
 
-export const getOtp = async (
+export const check_captchaRegister = async (
   captchaCode: string,
-  keyStatus: string,
+  keyStatus: string
+) => {
+  try {
+    const gg = convertToSecurePayload({
+      code: captchaCode,
+      key: keyStatus,
+      timestamp: new Date().getTime(),
+    });
+
+    const captchaResult = await axios.post(
+      convertToSecureUrl(`${process.env.REACT_APP_API_URL}/user/check_captcha`),
+      gg
+    );
+    const captchaResponse = captchaResult.data;
+
+    let newCap: { data?: any } = decryptWithAes(captchaResponse) || {};
+
+    if (!newCap.data) {
+      throw new Error("Captcha verification failed");
+    }
+    return newCap.data.key;
+  } catch (error) {
+    console.log("cap err", error);
+    return error;
+  }
+};
+
+export const getOtp = async (
+  // captchaCode: string,
+  // keyStatus: string,
+  key: string,
   sendTo: string, // This can be either email or phone
   sendType: "email" | "phone" // Specifies if it's for email or phone
 ): Promise<void> => {
   try {
-    // Step 1: Verify Captcha
-    const captchaResult = await axios.post(
-      `${process.env.REACT_APP_API_URL}/user/check_captcha`,
-      {
-        code: captchaCode,
-        key: keyStatus,
-      }
-    );
-
-    const captchaResponse = captchaResult.data;
-
-    if (!captchaResponse.data) {
-      throw new Error("Captcha verification failed");
-    }
-
-    // Step 2: Prepare formData with required fields, using `sendType` to differentiate
     const formData = {
       send_type: sendType, // Set as "email" or "phone"
       to: sendTo, // The value will be either an email or a phone number
-      captcha: captchaResponse.data.key,
+      captcha: key,
       timestamp: new Date().getTime(), // Add timestamp for extra security
     };
+    // console.log(formData);
 
     // Step 3: Encrypt the data
     const publicKey = process.env.REACT_APP_PUBLIC_KEY;
     if (!publicKey) {
       throw new Error("Public key is not defined");
     }
-    const encryptedData = encryptWithRsa(JSON.stringify(formData), publicKey);
+    // const encryptedData = encryptWithRsa(JSON.stringify(formData), publicKey);
+    const cc = convertToSecurePayload(formData);
 
     // Step 4: Generate signature for the encrypted data
-    const signature = generateSignature(encryptedData);
+    // const signature = generateSignature(encryptedData);
 
     // Step 5: Make the GET request with encrypted data and signature as query parameters
     const otpResponse = await axios.get(
-      `${process.env.REACT_APP_API_URL}v1/user/get_code`,
-      {
-        params: {
-          pack: encryptedData,
-          signature: signature,
-        },
-      }
+      convertToSecureUrl(
+        `${
+          process.env.REACT_APP_API_URL
+        }/user/get_code?send_type=${sendType}&to=${sendTo}&captcha=${key}&timestamp=${new Date().getTime()}`
+      )
+      // {
+      //   params: {
+      //     formData
+      //   },
+      // }
     );
+    // console.log(otpResponse);
   } catch (error: any) {
-    // console.error("Error requesting OTP:", error);
+    console.error("Error requesting OTP:", error);
     return error.response;
   }
 };

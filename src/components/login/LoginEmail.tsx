@@ -22,6 +22,8 @@ interface LoginEmailProps {
 }
 
 const LoginEmail: React.FC<LoginEmailProps> = ({ handleBack }) => {
+  const [key, setKey] = useState("");
+
   const dispatch = useDispatch();
   const { openCaptcha } = useSelector((state: any) => state.model);
   const [forgot, setForgot] = useState(false);
@@ -123,6 +125,8 @@ const LoginEmail: React.FC<LoginEmailProps> = ({ handleBack }) => {
       {/* Conditionally render the ForgotPass component if `forgot` is true */}
       {openCaptcha && (
         <Captch
+        key={key}
+        setKey={setKey}
           setIsVisible={setIsVisible}
           isLogin={true}
           username={email}

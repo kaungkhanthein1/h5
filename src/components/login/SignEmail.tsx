@@ -24,6 +24,7 @@ interface SignEmailProps {
 
 const SignEmail: React.FC<SignEmailProps> = ({ handleBack2 }) => {
   const dispatch = useDispatch();
+  const [key, setKey] = useState("");
   const { openCaptcha, openOtp, openSignUpEmailModel, openUserNameForm } =
     useSelector((state: any) => state.model);
   const [showOtp, setShowOtp] = useState(false);
@@ -57,6 +58,7 @@ const SignEmail: React.FC<SignEmailProps> = ({ handleBack2 }) => {
   const show = () => {
     setShowPassword(!showPassword);
   };
+
 
   // Password validation function
   const validatePassword = (password: string) => {
@@ -98,15 +100,17 @@ const SignEmail: React.FC<SignEmailProps> = ({ handleBack2 }) => {
   const handleClose = () => {
     setIsVisible(false);
   };
-
+  // console.log(key);
   return (
     <>
       {openOtp && (
-        <Opt setIsVisible={setIsVisible} password={password} email={email} />
+        <Opt key={key} setIsVisible={setIsVisible} password={password} email={email} />
       )}
       <div className="min-h-screen flex items-center justify-center overflow-hidde fixed z-[99999]">
         {openCaptcha && (
           <Captch
+            key={key}
+            setKey={setKey}
             setIsVisible={setIsVisible}
             isLogin={false}
             username={email}

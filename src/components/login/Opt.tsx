@@ -17,20 +17,28 @@ import {
   useSignUpPhoneMutation,
 } from "../../features/login/RegisterApi";
 import ErrorToast from "../../pages/profile/error/ErrorToast";
+import { decryptWithAes } from "../../services/newEncryption";
 
 interface OptProps {
   email?: string;
   password?: string;
   phone?: string;
+  key: string;
   setIsVisible: (isVisible: boolean) => void;
 }
 interface messg {
   msg: string;
 }
 
-const Opt: React.FC<OptProps> = ({ email, password, phone, setIsVisible }) => {
+const Opt: React.FC<OptProps> = ({
+  email,
+  password,
+  phone,
+  setIsVisible,
+  key,
+}) => {
   const [signUpEmail, { isLoading, error }] = useSignUpEmailMutation();
-  const [signUpPhone] = useSignUpPhoneMutation();
+  const [signUpPhone , {isLoading : phload}] = useSignUpPhoneMutation();
 
   const [otpDigits, setOtpDigits] = useState<string[]>(Array(6).fill(""));
   const [timer, setTimer] = useState<number>(59);
@@ -38,9 +46,16 @@ const Opt: React.FC<OptProps> = ({ email, password, phone, setIsVisible }) => {
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { captchaCode, captchaKey, openSignUpEmailModel } = useSelector(
-    (state: any) => state.model
-  );
+  const { captchaCode, captchaKey, openSignUpEmailModel, GraphicKey } =
+    useSelector((state: any) => state.model);
+
+    useEffect(() => {
+      if (email) {
+        getOtp(GraphicKey, email, "email");
+      } else if (phone) {
+        getOtp(GraphicKey, phone, "phone");
+      }
+    }, [email, phone]);
 
   useEffect(() => {
     const countdown = setInterval(() => {
@@ -52,14 +67,7 @@ const Opt: React.FC<OptProps> = ({ email, password, phone, setIsVisible }) => {
 
     return () => clearInterval(countdown);
   }, [timer]);
-
-  useEffect(() => {
-    if (email) {
-      getOtp(captchaCode, captchaKey, email, "email");
-    } else if (phone) {
-      getOtp(captchaCode, captchaKey, phone, "phone");
-    }
-  }, [captchaCode, email]);
+  // console.log(GraphicKey)
 
   const closeAllModals = () => {
     startTransition(() => {
@@ -73,40 +81,46 @@ const Opt: React.FC<OptProps> = ({ email, password, phone, setIsVisible }) => {
     const updatedOTP = [...otpDigits];
     updatedOTP[index] = value;
     setOtpDigits(updatedOTP);
-  
+
     if (value && index < inputRefs.current.length - 1) {
       inputRefs.current[index + 1]?.focus();
     }
     if (!value && index > 0) {
       inputRefs.current[index - 1]?.focus();
     }
-  
+
     // Handle OTP submission when all digits are filled
     if (updatedOTP.every((digit) => digit)) {
       // Remove focus from all inputs
       inputRefs.current.forEach((input) => input?.blur());
-  
+
       const otpCode = updatedOTP.join("");
       try {
+        console.log(otpCode);
         if (email && password) {
-          const result = await signUpEmail({
+          const data: any = await signUpEmail({
             email,
             password,
             email_code: otpCode,
           }).unwrap();
-          if (result && result.msg) {
+
+          if (data) {
+            const result: any = decryptWithAes(data);
+            console.log(result);
             dispatch(setOtpOpen(false));
             dispatch(showToast({ message: result.msg, type: "error" }));
             localStorage.setItem("authToken", JSON.stringify(result));
             setTimeout(() => closeAllModals(), 1000);
           }
         } else if (phone && password) {
-          const result = await signUpPhone({
+          const data: any = await signUpPhone({
             phone,
             password,
             sms_code: otpCode,
           }).unwrap();
-          if (result && result.msg) {
+          if (data) {
+            const result: any = decryptWithAes(data);
+            console.log(result);
             dispatch(setOtpOpen(false));
             dispatch(showToast({ message: result.msg, type: "success" }));
             localStorage.setItem("authToken", JSON.stringify(result));
@@ -115,23 +129,23 @@ const Opt: React.FC<OptProps> = ({ email, password, phone, setIsVisible }) => {
         }
       } catch (error: any) {
         const errorMessage = error.data?.msg || "An error occurred";
+        console.log("errorMessage", errorMessage);
         dispatch(showToast({ message: errorMessage, type: "error" }));
         inputRefs.current.forEach((input) => input?.focus()); // Optional: Refocus on inputs if needed
       }
     }
   };
-  
 
   const resendOtp = () => {
     if (email) {
       setTimer(59);
       setOtpDigits(Array(6).fill(""));
-      getOtp(captchaCode, captchaKey, email, "email");
+      getOtp(GraphicKey, email, "email");
       dispatch(showToast({ message: "验证码已成功重新发送", type: "success" }));
     } else if (phone) {
       setTimer(59);
       setOtpDigits(Array(6).fill(""));
-      getOtp(captchaCode, captchaKey, phone, "phone");
+      getOtp(GraphicKey, phone, "phone");
       dispatch(showToast({ message: "验证码已成功重新发送", type: "success" }));
     }
   };
@@ -178,15 +192,21 @@ const Opt: React.FC<OptProps> = ({ email, password, phone, setIsVisible }) => {
       </div>
 
       <div className="w-full flex justify-center items-center">
-        <button
-          disabled={timer > 0}
-          onClick={resendOtp}
-          className={`w-[320px] text-[14px] font-[600] leading-[22px]  mt-[20px] py-[10px] px-[16px] rounded-[80px] ${
-            timer > 0 ? "next_button text-[#777]" : "login_button text-white"
-          }`}
-        >
-          {buttonText}
-        </button>
+        {isLoading || phload ? (
+          <button disabled className="next_button text-[#777] w-[320px] text-[14px] font-[600] leading-[22px]  mt-[20px] py-[10px] px-[16px] rounded-[80px]">
+            加载中..
+          </button>
+        ) : (
+          <button
+            disabled={timer > 0}
+            onClick={resendOtp}
+            className={`w-[320px] text-[14px] font-[600] leading-[22px]  mt-[20px] py-[10px] px-[16px] rounded-[80px] ${
+              timer > 0 ? "next_button text-[#777]" : "login_button text-white"
+            }`}
+          >
+            {buttonText}
+          </button>
+        )}
       </div>
       <ErrorToast />
     </div>

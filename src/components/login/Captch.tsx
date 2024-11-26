@@ -5,22 +5,28 @@ import {
   setAuthModel,
   setCapCode,
   setCaptchaOpen,
+  setGraphicKey,
   setLoginOpen,
   setOCapKey,
   setOtpOpen,
   setSignupOpen,
 } from "../../features/login/ModelSlice";
-import { getCaptcha, login } from "../../services/userService"; // Importing service methods
+import {
+  check_captchaRegister,
+  getCaptcha,
+  login,
+} from "../../services/userService"; // Importing service methods
 import { useNavigate } from "react-router-dom";
 import { showToast } from "../../pages/profile/error/ErrorSlice";
 
 const Captch: React.FC<{
   username: string;
   setIsVisible: (isVisible: boolean) => void;
-
+  key: string;
+  setKey: (key: string) => void;
   password: string;
   isLogin: boolean;
-}> = ({ username, password, isLogin,setIsVisible }) => {
+}> = ({ username, password, isLogin, setIsVisible, key, setKey }) => {
   const dispatch = useDispatch();
   const [captchaCode, setCaptchaCode] = useState("");
   const [captchaImage, setCaptchaImage] = useState<string | null>(null);
@@ -84,8 +90,8 @@ const Captch: React.FC<{
       dispatch(setCaptchaOpen(false));
 
       // Manually redirect to the home page after login
-    } catch (err:any) {
-      const Errmessage = err.response.data.msg
+    } catch (err: any) {
+      const Errmessage = err.response.data.msg;
       dispatch(showToast({ message: Errmessage, type: "error" }));
       dispatch(setCaptchaOpen(false));
     }
@@ -99,17 +105,32 @@ const Captch: React.FC<{
     });
   };
 
-  const handleOtp = () => {
-    dispatch(setCapCode(captchaCode));
-    dispatch(setOCapKey(keyStatus));
-    dispatch(setCaptchaOpen(false));
-    dispatch(setOtpOpen(true));
+  const handleOtp = async () => {
+    try {
+      const data = await check_captchaRegister(captchaCode, keyStatus);
+      if (!data.code) {
+        setKey(data);
+        dispatch(setGraphicKey(data))
+        dispatch(setCaptchaOpen(false));
+        dispatch(setOtpOpen(true));
+        // console.log(data);
+      } else {
+        dispatch(showToast({ message: "图形验证码错误", type: "error" }));
+      }
+    } catch (error: any) {
+      const Errmessage = error.response.data.msg;
+      console.log("err", Errmessage);
+    }
+    // dispatch(setCapCode(captchaCode));
+    // dispatch(setOCapKey(keyStatus));
+    // dispatch(setCaptchaOpen(false));
+    // dispatch(setOtpOpen(true));
   };
 
   const handleClose = () => {
-    dispatch(setCaptchaOpen(false))
-    setIsVisible(true)
-  }
+    dispatch(setCaptchaOpen(false));
+    setIsVisible(true);
+  };
 
   return (
     <div className="fixed inset-0 z-[999998] bg-black/50 backdrop-blur-[12px] w-screen h-screen flex justify-center items-center">
@@ -117,7 +138,7 @@ const Captch: React.FC<{
         <div className="bg-[#1C1B20] w-[320px] h-[170px] p-[20px]">
           <div className="flex justify-center items-center pb-[16px] relative">
             <h1 className="text-white text-[16px] font-[400] text-center">
-            验证
+              验证
             </h1>
             <img
               onClick={handleClose}
