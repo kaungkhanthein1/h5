@@ -146,18 +146,19 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   };
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    const interval = setInterval(async() => {
       if (playerRef.current) {
-        reportProgress(
+        await reportProgress(
           playerRef.current.currentTime,
           playerRef.current.duration
         );
+        refetch();
       }
     }, 5000); // 5 seconds interval
 
     return () => clearInterval(interval); // Cleanup interval on unmount
   }, []);
-  
+
   const handlePiP = () => {
     if (document.pictureInPictureEnabled && playerRef.current) {
       if (playerRef.current.video !== document.pictureInPictureElement) {
