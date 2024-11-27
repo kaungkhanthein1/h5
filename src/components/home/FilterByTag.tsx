@@ -12,11 +12,9 @@ import { setShowFilterTag } from "../../features/counter/counterSlice";
 import { useGetHeaderTopicsQuery } from "../../services/helperService";
 
 const FilterByTag = ({
-  data,
-  sort,
   secondDivRef,
   setIsSecondDivAtTop,
-  isSecondDivAtTop,
+  paddingTop,
 }: any) => {
   const selectedClassRef1 = useRef<any>(null);
   const selectedYearRef1 = useRef<any>(null);
@@ -87,7 +85,6 @@ const FilterByTag = ({
       });
     }
   }, [area]);
-  
 
   if (isLoading || isFetching) {
     return null; // Ensure you return null instead of undefined
@@ -95,7 +92,11 @@ const FilterByTag = ({
 
   return (
     <>
-      <div className="w-full pt-5 pb-2 flex flex-col gap-3">
+      <div
+        className={`w-full ${
+          paddingTop?.length ? paddingTop : ""
+        } pb-2 flex flex-col gap-3`}
+      >
         <div className="flex overflow-x-scroll px-3 gap-5 remove-scrollbar items-center pt-2">
           {configData?.data?.movie_screen?.sort?.map(
             (item: any, index: any) => (

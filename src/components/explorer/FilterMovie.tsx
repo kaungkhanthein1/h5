@@ -17,8 +17,9 @@ import {
   setYear,
 } from "../../pages/explorer/slice/ExploreSlice";
 import { convertToSecureUrl } from "../../services/newEncryption";
+import { useGetFilteredDataQuery } from "../../pages/home/services/homeApi";
 const FilterMovie = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   const [movieData, setMovieData] = useState<any>([]);
   const dispatch = useDispatch();
   const activeTab = useSelector((state: any) => state.explore.activeTab);
@@ -29,7 +30,7 @@ const FilterMovie = () => {
   const [page, setPage] = useState(1);
   const [page2, setPage2] = useState(2);
   const [hasMore, setHasMore] = useState(true);
-  const [totalPage, setTotalPage] = useState<any>(null);
+  const [totalData, setTotalData] = useState<any>(null);
   const [nomoredata, setNomoredata] = useState(false);
   const [pageSize, setPageSize] = useState(9);
 
@@ -42,28 +43,25 @@ const FilterMovie = () => {
     (data: any) => data?.id === activeTab
   );
 
-  const getMoviesByType = async (id: any) => {
-    setIsLoading(true);
-    try {
-      const { data } = await axios.get(
-        convertToSecureUrl(
-          `${process.env.REACT_APP_API_URL}/movie/screen/list?type_id=${id}&&sort=${sort}&&class=${classData}&&area=${area}&&year=${year}&&pageSize=${pageSize}&&page=${page}`
-        )
-      );
-      if (data?.data?.list?.length >= 0) {
-        setIsLoading(false);
-      } else {
-        setIsLoading(false);
-        setNomoredata(true);
-      }
+  const {
+    data,
+    isFetching: dataFetching,
+    isLoading,
+  } = useGetFilteredDataQuery({
+    id: activeTab,
+    sort,
+    classData,
+    area,
+    year,
+    page,
+    pageSize,
+  });
+  useEffect(() => {
+    if (data?.data?.list?.length) {
       setMovieData(data?.data?.list);
-      setTotalPage(data?.data?.total);
-      if (data?.data?.total > page) setHasMore(true);
-    } catch (err) {
-      console.log("err is=>", err);
+      setTotalData(data?.data?.total);
     }
-  };
-
+  }, [data]);
   const fetchData = async () => {
     setPage2((prev) => prev + 1);
     const { data } = await axios.get(
@@ -71,31 +69,26 @@ const FilterMovie = () => {
         `${process.env.REACT_APP_API_URL}/movie/screen/list?type_id=${activeTab}&&sort=${sort}&&class=${classData}&&area=${area}&&year=${year}&&pageSize=${pageSize}&&page=${page2}`
       )
     );
-    if (data?.data?.list?.length >= 0) {
-      setIsLoading(false);
-    }
+    // if (data?.data?.list?.length >= 0) {
+    //   setIsLoading(false);
+    // }
     // setMovieData(movieData.concat(data?.data?.list));
     setMovieData((prev: any) => [...prev, ...data?.data?.list]);
   };
-
   useEffect(() => {
-    isLoading && window.scrollTo(0, 0);
-  }, [isLoading]);
-
-  useEffect(() => {
-    getMoviesByType(activeTab);
+    // getMoviesByType(activeTab);
     window.scrollTo(0, 0);
     setPage(1);
     setPage2(2);
-    setHasMore(true);
+    // setHasMore(true);
   }, [activeTab, sort, area, year, classData]);
-
   useEffect(() => {
-    if (totalPage <= movieData?.length) {
+    if (totalData <= movieData?.length) {
       setHasMore(false);
+    } else {
+      setHasMore(true);
     }
-  }, [movieData]);
-
+  }, [totalData, movieData]);
   useEffect(() => {
     dispatch(setSort("by_default"));
     dispatch(setSortName("综合"));
@@ -112,7 +105,7 @@ const FilterMovie = () => {
     <div className="bg-background text-text min-h-screen relative">
       <div className="">
         <FilterTag />
-        {isLoading ? (
+        {isLoading || dataFetching ? (
           <div className="mt-10 flex justify-center items-center w-full">
             <Loader />
           </div>
