@@ -81,7 +81,7 @@ const FilterMovie = () => {
     setPage(1);
     setPage2(2);
     // setHasMore(true);
-  }, [activeTab, sort, area, year, classData]);
+  }, [sort, area, year, classData]);
   useEffect(() => {
     if (totalData <= movieData?.length) {
       setHasMore(false);

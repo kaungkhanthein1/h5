@@ -54,30 +54,6 @@ const FilteredByType = () => {
     }
   }, [data]);
 
-  // console.log(movieData, "data");
-
-  // const getMoviesByType = async (id: any) => {
-  //   setIsLoading(true);
-  //   try {
-  //     const { data } = await axios.get(
-  //       convertToSecureUrl(
-  //         `${process.env.REACT_APP_API_URL}/movie/screen/list?type_id=${id}&&sort=${sort}&&class=${classData}&&area=${area}&&year=${year}&&pageSize=${pageSize}&&page=${page}`
-  //       )
-  //     );
-  //     if (data?.data?.list?.length >= 0) {
-  //       setIsLoading(false);
-  //     } else {
-  //       setIsLoading(false);
-  //       setNomoredata(true);
-  //     }
-  //     setMovieData(data?.data?.list);
-  //     setTotalPage(data?.data?.total);
-  //     if (data?.data?.total > page) setHasMore(true);
-  //   } catch (err) {
-  //     console.log("err is=>", err);
-  //   }
-  // };
-
   const fetchData = async () => {
     setPage2((prev) => prev + 1);
     const { data } = await axios.get(
@@ -85,30 +61,14 @@ const FilteredByType = () => {
         `${process.env.REACT_APP_API_URL}/movie/screen/list?type_id=${activeTab}&&sort=${sort}&&class=${classData}&&area=${area}&&year=${year}&&pageSize=${pageSize}&&page=${page2}`
       )
     );
-    // if (data?.data?.list?.length >= 0) {
-    //   setIsLoading(false);
-    // }
-    // setMovieData(movieData.concat(data?.data?.list));
     setMovieData((prev: any) => [...prev, ...data?.data?.list]);
   };
 
-  // useEffect(() => {
-  //   isLoading && window.scrollTo(0, 0);
-  // }, [isLoading]);
-
   useEffect(() => {
-    // getMoviesByType(activeTab);
     window.scrollTo(0, 0);
     setPage(1);
     setPage2(2);
-    // setHasMore(true);
-  }, [activeTab, sort, area, year, classData]);
-
-  // useEffect(() => {
-  //   if (totalPage <= movieData?.length) {
-  //     setHasMore(false);
-  //   }
-  // }, [movieData]);
+  }, [sort, area, year, classData]);
 
   useEffect(() => {
     if (totalData <= movieData?.length) {
@@ -132,7 +92,6 @@ const FilteredByType = () => {
       <div className=" mt-[100px] text-text min-h-screen">
         <div className="">
           <FilterByTag paddingTop="pt-5" />
-          {/* <NewAds section="start" /> */}
           {isFetching || isLoading ? (
             <div className="mt-10 flex justify-center items-center w-full">
               <Loader />

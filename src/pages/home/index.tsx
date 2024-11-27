@@ -1,10 +1,9 @@
-import { useEffect, useState } from "react";
 import Movies from "../../components/home/Movies";
 import Banner from "../../components/home/Banner";
 import { useGetRecommendedMoviesQuery } from "./services/homeApi";
 import Loader from "../search/components/Loader";
 import ContinueWatching from "../../components/home/ContinueWatching";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import FilteredByType from "../../components/home/FilteredByType";
 import "../../components/home/home.css";
 import { useGetRecordQuery } from "../profile/services/profileApi";
@@ -15,7 +14,7 @@ const Home: React.FC = () => {
   const activeTab = useSelector((state: any) => state.home.activeTab);
   const { data: movies } = useGetRecordQuery();
 
-  const ads = data?.data?.filter((item: any) => item?.layout === "advert_self");
+  // const ads = data?.data?.filter((item: any) => item?.layout === "advert_self");
 
   return (
     <>
@@ -27,16 +26,16 @@ const Home: React.FC = () => {
           {data && !isLoading ? (
             <div className="text-text min-h-screen pb-24 flex flex-col gap-5">
               {data?.data?.map((movieData: any, index: any) => {
-                <h1>{movieData?.layout}</h1>
                 if (movieData?.layout === "index_recommend_carousel") {
                   return (
                     <>
                       <Banner key={index} list={movieData?.list} />
                       {movies?.length !== 0 && <ContinueWatching />}
-                      {/* <Ads section={"start"} /> */}
-                      {/* <NewAds section={"screen_index"} /> */}
-                      {ads && <HomeAds data={ads[0]?.data} isLoading={isLoading} />}
                     </>
+                  );
+                } else if (movieData?.layout === "advert_self") {
+                  return (
+                    <HomeAds data={movieData?.data} isLoading={isLoading} />
                   );
                 } else if (movieData?.layout === "base") {
                   return <Movies key={index} movieData={movieData} />;
