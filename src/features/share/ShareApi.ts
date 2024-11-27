@@ -1,4 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import {
+  convertToSecurePayload,
+  convertToSecureUrl,
+} from "../../services/newEncryption";
+
+const convertUrl = convertToSecureUrl(`${process.env.REACT_APP_API_URL}`);
 
 const ShareApi = createApi({
   reducerPath: "shareApi",
@@ -32,21 +38,47 @@ const ShareApi = createApi({
       query: ({ qr_create }) => ({
         url: "/user/get_share",
         method: "GET",
-        params: {
+        params: convertToSecurePayload({
           qr_create: qr_create,
-        },
+        }),
       }),
     }),
     getInvitedDetails: builder.query({
-      query: ({ act, page, pageSize }) => ({
-        url: "/user/invite_details",
-        method: "GET",
-        params: {
-          act: act,
-          page: page,
-          pageSize: pageSize,
-        },
-      }),
+      // Custom query function
+      queryFn: async (
+        { act, page, pageSize },
+        _queryApi,
+        _extraOptions,
+        baseQuery
+      ) => {
+        try {
+          // Call the baseQuery for fetchBaseQuery logic
+          const result = await baseQuery({
+            url: convertToSecureUrl("/user/invite_details"),
+            method: "GET",
+            params: convertToSecurePayload({
+              act: act,
+              page: page,
+              pageSize: pageSize,
+            }),
+          });
+          // If the result has an error, handle it
+          if (result.error) {
+            return { error: result.error };
+          }
+
+          // Return the response data
+          return result;
+        } catch (error: any) {
+          // Catch unexpected errors
+          return {
+            error: {
+              status: 500,
+              data: error.message || "Internal Server Error",
+            },
+          };
+        }
+      },
     }),
   }),
 });

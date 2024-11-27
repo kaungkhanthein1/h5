@@ -10,25 +10,29 @@ import user from "../../../assets/share/user.svg";
 import { Link, useNavigate } from "react-router-dom";
 import "../share.css";
 import { useGetInvitedDetailsQuery } from "../../../features/share/ShareApi";
+import axios from "axios";
+import { convertToSecureUrl } from "../../../services/newEncryption";
 
 interface MemberProps {}
 
 const Member: React.FC<MemberProps> = ({}) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const {
     data: memberList,
     refetch,
     isFetching,
     isError,
-  } = useGetInvitedDetailsQuery({
+  } : any = useGetInvitedDetailsQuery({
     act: "list",
     page: 1,
     pagesize: 10,
   });
 
+  // console.log(memberList);
+
   // Trigger refetch when the component mounts
   useEffect(() => {
-    refetch(); // Refetch the data when the component renders
+    refetch()
   }, [refetch]);
 
   return (
@@ -38,7 +42,11 @@ const Member: React.FC<MemberProps> = ({}) => {
         src={BG}
         alt=""
       />
-      <img src={dust} className=" absolute left-0 right-0 top-0 z-[-1] rain_effect_thuHtoo" alt="" />
+      <img
+        src={dust}
+        className=" absolute left-0 right-0 top-0 z-[-1] rain_effect_thuHtoo"
+        alt=""
+      />
       <div className=" absolute hidden">
         <div className="rain_effect_thuHtoo"></div>
       </div>

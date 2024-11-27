@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./share.css";
 import bg1 from "../../assets/share/bg1.png";
 import back from "../../assets/login/back.svg";
@@ -17,12 +17,32 @@ import { useDispatch, useSelector } from "react-redux";
 import { useGetUserQuery } from "../profile/services/profileApi";
 import { showToast } from "../profile/error/ErrorSlice";
 import { toPng } from "html-to-image";
+import axios from "axios";
+import {
+  convertToSecureUrl,
+  decryptWithAes,
+} from "../../services/newEncryption";
 
 interface ShareProps {}
 
 const Share: React.FC<ShareProps> = ({}) => {
   const dispatch = useDispatch();
   const { data } = useGetShareScanQuery({ qr_create: "1" });
+  const [invite, setInvite] = useState<any>();
+
+  const getkk = async () => {
+    const { data } = await axios.get(
+      convertToSecureUrl(
+        `${process.env.REACT_APP_API_URL}//user/get_share?qr_create=1`
+      )
+    );
+    const result: any = await decryptWithAes(data);
+    setInvite(result);
+  };
+
+  useEffect(() => {
+    getkk();
+  }, []);
 
   const [copySuccess, setCopySuccess] = useState(false);
   const imageRef = useRef<HTMLDivElement>(null);
@@ -32,6 +52,7 @@ const Share: React.FC<ShareProps> = ({}) => {
   const token = parsedLoggedIn?.data?.access_token;
 
   const { data: userData, error } = useGetUserQuery(token);
+  // console.log(userData)
 
   const navigate = useNavigate();
   const handleCopy = () => {
@@ -51,8 +72,8 @@ const Share: React.FC<ShareProps> = ({}) => {
   };
 
   const handleShareLink = () => {
-    if (data) {
-      const link = data?.data?.link;
+    if (invite) {
+      const link = invite?.data?.link;
 
       navigator.clipboard
         .writeText(link)
@@ -154,7 +175,7 @@ const Share: React.FC<ShareProps> = ({}) => {
         </div>
       </div>
       {/* scan */}
-      {data && (
+      {invite ? (
         <div
           ref={imageRef}
           className=" flex justify-center items-center pt-[30px]"
@@ -162,7 +183,7 @@ const Share: React.FC<ShareProps> = ({}) => {
           <div className="scan py-6 px-10 flex flex-col justify-center items-center gap-[16px]">
             <img
               className=" w-[180px] h-[180px] rounded-[10px]"
-              src={data.data.qrcode.data}
+              src={invite?.data.qrcode.data}
               alt="QR Code"
             />
             {/* data */}
@@ -179,6 +200,15 @@ const Share: React.FC<ShareProps> = ({}) => {
                 </div>
               </div>
             )}
+          </div>
+        </div>
+      ) : (
+        <div className=" flex justify-center items-center pt-[30px]">
+          <div className="scan py-6 px-10 flex flex-col justify-center items-center gap-[16px]">
+            <div className=" animate-pulse bg-white/30 w-[180px] h-[180px] rounded-[10px]"></div>
+            <div className="">
+              <div className="bg-white/30 rounded-[16px] animate-pulse w-[200px] h-[30px] flex gap-[8px]  px-[16px] py-[8px]"></div>
+            </div>
           </div>
         </div>
       )}
