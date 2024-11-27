@@ -145,6 +145,19 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     onBack();
   };
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (playerRef.current) {
+        reportProgress(
+          playerRef.current.currentTime,
+          playerRef.current.duration
+        );
+      }
+    }, 5000); // 5 seconds interval
+
+    return () => clearInterval(interval); // Cleanup interval on unmount
+  }, []);
+  
   const handlePiP = () => {
     if (document.pictureInPictureEnabled && playerRef.current) {
       if (playerRef.current.video !== document.pictureInPictureElement) {
