@@ -6,25 +6,16 @@ import Loader from "../search/components/Loader";
 import ContinueWatching from "../../components/home/ContinueWatching";
 import { useDispatch, useSelector } from "react-redux";
 import FilteredByType from "../../components/home/FilteredByType";
-import { setActiveTab } from "./slice/HomeSlice";
 import "../../components/home/home.css";
 import { useGetRecordQuery } from "../profile/services/profileApi";
-import Ads from "../../components/NewAds";
-import NewAds from "../../components/NewAds";
 import HomeAds from "../../components/home/HomeAds";
 
 const Home: React.FC = () => {
-  const [adsData, setAdsData] = useState<any>([]);
   const { data, isLoading } = useGetRecommendedMoviesQuery();
   const activeTab = useSelector((state: any) => state.home.activeTab);
   const { data: movies } = useGetRecordQuery();
 
-  const dispatch = useDispatch();
-  useEffect(() => {
-    // dispatch(setActiveTab(0));
-  }, []);
-
-  const ads = data?.data?.list?.filter((item: any) => item?.layout === "advert_self");
+  const ads = data?.data?.filter((item: any) => item?.layout === "advert_self");
 
   return (
     <>

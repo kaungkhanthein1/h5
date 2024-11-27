@@ -109,7 +109,7 @@ function convertUrlToFormData(url: string): Record<string, any> {
 
 function createSecureUrl(base: string, formData: Record<string, any>): string {
   const publicKey = process.env.REACT_APP_PUBLIC_KEY;
-
+  
   if (!publicKey) {
     throw new Error("Public key is not defined");
   }

@@ -22,7 +22,7 @@ export const explorerAPi = createApi({
   endpoints: (builder) => ({
     getExploreList: builder.query<any, any>({
       query: ({ id, sort, classData, area, year }) => {
-        return convertToSecureUrl(`/movie/explore/list?type_id=${id}&&sort=${sort}&&class=${classData}&&area=${area}&&year=${year}`);
+        return convertToSecureUrl(`/movie/screen/list?type_id=${id}&&sort=${sort}&&class=${classData}&&area=${area}&&year=${year}`);
       },
     }),
     getMovieTopicList: builder.query<any, void>({
