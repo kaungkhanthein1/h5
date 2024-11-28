@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
 import { setPanding } from "../features/login/ModelSlice";
-import { useGetAdsStartQuery } from "../features/share/AdsApi";
+import { useGetAdsQuery } from "../services/helperService";
 import land from "../assets/login/land.png";
 
 import ad1 from "../assets/login/ad1.png";
@@ -12,7 +12,7 @@ const Landing: React.FC = () => {
   const [cur, setCur] = useState<any>([]); // Default to an empty array
   const dispatch = useDispatch();
   const [skip, setSkip] = useState(3);
-  const { data } = useGetAdsStartQuery("");
+  const { data } = useGetAdsQuery();
 
   useEffect(() => {
     setCur(data?.data["start"]); // Set cur only if it's an array
