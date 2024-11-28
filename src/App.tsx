@@ -93,11 +93,11 @@ const App: React.FC = () => {
     if (!hasSeenLanding) {
       sessionStorage.setItem("hasSeenLanding", "true"); // Mark as shown
       dispatch(setPanding(true));
-      const timer = setTimeout(() => {
-        dispatch(setPanding(false));
-      }, 3000);
+      // const timer = setTimeout(() => {
+      //   dispatch(setPanding(false));
+      // }, 3000);
 
-      return () => clearTimeout(timer);
+      // return () => clearTimeout(timer);
     }
   }, [dispatch]);
 
