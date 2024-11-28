@@ -22,6 +22,7 @@ import Favorite from "./pages/profile/Favorite";
 import Loader from "./pages/search/components/Loader";
 import ErrorToast from "./pages/profile/error/ErrorToast";
 import Landing from "./components/Landing";
+import BannerAds from './components/BannerAds';
 // import Menber from "./pages/share/member";
 // import Share from "./pages/share";
 
@@ -138,6 +139,7 @@ const App: React.FC = () => {
         <Landing />
       ) : (
         <div className="flex flex-col min-h-screen">
+          <BannerAds />
           {/* Conditionally render Header */}
           {!hideHeaderFooter && !hideHeader && <Header />}
 
