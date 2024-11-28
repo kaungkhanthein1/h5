@@ -139,7 +139,7 @@ const App: React.FC = () => {
         <Landing />
       ) : (
         <div className="flex flex-col min-h-screen">
-          <BannerAds />
+          {/* <BannerAds /> */}
           {/* Conditionally render Header */}
           {!hideHeaderFooter && !hideHeader && <Header />}
 
