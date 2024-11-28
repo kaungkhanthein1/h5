@@ -92,6 +92,9 @@ const FilteredByType = () => {
       <div className=" mt-[100px] text-text min-h-screen">
         <div className="">
           <FilterByTag paddingTop="pt-5" />
+          <div className="mt-5">
+            <NewAds section="topic_movies_top" />
+          </div>
           {isFetching || isLoading ? (
             <div className="mt-10 flex justify-center items-center w-full">
               <Loader />

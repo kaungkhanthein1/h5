@@ -89,7 +89,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
               handleVideoError(videoUrl);
             }
           });
-        } else if (art.video.canPlayType("application/vnd.apple.mpegurl")) {
+        } else {
           art.video.src = videoUrl; // For Safari and iOS
         }
 

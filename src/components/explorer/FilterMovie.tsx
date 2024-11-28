@@ -18,6 +18,7 @@ import {
 } from "../../pages/explorer/slice/ExploreSlice";
 import { convertToSecureUrl } from "../../services/newEncryption";
 import { useGetFilteredDataQuery } from "../../pages/home/services/homeApi";
+import NewAds from "../NewAds";
 const FilterMovie = () => {
   // const [isLoading, setIsLoading] = useState(false);
   const [movieData, setMovieData] = useState<any>([]);
@@ -105,6 +106,9 @@ const FilterMovie = () => {
     <div className="bg-background text-text min-h-screen relative">
       <div className="">
         <FilterTag />
+        <div className="mb-5 -mt-3">
+        <NewAds section="topic_movies_top" />
+      </div>
         {isLoading || dataFetching ? (
           <div className="mt-10 flex justify-center items-center w-full">
             <Loader />

@@ -7,6 +7,7 @@ import { setActiveWeek } from "../../pages/explorer/slice/ExploreSlice";
 import Loader from "../../pages/search/components/Loader";
 import axios from "axios";
 import { convertToSecureUrl } from "../../services/newEncryption";
+import NewAds from "../NewAds";
 
 const Tab2 = () => {
   const [currentIndex, setCurrentIndex] = useState<any>(null);
@@ -135,6 +136,9 @@ const Tab2 = () => {
           ))}
         </div>
       </nav>
+      <div className="my-3">
+        <NewAds section="zhuiju_weektable_under" />
+      </div>
       {isFetching ? (
         <div className="flex justify-center items-center mt-10">
           <Loader />
