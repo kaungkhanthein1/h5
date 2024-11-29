@@ -33,7 +33,7 @@ const FilterMovie = () => {
   const [hasMore, setHasMore] = useState(true);
   const [totalData, setTotalData] = useState<any>(null);
   const [nomoredata, setNomoredata] = useState(false);
-  const [pageSize, setPageSize] = useState(9);
+  const [pageSize, setPageSize] = useState(30);
 
   const {
     data: configData,
@@ -107,8 +107,8 @@ const FilterMovie = () => {
       <div className="">
         <FilterTag />
         <div className="mb-5 -mt-3">
-        <NewAds section="topic_movies_top" />
-      </div>
+          <NewAds section="topic_movies_top" />
+        </div>
         {isLoading || dataFetching ? (
           <div className="mt-10 flex justify-center items-center w-full">
             <Loader />

@@ -26,7 +26,7 @@ const FilteredByType = () => {
   const [movieData, setMovieData] = useState<any>([]);
   const [totalData, setTotalData] = useState<any>(null);
   const [hasMore, setHasMore] = useState(true);
-  const [pageSize, setPageSize] = useState(9);
+  const [pageSize, setPageSize] = useState(30);
   const [page, setPage] = useState(1);
   const [page2, setPage2] = useState(2);
   // const [isLoading, setIsLoading] = useState(false);
