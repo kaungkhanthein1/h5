@@ -151,7 +151,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         
         const token = getToken();
         if (token) {
-          await reportProgress(
+          reportProgress(
             playerRef.current.currentTime,
             playerRef.current.duration
           );

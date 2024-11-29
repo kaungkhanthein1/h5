@@ -11,7 +11,7 @@ const HomeAds = ({ data, isLoading }: any) => {
 
   return (
     <div className="max-md:px-3 px-10 flex flex-col justify-center">
-      <div className="grid w-full grid-cols-5 justify-center items-center gap-2">
+      <div className="grid w-full grid-cols-5 md:grid-cols-10 justify-center items-center gap-2 py-1">
         {isLoading
           ? Array.from({ length: 5 }).map((_, index) => (
               <div className="flex flex-col items-center gap-[4px] animate-pulse">

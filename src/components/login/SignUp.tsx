@@ -104,7 +104,7 @@ const SignUp: React.FC<SignUpProps> = ({ handleBack }) => {
       <AnimatePresence>
         {isVisible && (
           <motion.div
-            className="login_box fixed h-[480px]  bottom-0 z-[99999] w-full max-w-md"
+            className="login_box fixed h-[480px]  bottom-0 z-[99999] w-screen max-w-m"
             initial="hidden"
             animate="visible"
             exit="exit"
