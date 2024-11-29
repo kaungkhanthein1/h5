@@ -22,6 +22,11 @@ const Landing: React.FC = () => {
     setCur(gg);
     if (cur) {
       setcc(cur[0]);
+      const timer = setTimeout(() => {
+        dispatch(setPanding(false));
+      }, 4000);
+
+      return () => clearTimeout(timer);
     }
   }, [data, cur]);
 
