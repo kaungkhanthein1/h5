@@ -8,30 +8,38 @@ import land from "../assets/login/land.png";
 import ad1 from "../assets/login/ad1.png";
 import { Link } from "react-router-dom";
 
-const Landing: React.FC = () => {
-  const [cur, setCur] = useState<any>([]); // Default to an empty array
+const Landing: React.FC<any> = ({ data }) => {
   const dispatch = useDispatch();
-  const [cc, setcc] = useState<any>();
+  const [cc, setCc] = useState<any>();
   const [skip, setSkip] = useState(3);
-  const { data, isLoading } = useGetAdsQuery();
+  const [image, setImage] = useState('');
+  // const { data, isLoading } = useGetAdsQuery();
   const [imgLoad, setImgLoad] = useState(false);
 
   useEffect(() => {
-    const gg = data?.data["start"];
-    console.log(gg);
-    setCur(gg);
-    if (cur) {
-      setcc(cur[0]);
+    if (data?.data) {
+      const cur = data?.data["start"];
+      if(cur && cur.length > 0) {
+        setCc(cur[0])
+        setImage(cur[0]?.data?.image)
+      } else {
+        setImage(land);
+      }
+      const timer = setTimeout(() => {
+        dispatch(setPanding(false));
+      }, 4000);
+
+      return () => clearTimeout(timer);
     }
-  }, [data, cur]);
+  }, [data]);
 
   useEffect(() => {
     if (imgLoad) {
       const countdown = setInterval(() => {
         if (skip > 0) {
           setSkip((prev) => prev - 1);
-        }else{
-          dispatch(setPanding(false))
+        } else {
+          dispatch(setPanding(false));
         }
       }, 1000);
 
@@ -45,20 +53,12 @@ const Landing: React.FC = () => {
   };
 
   return (
-    <div className="relative min-h-[100svh] flex flex-col justify-center items-center">
-      {!cc?.data ? (
-        <img
-          src={land}
-          className="object-center object-cover w-screen h-screen"
-          alt="land"
-        />
-      ) : (
         <>
           <Link to={cc?.data?.url}>
             <img
               className=" h-screen object-cove"
               onLoad={() => setImgLoad(true)}
-              src={cc?.data?.image}
+              src={image}
               alt=""
             />
           </Link>
@@ -78,8 +78,6 @@ const Landing: React.FC = () => {
             </div>
           )}
         </>
-      )}
-    </div>
   );
 };
 
