@@ -15,23 +15,15 @@ const Landing: React.FC = () => {
   const [skip, setSkip] = useState(3);
   const { data, isLoading } = useGetAdsQuery();
   const [imgLoad, setImgLoad] = useState(false);
-  console.log(isLoading);
+
   useEffect(() => {
     const gg = data?.data["start"];
     console.log(gg);
     setCur(gg);
     if (cur) {
       setcc(cur[0]);
-      const timer = setTimeout(() => {
-        dispatch(setPanding(false));
-      }, 4000);
-
-      return () => clearTimeout(timer);
     }
   }, [data, cur]);
-
-  // console.log("img data =", cc);
-  // console.log(skip)
 
   useEffect(() => {
     if (imgLoad) {
