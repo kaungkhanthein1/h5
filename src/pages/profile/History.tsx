@@ -7,7 +7,13 @@ import Loader from "../search/components/Loader";
 import NewAds from "../../components/NewAds";
 
 const History = () => {
-  const { data, isLoading, isFetching, refetch } = useGetRecordQuery(); // Fetch favorite movies list from API
+  const isLoggedIn = localStorage.getItem("authToken");
+  const parsedLoggedIn = isLoggedIn ? JSON.parse(isLoggedIn) : null;
+  const token = parsedLoggedIn?.data?.access_token;
+  const { data, isLoading, isFetching, refetch } = useGetRecordQuery(
+    undefined,
+    { skip: !token }
+  ); // Fetch favorite movies list from API
 
   const [isEditMode, setIsEditMode] = useState(false);
 
@@ -39,8 +45,8 @@ const History = () => {
           />
         ) : (
           <div className="h-[80vh] mt-20">
-                        <div className="w-full">
-            <NewAds section="play_record_up" />
+            <div className="w-full">
+              <NewAds section="play_record_up" />
             </div>
             <div className="flex flex-col justify-center items-center text-center h-[50vh]">
               <svg

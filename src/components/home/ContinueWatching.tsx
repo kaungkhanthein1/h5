@@ -5,7 +5,10 @@ import "./home.css";
 import { useDispatch } from "react-redux";
 
 const ContinueWatching = () => {
-  const { data } = useGetRecordQuery(); // Fetch favorite movies list from API
+  const isLoggedIn = localStorage.getItem("authToken");
+  const parsedLoggedIn = isLoggedIn ? JSON.parse(isLoggedIn) : null;
+  const token = parsedLoggedIn?.data?.access_token;
+  const { data } = useGetRecordQuery(undefined, { skip: !token }); // Fetch favorite movies list from API
 
   const movies = data?.data;
   const moviesData = data?.data; // Assuming `data` is the fetched data containing your movie information
@@ -19,9 +22,6 @@ const ContinueWatching = () => {
   const latestMovies = allMovies
     ?.sort((a: any, b: any) => b.update_time - a.update_time) // Sort by update_time (newest first)
     ?.slice(0, 10); // Take the latest 10 movies
-  const isLoggedIn = localStorage.getItem("authToken");
-  const parsedLoggedIn = isLoggedIn ? JSON.parse(isLoggedIn) : null;
-  const token = parsedLoggedIn?.data?.access_token;
 
   function formatDuration(durationInSeconds: any) {
     const hours = Math.floor(durationInSeconds / 3600);

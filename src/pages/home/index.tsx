@@ -12,9 +12,10 @@ import HomeAds from "../../components/home/HomeAds";
 const Home: React.FC = () => {
   const { data, isLoading } = useGetRecommendedMoviesQuery();
   const activeTab = useSelector((state: any) => state.home.activeTab);
-  const { data: movies } = useGetRecordQuery();
-
-  // const ads = data?.data?.filter((item: any) => item?.layout === "advert_self");
+  const isLoggedIn = localStorage.getItem("authToken");
+  const parsedLoggedIn = isLoggedIn ? JSON.parse(isLoggedIn) : null;
+  const token = parsedLoggedIn?.data?.access_token;
+  const { data: movies } = useGetRecordQuery(undefined, { skip: !token });
 
   return (
     <>
