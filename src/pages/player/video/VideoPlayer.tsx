@@ -148,11 +148,15 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   useEffect(() => {
     const interval = setInterval(async() => {
       if (playerRef.current) {
-        await reportProgress(
-          playerRef.current.currentTime,
-          playerRef.current.duration
-        );
-        refetch();
+        
+        const token = getToken();
+        if (token) {
+          await reportProgress(
+            playerRef.current.currentTime,
+            playerRef.current.duration
+          );
+          refetch();
+        }
       }
     }, 5000); // 5 seconds interval
 
