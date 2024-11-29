@@ -56,7 +56,7 @@ const Landing: React.FC<any> = ({ data }) => {
         <>
           <Link to={cc?.data?.url}>
             <img
-              className=" h-screen object-cove"
+              className="w-full h-screen object-cove"
               onLoad={() => setImgLoad(true)}
               src={image}
               alt=""
