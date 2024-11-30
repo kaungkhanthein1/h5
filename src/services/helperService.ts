@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
 import { getAdsData, getconfigData } from "./playerService";
 import { decryptWithAes } from "./newEncryption";
+import { useDispatch } from "react-redux";
+import { setActiveTab } from "../pages/home/slice/HomeSlice";
 
 export const useGetHeaderTopicsQuery = () => {
   const [data, setData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<any>(null);
   const [isFetching, setIsFetching] = useState<boolean>(false);
+  const dispatch = useDispatch();
 
   const fetchHeaderTopics = async () => {
     const settings = JSON.parse(
@@ -19,6 +22,10 @@ export const useGetHeaderTopicsQuery = () => {
         setData(JSON.parse(cachedData));
         setIsLoading(false);
         return;
+      }
+
+      if (settings?.filterToggle) {
+        dispatch(setActiveTab(0));
       }
 
       const response = await getconfigData(settings);
