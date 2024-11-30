@@ -58,7 +58,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   useEffect(() => {
     let hls: Hls | null = null;
 
-    const initializePlayer = () => {
+    const initializePlayer = async () => {
       if (videoElementRef.current && videoUrl) {
         const art = new Artplayer({
           container: videoElementRef.current,
@@ -113,10 +113,12 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
                   playerRef.current.currentTime,
                   playerRef.current.duration
                 );
-                refetch();
               }
             }
-          },1000)
+          }, 1000)
+          setTimeout(()=>{
+            refetch();
+          }, 3000)
         });
 
         playerRef.current = art;
