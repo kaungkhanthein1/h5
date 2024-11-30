@@ -1,8 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Artplayer from "artplayer";
 import Hls from "hls.js"; // Import Hls.js
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import floatingScreen from "../../../assets/floatingScreen.png";
 import axios from "axios";
 import { VideoPlayerProps } from "../../../model/videoModel";
@@ -103,12 +101,22 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
         // Set resume time if available
         art.once("ready", () => {
-          art.notice.show = '';
-
-          art.mask.show = false;
           if (resumeTime > 0) {
             art.currentTime = resumeTime;
           }
+          setTimeout(()=>{
+            if (playerRef.current) {
+        
+              const token = getToken();
+              if (token) {
+                reportProgress(
+                  playerRef.current.currentTime,
+                  playerRef.current.duration
+                );
+                refetch();
+              }
+            }
+          },1000)
         });
 
         playerRef.current = art;
@@ -158,7 +166,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
           refetch();
         }
       }
-    }, 5000); // 5 seconds interval
+    }, 15000); // 15 seconds interval
 
     return () => clearInterval(interval); // Cleanup interval on unmount
   }, []);

@@ -118,10 +118,8 @@ const DetailPage: React.FC = () => {
             // eslint-disable-next-line eqeqeq
             (x: any) => x.episode_id == playBackInfo.episode_id
           );
-          console.log('episodeIndex is=>', episodeIndex);
           if (episodeIndex > -1) {
             const mvData = mvDetail?.play_from[sourceIndex]?.list[episodeIndex];
-            console.log('mvData is=>', mvData);
             if(!mvData.ready_to_play) {
               const parseData = await parsePlaybackUrl(mvData.episode_id, mvData.from_code, mvData.play_url, '1');
               mvData.play_url = parseData?.data?.play_url;
@@ -237,7 +235,7 @@ const DetailPage: React.FC = () => {
   }
   return (
     <div className="bg-background min-h-screen">
-      {!movieDetail || !currentEpisode ? (
+      {!movieDetail ? (
         <>
           <PlayerLoading onBack={navigateBackFunction}/>
           <div className="flex justify-center items-center pt-52 bg-background">
