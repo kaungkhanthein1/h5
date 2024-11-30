@@ -11,11 +11,20 @@ const Detail = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
+  const settings = JSON.parse(localStorage.getItem("movieAppSettings") || "{}");
+
+  // Set the X-Client-Setting header dynamically
+  const headers = {
+    "X-Client-Setting": JSON.stringify({
+      "pure-mode": settings.filterToggle ? 1 : 0,
+    }),
+  };
 
   const getDetails = async () => {
     setIsLoading(true);
     const res = await fetch(
-      convertToSecureUrl(`${process.env.REACT_APP_API_URL}/movie/topic/${id}`)
+      convertToSecureUrl(`${process.env.REACT_APP_API_URL}/movie/topic/${id}`),
+      { headers }
     );
     const data = await res.json();
     setDetails(data?.data);

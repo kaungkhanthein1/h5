@@ -24,6 +24,11 @@ const SettingFirst = () => {
     localStorage.setItem("movieAppSettings", JSON.stringify(settings));
   }, [filterToggle, pipMode, vibrantMode]);
 
+  const handleFilter = () => {
+    setFilterToggle((prev: any) => !prev);
+    localStorage.removeItem("headerTopics");
+  };
+
   return (
     <div className="profile-div">
       <div className="profile-div-main w-full">
@@ -38,7 +43,7 @@ const SettingFirst = () => {
               <input
                 type="checkbox"
                 checked={filterToggle}
-                onChange={() => setFilterToggle((prev: any) => !prev)}
+                onChange={handleFilter}
                 className="sr-only peer"
               />
               <div

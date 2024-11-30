@@ -18,11 +18,14 @@ export const getMovieDetail = async (id: string) => {
   }
 };
 
-export const getconfigData = async () => {
+export const getconfigData = async (settings: any) => {
   try {
     const response: any = await api.get(convertToSecureUrl("/app/config"), {
       headers: {
         "X-Client-Version": 3098,
+        "X-Client-Setting": JSON.stringify({
+          "pure-mode": settings?.filterToggle ? 1 : 0,
+        }),
       },
     });
     return response.data;
@@ -48,11 +51,16 @@ export const getAdsData = async () => {
 
 export const fetchCommentData = async (id: string, page: number = 1) => {
   try {
-    const response: any = await api.get(convertToSecureUrl(`${process.env.REACT_APP_API_URL}/movie/comments/index?movie_id=${id}&page=${page}&pageSize=10`), {
-      headers: {
-        "X-Client-Version": 3098,
-      },
-    });
+    const response: any = await api.get(
+      convertToSecureUrl(
+        `${process.env.REACT_APP_API_URL}/movie/comments/index?movie_id=${id}&page=${page}&pageSize=10`
+      ),
+      {
+        headers: {
+          "X-Client-Version": 3098,
+        },
+      }
+    );
     return response.data;
   } catch (error) {
     console.error("Error fetching ads data:", error);
@@ -125,10 +133,10 @@ export const fetchNextEpisode = async (fromCode: string, movieId: string) => {
 };
 
 export const parsePlaybackUrl = async (
-	episode_id: string,
-	from_code: string,
-	play_url: string,
-	refresh: string
+  episode_id: string,
+  from_code: string,
+  play_url: string,
+  refresh: string
 ) => {
   try {
     const response = await api.get(
@@ -141,4 +149,4 @@ export const parsePlaybackUrl = async (
     console.error("Error fetching next episode:", error);
     throw error;
   }
-}
+};

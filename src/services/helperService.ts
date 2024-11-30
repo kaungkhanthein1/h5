@@ -9,18 +9,22 @@ export const useGetHeaderTopicsQuery = () => {
   const [isFetching, setIsFetching] = useState<boolean>(false);
 
   const fetchHeaderTopics = async () => {
+    const settings = JSON.parse(
+      localStorage.getItem("movieAppSettings") || "{}"
+    );
+
     try {
-      const cachedData = localStorage.getItem('headerTopics');
+      const cachedData = localStorage.getItem("headerTopics");
       if (cachedData) {
         setData(JSON.parse(cachedData));
         setIsLoading(false);
         return;
       }
 
-      const response = await getconfigData();
+      const response = await getconfigData(settings);
       const data = await decryptWithAes(response);
 
-      localStorage.setItem('headerTopics', JSON.stringify(data));
+      localStorage.setItem("headerTopics", JSON.stringify(data));
       setData(data);
     } catch (err) {
       console.error("Failed to fetch header topics:", err);
@@ -52,7 +56,7 @@ export const useGetAdsQuery = () => {
   const fetchAdsTopics = async () => {
     setIsFetching(true);
     try {
-      const cachedData = localStorage.getItem('AdsQuery');
+      const cachedData = localStorage.getItem("AdsQuery");
       if (cachedData) {
         setConfigData(JSON.parse(cachedData));
         setIsLoading(false);
@@ -62,7 +66,7 @@ export const useGetAdsQuery = () => {
 
       if (response) {
         const data = await decryptWithAes(response);
-        localStorage.setItem('AdsQuery', JSON.stringify(data));
+        localStorage.setItem("AdsQuery", JSON.stringify(data));
         setConfigData(data);
       }
       setError(null);

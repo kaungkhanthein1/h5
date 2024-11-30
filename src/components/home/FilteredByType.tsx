@@ -53,13 +53,22 @@ const FilteredByType = () => {
       setTotalData(data?.data?.total);
     }
   }, [data]);
+  const settings = JSON.parse(localStorage.getItem("movieAppSettings") || "{}");
+
+  // Set the X-Client-Setting header dynamically
+  const headers = {
+    "X-Client-Setting": JSON.stringify({
+      "pure-mode": settings.filterToggle ? 1 : 0,
+    }),
+  };
 
   const fetchData = async () => {
     setPage2((prev) => prev + 1);
     const { data } = await axios.get(
       convertToSecureUrl(
         `${process.env.REACT_APP_API_URL}/movie/screen/list?type_id=${activeTab}&&sort=${sort}&&class=${classData}&&area=${area}&&year=${year}&&pageSize=${pageSize}&&page=${page2}`
-      )
+      ),
+      { headers }
     );
     setMovieData((prev: any) => [...prev, ...data?.data?.list]);
   };

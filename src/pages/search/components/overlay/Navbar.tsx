@@ -58,9 +58,9 @@ const Navbar: React.FC = () => {
 
   return (
     <div className="relative">
-      <div className="flex gap-4 w-full z-10 px-3 input-bg fixed items-center justify-between">
+      <div className="flex gap-4 w-full py-1 px-3 input-bg-overlay z-[9999]  fixed items-center justify-between">
         <form onSubmit={handleSubmit} className="w-full py-3 pt-3  ">
-          <div className="absolute left-6 top-[19px]">
+          <div className="absolute left-6 top-[22px]">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="21"

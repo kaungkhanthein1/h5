@@ -32,7 +32,7 @@ const Search: React.FC = () => {
       <div className="search-bg"></div>
       <Navbar />
       <div className="lg:container lg:mx-auto lg:px-[100px]">
-        <div className="mt-[70px]">
+        <div className="mt-[76px]">
           <Ads section={"search_input_under"} />
         </div>
         <History />
