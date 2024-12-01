@@ -41,7 +41,7 @@ const NewAds: React.FC<NewAdsProps> = ({ section, fromMovie = false }) => {
             ))
           : cur && cur.length > 0 && cur?.map((item, index) => (
             <Link
-            target="_blink"
+            target="_blank"
             className="flex flex-col justify-center items-center gap-[4px]"
             to={item?.data?.url || "#"}
             key={index}
