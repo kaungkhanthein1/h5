@@ -27,7 +27,7 @@ const Landing: React.FC<any> = ({ data }) => {
       }
       const timer = setTimeout(() => {
         dispatch(setPanding(false));
-      }, 4000);
+      }, 6000);
 
       return () => clearTimeout(timer);
     }
