@@ -143,6 +143,7 @@ const DetailPage: React.FC = () => {
               setCurrentEpisode(mvData);
               setResumeTime(0);
             } catch(err) {
+              setCurrentEpisode(mvData);
               setWholePageError(true);
             }
           } else {
