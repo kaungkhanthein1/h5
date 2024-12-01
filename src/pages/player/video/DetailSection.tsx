@@ -188,7 +188,7 @@ const DetailSection: React.FC<DetailSectionProps> = ({
   useEffect(() => {
     setTimeout(()=>{
       window.scrollTo(0, 0);
-    }, 1000)
+    }, 500)
   }, []);
 
   useEffect(() => {

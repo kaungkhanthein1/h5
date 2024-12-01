@@ -193,8 +193,10 @@ const DetailPage: React.FC = () => {
   };
 
   useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [movieDetail]);
+    if(currentEpisode) {
+      window.scrollTo(0, 0);
+    }
+  }, [movieDetail, currentEpisode]);
   
   const handleVideoError = (errorUrl: string) => {
     if (errorVideoUrl !== errorUrl && errorUrl) {

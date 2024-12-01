@@ -67,7 +67,7 @@ const CommentComponent: React.FC<CommentProps> = ({
   }, []);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    // window.scrollTo(0, 0);
   }, []);
   // Fetch comments
   const fetchComments = async () => {
