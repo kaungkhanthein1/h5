@@ -18,11 +18,25 @@ const MovieCard = ({
         to={`/player/${movie?.id}`}
       >
         <div className={`img_a relative  w-full border-none`}>
-          <LazyLoadImage
-            src={movie.cover}
+          {movie?.cover?.length > 0 ? (
+            <img
+              src={movie.cover?.length ? movie?.cover : cardSkeleton}
+              alt={movie.name}
+              className={`movie_img rounded-[4px] border-none  cursor-default object-cover w-full`}
+            />
+          ) : (
+            <LazyLoadImage
+              src={movie.cover}
+              alt={movie.name}
+              className={`movie_img rounded-[4px] border-none  cursor-default object-cover w-full`}
+            />
+          )}
+
+          {/* <img
+            src={movie.cover?.length ? movie?.cover : cardSkeleton}
             alt={movie.name}
             className={`movie_img rounded-[4px] border-none  cursor-default object-cover w-full`}
-          />
+          /> */}
           <div className="absolute rounded-[4px]  h-full w-full inset-0 bg-gradient-to-b from-transparent via-black/5 to-black"></div>
           <div className="flex absolute text-[10px] justify-between items-center px-3 bottom-2 w-full">
             <p className="flex-1 truncate text-white">{movie?.dynamic}</p>
