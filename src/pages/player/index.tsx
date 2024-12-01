@@ -94,8 +94,8 @@ const DetailPage: React.FC = () => {
   const fetchMovieDetail = async (movieId = "") => {
     try {
       const res = await getMovieDetail(movieId || id || "");
-      await setMovieDetail(res?.data);
       await setInitialEpisode(res?.data);
+      await setMovieDetail(res?.data);
       setWholePageError(false)
       setMovieReload(false);
     } catch (error) {
@@ -137,12 +137,19 @@ const DetailPage: React.FC = () => {
         if (mvDetail?.play_from?.[0]?.list?.[0]) {
           const mvData = mvDetail?.play_from[0].list[0];
           if(!mvData.ready_to_play) {
-            const parseData = await parsePlaybackUrl(mvData.episode_id, mvData.from_code, mvData.play_url, '1');
-            mvData.play_url = parseData?.data?.play_url;
+            try {
+              const parseData = await parsePlaybackUrl(mvData.episode_id, mvData.from_code, mvData.play_url, '1');
+              mvData.play_url = await parseData?.data?.play_url;
+              setCurrentEpisode(mvData);
+              setResumeTime(0);
+            } catch(err) {
+              setWholePageError(true);
+            }
+          } else {
+            setCurrentEpisode(mvData);
+            setResumeTime(0);
           }
-          setCurrentEpisode(mvData);
-          setResumeTime(0);
-          setEpisodes(mvDetail?.play_from[0].list);
+            setEpisodes(mvDetail?.play_from[0].list);
         } else {
           setWholePageError(true);
         }
