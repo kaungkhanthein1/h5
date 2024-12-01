@@ -1,3 +1,10 @@
+# Check Build Consistency
+# npm run build
+# cp -r build build1
+# npm run build
+# diff -r build1 build
+
+
 # H5 Frontend Deployment Document
 
 ## Node Version: 20.9.0 LTS

@@ -21,6 +21,7 @@ const HomeAds = ({ data, isLoading }: any) => {
             ))
           : cur?.map((item: any, index: any) => (
               <Link
+              target="_blink"
                 className="flex flex-col justify-center items-center gap-[4px]"
                 to={item?.data?.url || "#"}
                 key={index}
