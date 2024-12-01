@@ -104,9 +104,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
           if (resumeTime > 0) {
             art.currentTime = resumeTime;
           }
-          setTimeout(()=>{
+          setTimeout(() => {
             if (playerRef.current) {
-        
               const token = getToken();
               if (token) {
                 reportProgress(
@@ -115,10 +114,15 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
                 );
               }
             }
-          }, 1000)
-          setTimeout(()=>{
-            refetch();
-          }, 3000)
+          }, 1000);
+          setTimeout(() => {
+            if (playerRef.current) {
+              const token = getToken();
+              if (token) {
+                refetch();
+              }
+            }
+          }, 3000);
         });
 
         playerRef.current = art;
@@ -150,15 +154,17 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       playerRef.current.video.src = ""; // Stop video requests
       playerRef.current.destroy();
       playerRef.current = null;
-      refetch();
+      const token = getToken();
+      if (token) {
+        refetch();
+      }
     }
     onBack();
   };
 
   useEffect(() => {
-    const interval = setInterval(async() => {
+    const interval = setInterval(async () => {
       if (playerRef.current) {
-        
         const token = getToken();
         if (token) {
           reportProgress(
@@ -201,13 +207,13 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const handleTouchMove = () => {
     // Immediately hide the controls during a touch slide
     setIsControlsVisible(false);
-  
+
     // Optionally, clear any existing timeout to avoid re-showing the controls prematurely
     if (inactivityTimeout.current) {
       clearTimeout(inactivityTimeout.current);
     }
   };
-  
+
   useEffect(() => {
     // Attach event listeners for user activity
     const player = document.getElementById("my-player");
