@@ -37,7 +37,10 @@ const Banner = ({ list }: { list: any }) => {
                   src={banner?.image}
                   alt=""
                 />
-                {/* <p className="absolute text-white z-50 bottom-[30px] pl-3 text-[16px] font-semibold">
+                {
+                  banner?.type == 1 &&
+                  <>
+                <p className="absolute text-white z-50 bottom-[30px] pl-3 text-[16px] font-semibold">
                   {banner?.title ? banner?.title : "未知标题"}
                 </p>
                 <div className="absolute bottom-[10px] left-3 flex items-center gap-2">
@@ -47,7 +50,9 @@ const Banner = ({ list }: { list: any }) => {
                   <div className="z-[999] home-sub-title">
                     {banner?.sub_title ? banner?.sub_title : "剧情 / 古装"}
                   </div>
-                </div> */}
+                </div>
+                </>
+                }
                 <div className="absolute rounded-b-md  h-full w-full inset-0 bg-gradient-to-b from-transparent via-black/5 to-black"></div>
               </div>
             ))}
