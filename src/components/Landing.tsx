@@ -54,9 +54,9 @@ const Landing: React.FC<any> = ({ data }) => {
 
   return (
         <>
-          <Link to={cc?.data?.url}>
+          <Link target="_blink" to={cc?.data?.url}>
             <img
-              className="w-full h-screen object-cove"
+              className="h-screen w-screen object-cover"
               onLoad={() => setImgLoad(true)}
               src={image}
               alt=""

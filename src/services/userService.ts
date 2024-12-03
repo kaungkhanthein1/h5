@@ -136,7 +136,7 @@ export const login = async (
       return decryptWithAes(resultText);
     }
   } catch (err) {
-    console.error("Error during login:", err);
+    // console.error("Error during login:", err);
     throw err;
   }
 };
@@ -201,7 +201,7 @@ export const getCodeForgotPass = async ({ send_type, session_token }: any) => {
         `${process.env.REACT_APP_API_URL}/user/forget/send_code?send_type=${send_type}&session_token=${session_token}`
       )
     );
-    console.log(data)
+    // console.log(data)
   } catch (error) {
     throw error
   }
