@@ -11,8 +11,10 @@ const Phnumber: React.FC = () => {
   const { openCaptcha, openOtp } = useSelector((state: any) => state.model); // OpenCaptcha and OpenOtp states
   const { data: userData } = useGetUserQuery(undefined);
   const user = userData?.data;
+  const initialPhone = user?.phone && user.phone !== '0' ? user.phone : ""; 
+  // console.log(initialPhone)
   // const user = useSelector((state: any) => state.user.user);
-  const [text, setText] = useState(user?.phone); // Email value
+  const [text, setText] = useState(initialPhone); // Email value
   const [active, setActive] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {

@@ -18,6 +18,7 @@ const Main = () => {
 
   const { data: userData, refetch } = useGetUserQuery(undefined);
   const user = userData?.data;
+  // console.log(user)
 
   const navigate = useNavigate();
 
@@ -136,7 +137,7 @@ const Main = () => {
       if (user?.inviter_id !== 0) {
         dispatch(
           showToast({
-            message: "Already invited",
+            message: "已填写邀请码",
             type: "success",
           })
         );
@@ -314,7 +315,7 @@ const Main = () => {
               </div>
               <div className="flex items-center gap-1">
                 <p className="info-main-text">
-                  {user?.email ? user?.email : "Not yet"}
+                  {user?.email ? user?.email : "未绑定"}
                 </p>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -339,8 +340,8 @@ const Main = () => {
                   {user?.phone
                     ? user?.phone !== "0"
                       ? user?.phone
-                      : "Not yet"
-                    : "Not yet"}
+                      : "未绑定"
+                    : "未绑定"}
                 </p>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
