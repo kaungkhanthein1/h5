@@ -1,4 +1,4 @@
-import React, { startTransition, Suspense, useEffect } from "react";
+import React, { startTransition, Suspense, useEffect, useState } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -22,8 +22,9 @@ import Favorite from "./pages/profile/Favorite";
 import Loader from "./pages/search/components/Loader";
 import ErrorToast from "./pages/profile/error/ErrorToast";
 import Landing from "./components/Landing";
-import BannerAds from './components/BannerAds';
+import BannerAds from "./components/BannerAds";
 import { useGetAdsQuery } from "./services/helperService";
+import { setIsScrolling } from "./pages/home/slice/HomeSlice";
 // import Menber from "./pages/share/member";
 // import Share from "./pages/share";
 
@@ -61,7 +62,7 @@ const App: React.FC = () => {
   const dispatch = useDispatch();
   const { openAuthModel, openLoginModel, openSignupModel, panding } =
     useSelector((state: any) => state.model);
-    const { data, isLoading } = useGetAdsQuery();
+  const { data, isLoading } = useGetAdsQuery();
 
   const location = useLocation();
   // const isLoggedIn = localStorage.getItem("authToken"); // Check if the user is authenticated
@@ -130,76 +131,107 @@ const App: React.FC = () => {
     });
   };
 
+  const isScrolling = useSelector((state: any) => state.home.isScrolling);
+
+  useEffect(() => {
+    let timer: any;
+
+    const handleScroll = () => {
+      dispatch(setIsScrolling(true));
+
+      // Clear the timer if it's already set
+      if (timer) {
+        clearTimeout(timer);
+      }
+
+      // Set a timer to reset the isScrolling state after scrolling stops
+      timer = setTimeout(() => {
+        dispatch(setIsScrolling(false));
+      }, 150); // Adjust delay to detect when scrolling stops
+    };
+
+    // Attach the scroll event listener
+    window.addEventListener("scroll", handleScroll);
+
+    // Cleanup the event listener on component unmount
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (timer) clearTimeout(timer);
+    };
+  }, []);
+
+  // console.log(isScrolling, "isScrolling");
+
   return (
     <>
-     {data?.data && 
-     <>
-      {panding ? (
-        <Landing data={data}/>
-      ) : (
-        <div className="flex flex-col min-h-screen">
-          {/* <BannerAds /> */}
-          {/* Conditionally render Header */}
-          {!hideHeaderFooter && !hideHeader && <Header />}
+      {data?.data && (
+        <>
+          {panding ? (
+            <Landing data={data} />
+          ) : (
+            <div className="flex flex-col min-h-screen">
+              {/* <BannerAds /> */}
+              {/* Conditionally render Header */}
+              {!hideHeaderFooter && !hideHeader && <Header />}
 
-          <div className="flex-grow">
-            <Suspense
-              fallback={
-                <div className="flex justify-center items-center h-screen bg-[#161619]">
-                  <Loader />
-                </div>
-              }
-            >
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/home" element={<Home />} />
-                <Route path="/search" element={<Main />} />
-                <Route path="/search_overlay" element={<Search />} />
+              <div className="flex-grow">
+                <Suspense
+                  fallback={
+                    <div className="flex justify-center items-center h-screen bg-[#161619]">
+                      <Loader />
+                    </div>
+                  }
+                >
+                  <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/home" element={<Home />} />
+                    <Route path="/search" element={<Main />} />
+                    <Route path="/search_overlay" element={<Search />} />
 
-                <Route path="/explorer" element={<Explorer />} />
-                <Route path="/explorer/:id" element={<Detail />} />
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/player/:id" element={<Player />} />
-                <Route path="/history" element={<History />} />
-                <Route path="/favorites" element={<Favorite />} />
-                <Route path="/settings" element={<Settings />} />
-                <Route path="/notifications" element={<Notifications />} />
-                <Route path="/info" element={<Info />} />
-                <Route path="/nickname" element={<Nickname />} />
-                <Route path="/username" element={<Username />} />
-                <Route path="/social_callback" element={<Callback />} />
-                <Route path="/update_email" element={<Email />} />
-                <Route path="/update_phone" element={<Phnumber />} />
-                <Route path="/update_password" element={<Password />} />
-                <Route path="/bind" element={<Bind />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/share" element={<Share />} />
-                <Route path="/invite" element={<Invite />} />
-                <Route path="/share/member" element={<Member />} />
-              </Routes>
-            </Suspense>
-            <ErrorToast />
-          </div>
+                    <Route path="/explorer" element={<Explorer />} />
+                    <Route path="/explorer/:id" element={<Detail />} />
+                    <Route path="/profile" element={<Profile />} />
+                    <Route path="/player/:id" element={<Player />} />
+                    <Route path="/history" element={<History />} />
+                    <Route path="/favorites" element={<Favorite />} />
+                    <Route path="/settings" element={<Settings />} />
+                    <Route path="/notifications" element={<Notifications />} />
+                    <Route path="/info" element={<Info />} />
+                    <Route path="/nickname" element={<Nickname />} />
+                    <Route path="/username" element={<Username />} />
+                    <Route path="/social_callback" element={<Callback />} />
+                    <Route path="/update_email" element={<Email />} />
+                    <Route path="/update_phone" element={<Phnumber />} />
+                    <Route path="/update_password" element={<Password />} />
+                    <Route path="/bind" element={<Bind />} />
+                    <Route path="/contact" element={<Contact />} />
+                    <Route path="/share" element={<Share />} />
+                    <Route path="/invite" element={<Invite />} />
+                    <Route path="/share/member" element={<Member />} />
+                  </Routes>
+                </Suspense>
+                <ErrorToast />
+              </div>
 
-          {/* Conditionally render FooterNav */}
-          {!hideHeaderFooter && <FooterNav />}
-          {location.pathname.startsWith("/profile") && <FooterNav />}
+              {/* Conditionally render FooterNav */}
+              {!hideHeaderFooter && <FooterNav />}
+              {location.pathname.startsWith("/profile") && <FooterNav />}
 
-          {(openAuthModel || openLoginModel || openSignupModel) && (
-            <div
-              className="fixed inset-0 bg-black/40 opacity-50 z-[99899] h-screen" // Overlay with 50% opacity
-              onClick={closeAllModals} // Close all modals on click
-            ></div>
+              {(openAuthModel || openLoginModel || openSignupModel) && (
+                <div
+                  className="fixed inset-0 bg-black/40 opacity-50 z-[99899] h-screen" // Overlay with 50% opacity
+                  onClick={closeAllModals} // Close all modals on click
+                ></div>
+              )}
+              {/* <div className=" fixed h-screen flex flex-col justify-center items-center"> */}
+              {openAuthModel && <LoginEmail handleBack={handleBack} />}
+              {/* {openLoginModel && <LoginEmail handleBack={handleBack} />} */}
+              {openSignupModel && <SignUp handleBack={handleBack} />}
+              {/* </div> */}
+            </div>
           )}
-          {/* <div className=" fixed h-screen flex flex-col justify-center items-center"> */}
-          {openAuthModel && <LoginEmail handleBack={handleBack} />}
-          {/* {openLoginModel && <LoginEmail handleBack={handleBack} />} */}
-          {openSignupModel && <SignUp handleBack={handleBack} />}
-          {/* </div> */}
-        </div>
+        </>
       )}
-      </>
-    }
     </>
   );
 };

@@ -11,6 +11,7 @@ const HomeSlice = createSlice({
     year: "年份",
     activeNav: 0,
     showFilterTag: false,
+    isScrolling: false,
   },
   reducers: {
     setActiveTab: (state, { payload }) => {
@@ -37,6 +38,9 @@ const HomeSlice = createSlice({
     setShowFilterTag: (state, { payload }) => {
       state.showFilterTag = payload;
     },
+    setIsScrolling: (state, { payload }) => {
+      state.isScrolling = payload;
+    },
   },
 });
 
@@ -49,5 +53,6 @@ export const {
   setActiveNav,
   setShowFilterTag,
   setSortName,
+  setIsScrolling,
 } = HomeSlice.actions;
 export default HomeSlice.reducer;

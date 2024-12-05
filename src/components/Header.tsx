@@ -74,7 +74,7 @@ const Header: FC = () => {
       </div>
 
       <div className="w-full">
-        <nav className="flex overflow-x-scroll px-3 gap-3 remove-scrollbar items-center">
+        <nav className="flex overflow-x-scroll px-3 gap-3 remove-scrollbar items-center md:justify-between">
           {configData?.map((item: any, index: any) => (
             <div
               className="relative"
