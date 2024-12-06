@@ -2,7 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body {
+html,
+body {
   margin: 0;
   padding-top: env(safe-area-inset-top); /* Respect safe areas */
 }
@@ -216,7 +217,7 @@ input[type="range"]::-moz-range-thumb {
   background-image: url("./pages/home/images/homebg.png");
   background-repeat: no-repeat;
   background-size: contain;
-  margin-top: 50px;
+  /* margin-top: 50px; */
 }
 
 @media screen and (min-width: 470px) {

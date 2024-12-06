@@ -10,6 +10,8 @@ const Navbar: React.FC = () => {
   const [isFocused, setIsFocused] = useState(false); // Manage input focus
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const [isHeaderVisible, setIsHeaderVisible] = useState(true); // State to track header visibility
 
   const [triggerAutocomplete, { data: autocompleteData }] =
     useLazyGetAutocompleteQuery(); // Lazy query for autocomplete
@@ -56,9 +58,32 @@ const Navbar: React.FC = () => {
     navigate("/");
   };
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > lastScrollY && window.scrollY > 68) {
+        // Scrolling down, hide the header
+        setIsHeaderVisible(false);
+      } else if (window.scrollY < lastScrollY) {
+        // Scrolling up, show the header
+        setIsHeaderVisible(true);
+      }
+      setLastScrollY(window.scrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [lastScrollY]);
+
   return (
     <div className="relative">
-      <div className="flex gap-4 w-full py-1 px-3 input-bg-overlay z-[9999]  fixed items-center justify-between">
+      <div
+        className={`flex gap-4 w-full py-1 px-3 input-bg-overlay z-[9999]  fixed items-center justify-between transition-all duration-300 ${
+          isHeaderVisible ? "top-0" : "-top-[135px]"
+        }`}
+      >
         <form onSubmit={handleSubmit} className="w-full py-3 pt-3  ">
           <div className="absolute left-6 top-[22px]">
             <svg

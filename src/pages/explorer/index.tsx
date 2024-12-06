@@ -11,6 +11,8 @@ import { setActiveNav } from "./slice/ExploreSlice";
 const Explorer: React.FC = () => {
   const activeNav = useSelector((state: any) => state.explore.activeNav);
   const [activeTab, setActiveTab] = useState(!activeNav ? 0 : -1);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const [isHeaderVisible, setIsHeaderVisible] = useState(true); // State to track header visibility
   const dispatch = useDispatch();
 
   const tabs = [
@@ -19,10 +21,35 @@ const Explorer: React.FC = () => {
     { title: "专题", content: <Tab3 /> },
     { title: "排行榜", content: <Tab4 /> },
   ];
+
+  // Scroll event listener to detect scroll direction
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > lastScrollY && window.scrollY > 100) {
+        // Scrolling down, hide the header
+        setIsHeaderVisible(false);
+      } else if (window.scrollY < lastScrollY) {
+        // Scrolling up, show the header
+        setIsHeaderVisible(true);
+      }
+      setLastScrollY(window.scrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [lastScrollY]);
+
   return (
     // bg-[#1f1f21]
     <div className="relative">
-      <nav className="flex flex-wrap gap-4 items-center py-2 px-3  bg-background fixed top-0 w-full z-50">
+      <nav
+        className={`flex flex-wrap gap-4 items-center py-2 px-3  bg-background fixed transition-all duration-300 w-full z-50 ${
+          isHeaderVisible ? "top-0" : "-top-[135px]"
+        }`}
+      >
         {tabs.map((tab, index) => (
           <button
             key={index}

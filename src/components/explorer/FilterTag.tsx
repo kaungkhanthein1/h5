@@ -30,6 +30,8 @@ const FilterTag = () => {
   const classData = useSelector((state: any) => state?.explore?.class);
   const area = useSelector((state: any) => state?.explore?.area);
   const year = useSelector((state: any) => state?.explore?.year);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const [isHeaderVisible, setIsHeaderVisible] = useState(true); // State to track header visibility
   const { data: configData } = useGetHeaderTopicsQuery();
   const filteredTags = configData?.data?.movie_screen?.filter?.filter(
     (data: any) => {
@@ -120,11 +122,34 @@ const FilterTag = () => {
   }, [activeTab]);
 
   // console.log(show)
+  // Scroll event listener to detect scroll direction
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > lastScrollY && window.scrollY > 100) {
+        // Scrolling down, hide the header
+        setIsHeaderVisible(false);
+      } else if (window.scrollY < lastScrollY) {
+        // Scrolling up, show the header
+        setIsHeaderVisible(true);
+      }
+      setLastScrollY(window.scrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [lastScrollY]);
 
   return (
     <>
       <div className="flex flex-col gap-3 py-5">
-        <div className="fixed top-[53px] w-full z-50 bg-background">
+        <div
+          className={`fixed w-full z-50 bg-background transition-all duration-300 ${
+            isHeaderVisible ? "top-[53px]" : "-top-[135px]"
+          }`}
+        >
           <div className="flex  overflow-x-scroll px-3 gap-6 remove-scrollbar items-center  w-full">
             {configData?.data?.movie_search_screen?.type
               ?.filter((data: any) => data?.id !== 0)
