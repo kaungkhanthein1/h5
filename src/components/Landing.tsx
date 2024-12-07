@@ -71,7 +71,7 @@ const Landing: React.FC<any> = ({ data }) => {
           </Link>
           {imgLoad && (
             <div
-              onClick={() => {dispatch(setPanding(false)); sendMessageToNative}}
+              onClick={() => {dispatch(setPanding(false)); sendMessageToNative()}}
               style={{
                 borderRadius: "52px",
                 background: "rgba(0, 0, 0, 0.98)",
