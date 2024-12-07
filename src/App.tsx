@@ -99,10 +99,10 @@ const App: React.FC = () => {
   };
 
   useEffect(() => {
-    if(location.pathname === '/') {
+    if(location.pathname === '/' && !panding) {
       sendMessageToNative('showHomeScreen');
     }
-    if(location.pathname.startsWith("/profile")){
+    if(location.pathname.startsWith("/profile") && !panding){
       sendMessageToNative('showProfileScreen');
     }
   }, [location.pathname]);
