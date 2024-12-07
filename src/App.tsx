@@ -91,6 +91,21 @@ const App: React.FC = () => {
     location.pathname.startsWith("/share/member");
 
   const hideHeader = location.pathname.startsWith("/explorer");
+  
+  useEffect(() => {
+    const setGradiant = location.pathname === '/' || location.pathname.startsWith("/profile") ? true : false;
+    const elementId = "h5";
+    const element = document.getElementById(elementId);
+    if (element) {
+      if (setGradiant) {
+        element.style.background =
+          "linear-gradient(119deg, #0D485B 0%, #1E2037 46.52%, #2D1232 77.4%)";
+      } else {
+        element.style.background = "#161619";
+      }
+    }
+  }, [location.pathname]);
+
   useEffect(() => {
     const hasSeenLanding = sessionStorage.getItem("hasSeenLanding");
     if (!hasSeenLanding) {

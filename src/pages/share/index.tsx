@@ -222,7 +222,7 @@ const Share: React.FC<ShareProps> = ({}) => {
         </div>
       </div>
       {/* invited user */}
-      <div className="flex invite_user mx-[20px] justify-around items-center mt-[20px] p-[20px]">
+      <div className="flex invite_user mx-[20px] justify-around items-center mt-[20px] p-[20px] hidden">
         {/* point */}
         <Link
           to={"https://cc3e497d.qdhgtch.com:1333/"}

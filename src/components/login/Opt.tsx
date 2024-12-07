@@ -174,7 +174,8 @@ const Opt: React.FC<OptProps> = ({
 
         <p className="text-[#888] text-[10px] font-light leading-[15px] p-3 text-center">
           验证码已发送至 <span className=" text-white">{email}</span>{" "}
-          <span className="text-white">{phone}</span> Please
+          <span className="text-white">{phone}</span> 请
+
           检查您的邮件并确保检查您的垃圾邮件文件夹{" "}
         </p>
       </div>
