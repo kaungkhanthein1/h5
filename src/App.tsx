@@ -100,7 +100,6 @@ const App: React.FC = () => {
       if (setGradiant) {
         element.style.background =
           "linear-gradient(119deg, #0D485B 0%, #1E2037 46.52%, #2D1232 77.4%)";
-        document.body.style.backgroundAttachment = 'fixed'
       } else {
         element.style.background = "#161619";
       }

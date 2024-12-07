@@ -1,7 +1,12 @@
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from "react-responsive-carousel";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 const Banner = ({ list }: { list: any }) => {
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const handleOnChange = (index: any) => {
+    setSelectedIndex(index);
+  };
   const navigate = useNavigate();
 
   const handleBannerClick = (clickLink: string) => {
@@ -67,15 +72,25 @@ const Banner = ({ list }: { list: any }) => {
             infiniteLoop={true}
             centerMode
             centerSlidePercentage={60}
+            selectedItem={selectedIndex}
+            onChange={handleOnChange}
           >
-            {list?.map((banner: any) => (
+            {list?.map((banner: any, index: any) => (
               <div
                 key={banner?.image}
-                className="h-[200px] lg:h-[400px] rounded-md relative mx-3"
+                className={`${
+                  selectedIndex == index
+                    ? "h-[200px] lg:h-[400px]"
+                    : "h-[180px] lg:h-[350px] mt-[10px] lg:mt-[20px]"
+                } rounded-md relative mx-3`}
                 onClick={() => handleBannerClick(banner?.click)}
               >
                 <img
-                  className="relative h-[200px] lg:h-[400px] object-cover rounded-md"
+                  className={`relative ${
+                    selectedIndex == index
+                      ? "h-[200px] lg:h-[400px]"
+                      : "h-[180px] lg:h-[350px]"
+                  } object-cover rounded-md`}
                   src={banner?.image}
                   alt=""
                 />

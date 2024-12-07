@@ -212,8 +212,8 @@ input[type="range"]::-moz-range-thumb {
   position: fixed;
   top: 0;
   left: 0;
-  /* background-color: #161619;
-  background-image: url("./pages/home/images/homebg.png"); */
+  background-color: #161619;
+  background-image: url("./pages/home/images/homebg.png");
   background-repeat: no-repeat;
   background-size: contain;
   /* margin-top: 50px; */
