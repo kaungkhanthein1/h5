@@ -40,6 +40,7 @@ const Landing: React.FC<any> = ({ data }) => {
           setSkip((prev) => prev - 1);
         } else {
           dispatch(setPanding(false));
+          sendMessageToNative();
         }
       }, 1000);
 
@@ -52,6 +53,12 @@ const Landing: React.FC<any> = ({ data }) => {
     event.currentTarget.src = land; // Set default image if API image fails
   };
 
+  const sendMessageToNative = () => {
+    if ((window as any).webkit && (window as any).webkit.messageHandlers && (window as any).webkit.messageHandlers.jsBridge) {
+      (window as any).webkit.messageHandlers.jsBridge.postMessage("showHomeScreen");
+    }
+  };
+  
   return (
         <>
           <Link target="_blink" to={cc?.data?.url}>
@@ -64,7 +71,7 @@ const Landing: React.FC<any> = ({ data }) => {
           </Link>
           {imgLoad && (
             <div
-              onClick={() => dispatch(setPanding(false))}
+              onClick={() => {dispatch(setPanding(false)); sendMessageToNative}}
               style={{
                 borderRadius: "52px",
                 background: "rgba(0, 0, 0, 0.98)",
