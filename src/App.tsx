@@ -101,12 +101,17 @@ const App: React.FC = () => {
   useEffect(() => {
     if(data?.data) {
       if(location.pathname === '/' && !panding) {
-        console.log('home screen');
-        sendMessageToNative('showHomeScreen');
+        setTimeout(() => {
+          sendMessageToNative('showHomeScreen');
+        }, 100);
       } else if(location.pathname.startsWith("/profile") && !panding){
-        sendMessageToNative('showProfileScreen');
+        setTimeout(() => {
+          sendMessageToNative('showProfileScreen');
+        }, 100);
       } else if(location.pathname !== '/' && !location.pathname.startsWith("/profile") && !panding) {
-        sendMessageToNative('hideGradient');
+        setTimeout(() => {
+          sendMessageToNative('hideGradient');
+        }, 100);
       }
     }
   }, [location.pathname]);
