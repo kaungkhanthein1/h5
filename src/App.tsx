@@ -103,7 +103,7 @@ const App: React.FC = () => {
       sendMessageToNative('showHomeScreen');
     } else if(location.pathname.startsWith("/profile") && !panding){
       sendMessageToNative('showProfileScreen');
-    } else {
+    } else if(location.pathname !== '/' && !location.pathname.startsWith("/profile") && !panding) {
       sendMessageToNative('hideGradient');
     }
   }, [location.pathname]);
