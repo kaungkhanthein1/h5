@@ -171,6 +171,8 @@ input[type="range"]::-moz-range-thumb {
       rgba(22, 22, 25, 0) 100%
     ),
     linear-gradient(90deg, #0a5b75 0%, #4b2555 100%);
+    padding-top: 100px;
+    margin-top: -90px;
   /* background-image: url("./pages/home/images/blur.png"); */
 
   /* background: linear-gradient(
