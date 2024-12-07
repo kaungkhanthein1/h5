@@ -92,16 +92,18 @@ const App: React.FC = () => {
 
   const hideHeader = location.pathname.startsWith("/explorer");
   
-  const sendMessageToNative = () => {
+  const sendMessageToNative = (message: string) => {
     if ((window as any).webkit && (window as any).webkit.messageHandlers && (window as any).webkit.messageHandlers.jsBridge) {
-      (window as any).webkit.messageHandlers.jsBridge.postMessage("showHomeScreen");
+      (window as any).webkit.messageHandlers.jsBridge.postMessage(message);
     }
   };
 
   useEffect(() => {
-    const setGradiant = location.pathname === '/' || location.pathname.startsWith("/profile") ? true : false;
-    if(setGradiant) {
-      sendMessageToNative();
+    if(location.pathname === '/') {
+      sendMessageToNative('showHomeScreen');
+    }
+    if(location.pathname.startsWith("/profile")){
+      sendMessageToNative('showProfileScreen');
     }
   }, [location.pathname]);
 
