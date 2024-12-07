@@ -104,7 +104,7 @@ const Share: React.FC<ShareProps> = ({}) => {
     }
   };
   return (
-    <div className="">
+    <div className="bg_share h-screen">
       <img
         className=" absolute top-0 z-[-1] w-screen h-[350px] object-center object-cover"
         src={bg1}
