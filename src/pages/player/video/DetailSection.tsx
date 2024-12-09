@@ -22,7 +22,9 @@ import Fire from "../../../assets/Fire.png";
 import {
   convertToSecurePayload,
   convertToSecureUrl,
+  decryptWithAes,
 } from "../../../services/newEncryption";
+import axios from "axios";
 
 const DetailSection: React.FC<DetailSectionProps> = ({
   movieDetail,
@@ -138,26 +140,40 @@ const DetailSection: React.FC<DetailSectionProps> = ({
   };
 
   const handleShare = async (authorization: string) => {
+    // console.log(authorization);
     setIsLoading(true);
     try {
       // Fetch share content API call
-      const response = await fetch(
+      // const response = await fetch(
+      //   convertToSecureUrl(`${process.env.REACT_APP_API_URL}/user/get_share`),
+      //   {
+      //     method: "GET",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //       Authorization: authorization,
+      //     },
+      //   }
+      // );
+      const response = await axios.get(
         convertToSecureUrl(`${process.env.REACT_APP_API_URL}/user/get_share`),
         {
-          method: "GET",
           headers: {
             "Content-Type": "application/json",
             Authorization: authorization,
           },
         }
       );
-
-      const data = await response.json();
-      if (data && data.data && data.data.content) {
-        copyToClipboard(data.data.content);
-      } else {
-        alert("获取分享内容失败，请稍后重试");
+      const data = await response.data;
+      const result : any = await decryptWithAes(data)
+      console.log(result)
+      if(data && result){
+        copyToClipboard(result?.data.content)
       }
+      // if (data && data.data && data.data.content) {
+      //   copyToClipboard(data.data.content);
+      // } else {
+      //   alert("获取分享内容失败，请稍后重试");
+      // }
     } catch (error) {
       console.error("Error fetching share content:", error);
     } finally {
@@ -186,9 +202,9 @@ const DetailSection: React.FC<DetailSectionProps> = ({
   }, []);
 
   useEffect(() => {
-    setTimeout(()=>{
+    setTimeout(() => {
       window.scrollTo(0, 0);
-    }, 500)
+    }, 500);
   }, []);
 
   useEffect(() => {
@@ -209,7 +225,7 @@ const DetailSection: React.FC<DetailSectionProps> = ({
 
       {/* Tab content */}
       <div
-        className={`bg-background rounded-b-lg ${
+        className={`bg-background rounded-b-lg p-1 ${
           activeTab === "tab-1" && "p-4"
         }`}
       >

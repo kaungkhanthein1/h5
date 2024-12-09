@@ -2,10 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 import "./share.css";
 import bg1 from "../../assets/share/bg1.png";
 import back from "../../assets/login/back.svg";
-import down from "../../assets/share/down.svg";
-import friend from "../../assets/share/friend.svg";
+import down from "../../assets/share/down1.svg";
+import friend from "../../assets/share/friends1.svg";
 import copy from "../../assets/share/copy.svg";
-import form from "../../assets/share/form.svg";
+import form from "../../assets/share/alert1.svg";
 import link from "../../assets/share/link.svg";
 import linkD from "../../assets/share/linkD.svg";
 import fire from "../../assets/share/fire.png";
@@ -104,18 +104,15 @@ const Share: React.FC<ShareProps> = ({}) => {
     }
   };
   return (
-    <div className="bg_share h-screen">
-      <img
-        className=" absolute top-0 z-[-1] w-screen h-[350px] object-center object-cover"
-        src={bg1}
-        alt=""
-      />
+    <div className="bg-background h-screen flex flex-col justify-between p-5 gap-[10px]">
       {/* header */}
-      <div className=" flex justify-between items-center">
+      <div className="flex justify-between items-center">
         <Link to="/profile">
-          <img src={back} className=" p-[20px]" alt="" />
+          <img src={back} className="" alt="" />
         </Link>
-        <div
+        <p className="text-[18px] text-white font-semibold">Invite Friends</p>
+        <div></div>
+        {/* <div
           // onClick={() => navigate("")}
           className="rule py-[8px] px-[16px] mt-[5px]"
         >
@@ -126,104 +123,93 @@ const Share: React.FC<ShareProps> = ({}) => {
           >
             积分商城
           </a>
-        </div>
+        </div> */}
+      </div>
+      <div className=" flex flex-col gap-[20px]">
+      {/* scan */}
+      <div className="">
+        {invite ? (
+          <div
+            ref={imageRef}
+            className=" flex justify-center items-center pt-[30px]"
+          >
+            <div className="py-6 px-10 flex flex-col justify-center items-center gap-[16px]">
+              <img
+                className=" w-[180px] h-[180px] rounded-[10px]"
+                src={invite?.data.qrcode.data}
+                alt="QR Code"
+              />
+              {/* data */}
+              {userData && (
+                <div className="">
+                  <div className="flex gap-[8px] invite_code px-[16px] py-[8px]">
+                    <h1 className=" text-white text-[16px] font-[500] leading-[20px]">
+                      我的邀请码 :
+                    </h1>
+                    <span className=" text-white text-[16px] font-[500] leading-[20px]">
+                      {userData.data.invite_code}
+                    </span>
+                    <img onClick={handleCopy} src={copy} alt="" />
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        ) : (
+          <div className=" flex justify-center items-center pt-[30px]">
+            <div className="scan py-6 px-10 flex flex-col justify-center items-center gap-[16px]">
+              <div className=" animate-pulse bg-white/30 w-[180px] h-[180px] rounded-[10px]"></div>
+              <div className="">
+                <div className="bg-white/30 rounded-[16px] animate-pulse w-[200px] h-[30px] flex gap-[8px]  px-[16px] py-[8px]"></div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
       {/* tab */}
-      <div className=" pt-[130px]">
-        <div className=" flex justify-center items-center gap-[28px]">
+      <div className="">
+        <div className=" flex justify-around items-center">
           {/* friend */}
-          <div className=" flex flex-col items-center gap-[14px]">
-            <img
-              className=" tab px-[12px] py-[12px] w-[58px]"
-              src={friend}
-              alt=""
-            />
+          <div className="flex flex-col items-center gap-[14px]">
+            <img src={friend} alt="" />
             <div className=" flex justify-center items-center gap-1">
-              <p className=" w-[2px] h-[2px] bg-[#DDD]"></p>
-              <span className=" text-[12px] font-[400] text-[#DDD]">
+              <span className=" text-[12px] font-[400] text-[#fff]">
                 分享链接给好友
               </span>
             </div>
           </div>
           {/* down */}
           <div className=" flex flex-col items-center gap-[14px]">
-            <img
-              className=" tab px-[15px] py-[12px] w-[50px]"
-              src={down}
-              alt=""
-            />
+            <img src={down} alt="" />
             <div className=" flex justify-center items-center gap-1">
-              <p className=" w-[2px] h-[2px] bg-[#DDD]"></p>
-              <span className=" text-[12px] font-[400] text-[#DDD]">
+              <span className=" text-[12px] font-[400] text-[#fff]">
                 下载APP
               </span>
             </div>
           </div>
           <div className=" flex flex-col items-center gap-[14px]">
-            <img
-              className=" tab px-[12px] py-[12px] w-[58px]"
-              src={form}
-              alt=""
-            />
+            <img src={form} alt="" />
             <div className=" flex justify-center items-center gap-1">
-              <p className=" w-[2px] h-[2px] bg-[#DDD]"></p>
-              <span className=" text-[12px] font-[400] text-[#DDD]">
+              <span className=" text-[12px] font-[400] text-[#fff]">
                 分享链接给好友
               </span>
             </div>
           </div>
         </div>
       </div>
-      {/* scan */}
-      {invite ? (
-        <div
-          ref={imageRef}
-          className=" flex justify-center items-center pt-[30px]"
-        >
-          <div className="scan py-6 px-10 flex flex-col justify-center items-center gap-[16px]">
-            <img
-              className=" w-[180px] h-[180px] rounded-[10px]"
-              src={invite?.data.qrcode.data}
-              alt="QR Code"
-            />
-            {/* data */}
-            {userData && (
-              <div className="">
-                <div className="flex gap-[8px] invite_code px-[16px] py-[8px]">
-                  <h1 className=" text-white text-[16px] font-[500] leading-[20px]">
-                    我的邀请码 :
-                  </h1>
-                  <span className=" text-white text-[16px] font-[500] leading-[20px]">
-                    {userData.data.invite_code}
-                  </span>
-                  <img onClick={handleCopy} src={copy} alt="" />
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      ) : (
-        <div className=" flex justify-center items-center pt-[30px]">
-          <div className="scan py-6 px-10 flex flex-col justify-center items-center gap-[16px]">
-            <div className=" animate-pulse bg-white/30 w-[180px] h-[180px] rounded-[10px]"></div>
-            <div className="">
-              <div className="bg-white/30 rounded-[16px] animate-pulse w-[200px] h-[30px] flex gap-[8px]  px-[16px] py-[8px]"></div>
-            </div>
-          </div>
-        </div>
-      )}
+      </div>
       {/* alert */}
-      <div className=" flex justify-center items-center pt-[20px]">
+      {/* <div className=" flex justify-center items-center pt-[20px]">
         <div className="fire_box w-[320 px-[12px] py-[4px] flex gap-[7px] justify-center items-center">
           <img src={fire} alt="" />
           <h1 className=" poin text-white/70 text-[12px]">
             使用虚幻百褶裙邀请好友即可获得 40 积分
           </h1>
         </div>
-      </div>
+      </div> */}
       {/* invited user */}
-      <div className="flex invite_user mx-[20px] justify-around items-center mt-[20px] p-[20px] hidden">
-        {/* point */}
+      {/* <div className="flex invite_user mx-[20px] justify-around items-center mt-[20px] hidden">
+    
         <Link
           to={"https://cc3e497d.qdhgtch.com:1333/"}
           className=" flex flex-col items-center justify-center gap-[8px]"
@@ -246,7 +232,6 @@ const Share: React.FC<ShareProps> = ({}) => {
           </div>
         </Link>
         <p className=" line"></p>
-        {/* invited */}
         <div
           onClick={() => navigate("/share/member")}
           className=" flex flex-col items-center justify-center gap-[8px]"
@@ -262,24 +247,24 @@ const Share: React.FC<ShareProps> = ({}) => {
             <img src={go} alt="" />
           </div>
         </div>
-      </div>
+      </div> */}
       {/* two button */}
-      <div className="flex justify-center items-center py-[30px] gap-[16px] pb-[30px]">
+      <div className="flex justify-center items-center gap-[16px] pb-8">
         {/* copy */}
         <div
           onClick={handleShareLink}
-          className=" flex gap-[8px] link_button px-[14px] py-[12px]"
+          className=" flex gap-[8px] px-[20px] py-[16px] bg-[#FFFFFF0A] rounded-[24px]"
         >
           <img src={link} alt="" />
-          <h1 className=" text-white text-[16px] font-[500]">复制分享链接</h1>
+          <h1 className=" text-white text-[16px] font-[500] ">复制分享链接</h1>
         </div>
         {/* down and save qr card */}
         <div
           onClick={handleSaveAsImage}
-          className=" flex gap-[8px] link_button px-[14px] py-[12px]"
+          className=" flex gap-[8px] px-[20px] py-[16px] bg-[#FFFFFF0A] rounded-[24px]"
         >
           <img src={linkD} alt="" />
-          <h1 className=" text-white text-[16px] font-[500]">手动截图保存</h1>
+          <h1 className=" text-white text-[16px] font-[500] ">手动截图保存</h1>
         </div>{" "}
       </div>
     </div>
