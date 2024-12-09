@@ -252,12 +252,12 @@ const CommentComponent: React.FC<CommentProps> = ({
               "Content-Type": "application/json",
               Authorization: authorization,
             },
-            body: JSON.stringify({
+            body: JSON.stringify(convertToSecurePayload({
               comment_id: replyingTo ? replyingTo : 0,
               movie_id: movieId,
               type: "text",
               content: newComment,
-            }),
+            })),
           }
         );
 
