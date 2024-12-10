@@ -321,7 +321,7 @@ const DetailSection: React.FC<DetailSectionProps> = ({
           </div>
         )}
 
-        {visible || true && (
+        {visible && (
           <div className="link-copy fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-lg font-medium px-4 py-2 rounded-lg shadow-md">
             链接已复制
           </div>
