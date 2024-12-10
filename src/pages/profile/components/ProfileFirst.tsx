@@ -99,7 +99,7 @@ const ProfileFirst = () => {
       if (user?.inviter_id !== 0) {
         dispatch(
           showToast({
-            message: "Already invited",
+            message: "已邀请",
             type: "success",
           })
         );

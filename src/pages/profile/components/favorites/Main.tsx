@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Ads from "../../../search/components/Ads";
 import Loader from "../../../search/components/Loader";
@@ -90,6 +90,10 @@ const Main: React.FC<MainProps> = ({
       navigate(`/player/${movieId}`);
     }
   };
+
+  const selectAllMovies = () => {
+    setSelectedMovies(movies?.map(x => x.movie_id) || []);
+  }
 
   return (
     <div className="bg-[#161619] pb-[50px] mt-[65px] ">
@@ -380,9 +384,11 @@ const Main: React.FC<MainProps> = ({
         >
           <button
             className="w-[50%] cancel-all"
-            onClick={() => setSelectedMovies([])}
+            onClick={() => selectedMovies && selectedMovies.length === movies?.length ? setSelectedMovies([]) : selectAllMovies()}
           >
-            全部取消
+            {selectedMovies && selectedMovies.length === movies?.length
+                  ? "全部取消"
+                  : "选择全部"}
           </button>
           <button
             className="delete-all w-[50%]"
