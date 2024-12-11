@@ -27,6 +27,7 @@ const Landing: React.FC<any> = ({ data }) => {
       }
       const timer = setTimeout(() => {
         dispatch(setPanding(false));
+        sendMessageToNative();
       }, 6000);
 
       return () => clearTimeout(timer);

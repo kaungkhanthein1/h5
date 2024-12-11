@@ -100,7 +100,8 @@ const App: React.FC = () => {
 
   useEffect(() => {
     if(data?.data) {
-      if(location.pathname === '/' && !panding) {
+      if((location.pathname === '/' || location.pathname.startsWith("/search") || 
+      location.pathname.startsWith("/search_overlay")) && !panding) {
         sendMessageToNative('showHomeScreen');
       } else if(location.pathname.startsWith("/profile") && !panding){
         sendMessageToNative('showProfileScreen');
