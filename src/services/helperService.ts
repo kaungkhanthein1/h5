@@ -17,7 +17,7 @@ export const useGetHeaderTopicsQuery = () => {
     );
 
     try {
-      const cachedData = localStorage.getItem("headerTopics");
+      const cachedData = sessionStorage.getItem("headerTopics");
       if (cachedData) {
         setData(JSON.parse(cachedData));
         setIsLoading(false);
@@ -31,7 +31,7 @@ export const useGetHeaderTopicsQuery = () => {
       const response = await getconfigData(settings);
       const data = await decryptWithAes(response);
 
-      localStorage.setItem("headerTopics", JSON.stringify(data));
+      sessionStorage.setItem("headerTopics", JSON.stringify(data));
       setData(data);
     } catch (err) {
       console.error("Failed to fetch header topics:", err);
@@ -63,7 +63,7 @@ export const useGetAdsQuery = () => {
   const fetchAdsTopics = async () => {
     setIsFetching(true);
     try {
-      const cachedData = localStorage.getItem("AdsQuery");
+      const cachedData = sessionStorage.getItem("AdsQuery");
       if (cachedData) {
         setConfigData(JSON.parse(cachedData));
         setIsLoading(false);
@@ -73,7 +73,7 @@ export const useGetAdsQuery = () => {
 
       if (response) {
         const data = await decryptWithAes(response);
-        localStorage.setItem("AdsQuery", JSON.stringify(data));
+        sessionStorage.setItem("AdsQuery", JSON.stringify(data));
         setConfigData(data);
       }
       setError(null);
