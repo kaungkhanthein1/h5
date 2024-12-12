@@ -134,7 +134,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     const handleOrientationChange = () => {
       if (playerRef && playerRef.current) {
         playerRef.current.fullscreen =
-          window.innerWidth > window.innerHeight ? false : true;
+          window.innerWidth > window.innerHeight ? true : false;
       }
     };
 
