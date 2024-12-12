@@ -8,14 +8,19 @@ import FilteredByType from "../../components/home/FilteredByType";
 import "../../components/home/home.css";
 import { useGetRecordQuery } from "../profile/services/profileApi";
 import HomeAds from "../../components/home/HomeAds";
+import { useEffect } from "react";
 
 const Home: React.FC = () => {
-  const { data, isLoading } = useGetRecommendedMoviesQuery();
+  const { data, isLoading, refetch } = useGetRecommendedMoviesQuery();
   const activeTab = useSelector((state: any) => state.home.activeTab);
   const isLoggedIn = localStorage.getItem("authToken");
   const parsedLoggedIn = isLoggedIn ? JSON.parse(isLoggedIn) : null;
   const token = parsedLoggedIn?.data?.access_token;
   const { data: movies } = useGetRecordQuery(undefined, { skip: !token });
+
+  useEffect(() => {
+    if (data == undefined) refetch();
+  }, [data]);
 
   return (
     <>
