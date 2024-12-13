@@ -1,5 +1,5 @@
 import "./LoadingStyle.css";
-import Logo from "../../../assets/loadingLogo.svg";
+import Logo from "../../../assets/loadingLogo.png";
 
 const PlayerLoading: React.FC<any> = ({onBack}) => {
   return (
@@ -21,7 +21,7 @@ const PlayerLoading: React.FC<any> = ({onBack}) => {
             </svg>
       </button>
     </div>
-        <img src={Logo} alt="" className="m-auto"/>
+        <img src={Logo} alt="" className="m-auto h-12"/>
         <div className="animated-line"></div>
         <div className="text">精彩即将开始...</div>
       </div>
