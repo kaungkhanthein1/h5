@@ -203,7 +203,7 @@ const Main: React.FC<any> = ({
 
             <div
               className={`fixed z-10 bottom-0 gap-3 w-full bg-[#1B1B1F] p-6 flex justify-between items-center transition-transform duration-300 ease-in-out ${
-                isEditMode ? "translate-y-0" : "translate-y-full"
+                isEditMode ? "translate-y-0" : "transform translate-y-full"
               }`}
             >
               <button
