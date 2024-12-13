@@ -101,7 +101,7 @@ const Main: React.FC<any> = ({
           <div className="mt-5" key={index}>
             <div className="flex items-center justify-between bg-[#1B1B1F] px-4 py-1">
               <div className="history-text">{movie?.title}</div>
-              <div className="flex gap-2 items-center">
+              {/* <div className="flex gap-2 items-center">
                 <p className="filter-text">过滤已观看完视频</p>
 
                 <label className="relative inline-flex items-center cursor-pointer">
@@ -119,7 +119,7 @@ const Main: React.FC<any> = ({
                     }`}
                   ></div>
                 </label>
-              </div>
+              </div> */}
             </div>
 
             <div className="py-3">
