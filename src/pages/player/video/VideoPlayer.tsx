@@ -119,8 +119,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     });
         // Set resume time if available
         art.once("ready", () => {
-          window.alert('ok')
-
           if (resumeTime > 0) {
             art.currentTime = resumeTime;
           }
