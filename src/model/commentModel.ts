@@ -3,6 +3,10 @@ export interface CommentProps {
   lowerDivHeight: any;
   setCommentCount: (count: number) => void;
   commentCount: number;
+  comments: any,
+  setComments: (comments: any) => void,
+  hasMore: boolean,
+  setHasMore: any,
 }
 
 export interface Comment {

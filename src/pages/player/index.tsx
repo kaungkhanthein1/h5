@@ -297,7 +297,7 @@ const DetailPage: React.FC = () => {
                 >
                   <span>评论</span>
                   <span className="text-gray-500 ml-1.5 text-sm">
-                    {commentCount > 99 ? "99+" : commentCount || ""}
+                    {commentCount > 99 ? "99+" : commentCount || 0}
                   </span>
                   {activeTab === "tab-2" && (
                     <div className="absolute bottom-0 left-3.5 w-3/6 h-1 bg-mainColor rounded-md"></div>

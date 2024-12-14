@@ -35,6 +35,8 @@ const DetailSection: React.FC<DetailSectionProps> = ({
   setCommentCount,
   commentCount,
 }) => {
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [hasMore, setHasMore] = useState(false);
   const [showModal, setShowModal] = useState(false); // For triggering modal
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -71,8 +73,6 @@ const DetailSection: React.FC<DetailSectionProps> = ({
       const authorization = `${loginInfo.data.token_type} ${loginInfo.data.access_token}`;
       if (tab === "star") {
         handleStarToggle(authorization);
-      } else if (tab === "share") {
-        handleShare(authorization);
       } else {
         handleFeedbackModel();
       }
@@ -139,27 +139,15 @@ const DetailSection: React.FC<DetailSectionProps> = ({
     document.body.removeChild(textArea);
   };
 
-  const handleShare = async (authorization: string) => {
-    // console.log(authorization);
+  const handleShare = async () => {
     setIsLoading(true);
     try {
-      // Fetch share content API call
-      // const response = await fetch(
-      //   convertToSecureUrl(`${process.env.REACT_APP_API_URL}/user/get_share`),
-      //   {
-      //     method: "GET",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //       Authorization: authorization,
-      //     },
-      //   }
-      // );
       const response = await axios.get(
         convertToSecureUrl(`${process.env.REACT_APP_API_URL}/user/get_share`),
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: authorization,
+            // Authorization: authorization,
           },
         }
       );
@@ -300,7 +288,7 @@ const DetailSection: React.FC<DetailSectionProps> = ({
               </button>
 
               <button
-                onClick={() => handleTabClick("share")}
+                onClick={() => handleShare()}
                 className="action-btn flex flex-col items-center px-4 py-2 rounded-md"
               >
                 <img src={share} alt="" className="h-7 mb-2" />
@@ -335,6 +323,10 @@ const DetailSection: React.FC<DetailSectionProps> = ({
               lowerDivHeight={lowerDivHeight}
               setCommentCount={setCommentCount}
               commentCount={commentCount}
+              comments={comments}
+              setComments={setComments}
+              hasMore={hasMore}
+              setHasMore={setHasMore}
             />
           </div>
         ) : (

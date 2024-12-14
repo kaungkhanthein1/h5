@@ -30,13 +30,15 @@ const CommentComponent: React.FC<CommentProps> = ({
   lowerDivHeight,
   setCommentCount,
   commentCount,
+  comments,
+  setComments,
+  hasMore,
+  setHasMore
 }) => {
-  const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState("");
   const [replyingTo, setReplyingTo] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(false);
   const commentInputRef = useRef<HTMLInputElement>(null);
   const [isLoggedIn, setIsLoggedLogIn] = useState<boolean>(false);
   const [openPopup, setOpenPopup] = useState(false);
@@ -130,8 +132,8 @@ const CommentComponent: React.FC<CommentProps> = ({
           }
         );
         if (response.ok) {
-          setComments((prevComments) =>
-            prevComments.map((comment) =>
+          setComments((prevComments: any) =>
+            prevComments.map((comment: any) =>
               comment.id === commentId
                 ? { ...comment, likes: comment.likes + 1 }
                 : comment
@@ -164,7 +166,7 @@ const CommentComponent: React.FC<CommentProps> = ({
         }
       );
       const data: any = response ? await decryptWithAes(response) : null;
-      const newComments = comments.map((c) => {
+      const newComments = comments.map((c: any) => {
         if (c.id === comment.id) {
           c.replies.list = [...c.replies.list, ...data.data.list];
           c.replies.hasMore = data.data.hasMore;
@@ -204,8 +206,8 @@ const CommentComponent: React.FC<CommentProps> = ({
           }
         );
         if (response.ok) {
-          setComments((prevComments) =>
-            prevComments.filter((comment) => comment.id !== id)
+          setComments((prevComments: any) =>
+            prevComments.filter((comment: any) => comment.id !== id)
           );
           dispatch(showToast({ message: "已删除", type: "success" }));
         }
@@ -306,7 +308,7 @@ const CommentComponent: React.FC<CommentProps> = ({
             className="comment-section flex flex-col rounded-md p-3"
             height={lowerDivHeight - 140}
           >
-            {comments.map((comment) => (
+            {comments.map((comment: any) => (
               <div key={comment.id} className="comment pb-4 relative">
                 {/* Like button at the top right corner */}
                 {comment.status !== 0 && (
