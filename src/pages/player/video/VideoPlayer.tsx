@@ -98,25 +98,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
           setVideoRatio(videoHeight / videoWidth); // Set the dynamic aspect ratio
           setReHeight(videoWidth < videoHeight);
         });
-
-        art.on('fullscreenWeb', (state) => {
-          if (
-            (window as any).webkit &&
-            (window as any).webkit.messageHandlers &&
-            (window as any).webkit.messageHandlers.jsBridge
-          ) {
-            (window as any).webkit.messageHandlers.jsBridge.postMessage('fullScreen');
-          }
-      });
-      art.on('fullscreen', (state) => {
-        if (
-          (window as any).webkit &&
-          (window as any).webkit.messageHandlers &&
-          (window as any).webkit.messageHandlers.jsBridge
-        ) {
-          (window as any).webkit.messageHandlers.jsBridge.postMessage('fullScreen');
-        }
-    });
         // Set resume time if available
         art.once("ready", () => {
           if (resumeTime > 0) {
@@ -172,6 +153,29 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
       }
     };
   }, [videoUrl, resumeTime]);
+
+  useEffect(() => {
+    // Define the event handler
+    const handleClick = (event: any) => {
+      if (event.target.classList.contains("art-icon-fullscreenOn")) {
+        if (
+          (window as any).webkit &&
+          (window as any).webkit.messageHandlers &&
+          (window as any).webkit.messageHandlers.jsBridge
+        ) {
+          (window as any).webkit.messageHandlers.jsBridge.postMessage('fullScreen');
+        }
+      }
+    };
+
+    // Attach the event listener
+    document.addEventListener("click", handleClick);
+
+    // Cleanup the event listener
+    return () => {
+      document.removeEventListener("click", handleClick);
+    };
+  }, []);
 
   const handleBack = async () => {
     if (playerRef.current) {
