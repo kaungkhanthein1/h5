@@ -99,6 +99,15 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
           setReHeight(videoWidth < videoHeight);
         });
 
+        art.on('fullscreen', (state) => {
+          if (
+            (window as any).webkit &&
+            (window as any).webkit.messageHandlers &&
+            (window as any).webkit.messageHandlers.jsBridge
+          ) {
+            (window as any).webkit.messageHandlers.jsBridge.postMessage(state ? 'fullScreen' : 'defaultScreen');
+          }
+      });
         // Set resume time if available
         art.once("ready", () => {
           if (resumeTime > 0) {
