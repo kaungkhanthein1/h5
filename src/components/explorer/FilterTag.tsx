@@ -173,7 +173,7 @@ const FilterTag = () => {
                 </div>
               ))}
           </div>
-          {show ? (
+          {/* {show ? (
             <>
               <div
                 onClick={filterTagHandler}
@@ -189,7 +189,7 @@ const FilterTag = () => {
             </>
           ) : (
             <></>
-          )}
+          )} */}
           {showMenu ? (
             <div className="flex flex-col gap-3 py-3">
               <ExplorerTags
