@@ -6,12 +6,16 @@ interface CounterState {
   value: number;
   showFilterTag: boolean;
   showExploreFilterTag: boolean;
+  showMenu: boolean;
+  isShowMenu: boolean;
 }
 
 const initialState: CounterState = {
   value: 0,
   showFilterTag: false,
   showExploreFilterTag: false,
+  showMenu: false,
+  isShowMenu: false,
 };
 
 const counterSlice = createSlice({
@@ -27,10 +31,21 @@ const counterSlice = createSlice({
     setShowExploreFilterTag: (state, { payload }) => {
       state.showFilterTag = payload;
     },
+    setShowMenu: (state, { payload }) => {
+      state.showMenu = payload;
+    },
+    setIsShowMenu: (state, { payload }) => {
+      state.isShowMenu = payload;
+    },
   },
 });
 
-export const { increment, setShowFilterTag, setShowExploreFilterTag } =
-  counterSlice.actions;
+export const {
+  increment,
+  setShowFilterTag,
+  setShowExploreFilterTag,
+  setShowMenu,
+  setIsShowMenu,
+} = counterSlice.actions;
 
 export default counterSlice.reducer;

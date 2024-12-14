@@ -19,6 +19,7 @@ import {
 import { convertToSecureUrl } from "../../services/newEncryption";
 import { useGetFilteredDataQuery } from "../../pages/home/services/homeApi";
 import NewAds from "../NewAds";
+import { setShowMenu } from "../../features/counter/counterSlice";
 const FilterMovie = () => {
   // const [isLoading, setIsLoading] = useState(false);
   const [movieData, setMovieData] = useState<any>([]);
@@ -34,6 +35,7 @@ const FilterMovie = () => {
   const [totalData, setTotalData] = useState<any>(null);
   const [nomoredata, setNomoredata] = useState(false);
   const [pageSize, setPageSize] = useState(30);
+  const showMenu = useSelector((state: any) => state?.counter?.showMenu);
 
   const {
     data: configData,
@@ -115,6 +117,14 @@ const FilterMovie = () => {
 
   return (
     <div className="bg-background text-text min-h-screen relative">
+      {showMenu ? (
+        <div
+          onClick={() => dispatch(setShowMenu(false))}
+          className="bg-[#00000080] z-20 fixed top-0 left-0 w-full h-screen"
+        ></div>
+      ) : (
+        <></>
+      )}
       <div className="">
         <FilterTag />
         <div className="mb-5 -mt-3">

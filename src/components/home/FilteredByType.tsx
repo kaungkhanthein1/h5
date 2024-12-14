@@ -20,6 +20,7 @@ import {
 import NewAds from "../NewAds";
 import { convertToSecureUrl } from "../../services/newEncryption";
 import { useGetFilteredDataQuery } from "../../pages/home/services/homeApi";
+import { setIsShowMenu } from "../../features/counter/counterSlice";
 
 const FilteredByType = () => {
   const activeTab = useSelector((state: any) => state.home.activeTab);
@@ -35,6 +36,8 @@ const FilteredByType = () => {
   const classData = useSelector((state: any) => state.home.class);
   const area = useSelector((state: any) => state.home.area);
   const year = useSelector((state: any) => state.home.year);
+  const isShowMenu = useSelector((state: any) => state.counter.isShowMenu);
+
   const [nomoredata, setNomoredata] = useState(false);
   const dispatch = useDispatch();
 
@@ -98,6 +101,14 @@ const FilteredByType = () => {
   return (
     <>
       <div className="home-bg"></div>
+      {isShowMenu ? (
+        <div
+          onClick={() => dispatch(setIsShowMenu(false))}
+          className="bg-[#00000080] z-20 fixed top-0 left-0 w-full h-screen"
+        ></div>
+      ) : (
+        <></>
+      )}
       <div className=" mt-[100px] text-text min-h-screen">
         <div className="">
           <FilterByTag paddingTop="pt-5" />

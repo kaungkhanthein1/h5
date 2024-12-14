@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import downh from "../../assets/downh.svg";
 import ExplorerTags from "./ExplorerTags";
+import { setShowMenu } from "../../features/counter/counterSlice";
 
 const FilterTag = () => {
   const location = useLocation();
@@ -22,8 +23,9 @@ const FilterTag = () => {
   const [activeClass, setActiveClass] = useState(0);
   const [activeArea, setActiveArea] = useState(0);
   const [activeYear, setActiveYear] = useState(0);
-  const [showMenu, setShowMenu] = useState(false);
+  // const [showMenu, setShowMenu] = useState(false);
   const activeTab = useSelector((state: any) => state?.explore?.activeTab);
+  const showMenu = useSelector((state: any) => state?.counter?.showMenu);
   const sort = useSelector((state: any) => state?.explore?.sort);
   const sortName = useSelector((state: any) => state?.explore?.sortName);
   // console.log(sort, "sort");
@@ -46,7 +48,7 @@ const FilterTag = () => {
   // console.log(filterTagRef?.current.getBoundingClientRect())
   const [show, setShow] = useState(false);
   const filterTagHandler = () => {
-    setShowMenu(true);
+    dispatch(setShowMenu(true));
     setShow(true);
     // window.scrollTo(0, 0);
   };
@@ -59,7 +61,7 @@ const FilterTag = () => {
         if (rect.top < 100) {
           // dispatch(setShowExploreFilterTag(true));
           setShow(true);
-          setShowMenu(false);
+          dispatch(setShowMenu(false));
         } else {
           // dispatch(setShowExploreFilterTag(false));
           setShow(false);
@@ -176,6 +178,7 @@ const FilterTag = () => {
           </div>
           {show ? (
             <>
+              {/* <div className="bg-[#00000080] z-20 fixed top-0 left-0 w-full h-screen"></div> */}
               <div
                 onClick={filterTagHandler}
                 className={`mt-3 pb-3 text-white text-[14px] ${

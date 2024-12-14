@@ -49,7 +49,9 @@ const Tab4 = () => {
     };
     setIsLoading(true);
     const { data } = await axios(
-      convertToSecureUrl(`${process.env.REACT_APP_API_URL}/movie/ranking/data?id=${id}`),
+      convertToSecureUrl(
+        `${process.env.REACT_APP_API_URL}/movie/ranking/data?id=${id}`
+      ),
       { headers }
     );
     setRankingDataById(data?.data);
@@ -63,7 +65,7 @@ const Tab4 = () => {
 
   return (
     <div className="pb-32 min-h-screen">
-      <div className="w-full px-3">
+      <div className="w-full px-3 sticky top-[50px] z-50 bg-background">
         <nav className="flex overflow-x-scroll no-scrollbar pb-5 gap-3 remove-scrollbar">
           {data?.data?.map((item: any, index: number) => (
             <div

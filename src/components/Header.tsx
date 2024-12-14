@@ -136,12 +136,12 @@ import { useNavigate } from "react-router-dom";
 import { useGetHeaderTopicsQuery } from "../../src/services/helperService";
 import { useDispatch, useSelector } from "react-redux";
 import { setActiveTab } from "../../src/pages/home/slice/HomeSlice";
-import { setShowFilterTag } from "../../src/features/counter/counterSlice";
+import { setIsShowMenu, setShowFilterTag } from "../../src/features/counter/counterSlice";
 import FilterByTag from "./home/FilterByTag";
 
 const Header: FC = () => {
   const { data } = useGetHeaderTopicsQuery();
-  const [isShowMenu, setIsShowMenu] = useState(false);
+  // const [isShowMenu, setIsShowMenu] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isHeaderVisible, setIsHeaderVisible] = useState(true); // State to track header visibility
 
@@ -152,6 +152,7 @@ const Header: FC = () => {
   const classData = useSelector((state: any) => state.home.class);
   const area = useSelector((state: any) => state.home.area);
   const year = useSelector((state: any) => state.home.year);
+  const isShowMenu = useSelector((state: any) => state.counter.isShowMenu);
   const showFilterTag = useSelector(
     (state: any) => state.counter.showFilterTag
   );
@@ -159,12 +160,12 @@ const Header: FC = () => {
   const navigate = useNavigate();
 
   const filterTagHandler = () => {
-    setIsShowMenu(true);
+    dispatch(setIsShowMenu(true));
   };
 
   useEffect(() => {
     if (!showFilterTag) {
-      setIsShowMenu(false);
+      dispatch(setIsShowMenu(false));
     }
   }, [showFilterTag]);
 
