@@ -78,6 +78,7 @@ const CommentComponent: React.FC<CommentProps> = ({
       const response: any = await fetchCommentData(movieId || '', page);
       const data: any = response ? await decryptWithAes(response) : null;
 
+      console.log('data is=>', data);
       // Concatenate new comments to existing ones using spread operator (...)
       const updatedComments =
         comments &&
@@ -337,7 +338,7 @@ const CommentComponent: React.FC<CommentProps> = ({
                   />
                 </div>
                 <div style={{ marginLeft: "46px", marginTop: "-8px" }}>
-                  <div className="comment-text text-gray-300 mb-1">
+                  <div className={`comment-text text-gray-300 mb-1 ${comment.status === 0 ? 'italic' : ''}`}>
                     {comment.content}
                   </div>
                   <div className="comment-actions flex items-center justify-start gap-4 mt-2">
@@ -405,7 +406,7 @@ const CommentComponent: React.FC<CommentProps> = ({
                             <div
                               style={{ marginLeft: "46px", marginTop: "-8px" }}
                             >
-                              <div className="comment-text text-gray-300 mb-1">
+                              <div className={`comment-text text-gray-300 mb-1 ${comment.status === 0 ? 'italic' : ''}`}>
                                 {reply.content}
                               </div>
                               <div className="comment-actions flex items-center justify-start gap-4 mt-2">
