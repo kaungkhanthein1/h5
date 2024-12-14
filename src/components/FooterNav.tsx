@@ -47,9 +47,10 @@ const Footer: FC = () => {
   }, [lastScrollY]);
   return (
     <footer
-      className={`bg-[#1f1f21] fixed  transition-all duration-300 w-full shadow-lg z-50 ${
-        isHeaderVisible ? "bottom-0" : "-bottom-[135px]"
-      }`}
+      // className={`bg-[#1f1f21] fixed  transition-all duration-300 w-full shadow-lg z-50 ${
+      //   isHeaderVisible ? "bottom-0" : "-bottom-[135px]"
+      // }`}
+      className={`bg-[#1f1f21] fixed  transition-all duration-300 w-full shadow-lg z-50 bottom-0`}
     >
       <div className="flex justify-around items-center py-2">
         {/* Home Icon */}

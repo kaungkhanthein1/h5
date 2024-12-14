@@ -91,22 +91,34 @@ const App: React.FC = () => {
     location.pathname.startsWith("/share/member");
 
   const hideHeader = location.pathname.startsWith("/explorer");
-  
+
   const sendMessageToNative = (message: string) => {
-    if ((window as any).webkit && (window as any).webkit.messageHandlers && (window as any).webkit.messageHandlers.jsBridge) {
+    if (
+      (window as any).webkit &&
+      (window as any).webkit.messageHandlers &&
+      (window as any).webkit.messageHandlers.jsBridge
+    ) {
       (window as any).webkit.messageHandlers.jsBridge.postMessage(message);
     }
   };
 
   useEffect(() => {
-    if(data?.data) {
-      if((location.pathname === '/' || location.pathname.startsWith("/search") || 
-      location.pathname.startsWith("/search_overlay")) && !panding) {
-        sendMessageToNative('showHomeScreen');
-      } else if(location.pathname.startsWith("/profile") && !panding){
-        sendMessageToNative('showProfileScreen');
-      } else if(location.pathname !== '/' && !location.pathname.startsWith("/profile") && !panding) {
-        sendMessageToNative('hideGradient');
+    if (data?.data) {
+      if (
+        (location.pathname === "/" ||
+          location.pathname.startsWith("/search") ||
+          location.pathname.startsWith("/search_overlay")) &&
+        !panding
+      ) {
+        sendMessageToNative("showHomeScreen");
+      } else if (location.pathname.startsWith("/profile") && !panding) {
+        sendMessageToNative("showProfileScreen");
+      } else if (
+        location.pathname !== "/" &&
+        !location.pathname.startsWith("/profile") &&
+        !panding
+      ) {
+        sendMessageToNative("hideGradient");
       }
     }
   }, [location.pathname]);
@@ -150,37 +162,6 @@ const App: React.FC = () => {
       dispatch(setSignupOpen(false));
     });
   };
-
-  const isScrolling = useSelector((state: any) => state.home.isScrolling);
-
-  useEffect(() => {
-    let timer: any;
-
-    const handleScroll = () => {
-      dispatch(setIsScrolling(true));
-
-      // Clear the timer if it's already set
-      if (timer) {
-        clearTimeout(timer);
-      }
-
-      // Set a timer to reset the isScrolling state after scrolling stops
-      timer = setTimeout(() => {
-        dispatch(setIsScrolling(false));
-      }, 150); // Adjust delay to detect when scrolling stops
-    };
-
-    // Attach the scroll event listener
-    window.addEventListener("scroll", handleScroll);
-
-    // Cleanup the event listener on component unmount
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      if (timer) clearTimeout(timer);
-    };
-  }, []);
-
-  // console.log(isScrolling, "isScrolling");
 
   return (
     <>

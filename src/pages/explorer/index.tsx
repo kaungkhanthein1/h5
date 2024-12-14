@@ -46,9 +46,10 @@ const Explorer: React.FC = () => {
     // bg-[#1f1f21]
     <div className="relative">
       <nav
-        className={`flex flex-wrap gap-4 items-center py-2 px-3  bg-background fixed transition-all duration-300 w-full z-50 ${
-          isHeaderVisible ? "top-0" : "-top-[135px]"
-        }`}
+        // className={`flex flex-wrap gap-4 items-center py-2 px-3  bg-background fixed transition-all duration-300 w-full z-50 ${
+        //   isHeaderVisible ? "top-0" : "-top-[135px]"
+        // }`}
+        className={`flex flex-wrap gap-4 items-center py-2 px-3  bg-background fixed transition-all duration-300 w-full z-50 top-0`}
       >
         {tabs.map((tab, index) => (
           <button

@@ -146,9 +146,10 @@ const FilterTag = () => {
     <>
       <div className="flex flex-col gap-3 py-5">
         <div
-          className={`fixed w-full z-50 bg-background transition-all duration-300 ${
-            isHeaderVisible ? "top-[53px]" : "-top-[135px]"
-          }`}
+          // className={`fixed w-full z-50 bg-background transition-all duration-300 ${
+          //   isHeaderVisible ? "top-[53px]" : "-top-[135px]"
+          // }`}
+          className={`fixed w-full z-50 bg-background transition-all duration-300 top-[53px]`}
         >
           <div className="flex  overflow-x-scroll px-3 gap-6 remove-scrollbar items-center  w-full">
             {configData?.data?.movie_search_screen?.type
@@ -173,11 +174,11 @@ const FilterTag = () => {
                 </div>
               ))}
           </div>
-          {/* {show ? (
+          {show ? (
             <>
               <div
                 onClick={filterTagHandler}
-                className={`mt-3 text-white text-[14px] ${
+                className={`mt-3 pb-3 text-white text-[14px] ${
                   showMenu ? "hidden" : "flex"
                 } items-center justify-center gap-1 transition`}
               >
@@ -189,7 +190,7 @@ const FilterTag = () => {
             </>
           ) : (
             <></>
-          )} */}
+          )}
           {showMenu ? (
             <div className="flex flex-col gap-3 py-3">
               <ExplorerTags
