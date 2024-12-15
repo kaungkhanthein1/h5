@@ -439,3 +439,10 @@ input[type="radio"]:checked {
     backdrop-filter: blur(10px);
     background: radial-gradient(black, transparent);
 }
+
+.cus-elips {
+  white-space: nowrap; 
+  overflow: hidden;
+  text-overflow: ellipsis; 
+  max-width: 60%;
+}
