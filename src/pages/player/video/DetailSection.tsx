@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import share from "../../../assets/share.png";
 import star from "../../../assets/star.png";
 import info from "../../../assets/info.png";
+import shareLink from "../../../assets/shareLink.png";
 import selectedStar from "../../../assets/selectedStar.png";
 import rate from "../../../assets/rate.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -310,9 +311,10 @@ const DetailSection: React.FC<DetailSectionProps> = ({
         )}
 
         {visible && (
-          <div className="link-copy fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-lg font-medium px-4 py-2 rounded-lg shadow-md">
-            链接已复制
-          </div>
+            <img src={shareLink} alt="" className="w-32 h-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"/>
+          // <div className="link-copy fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-lg font-medium px-4 py-2 rounded-lg shadow-md">
+          //   链接已复制
+          // </div>
         )}
 
         {activeTab === "tab-2" ? (
