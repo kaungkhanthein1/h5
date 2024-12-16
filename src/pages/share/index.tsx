@@ -110,7 +110,7 @@ const Share: React.FC<ShareProps> = ({}) => {
         <Link to="/profile">
           <img src={back} className="" alt="" />
         </Link>
-        <p className="text-[18px] text-white font-semibold">Invite Friends</p>
+        <p className="text-[18px] text-white font-semibold">邀请朋友</p>
         <div></div>
         {/* <div
           // onClick={() => navigate("")}
