@@ -100,9 +100,10 @@ const Navbar: React.FC<NavbarProps> = ({
   return (
     <div className="relative">
       <div
-        className={`fixed input-bg w-full z-[9999] pb-3  transition-all duration-300 ${
-          isHeaderVisible ? "top-0" : "-top-[135px]"
-        }`}
+        // className={`fixed input-bg w-full z-[9999] pb-3  transition-all duration-300 ${
+        //   isHeaderVisible ? "top-0" : "-top-[135px]"
+        // }`}
+        className="fixed input-bg w-full z-[9999] pb-3  transition-all duration-300 top-0"
       >
         <div className="flex gap-4 w-full py-3 pt-5 px-3 z-10  items-center justify-between">
           <form onSubmit={handleSearch} className="w-full">

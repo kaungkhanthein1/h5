@@ -80,9 +80,10 @@ const Navbar: React.FC = () => {
   return (
     <div className="relative">
       <div
-        className={`flex gap-4 w-full py-1 px-3 input-bg-overlay z-[9999]  fixed items-center justify-between transition-all duration-300 ${
-          isHeaderVisible ? "top-0" : "-top-[135px]"
-        }`}
+        // className={`flex gap-4 w-full py-1 px-3 input-bg-overlay z-[9999]  fixed items-center justify-between transition-all duration-300 ${
+        //   isHeaderVisible ? "top-0" : "-top-[135px]"
+        // }`}
+        className="flex gap-4 w-full py-1 px-3 input-bg-overlay z-[9999]  fixed items-center justify-between transition-all duration-300 top-0"
       >
         <form onSubmit={handleSubmit} className="w-full py-3 pt-3  ">
           <div className="absolute left-6 top-[22px]">
