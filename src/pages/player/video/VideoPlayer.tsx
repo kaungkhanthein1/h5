@@ -95,6 +95,13 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         art.once("video:loadedmetadata", () => {
           const videoWidth = art.video.videoWidth;
           const videoHeight = art.video.videoHeight;
+          if (videoWidth > videoHeight) {
+            sendNativeEvent('landscape_view')
+          } else if (videoHeight > videoWidth) {
+            sendNativeEvent('potrait_view')
+          } else {
+            sendNativeEvent('square_view')
+          }
           setVideoRatio(videoHeight / videoWidth); // Set the dynamic aspect ratio
           setReHeight(videoWidth < videoHeight);
         });
@@ -154,28 +161,18 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     };
   }, [videoUrl, resumeTime]);
 
-  useEffect(() => {
-    // Define the event handler
-    const handleClick = (event: any) => {
-      if (event.target.classList.contains("art-icon-fullscreenOn")) {
-        if (
-          (window as any).webkit &&
-          (window as any).webkit.messageHandlers &&
-          (window as any).webkit.messageHandlers.jsBridge
-        ) {
-          (window as any).webkit.messageHandlers.jsBridge.postMessage('fullScreen');
-        }
-      }
-    };
-
-    // Attach the event listener
-    document.addEventListener("click", handleClick);
-
-    // Cleanup the event listener
-    return () => {
-      document.removeEventListener("click", handleClick);
-    };
-  }, []);
+  // Define the event handler
+  const sendNativeEvent = (message: string) => {
+      if (
+        (window as any).webkit &&
+        (window as any).webkit.messageHandlers &&
+        (window as any).webkit.messageHandlers.jsBridge
+      ) {
+        (window as any).webkit.messageHandlers.jsBridge.postMessage(
+          message
+        );
+    }
+  };
 
   const handleBack = async () => {
     if (playerRef.current) {
