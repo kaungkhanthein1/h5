@@ -26,6 +26,7 @@ import {
   decryptWithAes,
 } from "../../../services/newEncryption";
 import axios from "axios";
+import copy from 'copy-text-to-clipboard';
 
 const DetailSection: React.FC<DetailSectionProps> = ({
   movieDetail,
@@ -117,27 +118,12 @@ const DetailSection: React.FC<DetailSectionProps> = ({
   };
 
   const copyToClipboard = (text: string) => {
-    // Create a textarea element to hold the text
-    const textArea = document.createElement("textarea");
-    textArea.value = text;
-
-    // Position off-screen and make it invisible
-    textArea.style.position = "fixed";
-    textArea.style.top = "-1000px";
-    textArea.style.opacity = "0";
-
-    document.body.appendChild(textArea);
-    textArea.select();
-
     try {
-      document.execCommand("copy"); // This works on most browsers, including iOS Safari
+      copy(text);
       handleCopy(); // Show the "Link Copied" message
     } catch (err) {
       console.error("Failed to copy to clipboard", err);
     }
-
-    // Remove the textarea after copying
-    document.body.removeChild(textArea);
   };
 
   const handleShare = async () => {
