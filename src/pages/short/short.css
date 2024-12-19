@@ -1,0 +1,52 @@
+.short_div {
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #161619;
+}
+.short_div {
+  color: var(--White-100, #fff);
+  text-align: center;
+  font-family: "PingFang SC";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.short_head {
+  color: var(--White-100, #fff);
+  text-align: center;
+  font-feature-settings: "liga" off, "clig" off;
+  font-family: "PingFang SC";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+.short_des {
+  color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  font-feature-settings: "liga" off, "clig" off;
+  font-family: "PingFang SC";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px; /* 171.429% */
+}
+.short_btn {
+  border-radius: 72px;
+  background: rgba(255, 255, 255, 0.04);
+  display: flex;
+
+  padding: 12px 24px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.short_main {
+  background-image: url("../../assets/short.jpg");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}

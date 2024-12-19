@@ -64,6 +64,7 @@ export const useGetAdsQuery = () => {
     setIsFetching(true);
     try {
       const cachedData = sessionStorage.getItem("AdsQuery");
+
       if (cachedData) {
         setConfigData(JSON.parse(cachedData));
         setIsLoading(false);

@@ -25,6 +25,8 @@ import Landing from "./components/Landing";
 import BannerAds from "./components/BannerAds";
 import { useGetAdsQuery } from "./services/helperService";
 import { setIsScrolling } from "./pages/home/slice/HomeSlice";
+import Social from "./pages/social";
+import Short from "./pages/short";
 // import Menber from "./pages/share/member";
 // import Share from "./pages/share";
 
@@ -77,6 +79,8 @@ const App: React.FC = () => {
     location.pathname.startsWith("/search_overlay") ||
     location.pathname.startsWith("/search") ||
     location.pathname.startsWith("/profile") ||
+    location.pathname.startsWith("/social") ||
+    location.pathname.startsWith("/short") ||
     location.pathname.startsWith("/social_callback") ||
     location.pathname.startsWith("/info") ||
     location.pathname.startsWith("/nickname") ||
@@ -190,6 +194,8 @@ const App: React.FC = () => {
                     <Route path="/search_overlay" element={<Search />} />
 
                     <Route path="/explorer" element={<Explorer />} />
+                    <Route path="/social" element={<Social />} />
+                    <Route path="/short" element={<Short />} />
                     <Route path="/explorer/:id" element={<Detail />} />
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/player/:id" element={<Player />} />
@@ -217,6 +223,8 @@ const App: React.FC = () => {
               {/* Conditionally render FooterNav */}
               {!hideHeaderFooter && <FooterNav />}
               {location.pathname.startsWith("/profile") && <FooterNav />}
+              {location.pathname.startsWith("/social") && <FooterNav />}
+              {location.pathname.startsWith("/short") && <FooterNav />}
 
               {(openAuthModel || openLoginModel || openSignupModel) && (
                 <div

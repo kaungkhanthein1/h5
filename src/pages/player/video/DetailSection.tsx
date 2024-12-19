@@ -11,6 +11,7 @@ import {
   faTimes,
   faFire,
 } from "@fortawesome/free-solid-svg-icons";
+import Cookies from 'js-cookie';
 import CommentComponent from "./CommentSection";
 import { useDispatch } from "react-redux";
 import { setAuthModel } from "../../../features/login/ModelSlice";
@@ -26,7 +27,6 @@ import {
   decryptWithAes,
 } from "../../../services/newEncryption";
 import axios from "axios";
-import copy from 'copy-text-to-clipboard';
 
 const DetailSection: React.FC<DetailSectionProps> = ({
   movieDetail,
@@ -118,43 +118,80 @@ const DetailSection: React.FC<DetailSectionProps> = ({
   };
 
   const copyToClipboard = (text: string) => {
+    // Create a textarea element to hold the text
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+
+    // Position off-screen and make it invisible
+    textArea.style.position = "fixed";
+    textArea.style.top = "-1000px";
+    textArea.style.opacity = "0";
+
+    document.body.appendChild(textArea);
+    textArea.select();
+
     try {
-      copy(text);
+      document.execCommand("copy"); // This works on most browsers, including iOS Safari
+      sendEventToNative(text)
       handleCopy(); // Show the "Link Copied" message
     } catch (err) {
       console.error("Failed to copy to clipboard", err);
     }
+
+    // Remove the textarea after copying
+    document.body.removeChild(textArea);
   };
 
-  const handleShare = async () => {
-    setIsLoading(true);
-    try {
-      const response = await axios.get(
-        convertToSecureUrl(`${process.env.REACT_APP_API_URL}/user/get_share`),
-        {
-          headers: {
-            "Content-Type": "application/json",
-            // Authorization: authorization,
-          },
-        }
-      );
-      const data = await response.data;
-      const result : any = await decryptWithAes(data)
-      console.log(result)
-      if(data && result){
-        copyToClipboard(result?.data.content)
-      }
-      // if (data && data.data && data.data.content) {
-      //   copyToClipboard(data.data.content);
-      // } else {
-      //   alert("获取分享内容失败，请稍后重试");
-      // }
-    } catch (error) {
-      console.error("Error fetching share content:", error);
-    } finally {
-      setIsLoading(false);
+  const sendEventToNative = (text: string) => {
+    if (
+      (window as any).webkit &&
+      (window as any).webkit.messageHandlers &&
+      (window as any).webkit.messageHandlers.jsBridge
+    ) {
+      (window as any).webkit.messageHandlers.jsBridge.postMessage({
+        eventName: "movieDetailShare",
+        value: text
+    });
+  }
+  }
+
+const handleShare = async () => {
+  setIsLoading(true);
+  const cookieKey = 'shareContent';
+  
+  try {
+    // Check if the cookie exists
+    const cachedContent = Cookies.get(cookieKey);
+    if (cachedContent) {
+      copyToClipboard(JSON.parse(cachedContent).data.content);
+      return;
     }
-  };
+
+    // Call the API if no cached content is found
+    const response = await axios.get(
+      convertToSecureUrl(`${process.env.REACT_APP_API_URL}/user/get_share`),
+      {
+        headers: {
+          "Content-Type": "application/json",
+        }
+      }
+    );
+
+    const data = await response.data;
+    const result: any = await decryptWithAes(data);
+
+    if (data && result) {
+      // Save to cookie with a 2-hour expiry
+      Cookies.set(cookieKey, JSON.stringify(result), { expires: 1 / 12 }); // 1/12 day = 2 hours
+      copyToClipboard(result?.data.content);
+    }
+  } catch (error) {
+    console.error("Error fetching share content:", error);
+  } finally {
+    setIsLoading(false);
+  }
+};
+
 
   const customHeight = () => {
     const upperDiv = document.getElementById("upper-div");
