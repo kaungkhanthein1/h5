@@ -2,7 +2,7 @@ import Loader from "../../../pages/search/components/Loader";
 
 import ImageWithPlaceholder from "./socialImgPlaceholder";
 import InfiniteScroll from "react-infinite-scroll-component";
-import socialImg from "../socialPlaceholder.png";
+
 import {
   useFollowUserMutation,
   useLikePostMutation,
@@ -29,12 +29,13 @@ const PostList = ({
 }) => {
   const [showCreatedTime, setShowCreatedTime] = useState(false);
   const showCreatedTimeHandler = () => {
-    dispatch(showToast({ message: "该功能还在开发中，敬请期待！", type: "error" }));
+    dispatch(
+      showToast({ message: "该功能还在开发中，敬请期待！", type: "error" })
+    );
     // setShowCreatedTime(true);
     // setTimeout(() => {
     //   setShowCreatedTime(false);
     // }, 1500);
-
   };
   const isLoggedIn = localStorage.getItem("authToken");
   const parsedLoggedIn = isLoggedIn ? JSON.parse(isLoggedIn) : null;
@@ -76,6 +77,10 @@ const PostList = ({
 
   // Open lightbox specific to a post and image index
   const openLightbox = (postId: any, index: any) => {
+    const bodyElement = document.querySelector("body");
+    if (bodyElement) {
+      bodyElement.style.overflow = "hidden";
+    }
     setLightboxStates({
       ...lightboxStates,
       [postId]: { isOpen: true, currentIndex: index },
@@ -83,12 +88,17 @@ const PostList = ({
   };
 
   const closeLightbox = (postId: any) => {
+    const bodyElement = document.querySelector("body");
+    if (bodyElement) {
+      bodyElement.style.removeProperty("overflow"); // Remove the overflow style
+    }
     const newState = { ...lightboxStates };
     if (newState[postId]) {
       newState[postId].isOpen = false;
     }
     setLightboxStates(newState);
   };
+
   if (loading && !data.length) {
     return (
       <div className="text-center -mt-[100px] max-sm:h-[80vh]  h-[100vh] flex justify-center items-center">
@@ -126,6 +136,7 @@ const PostList = ({
       startTransition(() => {
         dispatch(setAuthModel(true));
       });
+      return;
     }
 
     try {
@@ -240,6 +251,7 @@ const PostList = ({
   //   };
 
   const sendEventToNative = () => {
+    copyToClipboard("https://d1svxjht0opoc5.cloudfront.net/kkoor4.pdf");
     if (
       (window as any).webkit &&
       (window as any).webkit.messageHandlers &&
@@ -252,6 +264,36 @@ const PostList = ({
     }
   };
 
+  const copyToClipboard = async (text: string) => {
+    try {
+      // Attempt to use the Clipboard API (works in most modern browsers)
+      if ('clipboard' in navigator) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        const input = document.createElement('input');
+        input.setAttribute('value', text); // Set the value to the text we want to copy
+        input.setAttribute('readonly', '');  // Make it readonly so user can't modify it
+        input.style.position = 'absolute';  // Ensure it doesn't affect layout
+        input.style.opacity = '0';          // Make it invisible
+        input.style.pointerEvents = 'none'; // Disable interaction
+        input.style.zIndex = '-9999';       // Position it off-screen
+
+        document.body.appendChild(input);  // Append it to the body
+        input.select();  // Select the text
+        document.execCommand('copy');  // Copy the selected text to clipboard
+        document.body.removeChild(input); // Remove the input from the DOM
+      }
+    } catch (error) {
+      console.error("Clipboard copy failed", error);
+    } finally {
+      dispatch(
+        showToast({
+          message: "已复制分享链接",
+          type: "success",
+        })
+      );
+    }
+  }
   return (
     <div className="bg-black">
       {data.map((post: any, index: number) => (

@@ -14,6 +14,8 @@ const Player = ({ src, thumbnail }: { src: any; thumbnail: any }) => {
         loaded: function (el) {
           // This function is called when the element is loaded and observed
           if (!artPlayerInstanceRef.current) {
+            Artplayer.MOBILE_DBCLICK_PLAY = false;
+            // Artplayer.MOBILE_CLICK_PLAY = false;
             artPlayerInstanceRef.current = new Artplayer({
               container: el as HTMLDivElement,
               url: src,

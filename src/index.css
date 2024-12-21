@@ -436,14 +436,14 @@ input[type="radio"]:checked {
 
 .link-copy {
   border: 2px solid #4e4e4eba;
-    backdrop-filter: blur(10px);
-    background: radial-gradient(black, transparent);
+  backdrop-filter: blur(10px);
+  background: radial-gradient(black, transparent);
 }
 
 .cus-elips {
-  white-space: nowrap; 
+  white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis; 
+  text-overflow: ellipsis;
   max-width: 60%;
 }
 

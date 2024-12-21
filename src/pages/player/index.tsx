@@ -213,6 +213,25 @@ const DetailPage: React.FC = () => {
     }
   };
 
+  useEffect(()=>{
+    if(currentEpisode?.play_url) {
+      sendEventToNative(currentEpisode?.play_url)
+    }
+  },[currentEpisode]);
+
+  const sendEventToNative = (url: string) => {
+    if (
+      (window as any).webkit &&
+      (window as any).webkit.messageHandlers &&
+      (window as any).webkit.messageHandlers.jsBridge
+    ) {
+      (window as any).webkit.messageHandlers.jsBridge.postMessage({
+        eventName: "playUrl",
+        value: url,
+      });
+    }
+  };
+
   const handleChangeSource = async (nextSource: any) => {
     if (nextSource && nextSource.code && id) {
       try {

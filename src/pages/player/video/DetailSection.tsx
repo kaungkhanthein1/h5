@@ -117,30 +117,31 @@ const DetailSection: React.FC<DetailSectionProps> = ({
     }
   };
 
-  const copyToClipboard = (text: string) => {
-    // Create a textarea element to hold the text
-    const textArea = document.createElement("textarea");
-    textArea.value = text;
-
-    // Position off-screen and make it invisible
-    textArea.style.position = "fixed";
-    textArea.style.top = "-1000px";
-    textArea.style.opacity = "0";
-
-    document.body.appendChild(textArea);
-    textArea.select();
-
+  const copyToClipboard = async (text: string) => {
     try {
-      document.execCommand("copy"); // This works on most browsers, including iOS Safari
-      sendEventToNative(text)
-      handleCopy(); // Show the "Link Copied" message
-    } catch (err) {
-      console.error("Failed to copy to clipboard", err);
-    }
+      handleCopy();
+      sendEventToNative(text);
+      // Attempt to use the Clipboard API (works in most modern browsers)
+      if ('clipboard' in navigator) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        const input = document.createElement('input');
+        input.setAttribute('value', text); // Set the value to the text we want to copy
+        input.setAttribute('readonly', '');  // Make it readonly so user can't modify it
+        input.style.position = 'absolute';  // Ensure it doesn't affect layout
+        input.style.opacity = '0';          // Make it invisible
+        input.style.pointerEvents = 'none'; // Disable interaction
+        input.style.zIndex = '-9999';       // Position it off-screen
 
-    // Remove the textarea after copying
-    document.body.removeChild(textArea);
-  };
+        document.body.appendChild(input);  // Append it to the body
+        input.select();  // Select the text
+        document.execCommand('copy');  // Copy the selected text to clipboard
+        document.body.removeChild(input); // Remove the input from the DOM
+      }
+    } catch (error) {
+      console.error("Clipboard copy failed", error);
+    }
+  }
 
   const sendEventToNative = (text: string) => {
     if (
@@ -216,7 +217,7 @@ const handleShare = async () => {
   useEffect(() => {
     setTimeout(() => {
       window.scrollTo(0, 0);
-    }, 500);
+    }, 200);
   }, []);
 
   useEffect(() => {
@@ -230,6 +231,14 @@ const handleShare = async () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [modalRef]);
+
+  useEffect(()=>{
+    if (activeTab === "tab-1") {
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+      }, 200);
+    }
+  },[activeTab]);
 
   return (
     <div className="flex flex-col w-full bg-background">
@@ -335,9 +344,6 @@ const handleShare = async () => {
 
         {visible && (
             <img src={shareLink} alt="" className="w-32 h-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"/>
-          // <div className="link-copy fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-lg font-medium px-4 py-2 rounded-lg shadow-md">
-          //   链接已复制
-          // </div>
         )}
 
         {activeTab === "tab-2" ? (

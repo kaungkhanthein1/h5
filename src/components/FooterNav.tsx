@@ -111,7 +111,7 @@ const Footer: FC = () => {
           </span>
         </Link>
         {/* Explorer Icon */}
-        {/* <Link
+        <Link
           to="/social"
           className="flex flex-col items-center"
           onClick={() => setSelectedMenu("social")}
@@ -130,9 +130,9 @@ const Footer: FC = () => {
           >
             广场
           </span>
-        </Link> */}
+        </Link>
         {/* Explorer Icon */}
-        {/* <Link
+        <Link
           to="/short"
           className="flex flex-col items-center"
           onClick={() => setSelectedMenu("short")}
@@ -151,7 +151,7 @@ const Footer: FC = () => {
           >
             短剧
           </span>
-        </Link> */}
+        </Link>
 
         {/* Profile Icon */}
         <Link
