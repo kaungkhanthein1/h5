@@ -65,12 +65,15 @@ const Navbar = () => {
     }
   }, [postsData, recommandData, followData, activeTab]);
 
-  const handleTabClick = (index: number) => {
-    window.scrollTo(0, 0);
-    setActiveTab(index);
-    setPage(1);
-    setDataList([]);
-    setHasMore(true);
+  const handleTabClick = async (index: number) => {
+    if (index === activeTab) {
+      window.scrollTo(0, 0);
+    } else {
+      setActiveTab(index);
+      setPage(1);
+      setDataList([]);
+      setHasMore(true);
+    }
   };
 
   const tabs = [{ title: "关注" }, { title: "推荐" }, { title: "最新" }];
