@@ -283,18 +283,22 @@
   background: rgba(0, 0, 0, 0.5);
 } */
 
+/* .art-state {
+  pointer-events: none !important;
+}
+
 .artplayer .artplayer-control-play,
 .artplayer .artplayer-control-volume {
-  display: none !important; /* Force hiding the play and volume buttons */
+  display: none !important;
 }
 
 .art-control-playAndPause {
-  display: none !important; /* Force hiding the play and volume buttons */
+  display: none !important;
 }
 
 .art-control-volume {
-  display: none !important; /* Force hiding the play and volume buttons */
-}
+  display: none !important;
+} */
 
 .social_des {
   color: #fff;
