@@ -38,6 +38,7 @@ const DetailPage: React.FC = () => {
   const [movieReload, setMovieReload] = useState(false);
   const [commentCount, setCommentCount] = useState(0);
   const [visible, setVisible] = useState(false);
+  const [isPlayerLoading, setIsPlayerLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(()=>{
@@ -234,6 +235,7 @@ const DetailPage: React.FC = () => {
 
   const handleChangeSource = async (nextSource: any) => {
     if (nextSource && nextSource.code && id) {
+      setIsPlayerLoading(true);
       try {
         const res = await getEpisodesBySource(nextSource.code, id || "");
         const mvData = res.data?.[0];
@@ -247,6 +249,10 @@ const DetailPage: React.FC = () => {
         setEpisodes(res.data);
       } catch (error) {
         console.error("Error auto-playing next episode:", error);
+      } finally {
+        setTimeout(()=>{
+          setIsPlayerLoading(false);
+        }, 1500);
       }
     }
   };
@@ -276,15 +282,17 @@ const DetailPage: React.FC = () => {
           <div className="sticky top-0 z-50">
             <div id="upper-div">
               {(currentEpisode && !wholePageError) || movieReload ? (
+                !isPlayerLoading ?
               <VideoPlayer
                 key={currentEpisode?.episode_id}
-                videoUrl={currentEpisode?.play_url || ''}
+                videoUrl={!isPlayerLoading ? currentEpisode?.play_url || '' : ''}
                 onBack={navigateBackFunction}
                 movieDetail={movieDetail}
                 selectedEpisode={currentEpisode}
                 resumeTime={resumeTime}
                 handleVideoError={handleVideoError}
-              />
+              /> 
+              : <PlayerLoading onBack={navigateBackFunction}/>
             ) : (
               <NetworkError switchNow={switchNow} refresh={refresh} onBack={navigateBackFunction}/>
             )}

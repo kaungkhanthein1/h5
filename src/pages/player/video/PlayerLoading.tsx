@@ -4,7 +4,7 @@ import Logo from "../../../assets/loadingLogo.png";
 const PlayerLoading: React.FC<any> = ({onBack}) => {
   return (
     <>
-      <div className="loading-back flex-row pt-24">
+      <div className="loading-back flex-row pt-20">
       <div className="absolute top-4 left-4 z-50">
       <button className="text-white text-2xl" onClick={onBack}>
         <svg
