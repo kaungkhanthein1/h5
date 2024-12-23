@@ -75,21 +75,23 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         });
 
         // Use Hls.js for HLS streams
-        if (Hls.isSupported() && videoUrl.includes(".m3u8")) {
-          hls = new Hls();
-          hls.loadSource(videoUrl);
-          hls.attachMedia(art.video);
+        // if (Hls.isSupported() && videoUrl.includes(".m3u8")) {
+        //   hls = new Hls();
+        //   hls.loadSource(videoUrl);
+        //   hls.attachMedia(art.video);
 
-          // Handle HLS errors
-          hls.on(Hls.Events.ERROR, (_, data) => {
-            if (data.fatal) {
-              console.error("HLS error:", data);
-              handleVideoError(videoUrl);
-            }
-          });
-        } else {
-          art.video.src = videoUrl; // For Safari and iOS
-        }
+        //   // Handle HLS errors
+        //   hls.on(Hls.Events.ERROR, (_, data) => {
+        //     if (data.fatal) {
+        //       console.error("HLS error:", data);
+        //       // handleVideoError(videoUrl);
+        //     }
+        //   });
+        // } else {
+        //   art.video.src = videoUrl; // For Safari and iOS
+        // }
+
+        art.video.src = videoUrl; // For Safari and iOS
 
         // Adjust video ratio based on the video's actual dimensions
         art.once("video:loadedmetadata", () => {
@@ -105,6 +107,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
           setVideoRatio(videoHeight / videoWidth); // Set the dynamic aspect ratio
           setReHeight(videoWidth < videoHeight);
         });
+        art.on('error', (error, reconnectTime) => {
+          handleVideoError(videoUrl);
+      });
         // Set resume time if available
         art.once("ready", () => {
           if (resumeTime > 0) {
