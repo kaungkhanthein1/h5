@@ -134,7 +134,7 @@ const ModalComponent: React.FC<ModalComponentProps> = ({
                   .map((episode) => (
                     <button
                       key={episode.episode_id}
-                      onClick={() => handleEpisodeClick(episode)}
+                      onClick={() => {handleEpisodeClick(episode); onClose();}}
                       className={`py-2 text-center rounded-lg ${
                         episode.episode_id !== selectedEpisodeId
                           ? "bg-source text-white"
@@ -166,6 +166,7 @@ const ModalComponent: React.FC<ModalComponentProps> = ({
                     onClick={() => {
                       setSelectedSource(index);
                       changeSource(source);
+                      onClose();
                     }}
                   >
                     <div>
