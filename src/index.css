@@ -450,3 +450,10 @@ input[type="radio"]:checked {
 .art-control-time {
   padding: 0px 15px !important;
 }
+
+.pause-btn {
+  position: absolute;
+  z-index: 9999;
+  margin-top: 26%;
+  margin-left: 43%;
+}

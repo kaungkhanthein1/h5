@@ -260,7 +260,6 @@
   color: #777;
   font-variant-numeric: lining-nums proportional-nums;
   font-feature-settings: "dlig" on;
-  font-family: Outfit;
   font-size: 12px;
   font-style: normal;
   font-weight: 300;
@@ -291,14 +290,14 @@
 .artplayer .artplayer-control-volume {
   display: none !important;
 }
-
-.art-control-playAndPause {
+*/
+.social-player .art-control-playAndPause {
   display: none !important;
 }
 
-.art-control-volume {
+.social-player .art-control-volume {
   display: none !important;
-} */
+}
 
 .social_des {
   color: #fff;
