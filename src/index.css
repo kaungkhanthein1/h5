@@ -454,6 +454,6 @@ input[type="radio"]:checked {
 .pause-btn {
   position: absolute;
   z-index: 9999;
-  margin-top: 26%;
-  margin-left: 43%;
+  margin-top: 23%;
+  margin-left: 40%;
 }
