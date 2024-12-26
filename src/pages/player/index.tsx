@@ -26,6 +26,7 @@ const DetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [movieDetail, setMovieDetail] = useState<MovieDetail | null>(null);
   const [currentEpisode, setCurrentEpisode] = useState<Episode | null>(null);
+  const [currentEpisodeNumber, setCurrentEpisodeNumber] = useState<number>(0);
   const [adsData, setAdsData] = useState<AdsData | null>(null);
   const [selectedSource, setSelectedSource] = useState(0);
   const [activeTab, setActiveTab] = useState("tab-1");
@@ -126,11 +127,13 @@ const DetailPage: React.FC = () => {
               mvData.play_url = parseData?.data?.play_url;
             }
             setCurrentEpisode(mvData);
+            setCurrentEpisodeNumber(episodeIndex);
             setEpisodes(mvDetail?.play_from[sourceIndex]?.list);
             setResumeTime(playBackInfo.current_time);
             return;
           } else {
-
+            setCurrentEpisode(mvDetail?.play_from[0]);
+            setEpisodes(mvDetail?.play_from[0]?.list);
           }
         }
       } else {
@@ -167,6 +170,8 @@ const DetailPage: React.FC = () => {
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
     }
+    const index = episodes.findIndex((x: Episode)=> x.episode_id === episode.episode_id);
+    setCurrentEpisodeNumber(index > 0 ? index : 0);
     setCurrentEpisode(episode);
     setWholePageError(false);
     setResumeTime(0);
@@ -234,6 +239,7 @@ const DetailPage: React.FC = () => {
   };
 
   const handleChangeSource = async (nextSource: any) => {
+    console.log('handleChangeSource =>', currentEpisodeNumber);
     if (nextSource && nextSource.code && id) {
       setIsPlayerLoading(true);
       try {
@@ -245,7 +251,15 @@ const DetailPage: React.FC = () => {
           const response = await parsePlaybackUrl(data.episode_id, data.from_code, data.play_url, '1');
           mvData.play_url = response?.data?.play_url;
         }
-        setCurrentEpisode(res.data[0]);
+        if(currentEpisodeNumber > -1) {
+          if(res.data?.length > currentEpisodeNumber) {
+            setCurrentEpisode(res.data[currentEpisodeNumber]);
+          } else {
+            setCurrentEpisode(res.data[res.data?.length - 1]);
+          }
+        } else {
+          setCurrentEpisode(res.data[0]);
+        }
         setEpisodes(res.data);
       } catch (error) {
         console.error("Error auto-playing next episode:", error);

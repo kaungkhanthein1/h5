@@ -18,6 +18,7 @@ const Navbar = () => {
   const [page, setPage] = useState(1);
   const [dataList, setDataList] = useState<any[]>([]);
   const [hasMore, setHasMore] = useState(true);
+  const [refresh, setRefresh] = useState(false);
 
   const {
     data: postsData,
@@ -43,6 +44,34 @@ const Navbar = () => {
       setPage((prevPage) => prevPage + 1);
     }
   };
+
+  useEffect(() => {
+    if (refresh) {
+      const fetchData = async () => {
+        if (activeTabRef.current === 0) {
+          await postRefetch();
+        } else if (activeTabRef.current === 1) {
+          await recommandRefetch();
+        } else {
+          await followRefetch();
+        }
+        const currentData =
+          activeTab === 0
+            ? postsData
+            : activeTab === 1
+            ? recommandData
+            : followData;
+
+        if (currentData?.data?.list) {
+          setDataList(currentData.data.list);
+          const loadedItems = currentData.data.page * currentData.data.pageSize;
+          setHasMore(loadedItems < currentData.data.total);
+        }
+        setRefresh(false);
+      };
+      fetchData();
+    }
+  }, [refresh]);
 
   useEffect(() => {
     const currentData =
@@ -117,33 +146,13 @@ const Navbar = () => {
         }
         onRefresh={async () => {
           setPage(1);
-          setDataList([]);
           setHasMore(true);
-          if (activeTabRef.current === 0) {
-            await postRefetch();
-          } else if (activeTabRef.current === 1) {
-            await recommandRefetch();
-          } else {
-            await followRefetch();
-          }
-          const currentData =
-            activeTab === 0
-              ? postsData
-              : activeTab === 1
-              ? recommandData
-              : followData;
-
-          if (currentData?.data?.list) {
-            setDataList(currentData.data.list);
-            const loadedItems =
-              currentData.data.page * currentData.data.pageSize;
-            setHasMore(loadedItems < currentData.data.total);
-          }
+          setRefresh(true);
         }}
       >
         <PostList
           data={dataList}
-          loading={postsFetching || recommandFetching || followFetching}
+          loading={postsLoading || recommandLoading || followLoading}
           hasMore={hasMore}
           fetchMoreData={fetchMoreData}
         />
