@@ -30,6 +30,14 @@ const Player = ({ src, thumbnail }: { src: any; thumbnail: any }) => {
               fullscreen: true,
               theme: "#00a1d6",
             });
+            artPlayerInstanceRef.current.on('control', (state) => {
+              if(state && artPlayerInstanceRef.current?.playing) {
+                setShowPauseButton(true);
+                console.log('control State', state);
+              } else {
+                setShowPauseButton(false);
+              }
+          });
           }
         },
       });
@@ -70,21 +78,6 @@ const Player = ({ src, thumbnail }: { src: any; thumbnail: any }) => {
     }
   }, [src, thumbnail]);
 
-  const handleShowPauseButton = () => {
-    if (artPlayerInstanceRef.current && artPlayerInstanceRef.current.playing) {
-      setShowPauseButton(true);
-
-      // Clear any existing timeout to avoid multiple timeouts stacking
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-
-      // Set timeout to hide pause button after 6 seconds
-      timeoutRef.current = setTimeout(() => {
-        setShowPauseButton(false);
-      }, 6000);
-    }
-  };
 
   const pausePlayer = () => {
     setShowPauseButton(false);
@@ -119,7 +112,6 @@ const Player = ({ src, thumbnail }: { src: any; thumbnail: any }) => {
       <div
         ref={playerContainerRef}
         className="relative artplayer-app w-full h-[250px] md:h-[350px] lg:h-[400px] xl:h-[400px]"
-        onClick={handleShowPauseButton}
       ></div>
     </div>
   );
