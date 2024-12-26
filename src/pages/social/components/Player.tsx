@@ -33,7 +33,6 @@ const Player = ({ src, thumbnail }: { src: any; thumbnail: any }) => {
             artPlayerInstanceRef.current.on('control', (state) => {
               if(state && artPlayerInstanceRef.current?.playing) {
                 setShowPauseButton(true);
-                console.log('control State', state);
               } else {
                 setShowPauseButton(false);
               }
