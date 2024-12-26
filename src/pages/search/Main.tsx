@@ -44,9 +44,13 @@ const Main = () => {
   const advert = ads?.data?.search_result_up?.data;
   const initialQuery = searchParams.get("query") || "";
   const [query, setQuery] = useState(initialQuery); // Initialize query with URL param
-  const [resActive, setresActive] = useState("");
-  const [sortActive, setsortActive] = useState("");
-  const [typeActive, settypeActive] = useState("");
+  const [resActive, setresActive] = useState(
+    res_type ? res_type[0]?.value : "by_movie_name"
+  );
+  const [sortActive, setsortActive] = useState(
+    sort ? sort[0]?.value : "by_default"
+  );
+  const [typeActive, settypeActive] = useState(type ? type[0]?.id : 0);
   const [currentPage, setcurrentPage] = useState(1);
   const [secAgain, setSecAgain] = useState(false);
   const [movies, setMovies] = useState<any[]>([]);
@@ -61,6 +65,7 @@ const Main = () => {
       dispatch(setHistoryData({ data: query.trim() }));
       setMovies([]); // Clear movies
       setcurrentPage(1); // Reset pagination
+
       triggerSearchMovie({
         keyword: query,
         page: 1,
@@ -160,6 +165,7 @@ const Main = () => {
       )
     );
   };
+
   const noData = !data || data?.data?.list.length === 0;
 
   return (
@@ -182,7 +188,7 @@ const Main = () => {
       />
 
       <div className="lg:container lg:mx-auto lg:px-[100px]">
-        {(tabLoading && tabFetching) || (isFetching && currentPage === 1) ? (
+        {tabLoading || tabFetching || (isFetching && currentPage === 1) ? (
           <div className="flex justify-center h-[100vh] items-center text-center text-white">
             <Loader />
           </div>

@@ -27,16 +27,17 @@ const Player = ({ src, thumbnail }: { src: any; thumbnail: any }) => {
               autoplay: false,
               aspectRatio: true,
               miniProgressBar: true,
+              fastForward: true,
               fullscreen: true,
               theme: "#00a1d6",
             });
-            artPlayerInstanceRef.current.on('control', (state) => {
-              if(state && artPlayerInstanceRef.current?.playing) {
-                setShowPauseButton(true);
-              } else {
-                setShowPauseButton(false);
-              }
-          });
+          //   artPlayerInstanceRef.current.on('control', (state) => {
+          //     if(state && artPlayerInstanceRef.current?.playing) {
+          //       setShowPauseButton(true);
+          //     } else {
+          //       setShowPauseButton(false);
+          //     }
+          // });
           }
         },
       });
@@ -87,7 +88,7 @@ const Player = ({ src, thumbnail }: { src: any; thumbnail: any }) => {
 
   return (
     <div className="social-player">
-      {showPauseButton && (
+      {/* {showPauseButton && (
         <svg
           onClick={pausePlayer}
           className="pause-btn"
@@ -107,7 +108,7 @@ const Player = ({ src, thumbnail }: { src: any; thumbnail: any }) => {
             fill="white"
           />
         </svg>
-      )}
+      )} */}
       <div
         ref={playerContainerRef}
         className="relative artplayer-app w-full h-[250px] md:h-[350px] lg:h-[400px] xl:h-[400px]"

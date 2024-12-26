@@ -69,6 +69,7 @@ const Navbar = () => {
     if (index === activeTab) {
       window.scrollTo(0, 0);
     } else {
+      window.scrollTo(0, 0);
       setActiveTab(index);
       setPage(1);
       setDataList([]);
