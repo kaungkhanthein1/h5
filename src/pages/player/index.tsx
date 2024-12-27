@@ -36,7 +36,6 @@ const DetailPage: React.FC = () => {
   const abortControllerRef = useRef<AbortController | null>(null);
   const [episodes, setEpisodes] = useState<any>([]);
   const [forwardedCount, setForwardedCount] = useState(-1);
-  const [movieReload, setMovieReload] = useState(false);
   const [commentCount, setCommentCount] = useState(0);
   const [visible, setVisible] = useState(false);
   const [isPlayerLoading, setIsPlayerLoading] = useState(false);
@@ -99,10 +98,10 @@ const DetailPage: React.FC = () => {
       await setInitialEpisode(res?.data);
       await setMovieDetail(res?.data);
       setWholePageError(false)
-      setMovieReload(false);
+      setIsPlayerLoading(false);
     } catch (error) {
       console.error("Error fetching movie details:", error);
-      setMovieReload(false);
+      setIsPlayerLoading(false);
     }
   };
 
@@ -138,8 +137,8 @@ const DetailPage: React.FC = () => {
         }
       } else {
         // Fallback to the first available episode
-        if (mvDetail?.play_from?.[0]?.list?.[0]) {
-          const mvData = mvDetail?.play_from[0].list[0];
+        if (mvDetail?.play_from?.[selectedSource]?.list?.[currentEpisodeNumber]) {
+          const mvData = mvDetail?.play_from[selectedSource].list[0];
           if(!mvData.ready_to_play) {
             try {
               const parseData = await parsePlaybackUrl(mvData.episode_id, mvData.from_code, mvData.play_url, '1');
@@ -154,7 +153,7 @@ const DetailPage: React.FC = () => {
             setCurrentEpisode(mvData);
             setResumeTime(0);
           }
-            setEpisodes(mvDetail?.play_from[0].list);
+            setEpisodes(mvDetail?.play_from[selectedSource].list);
         } else {
           setWholePageError(true);
         }
@@ -213,10 +212,11 @@ const DetailPage: React.FC = () => {
   }, [movieDetail, currentEpisode]);
   
   const handleVideoError = (errorUrl: string) => {
-    if (errorVideoUrl !== errorUrl && errorUrl) {
-      setErrorVideoUrl(errorUrl);
-      setWholePageError(true);
-    }
+    // if (errorVideoUrl !== errorUrl && errorUrl) {
+    //   setErrorVideoUrl(errorUrl);
+    //   setWholePageError(true);
+    // }
+    setWholePageError(true);
   };
 
   useEffect(()=>{
@@ -239,7 +239,6 @@ const DetailPage: React.FC = () => {
   };
 
   const handleChangeSource = async (nextSource: any) => {
-    console.log('handleChangeSource =>', currentEpisodeNumber);
     if (nextSource && nextSource.code && id) {
       setIsPlayerLoading(true);
       try {
@@ -272,14 +271,16 @@ const DetailPage: React.FC = () => {
   };
 
   const refresh = () => {
-    // setCurrentEpisode(null);
-    setMovieReload(true);
+    setIsPlayerLoading(true);
+    setWholePageError(false);
     fetchMovieDetail(movieDetail?.id);
   }
 
   const showRecommandMovie = (id: string) => {
     setCurrentEpisode(null);
     setMovieDetail(null);
+    setSelectedSource(0);
+    setCurrentEpisodeNumber(0);
     fetchMovieDetail(id);
   }
   return (
@@ -295,7 +296,7 @@ const DetailPage: React.FC = () => {
         <>
           <div className="sticky top-0 z-50">
             <div id="upper-div">
-              {(currentEpisode && !wholePageError) || movieReload ? (
+              {(currentEpisode && !wholePageError) ? (
                 !isPlayerLoading ?
               <VideoPlayer
                 key={currentEpisode?.episode_id}
