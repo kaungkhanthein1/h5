@@ -62,7 +62,7 @@ const SourceSelector: React.FC<SourceSelectorProps> = ({
           {/* Display current playFrom source and number of videos */}
           <span className="text-sm">
             <span className="font-bold">
-              {movieDetail.play_from.filter(x => x.code === selectedEpisode?.from_code)[0]?.name || "未选择来源"}
+              {movieDetail.play_from[selectedSource]?.name || "未选择来源"}
             </span>{" "}
             <span className="text-channelSecondary">{movieDetail?.play_from[selectedSource]?.total || 0} 个视频</span>
           </span>
