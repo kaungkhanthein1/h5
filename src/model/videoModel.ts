@@ -44,7 +44,8 @@ export interface VideoPlayerProps {
   movieDetail: MovieDetail;
   selectedEpisode?: Episode | null;
   resumeTime: number;
-  handleVideoError: (videlUrl: string) => void
+  handleVideoError: (videlUrl: string) => void;
+  autoPlayNextEpisode: () => void;
 }
 
 export interface PlayFrom {

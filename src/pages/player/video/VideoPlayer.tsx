@@ -14,6 +14,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   selectedEpisode,
   resumeTime,
   handleVideoError,
+  autoPlayNextEpisode
 }) => {
   const playerRef = useRef<any>(null);
   const videoElementRef = useRef<HTMLDivElement>(null);
@@ -137,6 +138,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         });
         art.on('control', (state) => {
           setIsControlsVisible(state);
+        })
+        art.on('video:ended', () => {
+          autoPlayNextEpisode();
         })
         playerRef.current = art;
       }

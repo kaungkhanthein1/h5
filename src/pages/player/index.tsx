@@ -56,7 +56,7 @@ const DetailPage: React.FC = () => {
       console.log('err is=>', err);
     }
   }
-  const autoPlayNextEpisode = async () => {
+  const autoPlayNextSource = async () => {
     if (!movieDetail?.play_from) return;
     for (let i = selectedSource + 1; i < movieDetail.play_from.length; i++) {
       const nextSource = movieDetail.play_from[i];
@@ -72,6 +72,14 @@ const DetailPage: React.FC = () => {
       } catch (error) {
         console.error("Error auto-playing next episode:", error);
       }
+    }
+  };
+
+  const autoPlayNextEpisode = async () => {
+    const nextEpisode = currentEpisodeNumber + 1;
+    if(episodes?.length > nextEpisode) {
+      setCurrentEpisode(episodes[nextEpisode]);
+      setCurrentEpisodeNumber(nextEpisode);
     }
   };
 
@@ -202,7 +210,7 @@ const DetailPage: React.FC = () => {
 
   const switchNow = () => {
     setWholePageError(false);
-    autoPlayNextEpisode();
+    autoPlayNextSource();
   };
 
   useEffect(() => {
@@ -306,6 +314,7 @@ const DetailPage: React.FC = () => {
                 selectedEpisode={currentEpisode}
                 resumeTime={resumeTime}
                 handleVideoError={handleVideoError}
+                autoPlayNextEpisode={autoPlayNextEpisode}
               /> 
               : <PlayerLoading onBack={navigateBackFunction}/>
             ) : (
