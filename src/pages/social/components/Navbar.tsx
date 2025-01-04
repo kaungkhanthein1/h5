@@ -19,6 +19,7 @@ const Navbar = () => {
   const [dataList, setDataList] = useState<any[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [refresh, setRefresh] = useState(false);
+  const [showDetail, setShowDetail] = useState(false);
 
   const {
     data: postsData,
@@ -110,7 +111,9 @@ const Navbar = () => {
 
   return (
     <div className="h-full bg-background">
-      <div className="fixed bg-background p-3 w-full z-[99] pb-3 transition-all duration-300 top-0">
+      {!showDetail && 
+      <>
+      <div className="fixed bg-background p-3 w-full z-[98] pb-3 transition-all duration-300 top-0">
         <nav className="flex flex-wrap gap-4 items-center">
           {tabs.map((tab, index) => (
             <button
@@ -136,6 +139,8 @@ const Navbar = () => {
       <div className="pt-[70px] pb-[10px] bg-background">
         <Ads section={"search_input_under"} />
       </div>
+      </>
+      }
 
       <PullToRefresh
         pullingContent={<div></div>}
@@ -149,8 +154,11 @@ const Navbar = () => {
           setHasMore(true);
           setRefresh(true);
         }}
+        isPullable={!showDetail}
       >
         <PostList
+          setShowDetail={setShowDetail}
+          showDetail={showDetail}
           data={dataList}
           loading={postsLoading || recommandLoading || followLoading}
           hasMore={hasMore}

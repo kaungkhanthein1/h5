@@ -299,6 +299,29 @@
   display: none !important;
 } */
 
+.ads-title {
+  color: #fff;
+  font-variant-numeric: lining-nums proportional-nums;
+  font-feature-settings: "dlig" on;
+  font-family: "PingFang SC";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 20px; /* 142.857% */
+}
+
+.ads-description {
+  color: #fff;
+  font-variant-numeric: lining-nums proportional-nums;
+  font-feature-settings: "dlig" on;
+  font-family: "PingFang SC";
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px; /* 133.333% */
+  letter-spacing: 0.24px;
+}
+
 .social_des {
   color: #fff;
   font-variant-numeric: lining-nums proportional-nums;
@@ -323,4 +346,32 @@
 
 .art-notice {
   display: none !important;
+}
+
+.hide-controls .art-progress {
+  display: none !important;
+}
+
+.hide-controls .art-controls-right {
+  display: none !important;
+}
+/* .hide-controls .art-control-playAndPause {
+  display: none !important;
+} */
+
+/* .hide-controls .art-icon-play {
+  display: none !important;
+}
+
+.hide-controls .art-icon-pause {
+  display: none !important;
+} */
+
+.hide-controls .art-icon-volume {
+  display: none !important;
+}
+
+.hide-controls .art-control-time {
+  position: absolute !important;
+  right: 0 !important;
 }

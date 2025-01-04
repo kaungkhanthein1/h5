@@ -42,7 +42,9 @@ const ContinueWatching = () => {
       {/* Horizontal Scrolling Movie List */}
       {token && movies?.length !== 0 && (
         <div className="max-md:px-3 px-10">
-          {latestMovies?.length > 0 && <h1 className="text-white font-headerFont">继续观看</h1>}
+          {latestMovies?.length > 0 && (
+            <h1 className="text-white font-headerFont">继续观看</h1>
+          )}
           <div className="flex overflow-x-scroll whitespace-nowrap scrollbar-hide gap-4 mt-5">
             {latestMovies?.map((movie: any) => (
               <Link
@@ -60,6 +62,12 @@ const ContinueWatching = () => {
                   />
                   <div className="absolute watchedDuration bottom-[2px] right-[3px] ">
                     {formatDuration(movie?.current_time)}
+                  </div>
+                  <div className="absolute watchedDuration bottom-[2px] left-[3px] ">
+                    {movie?.episode_name}
+                  </div>
+                  <div className="absolute watchedDuration top-[2px] right-[3px] ">
+                    {movie?.dynamic}
                   </div>
                 </div>
 

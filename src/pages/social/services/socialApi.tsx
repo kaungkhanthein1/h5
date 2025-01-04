@@ -118,6 +118,10 @@ export const socialApi = createApi({
         }),
       }),
     }),
+    getCommentList: builder.query({
+      query: ({post_id,page}) =>
+        convertToSecureUrl(`post/comment/list?page=${page}&post_id=${post_id}`),
+    }),
   }),
 });
 
@@ -127,4 +131,5 @@ export const {
   useGetFollowPostsQuery,
   useFollowUserMutation,
   useLikePostMutation,
+  useGetCommentListQuery
 } = socialApi;

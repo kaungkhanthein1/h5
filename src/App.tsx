@@ -25,6 +25,7 @@ import Landing from "./components/Landing";
 import BannerAds from "./components/BannerAds";
 import { useGetAdsQuery } from "./services/helperService";
 import { setIsScrolling } from "./pages/home/slice/HomeSlice";
+import SocialComment from './pages/social/components/Social_details';
 import Social from "./pages/social";
 import Short from "./pages/short";
 // import Menber from "./pages/share/member";
@@ -207,6 +208,7 @@ const App: React.FC = () => {
                     <Route path="/nickname" element={<Nickname />} />
                     <Route path="/username" element={<Username />} />
                     <Route path="/social_callback" element={<Callback />} />
+                    <Route path="/social_comment" element={<SocialComment />} />
                     <Route path="/update_email" element={<Email />} />
                     <Route path="/update_phone" element={<Phnumber />} />
                     <Route path="/update_password" element={<Password />} />
