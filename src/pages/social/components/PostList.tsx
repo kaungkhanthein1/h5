@@ -297,7 +297,7 @@ const PostList = ({
       );
     }
   };
-  console.log(data);
+  // console.log(data);
   return (
     <div className="bg-black">
       {showDetail && (

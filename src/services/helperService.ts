@@ -73,7 +73,7 @@ export const useGetAdsQuery = () => {
       const response = await getAdsData();
 
       if (response) {
-        const data = await decryptWithAes(response);
+        const data = response.data ? response : await decryptWithAes(response);
         sessionStorage.setItem("AdsQuery", JSON.stringify(data));
         setConfigData(data);
       }

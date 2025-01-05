@@ -24,26 +24,28 @@ const Social_details: React.FC<any> = ({
   const [hasMore, setHasMore] = useState(true);
   const [list, setList] = useState<any[]>([]);
 
-  const { data, isFetching , refetch } = useGetCommentListQuery({ post_id: post.post_id, page });
+  const { data, isFetching, refetch } = useGetCommentListQuery({
+    post_id: post.post_id,
+    page,
+  });
 
   useEffect(() => {
     if (data?.data) {
       setList((prevList) => [...prevList, ...data.data.list]);
       const loadedItems = data?.data.page * data?.data.pageSize;
-    //   console.log("text", loadedItems);
+      //   console.log("text", loadedItems);
       setHasMore(loadedItems < data?.data.total);
-     
     }
   }, [data]);
-
+  // console.log(post)
 
   const fetchMoreDataCmt = () => {
     if (hasMore) {
       setPage((prevPage) => prevPage + 1);
     }
-    console.log("Fetching more data...", page);
+    // console.log("Fetching more data...", page);
   };
-//   console.log(post);
+  //   console.log(post);
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => {
@@ -53,16 +55,19 @@ const Social_details: React.FC<any> = ({
 
   const handleScroll = (event: any) => {
     const { scrollTop, scrollHeight, clientHeight } = event.target;
-    if(scrollTop + clientHeight === scrollHeight && hasMore) {
-      setPage(page+1);
+    if (scrollTop + clientHeight === scrollHeight && hasMore) {
+      setPage(page + 1);
     }
-    console.log('next', scrollTop, scrollHeight, clientHeight);
-  }
+    // console.log('next', scrollTop, scrollHeight, clientHeight);
+  };
 
   return (
-    <div className="inset-0 px-[10px] fixed w-screen top-0 h-screen bg-background overflow-y-scroll z-[99]" onScroll={(event)=>handleScroll(event)}>
+    <div
+      className="inset-0 px-[10px] fixed w-screen top-0 h-screen bg-background overflow-y-scroll z-[99999]"
+      onScroll={(event) => handleScroll(event)}
+    >
       {/* header */}
-      <div className="fixed bg-background z-[99] w-screen top-0 flex py-[10px] justify-between items-center">
+      <div className="fixed bg-background z-[99] w-full top-0 grid grid-cols-3 py-[10px] justify-betwee items-cente">
         <span onClick={() => setShowDetail(false)}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -77,7 +82,7 @@ const Social_details: React.FC<any> = ({
             />
           </svg>
         </span>
-        <h1 className=" text-white text-[18px] font-[600] leading-[20px]">
+        <h1 className=" text-white text-[18px] text-center font-[600] leading-[20px]">
           详情
         </h1>
         <div className=""></div>
@@ -250,9 +255,11 @@ const Social_details: React.FC<any> = ({
           )}
           {post.file_type === "video" && (
             <Player
-            isCenterPlay={false}
+              isCenterPlay={false}
               src={post?.files[0].resourceURL}
-              thumbnail={post?.files[0].thumbnail} status={undefined}            />
+              thumbnail={post?.files[0].thumbnail}
+              status={undefined}
+            />
           )}
         </div>
         {/* status */}
@@ -347,28 +354,33 @@ const Social_details: React.FC<any> = ({
           </div>
         </div>
         {/* comment */}
-       <Comment list={list} isFetching={hasMore}/>
+        <Comment
+          setList={setList}
+          post_id={post.post_id}
+          list={list}
+          isFetching={hasMore}
+        />
 
-       <InfiniteScroll
-              // className=" h-[100px]"
-              dataLength={list.length}
-              next={fetchMoreDataCmt}
-              hasMore={hasMore}
-              loader={
-                <div className="flex bg-background justify-center items-center w-full py-5">
-                  <Loader />
-                </div>
-              }
-              endMessage={
-                <div className="flex bg-background justify-center items-center w-full py-5">
-                  <p style={{ textAlign: "center" }}>
-                    <b className=" text-white/60">没有更多评论</b>
-                  </p>
-                </div>
-              }
-            >
-              <></>
-            </InfiniteScroll>
+        <InfiniteScroll
+          // className=" h-[100px]"
+          dataLength={list.length}
+          next={fetchMoreDataCmt}
+          hasMore={hasMore}
+          loader={
+            <div className="flex bg-background justify-center items-center w-full pb-32">
+              <Loader />
+            </div>
+          }
+          endMessage={
+            <div className="flex bg-background justify-center items-center w-full pb-32">
+              <p style={{ textAlign: "center" }}>
+                <b className=" text-white/60">没有更多评论</b>
+              </p>
+            </div>
+          }
+        >
+          <></>
+        </InfiniteScroll>
       </div>
     </div>
   );
