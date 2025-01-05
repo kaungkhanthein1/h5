@@ -138,7 +138,7 @@ const Navbar: React.FC<NavbarProps> = ({
           </form>
           <div className="w-[40px]">
             <Link to={"/search_overlay"} className="search-btn">
-              搜索
+              取消
             </Link>
           </div>
         </div>
