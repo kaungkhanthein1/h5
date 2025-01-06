@@ -229,6 +229,7 @@ const DetailPage: React.FC = () => {
 
   useEffect(()=>{
     if(currentEpisode?.play_url) {
+      console.log('currentEpisode?.play_url is=>', currentEpisode?.play_url);
       sendEventToNative(currentEpisode?.play_url)
     }
   },[currentEpisode]);

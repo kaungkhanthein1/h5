@@ -67,8 +67,30 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
           autoplay: true,
           playbackRate: true,
           setting: true,
-          fullscreen: true,
+          // fullscreen: true,
           airplay: true,
+          controls: [
+            {
+              position: "right",
+              html: `<div><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M20 3H22V9H20V5H16V3H20ZM4 3H8V5H4V9H2V3H4ZM20 19V15H22V21H16V19H20ZM4 19H8V21H2V15H4V19Z" fill="white" fill-opacity="0.9"/>
+</svg><div>`,
+              tooltip: "Fullscreen",
+              click: function (...args) {
+                if (
+                  (window as any).webkit &&
+                  (window as any).webkit.messageHandlers &&
+                  (window as any).webkit.messageHandlers.jsBridge
+                ) {
+                  (window as any).webkit.messageHandlers.jsBridge.postMessage({
+                    eventName: "fullscreen",
+                  });
+                } else {
+                  playerRef.current.fullscreen = true;
+                }
+              },
+            },
+          ],
           // miniProgressBar: true,
           // moreVideoAttr: {
           //   playsInline: true,
@@ -111,6 +133,11 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         art.on('error', (error, reconnectTime) => {
           handleVideoError(videoUrl);
       });
+        const controls: any = document.querySelector('.art-controls-right');
+        if (controls) {
+          controls.style.display = 'flex'; // Ensure display is flex
+          controls.style.flexDirection = 'row-reverse'; // Dynamically set direction
+        }
         // Set resume time if available
         art.once("ready", () => {
           if (resumeTime > 0) {
