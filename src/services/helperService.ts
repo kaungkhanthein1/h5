@@ -29,7 +29,7 @@ export const useGetHeaderTopicsQuery = () => {
       }
 
       const response = await getconfigData(settings);
-      const data = await decryptWithAes(response);
+      const data =  response.data ? response : await decryptWithAes(response);
 
       sessionStorage.setItem("headerTopics", JSON.stringify(data));
       setData(data);

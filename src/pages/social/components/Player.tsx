@@ -151,12 +151,12 @@ const Player = ({
   src,
   thumbnail,
   status,
-  isCenterPlay
+  isCenterPlay,
 }: {
   src: any;
   thumbnail: any;
   status: any;
-  isCenterPlay: boolean
+  isCenterPlay: boolean;
 }) => {
   const playerContainerRef = useRef<HTMLDivElement>(null);
   const artPlayerInstanceRef = useRef<Artplayer | null>(null);
@@ -209,7 +209,11 @@ const Player = ({
 
               // Play the new center video
               activePlayerRef.current = videoContainer;
-              if (artPlayerInstanceRef.current && isCenterPlay) {
+              if (
+                artPlayerInstanceRef.current &&
+                isCenterPlay &&
+                artPlayerInstanceRef?.current?.loaded
+              ) {
                 artPlayerInstanceRef.current.play();
                 setIsPlaying(true);
               }

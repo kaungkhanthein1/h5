@@ -72,8 +72,9 @@ export const socialApi = createApi({
       const settings = JSON.parse(
         localStorage.getItem("movieAppSettings") || "{}"
       );
+
       headers.set("Accept-Language", "en");
-      // headers.set("x-client-version", "3099")
+      headers.set("x-client-version", "3099");
       if (settings.filterToggle) {
         headers.set("X-Client-Setting", JSON.stringify({ "pure-mode": 1 }));
       } else {
@@ -87,15 +88,24 @@ export const socialApi = createApi({
   }),
   endpoints: (builder) => ({
     getPosts: builder.query({
-      query: ({ page }) => convertToSecureUrl(`post/list?page=${page}`),
+      query: ({ page, path }) =>
+        convertToSecureUrl(`${path ? path : "/post/list"}?page=${page}`),
     }),
     getRecommandPosts: builder.query({
-      query: ({ page }) =>
-        convertToSecureUrl(`post/recommend/list?page=${page}`),
+      query: ({ page, path }) =>
+        convertToSecureUrl(
+          `${path ? path : "/post/recommend/list"}?page=${page}`
+        ),
     }),
     getFollowPosts: builder.query({
-      query: ({ page }) =>
-        convertToSecureUrl(`followed/post/list?page=${page}`),
+      query: ({ page, path }) =>
+        convertToSecureUrl(
+          `${path ? path : "/followed/post/list"}?page=${page}`
+        ),
+    }),
+    getAudioPosts: builder.query({
+      query: ({ page, path }) =>
+        convertToSecureUrl(`${path ? path : "/post/audio/list"}?page=${page}`),
     }),
     followUser: builder.mutation<void, { follow_user_id: any; is_follow: any }>(
       {
@@ -158,5 +168,6 @@ export const {
   useLikePostMutation,
   useGetCommentListQuery,
   useLikeCommentMutation,
-  usePostCommentMutation
+  usePostCommentMutation,
+  useGetAudioPostsQuery,
 } = socialApi;
