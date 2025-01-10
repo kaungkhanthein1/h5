@@ -277,7 +277,6 @@ const DetailPage: React.FC = () => {
     }
   };
   
-
   const handleChangeSource = async (nextSource: any) => {
     if (nextSource && nextSource.code && id) {
       setIsPlayerLoading(true);

@@ -411,7 +411,7 @@ const PostList = ({
                     </div>
                     {post?.type !== "ads" && post?.is_top === 1 && (
                       <div className="flex items-center gap-1">
-                        <span className="pin">Pinned</span>
+                        <span className="pin">已置顶</span>
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="16"
@@ -485,7 +485,7 @@ const PostList = ({
                       onClick={() => openLightbox(post.post_id, index)}
                     >
                       <ImageWithPlaceholder
-                        src={file.resourceURL}
+                        src={file?.resourceURL}
                         alt={`Picture of social_image`}
                         className="w-full h-full object-cover"
                       />
@@ -504,14 +504,14 @@ const PostList = ({
               {post.file_type === "video" && (
                 <Player
                   isCenterPlay={true}
-                  src={post?.files[0].resourceURL}
+                  src={post?.files[0]?.resourceURL}
                   thumbnail={post?.files[0].thumbnail}
                   status={post?.type === "ads" ? true : false}
                 />
               )}
               {post.file_type === "audio" && (
                 <AudioPlayer
-                  src={post?.files[0].resourceURL}
+                  src={post?.files[0]?.resourceURL}
                   index={index}
                   setActivePlayer={setActivePlayer}
                   activePlayer={activePlayer}

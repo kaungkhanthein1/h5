@@ -20,7 +20,7 @@ const AudioPlayer = ({
 
   // Extract title from the URL
   const title = React.useMemo(() => {
-    const filename = src.split("/").pop();
+    const filename = src?.split("/").pop();
     return filename?.split("_")[0] || "Audio Title";
   }, [src]);
 
@@ -133,7 +133,9 @@ const AudioPlayer = ({
             )}
           </button>
           <div className="flex flex-col flex-1 w-full">
-            <div className="text-sm font-medium truncate w-full -mr-5">{title}</div>
+            <div className="text-sm font-medium truncate w-full -mr-5">
+              {title}
+            </div>
             {/* Progress Bar */}
             <div>
               <input
