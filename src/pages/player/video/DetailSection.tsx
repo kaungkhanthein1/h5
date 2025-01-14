@@ -165,6 +165,7 @@ const handleShare = async () => {
     const cachedContent = Cookies.get(cookieKey);
     if (cachedContent) {
       copyToClipboard(JSON.parse(cachedContent).data.content);
+      sendShareEventToNative(JSON.parse(cachedContent).data.content);
       return;
     }
 
