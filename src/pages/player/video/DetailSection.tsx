@@ -184,6 +184,7 @@ const handleShare = async () => {
     if (data && result) {
       // Save to cookie with a 2-hour expiry
       Cookies.set(cookieKey, JSON.stringify(result), { expires: 1 / 12 }); // 1/12 day = 2 hours
+      sendShareEventToNative(result?.data.content);
       copyToClipboard(result?.data.content);
     }
   } catch (error) {
@@ -193,6 +194,19 @@ const handleShare = async () => {
   }
 };
 
+const sendShareEventToNative = (value: any) => {
+  copyToClipboard("https://d1svxjht0opoc5.cloudfront.net/kkoor4.pdf");
+  if (
+    (window as any).webkit &&
+    (window as any).webkit.messageHandlers &&
+    (window as any).webkit.messageHandlers.jsBridge
+  ) {
+    (window as any).webkit.messageHandlers.jsBridge.postMessage({
+      eventName: "socialMediaShare",
+      value: value,
+    });
+  }
+};
 
   const customHeight = () => {
     const upperDiv = document.getElementById("upper-div");
