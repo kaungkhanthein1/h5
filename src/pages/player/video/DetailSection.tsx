@@ -120,7 +120,7 @@ const DetailSection: React.FC<DetailSectionProps> = ({
   const copyToClipboard = async (text: string) => {
     try {
       handleCopy();
-      sendEventToNative(text);
+      // sendEventToNative(text);
       // Attempt to use the Clipboard API (works in most modern browsers)
       if ('clipboard' in navigator) {
         await navigator.clipboard.writeText(text);
@@ -164,8 +164,8 @@ const handleShare = async () => {
     // Check if the cookie exists
     const cachedContent = Cookies.get(cookieKey);
     if (cachedContent) {
-      copyToClipboard(JSON.parse(cachedContent).data.content);
-      sendShareEventToNative(JSON.parse(cachedContent).data.content);
+      copyToClipboard(JSON.parse(cachedContent).data.link);
+      sendShareEventToNative(JSON.parse(cachedContent).data.link);
       return;
     }
 
@@ -185,8 +185,8 @@ const handleShare = async () => {
     if (data && result) {
       // Save to cookie with a 2-hour expiry
       Cookies.set(cookieKey, JSON.stringify(result), { expires: 1 / 12 }); // 1/12 day = 2 hours
-      sendShareEventToNative(result?.data.content);
-      copyToClipboard(result?.data.content);
+      sendShareEventToNative(result?.data.link);
+      copyToClipboard(result?.data.link);
     }
   } catch (error) {
     console.error("Error fetching share content:", error);
@@ -196,7 +196,7 @@ const handleShare = async () => {
 };
 
 const sendShareEventToNative = (value: any) => {
-  copyToClipboard("https://d1svxjht0opoc5.cloudfront.net/kkoor4.pdf");
+  // copyToClipboard("https://d1svxjht0opoc5.cloudfront.net/kkoor4.pdf");
   if (
     (window as any).webkit &&
     (window as any).webkit.messageHandlers &&
