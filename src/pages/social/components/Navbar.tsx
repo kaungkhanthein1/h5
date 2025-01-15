@@ -197,11 +197,11 @@ const Navbar = () => {
   const { data } = useGetHeaderTopicsQuery();
   const social_menu = data?.data?.social_menu?.length > 0 ? data?.data?.social_menu : [
     {
-      text: "点赞",
+      text: "关注",
       path: "/followed/post/list",
     },
     {
-      text: "热门",
+      text: "推荐",
       path: "/post/recommend/list",
     },
     {
