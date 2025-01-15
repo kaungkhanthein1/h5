@@ -9,8 +9,8 @@ import explorerIcon from "../assets/explorer.png";
 import explorerSelectedIcon from "../assets/explorerSelected.png";
 import profileIcon from "../assets/profile.png";
 import profileSelectedIcon from "../assets/profileSelected.png";
-import beforePostIcon from "../assets/beforepost.png";
-import afterPostIcon from "../assets/afterpost.png";
+import beforePostIcon from "../assets/socialUnselected.svg";
+import afterPostIcon from "../assets/socialSelected.svg";
 import beforeShortIcon from "../assets/beforeshort.png";
 import afterShortIcon from "../assets/aftershort.png";
 
@@ -120,7 +120,8 @@ const Footer: FC = () => {
             <img
               src={selectedMenu === "social" ? afterPostIcon : beforePostIcon}
               alt="Social"
-              className="h-8 w-[48px] mb-2 -mt-[10px] "
+              className="h-[26px] w-[26px] mb-1.5"
+              // className="h-8 w-[48px] mb-2 -mt-[10px] "
             />
           </div>
           <span
@@ -132,7 +133,7 @@ const Footer: FC = () => {
           </span>
         </Link>
         {/* Explorer Icon */}
-        <Link
+        {/* <Link
           to="/short"
           className="flex flex-col items-center"
           onClick={() => setSelectedMenu("short")}
@@ -151,7 +152,7 @@ const Footer: FC = () => {
           >
             短剧
           </span>
-        </Link>
+        </Link> */}
 
         {/* Profile Icon */}
         <Link
