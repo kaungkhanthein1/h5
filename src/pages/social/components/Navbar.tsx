@@ -195,7 +195,7 @@ const Navbar = () => {
   const activeTabRef = useRef(activeTab); // Create a ref for activeTab
   activeTabRef.current = activeTab; // Update the ref whenever activeTab changes
   const { data } = useGetHeaderTopicsQuery();
-  const social_menu = data?.data?.social_menu || [
+  const social_menu = data?.data?.social_menu?.length > 0 ? data?.data?.social_menu : [
     {
       text: "点赞",
       path: "/followed/post/list",
