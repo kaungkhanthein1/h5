@@ -59,22 +59,29 @@ const AudioPlayer = ({
     }
   };
 
-  useEffect(() => {
-    if (activePlayer !== index && audioRef.current) {
-      // Pause the audio if it's not the active player
-      audioRef.current.pause();
-      setIsPlaying(false);
-    }
-  }, [activePlayer, index]);
+  // useEffect(() => {
+  //   if (activePlayer !== index && audioRef.current) {
+  //     // Pause the audio if it's not the active player
+  //     audioRef.current.pause();
+  //     setIsPlaying(false);
+  //   }
+  // }, [activePlayer, index]);
 
   useEffect(() => {
     // IntersectionObserver to detect when the player is in the center of the viewport
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting && entry.intersectionRatio >= 0.75) {
-            setActivePlayer(index); // Set this player as the active player
+          if (!entry.isIntersecting) {
+            // Pause the audio if this player is no longer in view
+            if (audioRef.current) {
+              audioRef.current.pause();
+              setIsPlaying(false);
+            }
           }
+          // if (entry.isIntersecting && entry.intersectionRatio >= 0.75) {
+          //   setActivePlayer(index); // Set this player as the active player
+          // }
         });
       },
       {
