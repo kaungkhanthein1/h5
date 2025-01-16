@@ -14,7 +14,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   selectedEpisode,
   resumeTime,
   handleVideoError,
-  autoPlayNextEpisode
+  autoPlayNextEpisode,
 }) => {
   const playerRef = useRef<any>(null);
   const videoElementRef = useRef<HTMLDivElement>(null);
@@ -77,6 +77,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 </svg><div>`,
               tooltip: "Fullscreen",
               click: function (...args) {
+                // playerRef.current.fullscreen = true;
                 if (
                   (window as any).webkit &&
                   (window as any).webkit.messageHandlers &&
@@ -121,22 +122,22 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
           const videoWidth = art.video.videoWidth;
           const videoHeight = art.video.videoHeight;
           if (videoWidth > videoHeight) {
-            sendNativeEvent('landscape_view')
+            sendNativeEvent("landscape_view");
           } else if (videoHeight > videoWidth) {
-            sendNativeEvent('potrait_view')
+            sendNativeEvent("potrait_view");
           } else {
-            sendNativeEvent('square_view')
+            sendNativeEvent("square_view");
           }
           setVideoRatio(videoHeight / videoWidth); // Set the dynamic aspect ratio
           setReHeight(videoWidth < videoHeight);
         });
-        art.on('error', (error, reconnectTime) => {
+        art.on("error", (error, reconnectTime) => {
           handleVideoError(videoUrl);
-      });
-        const controls: any = document.querySelector('.art-controls-right');
+        });
+        const controls: any = document.querySelector(".art-controls-right");
         if (controls) {
-          controls.style.display = 'flex'; // Ensure display is flex
-          controls.style.flexDirection = 'row-reverse'; // Dynamically set direction
+          controls.style.display = "flex"; // Ensure display is flex
+          controls.style.flexDirection = "row-reverse"; // Dynamically set direction
         }
         // Set resume time if available
         art.once("ready", () => {
@@ -163,12 +164,12 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
             }
           }, 3000);
         });
-        art.on('control', (state) => {
+        art.on("control", (state) => {
           setIsControlsVisible(state);
-        })
-        art.on('video:ended', () => {
+        });
+        art.on("video:ended", () => {
           autoPlayNextEpisode();
-        })
+        });
         playerRef.current = art;
       }
     };
@@ -202,14 +203,12 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   // Define the event handler
   const sendNativeEvent = (message: string) => {
-      if (
-        (window as any).webkit &&
-        (window as any).webkit.messageHandlers &&
-        (window as any).webkit.messageHandlers.jsBridge
-      ) {
-        (window as any).webkit.messageHandlers.jsBridge.postMessage(
-          message
-        );
+    if (
+      (window as any).webkit &&
+      (window as any).webkit.messageHandlers &&
+      (window as any).webkit.messageHandlers.jsBridge
+    ) {
+      (window as any).webkit.messageHandlers.jsBridge.postMessage(message);
     }
   };
 

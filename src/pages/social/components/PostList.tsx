@@ -299,7 +299,7 @@ const PostList = ({
       );
     }
   };
-  // console.log(data);
+
   return (
     <div className="bg-black">
       {showDetail && (
@@ -409,6 +409,7 @@ const PostList = ({
                         />
                       )}
                     </div>
+
                     {post?.type !== "ads" && post?.is_top === 1 && (
                       <div className="flex items-center gap-1">
                         <span className="pin">已置顶</span>
@@ -506,6 +507,7 @@ const PostList = ({
                   isCenterPlay={true}
                   src={post?.files[0]?.resourceURL}
                   thumbnail={post?.files[0].thumbnail}
+                  // status={false}
                   status={post?.type === "ads" ? true : false}
                 />
               )}
@@ -573,7 +575,6 @@ const PostList = ({
 
                     <button
                       onClick={() => handleShowDetail(post)}
-
                       // onClick={() => showCreatedTimeHandler()}
                       className="flex -mt-[2px] items-center gap-x-2"
                     >

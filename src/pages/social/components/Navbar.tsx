@@ -195,21 +195,38 @@ const Navbar = () => {
   const activeTabRef = useRef(activeTab); // Create a ref for activeTab
   activeTabRef.current = activeTab; // Update the ref whenever activeTab changes
   const { data } = useGetHeaderTopicsQuery();
-  const social_menu = data?.data?.social_menu?.length > 0 ? data?.data?.social_menu : [
-    {
-      text: "关注",
-      path: "/followed/post/list",
-    },
-    {
-      text: "推荐",
-      path: "/post/recommend/list",
-    },
-    {
-      text: "最新",
-      path: "/post/list",
-    },
-  ];
-  console.log(social_menu);
+  // const social_menu = [
+  //   {
+  //     text: "关注",
+  //     path: "/followed/post/list",
+  //   },
+  //   {
+  //     text: "推荐",
+  //     path: "/post/recommend/list",
+  //   },
+  //   {
+  //     text: "最新",
+  //     path: "/post/list",
+  //   },
+  // ];
+  const social_menu =
+    data?.data?.social_menu?.length > 0
+      ? data?.data?.social_menu
+      : [
+          {
+            text: "关注",
+            path: "/followed/post/list",
+          },
+          {
+            text: "推荐",
+            path: "/post/recommend/list",
+          },
+          {
+            text: "最新",
+            path: "/post/list",
+          },
+        ];
+
   const [page, setPage] = useState(1);
   const [dataList, setDataList] = useState<any[]>([]);
   const [hasMore, setHasMore] = useState(true);
@@ -218,7 +235,7 @@ const Navbar = () => {
 
   // Define dynamic queries based on the path from social_menu
   const selectedMenuPath = social_menu?.[activeTab]?.path;
-  console.log(selectedMenuPath);
+
   const {
     data: postsData,
     isLoading: postsLoading,
@@ -270,8 +287,6 @@ const Navbar = () => {
       setPage((prevPage) => prevPage + 1);
     }
   };
-
-  console.log(followData);
 
   useEffect(() => {
     if (refresh) {
@@ -341,8 +356,6 @@ const Navbar = () => {
     }
   };
 
-  console.log(social_menu);
-
   return (
     <div className="h-full bg-background">
       {!showDetail && (
@@ -352,10 +365,10 @@ const Navbar = () => {
               {social_menu?.map((tab: any, index: any) => (
                 <button
                   key={index}
-                  className={`inline-flex whitespace-nowrap social_nav transition-all duration-200 ease-in-out relative hover:text-white ${
+                  className={`inline-flex whitespace-nowrap social_nav relative hover:text-white ${
                     activeTab === index
-                      ? "text-white text-[20px]"
-                      : "text-[#FFFFFFB3] text-[20px]"
+                      ? "text-white text-[24px]"
+                      : "text-[#FFFFFFB3] text-[18px]"
                   }`}
                   onClick={() => handleTabClick(index)}
                   style={{

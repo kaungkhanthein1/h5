@@ -146,6 +146,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Artplayer from "artplayer";
 import lozad from "lozad";
+import Loader from "../../../pages/search/components/Loader";
 
 const Player = ({
   src,
@@ -160,7 +161,11 @@ const Player = ({
 }) => {
   const playerContainerRef = useRef<HTMLDivElement>(null);
   const artPlayerInstanceRef = useRef<Artplayer | null>(null);
+  const [loading, setLoading] = useState(false); // Track fake loading state
+
   const [isPlaying, setIsPlaying] = useState(false); // Track if the current player is playing
+  const [error, setError] = useState(false); // Track if there's a loading error
+
   const activePlayerRef = useRef<HTMLDivElement | null>(null); // Track the currently active player
 
   useEffect(() => {
@@ -187,6 +192,11 @@ const Player = ({
               fullscreen: true,
               theme: "#00a1d6",
             });
+            artPlayerInstanceRef.current.on("error", () => {
+              // Set error state when video fails to load
+              setError(true);
+            });
+            setError(false); // Clear error state when player initializes
           }
         },
       });
@@ -255,12 +265,42 @@ const Player = ({
     }
   }, [src, thumbnail]);
 
+  const handleRetry = () => {
+    setError(false);
+    setLoading(true); // Start fake loading
+    setTimeout(() => {
+      setLoading(false); // End fake loading
+      setError(true); // Show error message again
+    }, 1500);
+  };
+
   return (
     <div className={`social-player ${status ? "hide-controls" : ""}`}>
-      <div
-        ref={playerContainerRef}
-        className="relative artplayer-app w-full h-[250px] md:h-[350px] lg:h-[400px] xl:h-[400px]"
-      ></div>
+      {loading && (
+        <div className="loading-message flex justify-center items-center text-center bg-black w-full h-[250px] md:h-[350px] lg:h-[400px] xl:h-[400px]">
+          {/* <p className="text-white">加载中...</p> Loading message */}
+          <Loader />
+        </div>
+      )}
+      {error && (
+        <div className="error-message flex justify-center items-center text-center bg-black w-full h-[250px] md:h-[350px] lg:h-[400px] xl:h-[400px]">
+          <div>
+            <p className="text-white">出了点小问题，请稍后重试</p>
+            <button
+              onClick={handleRetry}
+              className="p-1 px-4 text-[14px] rounded-full bg-[#F54100] mt-2"
+            >
+              重试
+            </button>
+          </div>
+        </div>
+      )}
+      {!loading && !error && (
+        <div
+          ref={playerContainerRef}
+          className="relative artplayer-app w-full h-[250px] md:h-[350px] lg:h-[400px] xl:h-[400px]"
+        ></div>
+      )}
     </div>
   );
 };
