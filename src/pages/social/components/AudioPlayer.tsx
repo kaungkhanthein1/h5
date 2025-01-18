@@ -36,14 +36,22 @@ const AudioPlayer = ({
       }
     }
   };
-
   const handleSpeedChange = () => {
     if (audioRef.current) {
-      const newRate = playbackRate === 2 ? 1 : 2;
+      // Cycle between 1, 1.5, and 2 playback rates
+      const newRate = playbackRate === 1 ? 1.5 : playbackRate === 1.5 ? 2 : 1;
       audioRef.current.playbackRate = newRate;
       setPlaybackRate(newRate);
     }
   };
+
+  // const handleSpeedChange = () => {
+  //   if (audioRef.current) {
+  //     const newRate = playbackRate === 2 ? 1 : 2;
+  //     audioRef.current.playbackRate = newRate;
+  //     setPlaybackRate(newRate);
+  //   }
+  // };
 
   const handleTimeUpdate = () => {
     if (audioRef.current) {
