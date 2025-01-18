@@ -300,23 +300,31 @@ const PostList = ({
     }
   };
 
+  if(showDetail){
+    return (
+      <Social_details
+      followStatus={followStatus}
+      handleFollowChange={handleFollowChange}
+      post={activePost}
+      setShowDetail={setShowDetail}
+      openLightbox={openLightbox}
+      lightboxStates={lightboxStates}
+      closeLightbox={closeLightbox}
+      showCreatedTime={showCreatedTime}
+      likeStatus={likeStatus}
+      sendEventToNative={sendEventToNative}
+      handleLikeChange={handleLikeChange}
+      setActivePlayer={setActivePlayer}
+      activePlayer={activePlayer}
+    />
+    )
+  }
+
   return (
     <div className="bg-black">
-      {showDetail && (
-        <Social_details
-          followStatus={followStatus}
-          handleFollowChange={handleFollowChange}
-          post={activePost}
-          setShowDetail={setShowDetail}
-          openLightbox={openLightbox}
-          lightboxStates={lightboxStates}
-          closeLightbox={closeLightbox}
-          showCreatedTime={showCreatedTime}
-          likeStatus={likeStatus}
-          sendEventToNative={sendEventToNative}
-          handleLikeChange={handleLikeChange}
-        />
-      )}
+      {/* {showDetail && (
+       
+      )} */}
       {!showDetail && (
         <>
           {data.map((post: any, index: number) => (

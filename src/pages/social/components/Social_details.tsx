@@ -6,6 +6,7 @@ import Comment from "./Comment";
 import { useGetCommentListQuery } from "../services/socialApi";
 import InfiniteScroll from "react-infinite-scroll-component/dist";
 import Loader from "../../../pages/search/components/Loader";
+import AudioPlayer from "./AudioPlayer";
 
 const Social_details: React.FC<any> = ({
   setShowDetail,
@@ -19,6 +20,8 @@ const Social_details: React.FC<any> = ({
   likeStatus,
   sendEventToNative,
   handleLikeChange,
+  activePlayer,
+  setActivePlayer,
 }) => {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
@@ -261,6 +264,14 @@ const Social_details: React.FC<any> = ({
               status={undefined}
             />
           )}
+          {post.file_type === "audio" && (
+            <AudioPlayer
+              src={post?.files[0]?.resourceURL}
+              index={post.post_id}
+              setActivePlayer={setActivePlayer}
+              activePlayer={activePlayer}
+            />
+          )}
         </div>
         {/* status */}
         <div className="flex bg-[#161619] justify-between items-center px-4 py-3 text-xs">
@@ -374,7 +385,7 @@ const Social_details: React.FC<any> = ({
           endMessage={
             <div className="flex bg-background justify-center items-center w-full pb-32">
               <p style={{ textAlign: "center" }}>
-                <b className=" text-white/60">没有更多评论</b>
+                <b className=" hidden text-white/60">没有更多评论</b>
               </p>
             </div>
           }
