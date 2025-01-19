@@ -7,6 +7,8 @@ import { useGetCommentListQuery } from "../services/socialApi";
 import InfiniteScroll from "react-infinite-scroll-component/dist";
 import Loader from "../../../pages/search/components/Loader";
 import AudioPlayer from "./AudioPlayer";
+import { useDispatch, useSelector } from "react-redux";
+import { setShowingDetail } from "../../../features/login/ModelSlice";
 
 const Social_details: React.FC<any> = ({
   setShowDetail,
@@ -26,11 +28,18 @@ const Social_details: React.FC<any> = ({
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [list, setList] = useState<any[]>([]);
+  const { isShowingDetails } = useSelector((state: any) => state.model);
+  console.log(isShowingDetails);
+  const dispatch = useDispatch();
 
   const { data, isFetching, refetch } = useGetCommentListQuery({
     post_id: post.post_id,
     page,
   });
+
+  useEffect(() => {
+    dispatch(setShowingDetail(true));
+  }, [dispatch]);
 
   useEffect(() => {
     if (data?.data) {
@@ -63,7 +72,10 @@ const Social_details: React.FC<any> = ({
     }
     // console.log('next', scrollTop, scrollHeight, clientHeight);
   };
-
+  const handleBackSocial = () => {
+    setShowDetail(false);
+    dispatch(setShowingDetail(false));
+  };
   return (
     <div
       className="inset-0 px-[10px] fixed w-screen top-0 h-screen bg-background overflow-y-scroll z-[99999]"
@@ -71,7 +83,7 @@ const Social_details: React.FC<any> = ({
     >
       {/* header */}
       <div className="fixed bg-background z-[99] w-full top-0 grid grid-cols-3 py-[10px] justify-betwee items-cente">
-        <span onClick={() => setShowDetail(false)}>
+        <span onClick={handleBackSocial}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"

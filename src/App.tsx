@@ -25,7 +25,7 @@ import Landing from "./components/Landing";
 import BannerAds from "./components/BannerAds";
 import { useGetAdsQuery } from "./services/helperService";
 import { setIsScrolling } from "./pages/home/slice/HomeSlice";
-import SocialComment from './pages/social/components/Social_details';
+import SocialComment from "./pages/social/components/Social_details";
 import Social from "./pages/social";
 import Short from "./pages/short";
 // import Menber from "./pages/share/member";
@@ -63,8 +63,13 @@ const Member = React.lazy(() => import("./pages/share/member"));
 
 const App: React.FC = () => {
   const dispatch = useDispatch();
-  const { openAuthModel, openLoginModel, openSignupModel, panding } =
-    useSelector((state: any) => state.model);
+  const {
+    openAuthModel,
+    openLoginModel,
+    openSignupModel,
+    panding,
+    isShowingDetails,
+  } = useSelector((state: any) => state.model);
   const { data, isLoading } = useGetAdsQuery();
 
   const location = useLocation();
@@ -225,7 +230,9 @@ const App: React.FC = () => {
               {/* Conditionally render FooterNav */}
               {!hideHeaderFooter && <FooterNav />}
               {location.pathname.startsWith("/profile") && <FooterNav />}
-              {location.pathname.startsWith("/social") && <FooterNav />}
+              {location.pathname.startsWith("/social") && !isShowingDetails && (
+                <FooterNav />
+              )}
               {location.pathname.startsWith("/short") && <FooterNav />}
 
               {(openAuthModel || openLoginModel || openSignupModel) && (
