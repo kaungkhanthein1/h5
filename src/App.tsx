@@ -102,7 +102,7 @@ const App: React.FC = () => {
 
   const hideHeader = location.pathname.startsWith("/explorer");
   const { hideMode } = JSON.parse(
-    localStorage.getItem("movieAppSettings") || ""
+    localStorage.getItem("movieAppSettings") || "{}"
   );
 
   const sendMessageToNative = (message: string) => {

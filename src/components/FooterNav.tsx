@@ -56,7 +56,7 @@ const Footer: FC = () => {
     };
   }, [lastScrollY]);
   const { hideMode } = JSON.parse(
-    localStorage.getItem("movieAppSettings") || ""
+    localStorage.getItem("movieAppSettings") || "{}"
   );
   return (
     <footer
