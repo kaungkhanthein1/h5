@@ -168,7 +168,7 @@ const Player = ({
 
   const activePlayerRef = useRef<HTMLDivElement | null>(null); // Track the currently active player
   const { autoMode } = JSON.parse(
-    localStorage.getItem("movieAppSettings") || ""
+    localStorage.getItem("movieAppSettings") || "{}"
   );
 
   useEffect(() => {
