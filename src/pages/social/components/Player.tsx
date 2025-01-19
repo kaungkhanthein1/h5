@@ -167,6 +167,9 @@ const Player = ({
   const [error, setError] = useState(false); // Track if there's a loading error
 
   const activePlayerRef = useRef<HTMLDivElement | null>(null); // Track the currently active player
+  const { autoMode } = JSON.parse(
+    localStorage.getItem("movieAppSettings") || ""
+  );
 
   useEffect(() => {
     if (playerContainerRef.current) {
@@ -224,8 +227,10 @@ const Player = ({
                 isCenterPlay &&
                 artPlayerInstanceRef?.current?.loaded
               ) {
-                artPlayerInstanceRef.current.play();
-                setIsPlaying(true);
+                if (autoMode) {
+                  artPlayerInstanceRef.current.play();
+                  setIsPlaying(true);
+                }
               }
             }
           } else {

@@ -101,6 +101,9 @@ const App: React.FC = () => {
     location.pathname.startsWith("/share/member");
 
   const hideHeader = location.pathname.startsWith("/explorer");
+  const { hideMode } = JSON.parse(
+    localStorage.getItem("movieAppSettings") || ""
+  );
 
   const sendMessageToNative = (message: string) => {
     if (
@@ -200,7 +203,13 @@ const App: React.FC = () => {
                     <Route path="/search_overlay" element={<Search />} />
 
                     <Route path="/explorer" element={<Explorer />} />
-                    <Route path="/social" element={<Social />} />
+                    {/* Conditional rendering of the Social component */}
+                    {!hideMode && location.pathname === "/social" ? (
+                      <Route path="/social" element={<Social />} />
+                    ) : (
+                      <Route path="/social" element={<div />} />
+                    )}
+                    {/* <Route path="/social" element={<Social />} /> */}
                     <Route path="/short" element={<Short />} />
                     <Route path="/explorer/:id" element={<Detail />} />
                     <Route path="/profile" element={<Profile />} />

@@ -55,6 +55,9 @@ const Footer: FC = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, [lastScrollY]);
+  const { hideMode } = JSON.parse(
+    localStorage.getItem("movieAppSettings") || ""
+  );
   return (
     <footer
       // className={`bg-[#1f1f21] fixed  transition-all duration-300 w-full shadow-lg z-50 ${
@@ -111,27 +114,30 @@ const Footer: FC = () => {
           </span>
         </Link>
         {/* Explorer Icon */}
-        <Link
-          to="/social"
-          className="flex flex-col items-center"
-          onClick={() => setSelectedMenu("social")}
-        >
-          <div className="rounded-full">
-            <img
-              src={selectedMenu === "social" ? afterPostIcon : beforePostIcon}
-              alt="Social"
-              className="h-[26px] w-[26px] mb-1.5"
-              // className="h-8 w-[48px] mb-2 -mt-[10px] "
-            />
-          </div>
-          <span
-            className={`${
-              selectedMenu === "social" ? "text-white" : "text-white/80"
-            } text-[10px]`}
+        {!hideMode && (
+          <Link
+            to="/social"
+            className="flex flex-col items-center"
+            onClick={() => setSelectedMenu("social")}
           >
-            广场
-          </span>
-        </Link>
+            <div className="rounded-full">
+              <img
+                src={selectedMenu === "social" ? afterPostIcon : beforePostIcon}
+                alt="Social"
+                className="h-[26px] w-[26px] mb-1.5"
+                // className="h-8 w-[48px] mb-2 -mt-[10px] "
+              />
+            </div>
+            <span
+              className={`${
+                selectedMenu === "social" ? "text-white" : "text-white/80"
+              } text-[10px]`}
+            >
+              广场
+            </span>
+          </Link>
+        )}
+
         {/* Explorer Icon */}
         {/* <Link
           to="/short"

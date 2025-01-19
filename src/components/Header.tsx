@@ -149,7 +149,7 @@ const Header: FC = () => {
   const [isHeaderVisible, setIsHeaderVisible] = useState(true); // State to track header visibility
 
   const configData = data?.data?.index_top_nav;
-  console.log(data);
+
   const activeTab = useSelector((state: any) => state.home.activeTab);
   const sortData = useSelector((state: any) => state.home.sort);
   const sortName = useSelector((state: any) => state.home.sortName);
