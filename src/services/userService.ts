@@ -124,7 +124,7 @@ export const login = async (
     const dataIsEncrypt = loginResponse.headers;
     // const dataIsEncrypt = loginResponse.headers["x-app-data-encrypt"];
 
-    console.log(dataIsEncrypt, "gg");
+    // console.log(dataIsEncrypt, "gg");
 
     const resultText = await loginResponse.data;
     // console.log(resultText)

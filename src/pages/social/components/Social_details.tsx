@@ -104,9 +104,9 @@ const Social_details: React.FC<any> = ({
       </div>
       {/* <h1>{post.post_id}</h1> */}
 
-      <div className=" pt-[40px] px-[10px] flex flex-col">
+      <div className=" pt-[40px]  flex flex-col">
         {/* user */}
-        <div className="flex justify-between items-center mb-4 pt-4">
+        <div className="flex justify-between items-center mb-4 pt-4 px-[10px]">
           <div className="flex items-center ">
             {post?.user?.avatar ? (
               <img
@@ -238,7 +238,7 @@ const Social_details: React.FC<any> = ({
           </button>
         </div>
         {/* decs */}
-        <p className=" text-white text-[16px] font-[400] leading-[20px]">
+        <p className="px-[10px] text-white text-[16px] font-[400] leading-[20px]">
           {post.description}
         </p>
         {/* player */}
@@ -286,7 +286,7 @@ const Social_details: React.FC<any> = ({
           )}
         </div>
         {/* status */}
-        <div className="flex bg-[#161619] justify-between items-center px-4 py-3 text-xs">
+        <div className="flex bg-[#161619] justify-between items-center px-[10px] py-3 text-xs">
           {showCreatedTime ? (
             <div className="fixed top-0 left-0 flex h-screen items-center justify-center z-[1000] w-full">
               <p className="text-[12px] text-white font-semibold bg-gradient-to-r from-background to-gray-800 px-3 py-1 rounded-md">
@@ -376,6 +376,7 @@ const Social_details: React.FC<any> = ({
             </button>
           </div>
         </div>
+        <div className=" h-[4px] bg-black w-full"></div>
         {/* comment */}
         <Comment
           setList={setList}

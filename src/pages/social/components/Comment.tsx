@@ -152,7 +152,7 @@ const Comment: React.FC<any> = ({ list, isFetching, post_id, setList }) => {
     setContent("");
   };
   return (
-    <div className="py-[12px] bg-[#161619]">
+    <div className="py-[12px] px-[6px] bg-[#161619]">
       {panding && (
         <div className="absolute top-0 left-0 z-[9999909] w-screen h-screen bg-bla flex justify-center items-center">
           <div className=" w-[100px] h-[100px] bg-black/70 rounded-lg flex justify-center items-center">
@@ -328,26 +328,26 @@ const Comment: React.FC<any> = ({ list, isFetching, post_id, setList }) => {
       {/* ment mal :) */}
       {token ? (
         <div className=" fixed py-[12px] flex justify-center bottom-0 left-0 bg-[#1F1F21] w-screen z-[999992]">
-          <div className=" mr-[10px] grid grid-cols-4 w-full px-[20px]">
+          <div className=" mr-[10px] grid grid-cols-6 w-full px-[20px]">
             <input
               ref={inputRef}
               value={content}
               onChange={(e) => setContent(e.target.value)}
               placeholder="请输入内容"
-              className=" focus:outline-none text-white py-[12px] px-[16px] col-span-3 bg-white/10 w-full rounded-[100px]"
+              className=" focus:outline-none text-white py-[12px] px-[16px] col-span-5 bg-white/10 w-full rounded-[100px]"
               type="text"
             />
             {isRp ? (
               <button
                 onClick={handleReplyCmt}
-                className=" text-[#F54100] text-[16px] font-[600] leading-[16px]"
+                className=" text-[#F54100] text-right text-[16px] font-[600] leading-[16px]"
               >
                 发送
               </button>
             ) : (
               <button
                 onClick={handlePostCmt}
-                className=" text-[#F54100] text-[16px] font-[600] leading-[16px]"
+                className=" text-[#F54100] text-right text-[16px] font-[600] leading-[16px]"
               >
                 发送
               </button>

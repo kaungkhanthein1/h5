@@ -147,12 +147,12 @@ const AudioPlayer = ({
               </svg>
             )}
           </button>
-          <div className="flex flex-col flex-1 w-full">
+          <div className="flex flex-col w-full">
             <div className="text-sm font-medium truncate w-full -mr-5">
               {title}
             </div>
             {/* Progress Bar */}
-            <div>
+            <div className="flex justify-center items-center py-2 pt-4">
               <input
                 type="range"
                 className="progress-bar1"
@@ -168,6 +168,8 @@ const AudioPlayer = ({
                 }}
                 style={{
                   background: `linear-gradient(to right, #f97316 0%, #f97316 ${progress}%, #4c4c4e ${progress}%, #4c4c4e 100%)`,
+                  cursor: "pointer", // Ensures the progress bar is easy to interact with
+                  width: "100%",
                 }}
               />
             </div>
