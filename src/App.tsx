@@ -75,6 +75,19 @@ const App: React.FC = () => {
   const location = useLocation();
   // const isLoggedIn = localStorage.getItem("authToken"); // Check if the user is authenticated
 
+  const sendNativeEvent = (message: string) => {
+    if (
+      (window as any).webkit &&
+      (window as any).webkit.messageHandlers &&
+      (window as any).webkit.messageHandlers.jsBridge
+    ) {
+      (window as any).webkit.messageHandlers.jsBridge.postMessage(message);
+    }
+  };
+
+  useEffect(() => {
+    sendNativeEvent("dylsh5");
+  }, []);
   // Hide header and footer when the current path is "/player/:id" or "/login"
   const hideHeaderFooter =
     location.pathname.startsWith("/player") ||
