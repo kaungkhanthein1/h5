@@ -25,7 +25,8 @@ import { socialApi } from "../pages/social/services/socialApi";
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["history", "favorite", "user", "explore", "home", "model"], // Reducers you want to persist
+  // whitelist: [ ], // Reducers you want to persist
+  // whitelist: ["history", "favorite", "user", "explore", "home", "model"], // Reducers you want to persist
 };
 
 // Combine all reducers

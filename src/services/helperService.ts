@@ -63,18 +63,28 @@ export const useGetAdsQuery = () => {
   const fetchAdsTopics = async () => {
     setIsFetching(true);
     try {
-      const cachedData = sessionStorage.getItem("AdsQuery");
+      const cachedData = localStorage.getItem("AdsQuery");
 
       if (cachedData) {
         setConfigData(JSON.parse(cachedData));
         setIsLoading(false);
+        setTimeout(async() => {
+          const response = await getAdsData();
+
+      if (response) {
+        const data = response.data ? response : await decryptWithAes(response);
+        localStorage.setItem("AdsQuery", JSON.stringify(data));
+        setConfigData(data);
+      }
+      setError(null);
+        }, 3000);
         return;
       }
       const response = await getAdsData();
 
       if (response) {
         const data = response.data ? response : await decryptWithAes(response);
-        sessionStorage.setItem("AdsQuery", JSON.stringify(data));
+        localStorage.setItem("AdsQuery", JSON.stringify(data));
         setConfigData(data);
       }
       setError(null);
