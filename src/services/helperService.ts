@@ -77,7 +77,7 @@ export const useGetAdsQuery = () => {
         setConfigData(data);
       }
       setError(null);
-        }, 3000);
+        }, 5000);
         return;
       }
       const response = await getAdsData();

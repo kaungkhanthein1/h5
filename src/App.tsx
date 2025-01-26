@@ -88,6 +88,14 @@ const App: React.FC = () => {
   useEffect(() => {
     sendNativeEvent("dylsh5");
   }, []);
+
+  useEffect(()=>{
+    if(panding) {
+      sendNativeEvent('dylsh5_ads_started');
+    } else {
+      sendNativeEvent('dylsh5_home_started');
+    }
+  },[panding]);
   // Hide header and footer when the current path is "/player/:id" or "/login"
   const hideHeaderFooter =
     location.pathname.startsWith("/player") ||
