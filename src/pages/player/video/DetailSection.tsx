@@ -344,7 +344,7 @@ const sendShareEventToNative = (value: any) => {
               </button>
             </div>
             {/* Warning Message */}
-            {/* <div className="warning bg-gray-800 rounded-md text-white text-center">
+            <div className="warning bg-gray-800 rounded-md text-white text-center">
               <div className="warning-content">
                 <span className="warning-text">
                   ⬇️官方推荐靠谱平台⬇️，请勿相信视频中任何广告，谨防被骗！
@@ -353,7 +353,7 @@ const sendShareEventToNative = (value: any) => {
                   ⬇️官方推荐靠谱平台⬇️，请勿相信视频中任何广告，谨防被骗！
                 </span>
               </div>
-            </div> */}
+            </div>
           </div>
         )}
 

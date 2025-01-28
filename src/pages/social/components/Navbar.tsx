@@ -389,31 +389,37 @@ const Navbar = () => {
         </>
       )}
 
-      <PullToRefresh
-        pullingContent={<div></div>}
-        refreshingContent={
-          <div className="flex justify-center py-2 mt-2 text-center">
-            <Loader />
-          </div>
-        }
-        onRefresh={async () => {
-          setPage(1);
-          setHasMore(true);
-          setRefresh(true);
-        }}
-        isPullable={!showDetail}
-      >
-        <PostList
-          setShowDetail={setShowDetail}
-          showDetail={showDetail}
-          data={dataList}
-          loading={
-            postsLoading || recommandLoading || followLoading || audioLoading
+      {refresh ? (
+        <div className="flex justify-center items-center h-[50vh]">
+          <Loader />
+        </div>
+      ) : (
+        <PullToRefresh
+          pullingContent={<div></div>}
+          refreshingContent={
+            <div className="flex justify-center py-2 mt-2 text-center">
+              <Loader />
+            </div>
           }
-          hasMore={hasMore}
-          fetchMoreData={fetchMoreData}
-        />
-      </PullToRefresh>
+          onRefresh={async () => {
+            setPage(1);
+            setHasMore(true);
+            setRefresh(true);
+          }}
+          isPullable={!showDetail}
+        >
+          <PostList
+            setShowDetail={setShowDetail}
+            showDetail={showDetail}
+            data={dataList}
+            loading={
+              postsLoading || recommandLoading || followLoading || audioLoading
+            }
+            hasMore={hasMore}
+            fetchMoreData={fetchMoreData}
+          />
+        </PullToRefresh>
+      )}
     </div>
   );
 };
