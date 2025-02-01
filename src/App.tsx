@@ -23,11 +23,12 @@ import Loader from "./pages/search/components/Loader";
 import ErrorToast from "./pages/profile/error/ErrorToast";
 import Landing from "./components/Landing";
 import BannerAds from "./components/BannerAds";
-import { useGetAdsQuery } from "./services/helperService";
+import { useGetAdsQuery, useGetHeaderTopicsQuery } from "./services/helperService";
 import { setIsScrolling } from "./pages/home/slice/HomeSlice";
 import SocialComment from "./pages/social/components/Social_details";
 import Social from "./pages/social";
 import Short from "./pages/short";
+import { useGetRecommendedMoviesQuery } from "./pages/home/services/homeApi";
 // import Menber from "./pages/share/member";
 // import Share from "./pages/share";
 
@@ -70,8 +71,10 @@ const App: React.FC = () => {
     panding,
     isShowingDetails,
   } = useSelector((state: any) => state.model);
-  const { data, isLoading } = useGetAdsQuery();
-
+  const { data, refetchAds } = useGetAdsQuery();
+  const { refetch } = useGetRecommendedMoviesQuery();
+  
+  
   const location = useLocation();
   // const isLoggedIn = localStorage.getItem("authToken"); // Check if the user is authenticated
 
@@ -145,6 +148,7 @@ const App: React.FC = () => {
         !panding
       ) {
         sendMessageToNative("showHomeScreen");
+        
       } else if (location.pathname.startsWith("/profile") && !panding) {
         sendMessageToNative("showProfileScreen");
       } else if (
@@ -156,6 +160,13 @@ const App: React.FC = () => {
       }
     }
   }, [location.pathname]);
+
+  useEffect(()=>{
+    if(location.pathname !== "/") {
+      refetchAds();
+      refetch();
+    }
+  },[location.pathname])
 
   useEffect(() => {
     const hasSeenLanding = sessionStorage.getItem("hasSeenLanding");

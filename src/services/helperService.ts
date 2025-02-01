@@ -11,33 +11,33 @@ export const useGetHeaderTopicsQuery = () => {
   const [isFetching, setIsFetching] = useState<boolean>(false);
   const dispatch = useDispatch();
 
-  const fetchHeaderTopics = async () => {
-    const settings = JSON.parse(
-      localStorage.getItem("movieAppSettings") || "{}"
-    );
+  const fetchHeaderTopics = async (forceRefresh = false) => {
+    // setIsFetching(true);
+    const settings = JSON.parse(localStorage.getItem("movieAppSettings") || "{}");
 
     try {
       const cachedData = sessionStorage.getItem("headerTopics");
-      if (cachedData) {
+
+      // **Step 1: Serve Cached Data Immediately**
+      if (cachedData && !forceRefresh) {
         setData(JSON.parse(cachedData));
         setIsLoading(false);
-        return;
       }
 
-      if (settings?.filterToggle) {
-        dispatch(setActiveTab(0));
-      }
-
+      // **Step 2: Fetch Fresh Data in the Background**
       const response = await getconfigData(settings);
-      const data =  response.data ? response : await decryptWithAes(response);
+      const newData = response.data ? response : await decryptWithAes(response);
 
-      sessionStorage.setItem("headerTopics", JSON.stringify(data));
-      setData(data);
+      // **Step 3: Update Cache & UI**
+      sessionStorage.setItem("headerTopics", JSON.stringify(newData));
+      console.log('useGetHeaderTopicsQuery is=>', newData);
+      setData(newData);
     } catch (err) {
       console.error("Failed to fetch header topics:", err);
       setError(err);
     } finally {
       setIsLoading(false);
+      setIsFetching(false);
     }
   };
 
@@ -50,7 +50,7 @@ export const useGetHeaderTopicsQuery = () => {
     isLoading,
     error,
     isFetching,
-    refetch: fetchHeaderTopics,
+    refetch: () => fetchHeaderTopics(true), // Force refresh when refetching
   };
 };
 
@@ -60,36 +60,28 @@ export const useGetAdsQuery = () => {
   const [isFetching, setIsFetching] = useState<boolean>(false);
   const [error, setError] = useState<any>(null);
 
-  const fetchAdsTopics = async () => {
-    setIsFetching(true);
+  const fetchAdsTopics = async (forceRefresh = false) => {
+    // setIsFetching(true);
+
     try {
       const cachedData = localStorage.getItem("AdsQuery");
 
-      if (cachedData) {
+      // **Step 1: Serve Cached Data Immediately**
+      if (cachedData && !forceRefresh) {
         setConfigData(JSON.parse(cachedData));
         setIsLoading(false);
-        setTimeout(async() => {
-          const response = await getAdsData();
+      }
 
-      if (response) {
-        const data = response.data ? response : await decryptWithAes(response);
-        localStorage.setItem("AdsQuery", JSON.stringify(data));
-        setConfigData(data);
-      }
-      setError(null);
-        }, 5000);
-        return;
-      }
+      // **Step 2: Fetch Fresh Data in the Background**
       const response = await getAdsData();
-
-      if (response) {
-        const data = response.data ? response : await decryptWithAes(response);
-        localStorage.setItem("AdsQuery", JSON.stringify(data));
-        setConfigData(data);
-      }
+      const newData = response.data ? response : await decryptWithAes(response);
+      console.log('useGetAdsQuery is=>', newData)
+      // **Step 3: Update Cache & UI**
+      localStorage.setItem("AdsQuery", JSON.stringify(newData));
+      setConfigData(newData);
       setError(null);
     } catch (err) {
-      console.error("Failed to fetch header topics:", err);
+      console.error("Failed to fetch Ads data:", err);
       setError(err);
     } finally {
       setIsLoading(false);
@@ -106,6 +98,7 @@ export const useGetAdsQuery = () => {
     isLoading,
     isFetching,
     error,
-    refetch: fetchAdsTopics,
+    refetchAds: () => fetchAdsTopics(true), // Force refresh when refetching
   };
 };
+
