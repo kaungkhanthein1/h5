@@ -178,12 +178,11 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import PullToRefresh from "react-simple-pull-to-refresh";
-
 import {
   useGetPostsQuery,
   useGetRecommandPostsQuery,
   useGetFollowPostsQuery,
-  useGetAudioPostsQuery, // Assuming you will have a query for audio
+  useGetAudioPostsQuery,
 } from "../services/socialApi";
 import PostList from "./PostList";
 import Ads from "../../../components/NewAds";
@@ -192,162 +191,87 @@ import { useGetHeaderTopicsQuery } from "../../../services/helperService";
 
 const Navbar = () => {
   const [activeTab, setActiveTab] = useState(2);
-  const activeTabRef = useRef(activeTab); // Create a ref for activeTab
-  activeTabRef.current = activeTab; // Update the ref whenever activeTab changes
+  const activeTabRef = useRef(activeTab);
+  activeTabRef.current = activeTab;
+
   const { data } = useGetHeaderTopicsQuery();
-  // const social_menu = [
-  //   {
-  //     text: "关注",
-  //     path: "/followed/post/list",
-  //   },
-  //   {
-  //     text: "推荐",
-  //     path: "/post/recommend/list",
-  //   },
-  //   {
-  //     text: "最新",
-  //     path: "/post/list",
-  //   },
-  // ];
-  const social_menu =
-    data?.data?.social_menu?.length > 0
-      ? data?.data?.social_menu
-      : [
-          {
-            text: "关注",
-            path: "/followed/post/list",
-          },
-          {
-            text: "推荐",
-            path: "/post/recommend/list",
-          },
-          {
-            text: "最新",
-            path: "/post/list",
-          },
-        ];
+  const social_menu = data?.data?.social_menu?.length
+    ? data.data.social_menu
+    : [
+        { text: "关注", path: "/followed/post/list" },
+        { text: "推荐", path: "/post/recommend/list" },
+        { text: "最新", path: "/post/list" },
+      ];
 
   const [page, setPage] = useState(1);
   const [dataList, setDataList] = useState<any[]>([]);
   const [hasMore, setHasMore] = useState(true);
-  const [refresh, setRefresh] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [showDetail, setShowDetail] = useState(false);
 
-  // Define dynamic queries based on the path from social_menu
   const selectedMenuPath = social_menu?.[activeTab]?.path;
 
+  const queryOptions = { page, path: selectedMenuPath };
   const {
     data: postsData,
-    isLoading: postsLoading,
-    isFetching: postsFetching,
     refetch: postRefetch,
-  } = useGetPostsQuery(
-    { page, path: selectedMenuPath },
-    { skip: activeTab !== 2 && selectedMenuPath === undefined }
-  );
+    isFetching: postsFetching,
+    isLoading: postsLoading,
+  } = useGetPostsQuery(queryOptions, { skip: activeTab !== 2 });
 
   const {
     data: recommandData,
-    isLoading: recommandLoading,
-    isFetching: recommandFetching,
     refetch: recommandRefetch,
-  } = useGetRecommandPostsQuery(
-    { page, path: selectedMenuPath },
-    { skip: activeTab !== 1 || selectedMenuPath === undefined }
-  );
+    isFetching: recommandFetching,
+    isLoading: recommandLoading,
+  } = useGetRecommandPostsQuery(queryOptions, { skip: activeTab !== 1 });
 
   const {
     data: followData,
-    isLoading: followLoading,
-    isFetching: followFetching,
     refetch: followRefetch,
-  } = useGetFollowPostsQuery(
-    { page, path: selectedMenuPath },
-    { skip: activeTab !== 0 || selectedMenuPath === undefined }
-  );
+    isFetching: followFetching,
+    isLoading: followLoading,
+  } = useGetFollowPostsQuery(queryOptions, { skip: activeTab !== 0 });
 
   const {
     data: audioData,
-    isLoading: audioLoading,
-    isFetching: audioFetching,
     refetch: audioRefetch,
-  } = useGetAudioPostsQuery(
-    { page, path: selectedMenuPath },
-    { skip: activeTab !== 3 || selectedMenuPath === undefined }
-  );
+    isFetching: audioFetching,
+    isLoading: audioLoading,
+  } = useGetAudioPostsQuery(queryOptions, { skip: activeTab !== 3 });
 
   const fetchMoreData = () => {
-    if (
-      !postsFetching &&
-      !recommandFetching &&
-      !followFetching &&
-      !audioFetching &&
-      hasMore
-    ) {
+    if (!postsFetching && !recommandFetching && !followFetching && !audioFetching && hasMore) {
       setPage((prevPage) => prevPage + 1);
     }
   };
 
   useEffect(() => {
-    if (refresh) {
-      const fetchData = async () => {
-        if (activeTabRef.current === 2) {
-          await postRefetch();
-        } else if (activeTabRef.current === 1) {
-          await recommandRefetch();
-        } else if (activeTabRef.current === 0) {
-          await followRefetch();
-        } else {
-          await audioRefetch();
-        }
-
-        const currentData =
-          activeTab === 2
-            ? postsData
-            : activeTab === 1
-            ? recommandData
-            : activeTab === 0
-            ? followData
-            : audioData;
-
-        if (currentData?.data?.list) {
-          setDataList(currentData.data.list);
-          const loadedItems = currentData.data.page * currentData.data.pageSize;
-          setHasMore(loadedItems < currentData.data.total);
-        }
-        setRefresh(false);
-      };
-      fetchData();
-    }
-  }, [refresh]);
-
-  useEffect(() => {
     const currentData =
-      activeTab === 2
-        ? postsData
-        : activeTab === 1
-        ? recommandData
-        : activeTab === 0
-        ? followData
-        : audioData;
+      activeTab === 2 ? postsData : activeTab === 1 ? recommandData : activeTab === 0 ? followData : audioData;
 
     if (currentData?.data?.list) {
-      if (page !== 1) {
-        setDataList((prev) => [...prev, ...currentData.data.list]);
-        const loadedItems = currentData.data.page * currentData.data.pageSize;
-        setHasMore(loadedItems < currentData.data.total);
-      } else {
-        setDataList(currentData.data.list);
-        const loadedItems = currentData.data.page * currentData.data.pageSize;
-        setHasMore(loadedItems < currentData.data.total);
-      }
+      setDataList((prev) => (page === 1 ? currentData.data.list : [...prev, ...currentData.data.list]));
+      setHasMore(currentData.data.page * currentData.data.pageSize < currentData.data.total);
     }
   }, [postsData, recommandData, followData, audioData, activeTab]);
 
-  const handleTabClick = async (index: number) => {
-    if (index === activeTab) {
-      window.scrollTo(0, 0);
-    } else {
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    setPage(1);
+    setHasMore(true);
+
+    if (activeTabRef.current === 2) await postRefetch();
+    else if (activeTabRef.current === 1) await recommandRefetch();
+    else if (activeTabRef.current === 0) await followRefetch();
+    else await audioRefetch();
+
+    await new Promise((resolve) => setTimeout(resolve, 500)); // Add pause before closing refresh
+    setIsRefreshing(false);
+  };
+
+  const handleTabClick = (index: number) => {
+    if (index !== activeTab) {
       window.scrollTo(0, 0);
       setActiveTab(index);
       setPage(1);
@@ -366,14 +290,10 @@ const Navbar = () => {
                 <button
                   key={index}
                   className={`inline-flex whitespace-nowrap social_nav relative hover:text-white ${
-                    activeTab === index
-                      ? "text-white text-[24px]"
-                      : "text-[#FFFFFFB3] text-[18px]"
+                    activeTab === index ? "text-white text-[24px]" : "text-[#FFFFFFB3] text-[18px]"
                   }`}
                   onClick={() => handleTabClick(index)}
-                  style={{
-                    paddingBottom: "4px",
-                  }}
+                  style={{ paddingBottom: "4px" }}
                 >
                   {tab.text}
                   {activeTab === index && (
@@ -389,37 +309,31 @@ const Navbar = () => {
         </>
       )}
 
-      {refresh ? (
+      {/* {isRefreshing ? (
         <div className="flex justify-center items-center h-[50vh]">
           <Loader />
         </div>
-      ) : (
+      ) : ( */}
         <PullToRefresh
-          pullingContent={<div></div>}
+          // pullingContent={null}
           refreshingContent={
             <div className="flex justify-center py-2 mt-2 text-center">
               <Loader />
             </div>
           }
-          onRefresh={async () => {
-            setPage(1);
-            setHasMore(true);
-            setRefresh(true);
-          }}
+          onRefresh={handleRefresh}
           isPullable={!showDetail}
         >
           <PostList
             setShowDetail={setShowDetail}
             showDetail={showDetail}
             data={dataList}
-            loading={
-              postsLoading || recommandLoading || followLoading || audioLoading
-            }
+            loading={postsLoading || recommandLoading || followLoading || audioLoading}
             hasMore={hasMore}
             fetchMoreData={fetchMoreData}
           />
         </PullToRefresh>
-      )}
+      {/* )} */}
     </div>
   );
 };
