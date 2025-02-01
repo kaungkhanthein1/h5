@@ -1,11 +1,16 @@
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import { showToast } from "../pages/profile/error/ErrorSlice";
 
 const Content = ({ notice }: any) => {
+  const dispatch = useDispatch();
+
   const navigate = useNavigate();
   const [pageType, setPageType] = useState(false);
 
   const type = notice?.extend?.page_type;
+  // console.log('type', type)
 
   useEffect(() => {
     if (type === "internal") {
@@ -19,11 +24,30 @@ const Content = ({ notice }: any) => {
     return null;
   }
 
+  const JumpAction = (notice: any) => {
+    const external = notice?.extend?.page_type;
+    console.log(external);
+    if (external === "external") {
+      window.open(notice.extend.page_path, "_blank");
+    } else {
+      dispatch(
+        showToast({
+          message: "IOS积分系统正在开发中！敬请期待～",
+          type: "error",
+        })
+      );
+    }
+  };
+
   return (
     <div className="content p-3">
       <div className="text-card">
-        <h3 className=" text-white text-[12px] font-[500] leading-[14px]">{notice.title}</h3>
-        <p className="mt-3 text-[#888] text-[10px] font-[500]">{notice.content}</p>
+        <h3 className=" text-white text-[12px] font-[500] leading-[14px]">
+          {notice.title}
+        </h3>
+        <p className="mt-3 text-[#888] text-[10px] font-[500]">
+          {notice.content}
+        </p>
         {pageType ? (
           <>
             {notice.extend.parameters?.video_id && (
@@ -49,7 +73,7 @@ const Content = ({ notice }: any) => {
             {!notice.extend.parameters?.topic_id &&
               !notice.extend.parameters?.video_id && (
                 <button
-                  onClick={() => navigate(`/${notice.extend.page_path}`)}
+                  onClick={() => JumpAction(notice)}
                   className="noti-btn mt-6"
                 >
                   {notice.extend.page_name}
@@ -60,7 +84,7 @@ const Content = ({ notice }: any) => {
           notice.extend.page_name && (
             <button
               className="noti-btn mt-6"
-              onClick={() => window.open(notice.extend.page_path, "_blank")}
+              onClick={() => JumpAction(notice)}
             >
               {notice.extend.page_name}
             </button>

@@ -16,6 +16,18 @@ const Announce: React.FC<AnnounceProps> = ({ setShowNotice }) => {
   const [selectedNotice, setSelectedNotice] = useState<number | null>(null); // To track the selected notice
 
   useEffect(() => {
+    const isLatest = localStorage.getItem("LatestNotice");
+    console.log(isLatest);
+
+    if (!isLatest && config?.data) {
+      localStorage.setItem("LatestNotice", config?.data?.latest_notice_hash);
+    }
+    if (isLatest === config?.data?.latest_notice_hash) {
+      return;
+    }
+  }, [config?.data?.latest_notice_hash]);
+
+  useEffect(() => {
     document.body.style.overflow = "hidden";
 
     return () => {

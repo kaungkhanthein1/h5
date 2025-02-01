@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { showToast } from "../../error/ErrorSlice";
+import { useDispatch } from "react-redux";
 
 const Content = ({ notice }: any) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [pageType, setPageType] = useState(false);
 
@@ -18,6 +21,21 @@ const Content = ({ notice }: any) => {
   if (!notice) {
     return null;
   }
+
+  const JumpAction = (notice: any) => {
+    const external = notice?.extend?.page_type;
+    console.log(external);
+    if (external === "external") {
+      window.open(notice.extend.page_path, "_blank");
+    } else {
+      dispatch(
+        showToast({
+          message: "IOS积分系统正在开发中！敬请期待～",
+          type: "error",
+        })
+      );
+    }
+  };
 
   return (
     <div className="content p-3">
@@ -49,7 +67,7 @@ const Content = ({ notice }: any) => {
             {!notice.extend.parameters?.topic_id &&
               !notice.extend.parameters?.video_id && (
                 <button
-                  onClick={() => navigate(`/${notice.extend.page_path}`)}
+                  onClick={() => JumpAction(notice)}
                   className="noti-btn mt-6"
                 >
                   {notice.extend.page_name}
@@ -60,7 +78,7 @@ const Content = ({ notice }: any) => {
           notice.extend.page_name && (
             <button
               className="noti-btn mt-6"
-              onClick={() => window.open(notice.extend.page_path, "_blank")}
+              onClick={() => JumpAction(notice)}
             >
               {notice.extend.page_name}
             </button>
