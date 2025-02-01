@@ -23,16 +23,19 @@ const Content = ({ notice }: any) => {
   if (!notice) {
     return null;
   }
+  console.log(notice);
 
   const JumpAction = (notice: any) => {
     const external = notice?.extend?.page_type;
-    console.log(external);
+    // console.log(external);
     if (external === "external") {
       window.open(notice.extend.page_path, "_blank");
     } else {
+      console.log(notice?.extend);
       dispatch(
         showToast({
-          message: "IOS积分系统正在开发中！敬请期待～",
+          // message: "IOS积分系统正在开发中！敬请期待～",
+          message: ` ${notice.extend.page_name} 正在开发中！敬请期待~`,
           type: "error",
         })
       );

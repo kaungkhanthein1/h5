@@ -30,7 +30,9 @@ const Content = ({ notice }: any) => {
     } else {
       dispatch(
         showToast({
-          message: "IOS积分系统正在开发中！敬请期待～",
+          // message: "IOS积分系统正在开发中！敬请期待～",
+          message: ` ${notice.extend.page_name} 正在开发中！敬请期待~`,
+
           type: "error",
         })
       );
