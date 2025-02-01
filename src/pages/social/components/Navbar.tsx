@@ -316,6 +316,7 @@ const Navbar = () => {
       ) : ( */}
         <PullToRefresh
           // pullingContent={null}
+          pullingContent={<div></div>}
           refreshingContent={
             <div className="flex justify-center py-2 mt-2 text-center">
               <Loader />
