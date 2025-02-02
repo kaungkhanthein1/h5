@@ -24,11 +24,10 @@ const NewAds: React.FC<NewAdsProps> = ({ section, fromMovie = false }) => {
   useEffect(() => {
     if (data?.data?.[section]) {
       const ads = data?.data?.[section];
-      const sortedData = [...ads].sort((a, b) => a.sort - b.sort);
+      const sortedData = [...ads].sort((a, b) => b.sort - a.sort);
       setCur(sortedData as AdItem[]);
     }
   }, [data, section]);
-  // console.log(" sorted",cur);
 
   const AdItemComponent = ({ item }: { item: AdItem }) => {
     const imageUrl = item.data?.image || "";

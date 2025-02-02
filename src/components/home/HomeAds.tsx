@@ -6,7 +6,7 @@ const HomeAds = ({ data, isLoading }: any) => {
   const [cur, setCur] = useState<any[]>([]);
 
   useEffect(() => {
-    const sortedData = [...data].sort((a, b) => a.sort - b.sort);
+    const sortedData = [...data].sort((a, b) => b.sort - a.sort);
     // console.log(sortedData)
 
     setCur(sortedData || []);
