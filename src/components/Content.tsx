@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { showToast } from "../pages/profile/error/ErrorSlice";
+import { setActiveNav } from "../pages/home/slice/HomeSlice";
 
 const Content = ({ notice }: any) => {
   const dispatch = useDispatch();
@@ -23,15 +24,17 @@ const Content = ({ notice }: any) => {
   if (!notice) {
     return null;
   }
-  console.log(notice);
 
   const JumpAction = (notice: any) => {
     const external = notice?.extend?.page_type;
     // console.log(external);
     if (external === "external") {
       window.open(notice.extend.page_path, "_blank");
+    } else if (notice?.extend.page_path === "rankings") {
+      dispatch(setActiveNav(3));
+
+      navigate("/explorer");
     } else {
-      console.log(notice?.extend);
       dispatch(
         showToast({
           // message: "IOS积分系统正在开发中！敬请期待～",

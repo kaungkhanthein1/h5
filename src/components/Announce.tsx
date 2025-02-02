@@ -3,12 +3,15 @@ import { useGetNotificationQuery } from "../pages/profile/services/profileApi";
 import { useGetHeaderTopicsQuery } from "../services/helperService";
 import Content from "./Content";
 import "../pages/profile/profile.css";
+import { useSelector } from "react-redux";
 
 interface AnnounceProps {
   setShowNotice: any;
 }
 
 const Announce: React.FC<AnnounceProps> = ({ setShowNotice }) => {
+  const {activeNav} = useSelector((state: any) => state.explore);
+  console.log(activeNav);
   const { data, isLoading, isFetching } = useGetNotificationQuery(); // Fetch data from API
   const { data: config } = useGetHeaderTopicsQuery();
   const categories = data?.data || [];
@@ -17,7 +20,6 @@ const Announce: React.FC<AnnounceProps> = ({ setShowNotice }) => {
 
   useEffect(() => {
     const isLatest = localStorage.getItem("LatestNotice");
-    console.log(isLatest);
 
     if (!isLatest && config?.data) {
       localStorage.setItem("LatestNotice", config?.data?.latest_notice_hash);
