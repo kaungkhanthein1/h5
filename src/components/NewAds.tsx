@@ -9,6 +9,7 @@ interface AdItem {
     image?: string;
   };
   remarks?: string;
+  sort?: number;
 }
 
 interface NewAdsProps {
@@ -22,12 +23,15 @@ const NewAds: React.FC<NewAdsProps> = ({ section, fromMovie = false }) => {
 
   useEffect(() => {
     if (data?.data?.[section]) {
-      setCur(data.data[section] as AdItem[]);
+      const ads = data?.data?.[section];
+      const sortedData = [...ads].sort((a, b) => a.sort - b.sort);
+      setCur(sortedData as AdItem[]);
     }
   }, [data, section]);
+  // console.log(" sorted",cur);
 
   const AdItemComponent = ({ item }: { item: AdItem }) => {
-    const imageUrl = item.data?.image || '';
+    const imageUrl = item.data?.image || "";
     const { imgSrc, isLoading: imageLoading } = useCachedImage(imageUrl);
 
     return (
@@ -59,12 +63,16 @@ const NewAds: React.FC<NewAdsProps> = ({ section, fromMovie = false }) => {
   };
 
   return (
-    <div className={`${fromMovie ? '' : 'max-md:px-3 px-10'} flex flex-col justify-center py-1`}>
+    <div
+      className={`${
+        fromMovie ? "" : "max-md:px-3 px-10"
+      } flex flex-col justify-center py-1`}
+    >
       <div className="grid w-full grid-cols-5 md:grid-cols-10 justify-center items-center gap-2">
         {isLoading
           ? Array.from({ length: 10 }).map((_, index) => (
-              <div 
-                key={index} 
+              <div
+                key={index}
                 className="flex flex-col items-center gap-[4px] animate-pulse mb-1"
               >
                 <div className="w-[58px] h-[58px] bg-white/30 rounded-[4px]" />
