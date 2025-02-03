@@ -141,13 +141,15 @@ import {
   setShowFilterTag,
 } from "../../src/features/counter/counterSlice";
 import FilterByTag from "./home/FilterByTag";
+import { useGetSearchRankingQuery } from "../pages/search/services/searchApi";
 
 const Header: FC = () => {
   const { data } = useGetHeaderTopicsQuery();
   // const [isShowMenu, setIsShowMenu] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isHeaderVisible, setIsHeaderVisible] = useState(true); // State to track header visibility
-
+  const { data: rankList } = useGetSearchRankingQuery();
+  const [randomWord, setRandomWord] = useState<string | null>(null);
   const configData = data?.data?.index_top_nav;
 
   const activeTab = useSelector((state: any) => state.home.activeTab);
@@ -156,6 +158,7 @@ const Header: FC = () => {
   const classData = useSelector((state: any) => state.home.class);
   const area = useSelector((state: any) => state.home.area);
   const year = useSelector((state: any) => state.home.year);
+
   const isShowMenu = useSelector((state: any) => state.counter.isShowMenu);
   const showFilterTag = useSelector(
     (state: any) => state.counter.showFilterTag
@@ -198,6 +201,28 @@ const Header: FC = () => {
     };
   }, [lastScrollY]);
 
+  // useEffect(() => {
+  //   // Use a slight delay to ensure layout adjusts properly
+  //   setTimeout(() => {
+  //     window.scrollTo(0, 0);
+  //   }, 100);
+  // }, [location]);
+  const ranks = rankList?.data;
+
+  useEffect(() => {
+    // Ensure layout adjusts properly
+    // Randomly select a word from the ranks data
+    if (ranks && ranks.length > 0) {
+      const rankList = ranks[0]?.list;
+      if (rankList && rankList.length > 0) {
+        // Randomly pick a word from the rank list
+        const randomIndex = Math.floor(Math.random() * rankList.length);
+        const randomItem = rankList[randomIndex];
+        setRandomWord(randomItem.word);
+      }
+    }
+  }, [ranks]);
+
   return (
     <header
       // className={`w-full z-[99999] fixed  gradient-bg-home pt-4 pb-2 transition-all duration-300 ${
@@ -209,7 +234,7 @@ const Header: FC = () => {
         <div className="flex-1 relative">
           <input
             onFocus={() => navigate("/search_overlay")}
-            placeholder="觉醒年代"
+            placeholder={randomWord || ""}
             type="text"
             className="rounded-[18.138px] home-input py-[8.062px] px-[16.123px] w-full text-white outline-none"
           />

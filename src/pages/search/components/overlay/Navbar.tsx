@@ -4,7 +4,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { setHistoryData } from "../../slice/HistorySlice";
 import { useLazyGetAutocompleteQuery } from "../../services/searchApi";
 
-const Navbar: React.FC = () => {
+interface NavbarProps {
+  randomWord: any;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ randomWord }) => {
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]); // Store autocomplete suggestions
   const [isFocused, setIsFocused] = useState(false); // Manage input focus
@@ -107,7 +111,7 @@ const Navbar: React.FC = () => {
               value={query}
               type="text"
               className="search-input"
-              placeholder="觉醒年代"
+              placeholder={randomWord}
               onChange={(e) => setQuery(e.target.value)} // Update the query state on input change
               onFocus={() => setIsFocused(true)}
               onBlur={() => setTimeout(() => setIsFocused(false), 200)} // Delay to allow clicks on suggestions

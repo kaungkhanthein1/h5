@@ -1,8 +1,15 @@
 import { useGetSearchRankingQuery } from "../services/searchApi";
 import Rank from "./Rank";
 
-const Rankings = () => {
-  const { data, isLoading, isFetching } = useGetSearchRankingQuery();
+const Rankings = ({
+  ranks,
+  isFetching,
+  isLoading,
+}: {
+  ranks: any;
+  isFetching: any;
+  isLoading: any;
+}) => {
   if (isFetching || isLoading) {
     return (
       <></>
@@ -11,7 +18,7 @@ const Rankings = () => {
       // </div>
     );
   }
-  const ranks = data?.data;
+
   return (
     <div className="px-3 mt-5 mb-5">
       <div className="flex gap-3 container_scroll">

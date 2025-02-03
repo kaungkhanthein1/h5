@@ -2,8 +2,8 @@ import { Link } from "react-router-dom";
 
 const Header = ({ categories, onCategoryClick, selectedCategory }: any) => {
   return (
-    <div className="flex gap-6 noti-header items-center p-5">
-      <Link to="/profile">
+    <div className="flex gap-6 noti-header justify-center items-center p-5">
+      <Link to="/profile" className="absolute left-[20px]">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
