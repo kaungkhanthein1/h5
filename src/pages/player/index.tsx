@@ -229,6 +229,7 @@ const DetailPage: React.FC = () => {
 
   useEffect(()=>{
     if(currentEpisode?.play_url) {
+      sendMovieDetailEventToNative(movieDetail);
       sendEventToNative(currentEpisode?.play_url)
     }
   },[currentEpisode]);
@@ -274,6 +275,19 @@ const DetailPage: React.FC = () => {
       }
     } else {
       console.warn("JS Bridge is not available in the current environment.");
+    }
+  };
+
+  const sendMovieDetailEventToNative = (mDetail: any) => {
+    if (
+      (window as any).webkit &&
+      (window as any).webkit.messageHandlers &&
+      (window as any).webkit.messageHandlers.jsBridge
+    ) {
+      (window as any).webkit.messageHandlers.jsBridge.postMessage({
+        eventName: "movieDetail",
+        value: mDetail,
+      });
     }
   };
   
