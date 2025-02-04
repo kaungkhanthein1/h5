@@ -83,6 +83,10 @@ const DetailPage: React.FC = () => {
     }
   };
 
+  useEffect(()=>{
+    console.log('useEffect epsodes is=>', episodes);
+  },[episodes])
+
   useEffect(() => {
     if (id) {
       setWholePageError(false);
@@ -340,6 +344,7 @@ const DetailPage: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    console.log('episodes is=>,', episodes);
     const handleIosEvent = (event: CustomEvent) => {
       console.log('event is=>', event);
       console.log('episodes is=>', episodes);
@@ -359,9 +364,11 @@ const DetailPage: React.FC = () => {
     return () => {
       window.removeEventListener("getEpisodeId_iOS", handleIosEvent as EventListener);
     };
-  }, []);
+  }, [episodes]);
 
   const refresh = () => {
+    console.log('refresh is=>', episodes);
+    return;
     setIsPlayerLoading(true);
     setWholePageError(false);
     fetchMovieDetail(movieDetail?.id);
