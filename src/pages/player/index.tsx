@@ -325,6 +325,7 @@ const DetailPage: React.FC = () => {
 
   useEffect(() => {
     const handleIosEvent = (event: CustomEvent) => {
+      console.log('event is=>', event);
       const nextSource = { code: event.detail.code };
       handleChangeSource(nextSource);
     };
@@ -340,9 +341,11 @@ const DetailPage: React.FC = () => {
 
   useEffect(() => {
     const handleIosEvent = (event: CustomEvent) => {
+      console.log('event is=>', event);
       if(event?.detail?.episode_id && episodes?.length > 0) {
         const index = episodes.findIndex((x: Episode)=> x.episode_id === event.detail.episode_id);
         const episode = index >= 0 ? episodes[index] : episodes[0];
+        console.log('episode is=>', episode);
         handleEpisodeSelect(episode);
       }
     };
@@ -355,7 +358,7 @@ const DetailPage: React.FC = () => {
       window.removeEventListener("getEpisodeId_iOS", handleIosEvent as EventListener);
     };
   }, []);
-  
+
   const refresh = () => {
     setIsPlayerLoading(true);
     setWholePageError(false);
