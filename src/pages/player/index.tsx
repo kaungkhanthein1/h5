@@ -323,6 +323,39 @@ const DetailPage: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    const handleIosEvent = (event: CustomEvent) => {
+      const nextSource = { code: event.detail.code };
+      handleChangeSource(nextSource);
+    };
+
+    // Listen for the `iosEvent`
+    window.addEventListener("getSourceCode_iOS", handleIosEvent as EventListener);
+
+    // Cleanup the event listener when the component unmounts
+    return () => {
+      window.removeEventListener("getSourceCode_iOS", handleIosEvent as EventListener);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleIosEvent = (event: CustomEvent) => {
+      if(event?.detail?.episode_id && episodes?.length > 0) {
+        const index = episodes.findIndex((x: Episode)=> x.episode_id === event.detail.episode_id);
+        const episode = index >= 0 ? episodes[index] : episodes[0];
+        handleEpisodeSelect(episode);
+      }
+    };
+
+    // Listen for the `iosEvent`
+    window.addEventListener("getEpisodeId_iOS", handleIosEvent as EventListener);
+
+    // Cleanup the event listener when the component unmounts
+    return () => {
+      window.removeEventListener("getEpisodeId_iOS", handleIosEvent as EventListener);
+    };
+  }, []);
+  
   const refresh = () => {
     setIsPlayerLoading(true);
     setWholePageError(false);
