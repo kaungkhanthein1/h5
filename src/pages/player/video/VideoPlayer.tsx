@@ -86,6 +86,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
                   (window as any).webkit.messageHandlers.jsBridge.postMessage({
                     eventName: "fullscreen",
                   });
+                  playerRef.current.pause();
                 } else {
                   playerRef.current.fullscreen = true;
                 }
