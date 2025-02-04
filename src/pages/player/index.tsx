@@ -342,7 +342,9 @@ const DetailPage: React.FC = () => {
   useEffect(() => {
     const handleIosEvent = (event: CustomEvent) => {
       console.log('event is=>', event);
+      console.log('episodes is=>', episodes);
       if(event?.detail?.episode_id && episodes?.length > 0) {
+        console.log('Inprogress');
         const index = episodes.findIndex((x: Episode)=> x.episode_id == event.detail.episode_id);
         const episode = index >= 0 ? episodes[index] : episodes[0];
         console.log('episode is=>', episode);
