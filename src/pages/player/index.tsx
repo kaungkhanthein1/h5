@@ -327,7 +327,7 @@ const DetailPage: React.FC = () => {
   useEffect(() => {
     const handleIosEvent = (event: CustomEvent) => {
       const index = event.detail?.index || 0;
-      setSelectedSource(index);
+      setSelectedSource(Number(index));
       const nextSource = { code: event.detail.code };
       handleChangeSource(nextSource);
     };
