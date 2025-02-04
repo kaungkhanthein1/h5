@@ -296,6 +296,8 @@ const DetailPage: React.FC = () => {
   };
   
   const handleChangeSource = async (nextSource: any) => {
+    console.log('nextSource is=>', nextSource);
+    console.log('id is=>', id);
     if (nextSource && nextSource.code && id) {
       setIsPlayerLoading(true);
       try {
@@ -344,15 +346,10 @@ const DetailPage: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    console.log('episodes is=>,', episodes);
     const handleIosEvent = (event: CustomEvent) => {
-      console.log('event is=>', event);
-      console.log('episodes is=>', episodes);
       if(event?.detail?.episode_id && episodes?.length > 0) {
-        console.log('Inprogress');
         const index = episodes.findIndex((x: Episode)=> x.episode_id == event.detail.episode_id);
         const episode = index >= 0 ? episodes[index] : episodes[0];
-        console.log('episode is=>', episode);
         handleEpisodeSelect(episode);
       }
     };
@@ -367,8 +364,6 @@ const DetailPage: React.FC = () => {
   }, [episodes]);
 
   const refresh = () => {
-    console.log('refresh is=>', episodes);
-    return;
     setIsPlayerLoading(true);
     setWholePageError(false);
     fetchMovieDetail(movieDetail?.id);
