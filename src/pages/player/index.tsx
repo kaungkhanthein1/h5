@@ -83,9 +83,6 @@ const DetailPage: React.FC = () => {
     }
   };
 
-  useEffect(()=>{
-    console.log('useEffect epsodes is=>', episodes);
-  },[episodes])
 
   useEffect(() => {
     if (id) {
@@ -296,8 +293,6 @@ const DetailPage: React.FC = () => {
   };
   
   const handleChangeSource = async (nextSource: any) => {
-    console.log('nextSource is=>', nextSource);
-    console.log('id is=>', id);
     if (nextSource && nextSource.code && id) {
       setIsPlayerLoading(true);
       try {
@@ -331,7 +326,8 @@ const DetailPage: React.FC = () => {
 
   useEffect(() => {
     const handleIosEvent = (event: CustomEvent) => {
-      console.log('event is=>', event);
+      const index = event.detail?.index || 0;
+      setSelectedSource(index);
       const nextSource = { code: event.detail.code };
       handleChangeSource(nextSource);
     };
