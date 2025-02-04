@@ -292,6 +292,25 @@ const DetailPage: React.FC = () => {
     }
   };
   
+  const sendEpisodeListEventToNative = (episodeList: any) => {
+    if (
+      (window as any).webkit &&
+      (window as any).webkit.messageHandlers &&
+      (window as any).webkit.messageHandlers.jsBridge
+    ) {
+      (window as any).webkit.messageHandlers.jsBridge.postMessage({
+        eventName: "episodeList",
+        value: episodeList,
+      });
+    }
+  };
+
+  useEffect(()=>{
+    if(episodes?.length > 0) {
+      sendEpisodeListEventToNative(episodes);
+    }
+  },[episodes])
+
   const handleChangeSource = async (nextSource: any) => {
     if (nextSource && nextSource.code && id) {
       setIsPlayerLoading(true);
