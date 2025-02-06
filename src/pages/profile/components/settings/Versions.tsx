@@ -7,7 +7,7 @@ const Versions = () => {
             <h1 className="versions-title">当前版本</h1>
           </div>
           <div>
-            <h1 className="versions-text">V 1.0.2</h1>
+            <h1 className="versions-text">V 2.0.2</h1>
           </div>
         </div>
         {/* <div className="p-first">
