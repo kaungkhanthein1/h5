@@ -2,6 +2,8 @@
 import { useEffect, useState } from 'react';
 import { getCachedImage, storeImage } from '../utils/imageCache';
 
+const failedUrls = new Set<string>(); // Track URLs that have failed to fetch
+
 const useCachedImage = (imageUrl: string) => {
   const [imgSrc, setImgSrc] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -19,6 +21,13 @@ const useCachedImage = (imageUrl: string) => {
           return;
         }
 
+        // Skip fetch if URL has previously failed
+        if (failedUrls.has(imageUrl)) {
+          if (isMounted) setImgSrc(imageUrl);
+          setIsLoading(false);
+          return;
+        }
+
         const response = await fetch(imageUrl, { signal: controller.signal });
         const blob = await response.blob();
         await storeImage(imageUrl, blob);
@@ -29,6 +38,7 @@ const useCachedImage = (imageUrl: string) => {
           setIsLoading(false);
         }
       } catch (error) {
+        failedUrls.add(imageUrl); // Mark URL as failed
         if (isMounted) setImgSrc(imageUrl); // Fallback to original URL
         setIsLoading(false);
       }
