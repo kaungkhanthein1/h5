@@ -186,11 +186,9 @@ export const getTokenPass = async ({ email, graphicKey }: any) => {
         `${process.env.REACT_APP_API_URL}/user/forget/get_token?username=${email}&captcha=${graphicKey}`
       )
     );
-    console.log(data);
     return decryptWithAes(data);
   } catch (error) {
     throw error;
-    console.log(error);
   }
 };
 
@@ -203,7 +201,7 @@ export const getCodeForgotPass = async ({ send_type, session_token }: any) => {
     );
     // console.log(data)
   } catch (error) {
-    throw error
+    throw error;
   }
 };
 
@@ -231,7 +229,7 @@ export const check_captchaRegister = async (
     }
     return newCap.data.key;
   } catch (error) {
-    console.log("cap err", error);
+    // console.log("cap err", error);
     return error;
   }
 };
@@ -454,4 +452,20 @@ export const handleSocialSignUpCredentials = async (
   } catch (error) {
     console.error("Error during social sign up:", error);
   }
+};
+
+export const getCurrentVersion = async ({ type, current }: any) => {
+  const url = convertToSecureUrl(
+    `${process.env.REACT_APP_API_URL}/app/check_update?type=${type}&current=${current}`
+  );
+
+  const url2 = `https://cc3e497d.qdhgtch.com:2345/api/v1/app/check_update?type=${type}&current=${current}`
+
+  const { data } = await axios.get(url2);
+  return data;
+
+  // if(data){
+  //   const response = await decryptWithAes(data)
+  //   return response
+  // }
 };

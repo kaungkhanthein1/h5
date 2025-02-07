@@ -3,12 +3,11 @@ import Header from "./components/notifications/Header";
 import Sidebar from "./components/notifications/Sidebar";
 import Content from "./components/notifications/Content";
 import "./profile.css";
-import { useGetNotificationQuery } from "./services/profileApi";
 // import { useGetAdsQuery } from "../search/services/searchApi";
 import Ads from "../search/components/Ads";
 import Loader from "../search/components/Loader";
 import NewAds from "../../components/NewAds";
-import { useGetAdsQuery } from "../../services/helperService";
+import { useGetAdsQuery, useGetNotificationQuery } from "../../services/helperService";
 
 const Notifications = () => {
   const { data, isLoading, isFetching } = useGetNotificationQuery(); // Fetch data from API

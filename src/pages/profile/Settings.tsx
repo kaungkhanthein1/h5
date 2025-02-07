@@ -1,6 +1,9 @@
 import "./profile.css";
 import { useNavigate } from "react-router-dom";
-import { useLogOutUserMutation } from "./services/profileApi";
+import {
+  useGetIosVersionQuery,
+  useLogOutUserMutation,
+} from "./services/profileApi";
 import Navbar from "./components/settings/Navbar";
 import SettingFirst from "./components/settings/SettinngFirst";
 import Versions from "./components/settings/Versions";
@@ -8,12 +11,36 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { clearUser } from "./components/slice/UserSlice";
 import { showToast } from "./error/ErrorSlice";
+import { getCurrentVersion } from "../../services/userService";
 
 const Settings = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [logOutUser] = useLogOutUserMutation();
+  const [vName, setVname] = useState();
+
+  const data = useGetIosVersionQuery({
+    type: "ios",
+    current: 1,
+  });
+
+  // console.log(data)
+
+  const getVV = async () => {
+    const { data } = await getCurrentVersion({
+      type: "ios",
+      current: 0,
+    });
+    if (data) {
+      const name = data?.data?.show_name;
+      setVname(name);
+    }
+  };
+
+  useEffect(() => {
+    getVV();
+  }, []);
 
   useEffect(() => {
     const isOkay = localStorage.getItem("authToken");
@@ -56,7 +83,7 @@ const Settings = () => {
           <SettingFirst />
         </div>
         <div className="bg-[#161619]">
-          <Versions />
+          <Versions vName={vName} />
         </div>
         {isLoggedIn && (
           <div className="setting-profile-div bg-[#161619] flex">

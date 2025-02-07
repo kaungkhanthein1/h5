@@ -1,4 +1,4 @@
-const Versions = () => {
+const Versions = ({ vName }: any) => {
   return (
     <div className="profile-div">
       <div className="profile-div-main w-full">
@@ -7,7 +7,8 @@ const Versions = () => {
             <h1 className="versions-title">当前版本</h1>
           </div>
           <div>
-            <h1 className="versions-text">V 2.0.2</h1>
+            <h1 className="versions-text">V 2.0.3</h1>
+
           </div>
         </div>
         {/* <div className="p-first">

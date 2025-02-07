@@ -15,7 +15,6 @@ const Reply: React.FC<ReplyProps> = ({
   rplist,
   setrpList,
 }) => {
-console.log(rplist)
   return (
     <div className=" flex flex-col gap-[20px] w-full pt-[10px]">
       {rplist.map((tt: any) => (

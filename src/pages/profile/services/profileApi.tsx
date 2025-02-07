@@ -221,6 +221,13 @@ export const profileApi = createApi({
         );
       },
     }),
+    getIosVersion: builder.query<any, { type: string; current: any }>({
+      query: ({ type, current }) => {
+        return convertToSecureUrl(
+          `/app/check_update?type=${type}&current=${current}`
+        );
+      },
+    }),
     socialCallback: builder.query<any, { type: string; code: string }>({
       query: ({ type, code }) => ({
         url: `/user/social_login_callback`,
@@ -269,4 +276,5 @@ export const {
   useChangeAvatarMutation,
   useLazySocialCallbackQuery,
   useCreateInviteMutation,
+  useGetIosVersionQuery
 } = profileApi;

@@ -233,7 +233,7 @@ const DetailPage: React.FC = () => {
       sendMovieDetailEventToNative(movieDetail);
       sendEventToNative(currentEpisode?.play_url)
     }
-  },[currentEpisode]);
+  },[currentEpisode, movieDetail]);
 
   const sendEventToNative = async (url: string) => {
     if (

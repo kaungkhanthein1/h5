@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "./components/contact/Navbar";
 import logo from "../../assets/ContactLogo.png";
 import { Link } from "react-router-dom";
 import { useGetTagsQuery } from "../search/services/searchApi";
 import Loader from "../search/components/Loader";
 import { useGetHeaderTopicsQuery } from "../../services/helperService";
+import { getCurrentVersion } from "../../services/userService";
 
 const Contact = () => {
   const [show, setshow] = useState(false);
+  const [vName, setVname] = useState<any>();
+
   const handleClick = () => {
     setshow((prev) => !prev);
   };
@@ -26,6 +29,20 @@ const Contact = () => {
 
   const about = data?.data?.about;
 
+  // const getVV = async () => {
+  //   const { data } = await getCurrentVersion({
+  //     type: "ios",
+  //     current: 0,
+  //   });
+  //   console.log(data)
+  //   if (data) {
+  //     const name = data?.data?.code;
+  //     const str = name.toString(); 
+  //     const formatted = `${str[0]}.${str[1]}.${str[2]}.${str[3]}`;
+  //     setVname(formatted);
+  //   }
+  // };
+
   return (
     <div>
       <div className="fixed-bg"></div>
@@ -35,7 +52,8 @@ const Contact = () => {
         <div className="flex justify-center -mt-[100px] text-center h-screen">
           <div className="flex flex-col justify-center items-center">
             <img src={logo} alt="" className="w-[90px]" />
-            <p className="contact-text mt-3">版本号 2.0.2</p>
+            <p className="contact-text mt-3">版本号 2.0.3</p>
+
           </div>
         </div>
 

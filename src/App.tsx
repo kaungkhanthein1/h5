@@ -26,6 +26,7 @@ import BannerAds from "./components/BannerAds";
 import {
   useGetAdsQuery,
   useGetHeaderTopicsQuery,
+  useGetNotificationQuery,
 } from "./services/helperService";
 import { setIsScrolling } from "./pages/home/slice/HomeSlice";
 import SocialComment from "./pages/social/components/Social_details";
@@ -75,9 +76,15 @@ const App: React.FC = () => {
     panding,
     isShowingDetails,
   } = useSelector((state: any) => state.model);
-  const { data, refetchAds } = useGetAdsQuery();
-  const { refetch } = useGetRecommendedMoviesQuery();
+  const { data, isLoading: adsLoading, refetchAds } = useGetAdsQuery();
+  const { isLoading: moviesLoading, refetch } = useGetRecommendedMoviesQuery();
+  const { data: headerData, isLoading: topicsLoading } = useGetHeaderTopicsQuery();
+  const { data: notiData, isLoading: notiLoading } = useGetNotificationQuery();
+  
   const [showNotice, setShowNotice] = useState(false);
+
+  // Combined loading state
+  // const isLoading = moviesLoading || topicsLoading || notiLoading;
 
   useEffect(() => {
     const hasSeenNotice = sessionStorage.getItem("hasSeenNotice");
@@ -219,6 +226,14 @@ const App: React.FC = () => {
     });
   };
 
+  if (!data?.data) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-[#161619]">
+        <Loader />
+      </div>
+    );
+  }
+
   return (
     <>
       {data?.data && (
@@ -232,7 +247,7 @@ const App: React.FC = () => {
             {/* <BannerAds /> */}
             {/* Conditionally render Header */}
             {!hideHeaderFooter && !hideHeader && <Header />}
-            {showNotice && <Announce setShowNotice={setShowNotice} />}
+            {showNotice && <Announce setShowNotice={setShowNotice} config={headerData} showNotice={showNotice}/>}
 
             <div className="flex-grow">
               <Suspense
