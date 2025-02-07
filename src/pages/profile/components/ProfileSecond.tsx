@@ -9,11 +9,11 @@ const ProfileSecond = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const handleLoginClick = () => {
-    if (!token) {
-      dispatch(setAuthModel(true)); // Open the login modal if not logged in
-    } else {
+    // if (!token) {
+    //   dispatch(setAuthModel(true)); // Open the login modal if not logged in
+    // } else {
       navigate("/share");
-    }
+    // }
   };
   return (
     <div className="profile-div">
