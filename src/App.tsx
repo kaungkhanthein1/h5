@@ -238,7 +238,7 @@ const App: React.FC = () => {
     <>
       {data?.data && (
         <>
-          {panding ? <Landing data={data} /> : <></>}
+          {panding ? <Landing data={data} /> : 
           <div
             className={`flex flex-col min-h-screen ${
               panding ? "invisible" : "visible"
@@ -316,7 +316,7 @@ const App: React.FC = () => {
             {/* {openLoginModel && <LoginEmail handleBack={handleBack} />} */}
             {openSignupModel && <SignUp handleBack={handleBack} />}
             {/* </div> */}
-          </div>
+          </div>}
         </>
       )}
     </>
