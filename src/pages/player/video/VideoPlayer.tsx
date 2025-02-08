@@ -297,7 +297,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
                   fill="white"
                 />
               </svg>
-              <p className="cus-elips">{selectedEpisode?.episode_name}</p>
+              <p className="cus-elips">{movieDetail?.name} {selectedEpisode?.episode_name}</p>
             </button>
           </div>
           <div className="absolute top-0 right-0 p-4 z-50">

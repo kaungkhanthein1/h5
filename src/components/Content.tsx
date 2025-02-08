@@ -4,13 +4,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { showToast } from "../pages/profile/error/ErrorSlice";
 import { setActiveNav } from "../pages/home/slice/HomeSlice";
 
-const Content = ({ notice }: any) => {
+const Content = ({ notice, handleAppClose }: any) => {
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
   const [pageType, setPageType] = useState(false);
 
   const type = notice?.extend?.page_type;
+  console.log(type);
   // console.log('type', type)
 
   useEffect(() => {
@@ -26,14 +27,13 @@ const Content = ({ notice }: any) => {
   }
 
   const JumpAction = (notice: any) => {
-    const external = notice?.extend?.page_type;
-    // console.log(external);
-    if (external === "external") {
-      window.open(notice.extend.page_path, "_blank");
-    } else if (notice?.extend.page_path === "rankings") {
+    if (notice?.extend.page_path === "rankings") {
       dispatch(setActiveNav(3));
+      setTimeout(() => {
+        navigate("/explorer");
+      }, 300);
 
-      navigate("/explorer");
+      handleAppClose();
     } else {
       dispatch(
         showToast({
@@ -45,6 +45,8 @@ const Content = ({ notice }: any) => {
     }
   };
 
+  console.log(notice);
+
   return (
     <div className="content p-3">
       <div className="text-card">
@@ -54,7 +56,7 @@ const Content = ({ notice }: any) => {
         <p className="mt-3 text-[#888] text-[10px] font-[500]">
           {notice.content}
         </p>
-        {pageType ? (
+        {/* {pageType ? (
           <>
             {notice.extend.parameters?.video_id && (
               <button
@@ -95,6 +97,26 @@ const Content = ({ notice }: any) => {
               {notice.extend.page_name}
             </button>
           )
+        )} */}
+        {pageType ? (
+          <button className="noti-btn mt-6" onClick={() => JumpAction(notice)}>
+            {notice.extend.page_name}
+          </button>
+        ) : (
+          <>
+            {notice?.extend.page_name ? (
+              <a
+                target="_blink"
+                href={notice?.extend?.page_path}
+                className="noti-btn mt-6"
+                // onClick={() => JumpAction(notice)}
+              >
+                {notice.extend.page_name ? notice.extend.page_name : ""}
+              </a>
+            ) : (
+              ""
+            )}
+          </>
         )}
       </div>
     </div>
