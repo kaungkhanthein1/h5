@@ -205,7 +205,7 @@ const ProfileFirst = () => {
                     }}
                   ></div>
                 </div>
-                <div className="his-text mt-1">{movie?.movie_name}</div>
+                <div className="his-text mt-1 cus-elips">{movie?.movie_name}</div>
               </Link>
             ))}
           </div>

@@ -79,7 +79,7 @@ const App: React.FC = () => {
   const { data, isLoading: adsLoading, refetchAds } = useGetAdsQuery();
   const { isLoading: moviesLoading, refetch } = useGetRecommendedMoviesQuery();
   const { data: headerData, isLoading: topicsLoading } = useGetHeaderTopicsQuery();
-  const { data: notiData, isLoading: notiLoading } = useGetNotificationQuery();
+  // const { data: notiData, isLoading: notiLoading } = useGetNotificationQuery();
   
   const [showNotice, setShowNotice] = useState(false);
 
@@ -247,7 +247,7 @@ const App: React.FC = () => {
             {/* <BannerAds /> */}
             {/* Conditionally render Header */}
             {!hideHeaderFooter && !hideHeader && <Header />}
-            {showNotice && <Announce setShowNotice={setShowNotice} config={headerData} showNotice={showNotice}/>}
+            {/* {showNotice && <Announce setShowNotice={setShowNotice} config={headerData} showNotice={showNotice}/>} */}
 
             <div className="flex-grow">
               <Suspense

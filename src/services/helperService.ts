@@ -22,8 +22,8 @@ export const useGetHeaderTopicsQuery = () => {
       if (cachedData && !forceRefresh) {
         setData(JSON.parse(cachedData));
         setIsLoading(false);
+        await new Promise(resolve => setTimeout(resolve, 5000)); // 5000ms = 5 seconds
       }
-
       // **Step 2: Fetch Fresh Data in the Background**
       const response = await getconfigData(settings);
       const newData = response.data ? response : await decryptWithAes(response);
@@ -69,8 +69,8 @@ export const useGetAdsQuery = () => {
       if (cachedData && !forceRefresh) {
         setConfigData(JSON.parse(cachedData));
         setIsLoading(false);
+        await new Promise(resolve => setTimeout(resolve, 5000)); // 5000ms = 5 seconds
       }
-
       // **Step 2: Fetch Fresh Data in the Background**
       const response = await getAdsData();
       const newData = response.data ? response : await decryptWithAes(response);
@@ -118,6 +118,7 @@ export const useGetNotificationQuery = () => {
       if (cachedData && !forceRefresh) {
         setData(JSON.parse(cachedData));
         setIsLoading(false);
+        await new Promise(resolve => setTimeout(resolve, 5000)); // 5000ms = 5 seconds
       }
 
       // **Step 2: Fetch Fresh Data in the Background**
