@@ -24,14 +24,12 @@ const Content = ({ notice }: any) => {
   }
 
   const JumpAction = (notice: any) => {
-    const external = notice?.extend?.page_type;
-    // console.log(external);
-    if (external === "external") {
-      window.open(notice.extend.page_path, "_blank");
-    } else if (notice?.extend.page_path === "rankings") {
+    if (notice?.extend.page_path === "rankings") {
       dispatch(setActiveNav(3));
+      setTimeout(() => {
+        navigate("/explorer");
+      }, 300);
 
-      navigate("/explorer");
     } else {
       dispatch(
         showToast({
@@ -48,7 +46,7 @@ const Content = ({ notice }: any) => {
       <div className="text-card">
         <h3>{notice.title}</h3>
         <p className="mt-3">{notice.content}</p>
-        {pageType ? (
+        {/* {pageType ? (
           <>
             {notice.extend.parameters?.video_id && (
               <button
@@ -89,6 +87,26 @@ const Content = ({ notice }: any) => {
               {notice.extend.page_name}
             </button>
           )
+        )} */}
+         {pageType ? (
+          <button className="noti-btn mt-6" onClick={() => JumpAction(notice)}>
+            {notice.extend.page_name}
+          </button>
+        ) : (
+          <>
+            {notice?.extend.page_name ? (
+              <a
+                target="_blink"
+                href={notice?.extend?.page_path}
+                className="noti-btn mt-6"
+                // onClick={() => JumpAction(notice)}
+              >
+                {notice.extend.page_name ? notice.extend.page_name : ""}
+              </a>
+            ) : (
+              ""
+            )}
+          </>
         )}
       </div>
     </div>

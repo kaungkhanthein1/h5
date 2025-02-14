@@ -52,7 +52,7 @@ const Contact = () => {
         <div className="flex justify-center -mt-[100px] text-center h-screen">
           <div className="flex flex-col justify-center items-center">
             <img src={logo} alt="" className="w-[90px]" />
-            <p className="contact-text mt-3">版本号 2.0.5</p>
+            <p className="contact-text mt-3">版本号 2.0.6</p>
 
           </div>
         </div>
