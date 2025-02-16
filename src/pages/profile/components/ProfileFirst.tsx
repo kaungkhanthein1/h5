@@ -122,7 +122,7 @@ const ProfileFirst = () => {
     }
   };
 
-  console.log(latestMovies);
+  // console.log(latestMovies);
 
   return (
     <div className="profile-div">

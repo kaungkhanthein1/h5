@@ -20,6 +20,7 @@ import RegisterApi from "../features/login/RegisterApi";
 import ShareApi from "../features/share/ShareApi";
 import AdsApi from "../features/share/AdsApi";
 import { socialApi } from "../pages/social/services/socialApi";
+import { pointApi } from "../pages/Point/service/PointApi";
 
 // Define persist config
 const persistConfig = {
@@ -49,6 +50,7 @@ const rootReducer = combineReducers({
   [RegisterApi.reducerPath]: RegisterApi.reducer,
   [ShareApi.reducerPath]: ShareApi.reducer,
   [AdsApi.reducerPath]: AdsApi.reducer,
+  [pointApi.reducerPath]: pointApi.reducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -68,7 +70,8 @@ const store = configureStore({
       .concat(RegisterApi.middleware)
       .concat(ShareApi.middleware)
       .concat(AdsApi.middleware)
-      .concat(socialApi.middleware),
+      .concat(socialApi.middleware)
+      .concat(pointApi.middleware),
 });
 
 export const persistor = persistStore(store);

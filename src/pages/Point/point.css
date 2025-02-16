@@ -1,0 +1,33 @@
+.top_box {
+  border-radius: 16px;
+  border: 1px solid var(--Stroke-Linear, rgba(205, 191, 166, 0.12));
+  background: linear-gradient(
+    112deg,
+    rgba(0, 0, 0, 0.12) 10.86%,
+    rgba(136, 128, 128, 0.04) 100%
+  );
+  backdrop-filter: blur(16px);
+}
+
+.integral_text {
+  background: var(
+    --Gold-Raidal,
+    radial-gradient(50% 50% at 50% 50%, #ffc279 0%, #ffe5a0 100%)
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.progress_box {
+  border-radius: 100px;
+  border: 1px solid rgba(205, 191, 166, 0.12);
+  background: var(
+    --Blackgradient,
+    linear-gradient(
+      251deg,
+      rgba(15, 15, 17, 0.12) 22.88%,
+      rgba(62, 62, 62, 0.32) 106.55%
+    )
+  );
+}

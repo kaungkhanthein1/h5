@@ -60,6 +60,7 @@ const Contact = React.lazy(() => import("./pages/profile/Contact"));
 const Invite = React.lazy(() => import("./pages/profile/Invite"));
 const Share = React.lazy(() => import("./pages/share"));
 const Member = React.lazy(() => import("./pages/share/member"));
+const Point = React.lazy(() => import("./pages/Point"));
 
 // ProtectedRoute component to handle route guarding
 // const ProtectedRoute: React.FC<{ children: JSX.Element }> = ({ children }) => {
@@ -78,9 +79,10 @@ const App: React.FC = () => {
   } = useSelector((state: any) => state.model);
   const { data, isLoading: adsLoading, refetchAds } = useGetAdsQuery();
   const { isLoading: moviesLoading, refetch } = useGetRecommendedMoviesQuery();
-  const { data: headerData, isLoading: topicsLoading } = useGetHeaderTopicsQuery();
+  const { data: headerData, isLoading: topicsLoading } =
+    useGetHeaderTopicsQuery();
   // const { data: notiData, isLoading: notiLoading } = useGetNotificationQuery();
-  
+
   const [showNotice, setShowNotice] = useState(false);
 
   // Combined loading state
@@ -141,7 +143,8 @@ const App: React.FC = () => {
     location.pathname.startsWith("/contact") ||
     location.pathname.startsWith("/share") ||
     location.pathname.startsWith("/invite") ||
-    location.pathname.startsWith("/share/member");
+    location.pathname.startsWith("/share/member") ||
+    location.pathname.startsWith("/point_info");
 
   const hideHeader = location.pathname.startsWith("/explorer");
   const { hideMode } = JSON.parse(
@@ -238,85 +241,89 @@ const App: React.FC = () => {
     <>
       {data?.data && (
         <>
-          {panding ? <Landing data={data} /> : 
-          <div
-            className={`flex flex-col min-h-screen ${
-              panding ? "invisible" : "visible"
-            }`}
-          >
-            {/* <BannerAds /> */}
-            {/* Conditionally render Header */}
-            {!hideHeaderFooter && !hideHeader && <Header />}
-            {/* {showNotice && <Announce setShowNotice={setShowNotice} config={headerData} showNotice={showNotice}/>} */}
+          {panding ? (
+            <Landing data={data} />
+          ) : (
+            <div
+              className={`flex flex-col min-h-screen ${
+                panding ? "invisible" : "visible"
+              }`}
+            >
+              {/* <BannerAds /> */}
+              {/* Conditionally render Header */}
+              {!hideHeaderFooter && !hideHeader && <Header />}
+              {/* {showNotice && <Announce setShowNotice={setShowNotice} config={headerData} showNotice={showNotice}/>} */}
 
-            <div className="flex-grow">
-              <Suspense
-                fallback={
-                  <div className="flex justify-center items-center h-screen bg-[#161619]">
-                    <Loader />
-                  </div>
-                }
-              >
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/home" element={<Home />} />
-                  <Route path="/search" element={<Main />} />
-                  <Route path="/search_overlay" element={<Search />} />
+              <div className="flex-grow">
+                <Suspense
+                  fallback={
+                    <div className="flex justify-center items-center h-screen bg-[#161619]">
+                      <Loader />
+                    </div>
+                  }
+                >
+                  <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/home" element={<Home />} />
+                    <Route path="/search" element={<Main />} />
+                    <Route path="/search_overlay" element={<Search />} />
 
-                  <Route path="/explorer" element={<Explorer />} />
-                  {/* Conditional rendering of the Social component */}
-                  {!hideMode && location.pathname === "/social" ? (
-                    <Route path="/social" element={<Social />} />
-                  ) : (
-                    <Route path="/social" element={<div />} />
-                  )}
-                  {/* <Route path="/social" element={<Social />} /> */}
-                  <Route path="/short" element={<Short />} />
-                  <Route path="/explorer/:id" element={<Detail />} />
-                  <Route path="/profile" element={<Profile />} />
-                  <Route path="/player/:id" element={<Player />} />
-                  <Route path="/history" element={<History />} />
-                  <Route path="/favorites" element={<Favorite />} />
-                  <Route path="/settings" element={<Settings />} />
-                  <Route path="/notifications" element={<Notifications />} />
-                  <Route path="/info" element={<Info />} />
-                  <Route path="/nickname" element={<Nickname />} />
-                  <Route path="/username" element={<Username />} />
-                  <Route path="/social_callback" element={<Callback />} />
-                  <Route path="/social_comment" element={<SocialComment />} />
-                  <Route path="/update_email" element={<Email />} />
-                  <Route path="/update_phone" element={<Phnumber />} />
-                  <Route path="/update_password" element={<Password />} />
-                  <Route path="/bind" element={<Bind />} />
-                  <Route path="/contact" element={<Contact />} />
-                  <Route path="/share" element={<Share />} />
-                  <Route path="/invite" element={<Invite />} />
-                  <Route path="/share/member" element={<Member />} />
-                </Routes>
-              </Suspense>
-              <ErrorToast />
+                    <Route path="/explorer" element={<Explorer />} />
+                    {/* Conditional rendering of the Social component */}
+                    {!hideMode && location.pathname === "/social" ? (
+                      <Route path="/social" element={<Social />} />
+                    ) : (
+                      <Route path="/social" element={<div />} />
+                    )}
+                    {/* <Route path="/social" element={<Social />} /> */}
+                    <Route path="/short" element={<Short />} />
+                    <Route path="/explorer/:id" element={<Detail />} />
+                    <Route path="/profile" element={<Profile />} />
+                    <Route path="/player/:id" element={<Player />} />
+                    <Route path="/history" element={<History />} />
+                    <Route path="/favorites" element={<Favorite />} />
+                    <Route path="/settings" element={<Settings />} />
+                    <Route path="/notifications" element={<Notifications />} />
+                    <Route path="/info" element={<Info />} />
+                    <Route path="/nickname" element={<Nickname />} />
+                    <Route path="/username" element={<Username />} />
+                    <Route path="/social_callback" element={<Callback />} />
+                    <Route path="/social_comment" element={<SocialComment />} />
+                    <Route path="/update_email" element={<Email />} />
+                    <Route path="/update_phone" element={<Phnumber />} />
+                    <Route path="/update_password" element={<Password />} />
+                    <Route path="/bind" element={<Bind />} />
+                    <Route path="/contact" element={<Contact />} />
+                    <Route path="/share" element={<Share />} />
+                    <Route path="/invite" element={<Invite />} />
+                    <Route path="/share/member" element={<Member />} />
+                    <Route path="/point_info" element={<Point />} />
+                  </Routes>
+                </Suspense>
+                <ErrorToast />
+              </div>
+
+              {/* Conditionally render FooterNav */}
+              {!hideHeaderFooter && <FooterNav />}
+              {location.pathname.startsWith("/profile") && <FooterNav />}
+              {location.pathname.startsWith("/social") && !isShowingDetails && (
+                <FooterNav />
+              )}
+              {location.pathname.startsWith("/short") && <FooterNav />}
+
+              {(openAuthModel || openLoginModel || openSignupModel) && (
+                <div
+                  className="fixed inset-0 bg-black/40 opacity-50 z-[99899] h-screen" // Overlay with 50% opacity
+                  onClick={closeAllModals} // Close all modals on click
+                ></div>
+              )}
+              {/* <div className=" fixed h-screen flex flex-col justify-center items-center"> */}
+              {openAuthModel && <LoginEmail handleBack={handleBack} />}
+              {/* {openLoginModel && <LoginEmail handleBack={handleBack} />} */}
+              {openSignupModel && <SignUp handleBack={handleBack} />}
+              {/* </div> */}
             </div>
-
-            {/* Conditionally render FooterNav */}
-            {!hideHeaderFooter && <FooterNav />}
-            {location.pathname.startsWith("/profile") && <FooterNav />}
-            {location.pathname.startsWith("/social") && !isShowingDetails && (
-              <FooterNav />
-            )}
-            {location.pathname.startsWith("/short") && <FooterNav />}
-
-            {(openAuthModel || openLoginModel || openSignupModel) && (
-              <div
-                className="fixed inset-0 bg-black/40 opacity-50 z-[99899] h-screen" // Overlay with 50% opacity
-                onClick={closeAllModals} // Close all modals on click
-              ></div>
-            )}
-            {/* <div className=" fixed h-screen flex flex-col justify-center items-center"> */}
-            {openAuthModel && <LoginEmail handleBack={handleBack} />}
-            {/* {openLoginModel && <LoginEmail handleBack={handleBack} />} */}
-            {openSignupModel && <SignUp handleBack={handleBack} />}
-            {/* </div> */}
-          </div>}
+          )}
         </>
       )}
     </>

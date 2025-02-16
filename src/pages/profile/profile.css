@@ -107,6 +107,16 @@
   backdrop-filter: blur(12px);
 }
 
+.profile-card_point {
+  display: flex;
+  flex-direction: column;
+  padding: 17px 16px;
+  align-items: center;
+  border-radius: 20px;
+  background: rgba(136, 136, 136, 0.08);
+  backdrop-filter: blur(12px);
+}
+
 .profile-header p {
   color: var(--White-100, #fff);
   text-align: center;
