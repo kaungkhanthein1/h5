@@ -247,7 +247,11 @@ const DetailPage: React.FC = () => {
           console.warn("Current episode URL is missing, attempting to parse...");
           const currentEpisode = episodes?.[currentEpisodeNumber];
           
-          if (currentEpisode) {
+          if (!currentEpisode.ready_to_play || !currentEpisode.play_url ) {
+            (window as any).webkit.messageHandlers.jsBridge.postMessage({
+              eventName: "needToParse",
+              value: process.env.REACT_APP_API_URL,
+            });
             const parsedData = await parsePlaybackUrl(
               currentEpisode.episode_id,
               currentEpisode.from_code,
