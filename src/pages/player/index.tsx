@@ -266,6 +266,14 @@ const DetailPage: React.FC = () => {
           console.error("Failed to obtain play URL for the current episode.");
           return;
         }
+
+        const currentEpisode = episodes?.[currentEpisodeNumber];
+        if(!currentEpisode.ready_to_play) {
+          (window as any).webkit.messageHandlers.jsBridge.postMessage({
+            eventName: "needToParse",
+            value: process.env.REACT_APP_API_URL,
+          })
+        }
   
         // Send the initial playUrl event
         (window as any).webkit.messageHandlers.jsBridge.postMessage({
