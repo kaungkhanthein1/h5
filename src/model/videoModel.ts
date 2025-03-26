@@ -4,6 +4,7 @@ export interface Episode {
     play_url: string;  // Ensure this field is present if required
     from_code: string;
     ready_to_play: boolean;
+    parseUrl?: string;  // Add parseUrl property for the parsed playback URL
   }
   
 

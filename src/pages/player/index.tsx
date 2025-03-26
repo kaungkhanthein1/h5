@@ -132,7 +132,7 @@ const DetailPage: React.FC = () => {
             const mvData = mvDetail?.play_from[sourceIndex]?.list[episodeIndex];
             if(!mvData.ready_to_play) {
               const parseData = await parsePlaybackUrl(mvData.episode_id, mvData.from_code, mvData.play_url, '1');
-              mvData.play_url = parseData?.data?.play_url;
+              mvData.parseUrl = parseData?.data?.play_url;
             }
             setCurrentEpisode(mvData);
             setCurrentEpisodeNumber(episodeIndex);
@@ -151,7 +151,7 @@ const DetailPage: React.FC = () => {
           if(!mvData.ready_to_play) {
             try {
               const parseData = await parsePlaybackUrl(mvData.episode_id, mvData.from_code, mvData.play_url, '1');
-              mvData.play_url = await parseData?.data?.play_url;
+              mvData.parseUrl = await parseData?.data?.play_url;
               setCurrentEpisode(mvData);
               setResumeTime(0);
             } catch(err) {
@@ -241,79 +241,65 @@ const DetailPage: React.FC = () => {
       (window as any).webkit.messageHandlers &&
       (window as any).webkit.messageHandlers.jsBridge
     ) {
-      try {
-        // Ensure current episode URL is parsed if necessary
-        if (!url) {
-          console.warn("Current episode URL is missing, attempting to parse...");
-          const currentEpisode = episodes?.[currentEpisodeNumber];
+      // Parse a fresh URL specifically for the native player
+      if (currentEpisode && !currentEpisode.ready_to_play) {
+        try {
+          // Get a freshly parsed URL for the native player
+          const parseData = await parsePlaybackUrl(
+            currentEpisode.episode_id?.toString() || "",
+            currentEpisode.from_code,
+            currentEpisode.play_url,
+            "1"
+          );
           
-          if (!currentEpisode.ready_to_play || !currentEpisode.play_url ) {
-            (window as any).webkit.messageHandlers.jsBridge.postMessage({
-              eventName: "needToParse",
-              value: process.env.REACT_APP_API_URL,
-            });
-            const parsedData = await parsePlaybackUrl(
-              currentEpisode.episode_id,
-              currentEpisode.from_code,
-              currentEpisode.play_url,
-              '1'
-            );
-            url = parsedData?.data?.play_url;
-          }
-        }
-  
-        if (!url) {
-          console.error("Failed to obtain play URL for the current episode.");
-          return;
-        }
-
-        const currentEpisode = episodes?.[currentEpisodeNumber];
-        if(!currentEpisode.ready_to_play) {
+          // Send the freshly parsed URL to native
           (window as any).webkit.messageHandlers.jsBridge.postMessage({
-            eventName: "needToParse",
-            value: process.env.REACT_APP_API_URL,
-          })
+            eventName: "playUrl",
+            value: parseData?.data?.play_url || url,
+          });
+        } catch (error) {
+          console.error("Error parsing playback URL for native player:", error);
+          // Fallback to sending the original URL if parsing fails
+          (window as any).webkit.messageHandlers.jsBridge.postMessage({
+            eventName: "playUrl",
+            value: url,
+          });
         }
-  
-        // Send the initial playUrl event
+      } else {
+        // If ready_to_play or no parsing needed, just send the url as is
         (window as any).webkit.messageHandlers.jsBridge.postMessage({
           eventName: "playUrl",
           value: url,
         });
+      }
   
-        // Check if the next episode exists and is ready to play
-        const nextEpisode = episodes?.[currentEpisodeNumber + 1];
-  
-        if (nextEpisode) {
-          if (!nextEpisode.ready_to_play || !nextEpisode.play_url) {
-            try {
-              console.warn("Next episode URL is missing or not ready, parsing...");
-              const parseData = await parsePlaybackUrl(
-                nextEpisode.episode_id,
-                nextEpisode.from_code,
-                nextEpisode.play_url,
-                '1'
-              );
-  
-              // Update the play_url with the parsed value
-              nextEpisode.play_url = parseData?.data?.play_url;
-            } catch (error) {
-              console.error("Error parsing playback URL for next episode:", error);
-            }
-          }
-  
-          if (nextEpisode.play_url) {
-            // Send the next episode details to the native bridge
-            (window as any).webkit.messageHandlers.jsBridge.postMessage({
-              eventName: "playUrlForNextEpisode",
-              value: nextEpisode.play_url,
-            });
-          } else {
-            console.error("Next episode URL parsing failed, not sending.");
-          }
+      // Check if the next episode exists and is ready to play
+      const nextEpisode = episodes?.[currentEpisodeNumber + 1];
+      
+      if (nextEpisode && !nextEpisode.ready_to_play) {
+        try {
+          // Always parse a fresh URL for the next episode for native player
+          const parseData = await parsePlaybackUrl(
+            nextEpisode.episode_id?.toString() || "",
+            nextEpisode.from_code,
+            nextEpisode.play_url,
+            "1"
+          );
+          
+          // Send the freshly parsed next episode URL to native
+          (window as any).webkit.messageHandlers.jsBridge.postMessage({
+            eventName: "playUrlForNextEpisode",
+            value: parseData?.data?.play_url,
+          });
+        } catch (error) {
+          console.error("Error parsing playback URL for next episode:", error);
         }
-      } catch (error) {
-        console.error("Error in sendEventToNative:", error);
+      } else if (nextEpisode) {
+        // If the next episode is ready to play, send its URL directly
+        (window as any).webkit.messageHandlers.jsBridge.postMessage({
+          eventName: "playUrlForNextEpisode",
+          value: nextEpisode.play_url,
+        });
       }
     } else {
       console.warn("JS Bridge is not available in the current environment.");
@@ -362,7 +348,7 @@ const DetailPage: React.FC = () => {
         if (!mvData?.ready_to_play) {
           const data = mvData;
           const response = await parsePlaybackUrl(data.episode_id, data.from_code, data.play_url, '1');
-          mvData.play_url = response?.data?.play_url;
+          mvData.parseUrl = response?.data?.play_url;
         }
         if(currentEpisodeNumber > -1) {
           if(res.data?.length > currentEpisodeNumber) {
@@ -436,7 +422,7 @@ const DetailPage: React.FC = () => {
     <div className="bg-background min-h-screen">
       {!movieDetail ? (
         <>
-          <PlayerLoading onBack={navigateBackFunction}/>
+          <PlayerLoading onBack={navigateBackFunction} />
           <div className="flex justify-center items-center pt-52 bg-background">
             <Loader />
           </div>
@@ -445,22 +431,30 @@ const DetailPage: React.FC = () => {
         <>
           <div className="sticky top-0 z-50">
             <div id="upper-div">
-              {(currentEpisode && !wholePageError) ? (
-                !isPlayerLoading ?
-              <VideoPlayer
-                key={currentEpisode?.episode_id}
-                videoUrl={!isPlayerLoading ? currentEpisode?.play_url || '' : ''}
-                onBack={navigateBackFunction}
-                movieDetail={movieDetail}
-                selectedEpisode={currentEpisode}
-                resumeTime={resumeTime}
-                handleVideoError={handleVideoError}
-                autoPlayNextEpisode={autoPlayNextEpisode}
-              /> 
-              : <PlayerLoading onBack={navigateBackFunction}/>
-            ) : (
-              <NetworkError switchNow={switchNow} refresh={refresh} onBack={navigateBackFunction}/>
-            )}
+              {currentEpisode && !wholePageError ? (
+                !isPlayerLoading ? (
+                  <VideoPlayer
+                    key={currentEpisode?.episode_id}
+                    videoUrl={
+                      !isPlayerLoading ? currentEpisode?.parseUrl || currentEpisode?.play_url || "" : ""
+                    }
+                    onBack={navigateBackFunction}
+                    movieDetail={movieDetail}
+                    selectedEpisode={currentEpisode}
+                    resumeTime={resumeTime}
+                    handleVideoError={handleVideoError}
+                    autoPlayNextEpisode={autoPlayNextEpisode}
+                  />
+                ) : (
+                  <PlayerLoading onBack={navigateBackFunction} />
+                )
+              ) : (
+                <NetworkError
+                  switchNow={switchNow}
+                  refresh={refresh}
+                  onBack={navigateBackFunction}
+                />
+              )}
             </div>
             <div
               className="relative flex px-2 justify-between items-center bg-background"

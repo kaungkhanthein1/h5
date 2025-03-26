@@ -241,20 +241,77 @@ const Navbar = () => {
   } = useGetAudioPostsQuery(queryOptions, { skip: activeTab !== 3 });
 
   const fetchMoreData = () => {
-    if (!postsFetching && !recommandFetching && !followFetching && !audioFetching && hasMore) {
+    if (
+      !postsFetching &&
+      !recommandFetching &&
+      !followFetching &&
+      !audioFetching &&
+      hasMore
+    ) {
       setPage((prevPage) => prevPage + 1);
     }
   };
 
   useEffect(() => {
+    // if (isRefreshing) return; // Skip updates while refreshing
+
     const currentData =
-      activeTab === 2 ? postsData : activeTab === 1 ? recommandData : activeTab === 0 ? followData : audioData;
+      activeTab === 2
+        ? postsData
+        : activeTab === 1
+        ? recommandData
+        : activeTab === 0
+        ? followData
+        : audioData;
 
     if (currentData?.data?.list) {
-      setDataList((prev) => (page === 1 ? currentData.data.list : [...prev, ...currentData.data.list]));
-      setHasMore(currentData.data.page * currentData.data.pageSize < currentData.data.total);
+      const newList = currentData.data.list;
+
+      // For page 1: Check if first item's post_id matches existing first item
+      // For page > 1: Check if any new items don't exist in current dataList
+      const shouldUpdate =
+        page === 1
+          ? dataList.length === 0 ||
+            newList[0]?.post_id !== dataList[0]?.post_id
+          : newList.some(
+              (newItem: any) =>
+                !dataList.some(
+                  (existingItem) => existingItem.post_id === newItem.post_id
+                )
+            );
+
+      if (shouldUpdate) {
+        setDataList((prev) => (page === 1 ? newList : [...prev, ...newList]));
+        setHasMore(
+          currentData.data.page * currentData.data.pageSize <
+            currentData.data.total
+        );
+      } else {
+        console.log("Skipping update - data hasn't changed");
+      }
     }
   }, [postsData, recommandData, followData, audioData, activeTab]);
+  // useEffect(() => {
+  //   const currentData =
+  //     activeTab === 2
+  //       ? postsData
+  //       : activeTab === 1
+  //       ? recommandData
+  //       : activeTab === 0
+  //       ? followData
+  //       : audioData;
+
+  //   if (currentData?.data?.list) {
+  //     console.log("ccc");
+  //     setDataList((prev) =>
+  //       page === 1 ? currentData.data.list : [...prev, ...currentData.data.list]
+  //     );
+  //     setHasMore(
+  //       currentData.data.page * currentData.data.pageSize <
+  //         currentData.data.total
+  //     );
+  //   }
+  // }, [postsData, recommandData, followData, audioData, activeTab]);
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
@@ -267,6 +324,7 @@ const Navbar = () => {
     else await audioRefetch();
 
     await new Promise((resolve) => setTimeout(resolve, 500)); // Add pause before closing refresh
+
     setIsRefreshing(false);
   };
 
@@ -290,7 +348,9 @@ const Navbar = () => {
                 <button
                   key={index}
                   className={`inline-flex whitespace-nowrap social_nav relative hover:text-white ${
-                    activeTab === index ? "text-white text-[24px]" : "text-[#FFFFFFB3] text-[18px]"
+                    activeTab === index
+                      ? "text-white text-[24px]"
+                      : "text-[#FFFFFFB3] text-[18px]"
                   }`}
                   onClick={() => handleTabClick(index)}
                   style={{ paddingBottom: "4px" }}
@@ -314,26 +374,28 @@ const Navbar = () => {
           <Loader />
         </div>
       ) : ( */}
-        <PullToRefresh
-          // pullingContent={null}
-          pullingContent={<div></div>}
-          refreshingContent={
-            <div className="flex justify-center py-2 mt-2 text-center">
-              <Loader />
-            </div>
+      <PullToRefresh
+        // pullingContent={null}
+        pullingContent={<div></div>}
+        refreshingContent={
+          <div className="flex justify-center py-2 mt-2 text-center">
+            <Loader />
+          </div>
+        }
+        onRefresh={handleRefresh}
+        isPullable={!showDetail}
+      >
+        <PostList
+          setShowDetail={setShowDetail}
+          showDetail={showDetail}
+          data={dataList}
+          loading={
+            postsLoading || recommandLoading || followLoading || audioLoading
           }
-          onRefresh={handleRefresh}
-          isPullable={!showDetail}
-        >
-          <PostList
-            setShowDetail={setShowDetail}
-            showDetail={showDetail}
-            data={dataList}
-            loading={postsLoading || recommandLoading || followLoading || audioLoading}
-            hasMore={hasMore}
-            fetchMoreData={fetchMoreData}
-          />
-        </PullToRefresh>
+          hasMore={hasMore}
+          fetchMoreData={fetchMoreData}
+        />
+      </PullToRefresh>
       {/* )} */}
     </div>
   );

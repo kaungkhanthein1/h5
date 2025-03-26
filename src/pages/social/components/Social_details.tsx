@@ -273,7 +273,7 @@ const Social_details: React.FC<any> = ({
               isCenterPlay={false}
               src={post?.files[0].resourceURL}
               thumbnail={post?.files[0].thumbnail}
-              status={undefined}
+              status={false}
             />
           )}
           {post.file_type === "audio" && (
