@@ -92,6 +92,15 @@ export const pointApi = createApi({
         url: convertToSecureUrl("/user/invite_details?act=list"),
       }),
     }),
+    getInviteNotice: builder.query({
+      query: () => ({
+        url: convertToSecureUrl("/activities/invite/notices"),
+        method: "GET",
+        // params: convertToSecurePayload({
+        //   qr_create: qr_create,
+        // }),
+      }),
+    }),
   }),
 });
 
@@ -102,4 +111,5 @@ export const {
   useGetInvitaionMemberQuery,
   useGetActivityListQuery,
   useGetInvitaionMemberListQuery,
+  useGetInviteNoticeQuery
 } = pointApi;
