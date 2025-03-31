@@ -34,11 +34,17 @@ import Social from "./pages/social";
 import Short from "./pages/short";
 import { useGetRecommendedMoviesQuery } from "./pages/home/services/homeApi";
 import Announce from "./components/Announce";
+// import { Game } from "./pages/Point/pages/Game";
 // import Menber from "./pages/share/member";
 // import Share from "./pages/share";
 
 // Lazy load the pages
 const Home = React.lazy(() => import("./pages/home"));
+const Game = React.lazy(() => import("./pages/Point/pages/Game"));
+const Mall = React.lazy(() => import("./pages/Point/pages/Mall"));
+const List = React.lazy(() => import("./pages/Point/pages/List"));
+const Shop = React.lazy(() => import("./pages/Point/pages/Shop"));
+const ItemDetail = React.lazy(() => import("./pages/Point/pages/ItemDetail"));
 const Search = React.lazy(() => import("./pages/search"));
 const Main = React.lazy(() => import("./pages/search/Main"));
 const Explorer = React.lazy(() => import("./pages/explorer"));
@@ -61,6 +67,7 @@ const Invite = React.lazy(() => import("./pages/profile/Invite"));
 const Share = React.lazy(() => import("./pages/share"));
 const Member = React.lazy(() => import("./pages/share/member"));
 const Point = React.lazy(() => import("./pages/Point"));
+const ItemInfo = React.lazy(() => import("./pages/Point/pages/ItemInfo"));
 
 // ProtectedRoute component to handle route guarding
 // const ProtectedRoute: React.FC<{ children: JSX.Element }> = ({ children }) => {
@@ -144,7 +151,12 @@ const App: React.FC = () => {
     location.pathname.startsWith("/share") ||
     location.pathname.startsWith("/invite") ||
     location.pathname.startsWith("/share/member") ||
-    location.pathname.startsWith("/point_info");
+    location.pathname.startsWith("/point_info") ||
+    location.pathname.startsWith("/game") ||
+    location.pathname.startsWith("/point_mall") ||
+    location.pathname.startsWith("/list") ||
+    location.pathname.startsWith("/itemDetail") ||
+    location.pathname.startsWith("/shop");
 
   const hideHeader = location.pathname.startsWith("/explorer");
   const { hideMode } = JSON.parse(
@@ -252,7 +264,13 @@ const App: React.FC = () => {
               {/* <BannerAds /> */}
               {/* Conditionally render Header */}
               {!hideHeaderFooter && !hideHeader && <Header />}
-              {showNotice && <Announce setShowNotice={setShowNotice} config={headerData} showNotice={showNotice}/>}
+              {showNotice && (
+                <Announce
+                  setShowNotice={setShowNotice}
+                  config={headerData}
+                  showNotice={showNotice}
+                />
+              )}
 
               <div className="flex-grow">
                 <Suspense
@@ -265,7 +283,13 @@ const App: React.FC = () => {
                   <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/home" element={<Home />} />
-                    <Route path="/search" element={<Main />} />
+                    <Route path="/game" element={<Game />} />
+                    <Route path="/point_mall" element={<Mall />} />
+                    <Route path="/list" element={<List />} />
+                    <Route path="/list" element={<List />} />
+                    <Route path="/itemDetail/:id" element={<ItemDetail />} />
+                    <Route path="/info/:id" element={<ItemInfo />} />
+                    <Route path="/shop/:id" element={<Shop />} />
                     <Route path="/search_overlay" element={<Search />} />
 
                     <Route path="/explorer" element={<Explorer />} />

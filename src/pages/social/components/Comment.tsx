@@ -14,7 +14,13 @@ import { showToast } from "../../../pages/profile/error/ErrorSlice";
 import { setAuthModel } from "../../../features/login/ModelSlice";
 import Reply from "./Reply";
 
-const Comment: React.FC<any> = ({ list, isFetching, post_id, setList }) => {
+const Comment: React.FC<any> = ({
+  list,
+  isFetching,
+  post_id,
+  setList,
+  isLoading,
+}) => {
   const [panding, setpanding] = useState(false);
   const [likeCmt, { isLoading: isLikeloading }] = useLikeCommentMutation();
   const [postCmt, { isLoading: cmtLoading }] = usePostCommentMutation();

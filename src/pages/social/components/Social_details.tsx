@@ -29,13 +29,19 @@ const Social_details: React.FC<any> = ({
   const [hasMore, setHasMore] = useState(true);
   const [list, setList] = useState<any[]>([]);
   const { isShowingDetails } = useSelector((state: any) => state.model);
-  console.log(isShowingDetails);
+  // console.log(isShowingDetails);
   const dispatch = useDispatch();
 
-  const { data, isFetching, refetch } = useGetCommentListQuery({
+  const { data, isFetching, refetch, isLoading } = useGetCommentListQuery({
     post_id: post.post_id,
     page,
   });
+
+  useEffect(() => {
+    if (isShowingDetails) {
+      refetch();
+    }
+  }, [isShowingDetails, refetch]);
 
   useEffect(() => {
     dispatch(setShowingDetail(true));
@@ -75,7 +81,10 @@ const Social_details: React.FC<any> = ({
   const handleBackSocial = () => {
     setShowDetail(false);
     dispatch(setShowingDetail(false));
+    setList([]);
   };
+
+  console.log(" this is mf =>",isLoading)
   return (
     <div
       className="inset-0 px-[10px] fixed w-screen top-0 h-screen bg-background overflow-y-scroll z-[99999]"
@@ -376,35 +385,44 @@ const Social_details: React.FC<any> = ({
             </button>
           </div>
         </div>
-        <div className=" h-[4px] bg-black w-full"></div>
-        {/* comment */}
-        <Comment
-          setList={setList}
-          post_id={post.post_id}
-          list={list}
-          isFetching={hasMore}
-        />
+        {isFetching || isLoading ? (
+          <div className="flex bg-background justify-center items-center w-full py-[100px]">
+            <Loader />
+          </div>
+        ) : (
+          <>
+            <div className=" h-[4px] bg-black w-full"></div>
+            {/* comment */}
+            <Comment
+              setList={setList}
+              post_id={post.post_id}
+              list={list}
+              isFetching={hasMore}
+              isLoading={isLoading}
+            />
 
-        <InfiniteScroll
-          // className=" h-[100px]"
-          dataLength={list.length}
-          next={fetchMoreDataCmt}
-          hasMore={hasMore}
-          loader={
-            <div className="flex bg-background justify-center items-center w-full pb-32">
-              <Loader />
-            </div>
-          }
-          endMessage={
-            <div className="flex bg-background justify-center items-center w-full pb-32">
-              <p style={{ textAlign: "center" }}>
-                <b className=" hidden text-white/60">没有更多评论</b>
-              </p>
-            </div>
-          }
-        >
-          <></>
-        </InfiniteScroll>
+            <InfiniteScroll
+              // className=" h-[100px]"
+              dataLength={list.length}
+              next={fetchMoreDataCmt}
+              hasMore={hasMore}
+              loader={
+                <div className="flex bg-background justify-center items-center w-full pb-32">
+                  <Loader />
+                </div>
+              }
+              endMessage={
+                <div className="flex bg-background justify-center items-center w-full pb-32">
+                  <p style={{ textAlign: "center" }}>
+                    <b className=" hidden text-white/60">没有更多评论</b>
+                  </p>
+                </div>
+              }
+            >
+              <></>
+            </InfiniteScroll>
+          </>
+        )}
       </div>
     </div>
   );
