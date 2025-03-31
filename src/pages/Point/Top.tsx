@@ -6,9 +6,11 @@ interface TopProps {
   inretralDetails: any;
   activeTab: number;
   invite: any;
+  point : any
 }
 
-const Top: React.FC<TopProps> = ({ inretralDetails, activeTab, invite }) => {
+const Top: React.FC<TopProps> = ({ inretralDetails, activeTab, invite , point }) => {
+  // console.log(point)
   // console.log(inretralDetails);
   return (
     <div className=" top_box m-[20px]">
@@ -120,7 +122,8 @@ const Top: React.FC<TopProps> = ({ inretralDetails, activeTab, invite }) => {
                 </defs>
               </svg>
               <span className="integral_text text-[20px] font-[600]">
-                {inretralDetails?.total}
+                {/* {inretralDetails?.total}  */}
+                {point?.data?.integral}
               </span>
             </div>
             <div className="progress_box py-[6px] px-[12px] flex justify-center items-center gap-[10px]">

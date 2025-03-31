@@ -50,7 +50,7 @@ const Share: React.FC<ShareProps> = ({}) => {
   }, []);
 
   useEffect(() => {
-    setList(notice.data);
+    setList(notice?.data);
   }, [notice]);
 
   const [copySuccess, setCopySuccess] = useState(false);
@@ -180,7 +180,7 @@ const Share: React.FC<ShareProps> = ({}) => {
               <div className="py-6 px-10 flex flex-col justify-center items-center gap-[16px] scan">
                 <img
                   className=" w-[180px] h-[180px] rounded-[10px]"
-                  src={invite?.data.qrcode.data}
+                  src={invite?.data?.qrcode.data}
                   alt="QR Code"
                 />
                 {/* data */}
