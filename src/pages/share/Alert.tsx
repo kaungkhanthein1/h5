@@ -22,7 +22,7 @@ const Alert: React.FC<AlertProps> = ({ img, list }) => {
           modules={[Autoplay]}
           className="h-[20px]" // Adjust height based on your text size
         >
-          {list.map((item: string, index: number) => (
+          {list?.map((item: string, index: number) => (
             <SwiperSlide key={index}>
               <h1 className="text-white/80 text-[12px] font-[400]">{item}</h1>
             </SwiperSlide>

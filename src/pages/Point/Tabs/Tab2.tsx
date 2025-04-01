@@ -18,6 +18,8 @@ const Tab2: React.FC<Tab2Props> = ({ taskList }) => {
       if (tt.logo === "lottery") navigate("/game");
     }
   };
+
+  // console.log(taskList);
   return (
     <div className=" flex flex-col gap-[18px]">
       {taskList?.map((tt: any) => (
@@ -38,7 +40,7 @@ const Tab2: React.FC<Tab2Props> = ({ taskList }) => {
                 <img className=" w-[18px] h-[18px]" src={coin} alt="" />
               </span>
             )}
-            <button
+            {/* <button
               onClick={() => junpAttempt(tt)}
               className={` text-white ${
                 !tt.is_success || tt.reward === 0
@@ -47,7 +49,26 @@ const Tab2: React.FC<Tab2Props> = ({ taskList }) => {
               }  text-[14px] font-[500] rounded-[100px] w-[90px] px-[12px] py-[6px]`}
             >
               {tt.is_success ? "立即前往" : "去完成"}
-            </button>
+            </button> */}
+            {tt.reward === 0 ? (
+              <button
+                onClick={() => junpAttempt(tt)}
+                className={` text-white bg-white/20 text-[14px] font-[500] rounded-[100px] w-[90px] px-[12px] py-[6px]`}
+              >
+                {tt.is_success ? "立即前往" : "去完成"}
+              </button>
+            ) : (
+              <button
+                onClick={() => junpAttempt(tt)}
+                className={` text-white ${
+                  !tt.is_success || tt.reward === 0
+                    ? "bg-[#FF6A33]"
+                    : " bg-white/20"
+                }  text-[14px] font-[500] rounded-[100px] w-[90px] px-[12px] py-[6px]`}
+              >
+                {tt.is_success ? "已完成" : "去完成"}
+              </button>
+            )}
           </div>
         </div>
       ))}

@@ -212,7 +212,7 @@ const Share: React.FC<ShareProps> = ({}) => {
         </div>
       </div>
       {/* alert */}
-     <Alert list={list} img={fire} />
+      <Alert list={list} img={fire} />
       {/* invited user */}
       <div className="flex invite_user mx-[20px] justify-around items-center mt-[20px] p-4">
         <Link
