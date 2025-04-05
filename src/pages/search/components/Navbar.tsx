@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
   useLazyGetAutocompleteQuery, // Lazy query for autocomplete suggestions
 } from "../services/searchApi"; // Adjust the import based on your API setup
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Filter from "./Filter";
 
 interface NavbarProps {
@@ -43,6 +43,8 @@ const Navbar: React.FC<NavbarProps> = ({
   const [triggerAutocomplete, { data: autocompleteData }] =
     useLazyGetAutocompleteQuery(); // Lazy query for autocomplete
 
+  const navigate = useNavigate();
+
   // Fetch autocomplete suggestions when the query changes
   useEffect(() => {
     if (query.trim()) {
@@ -65,9 +67,13 @@ const Navbar: React.FC<NavbarProps> = ({
   // Handle form submit (trigger search)
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    if (query.trim()) {
-      setSuggestions([]); // Clear suggestions after search
-      onSearch(); // Trigger the search
+    if (query.length > 0) {
+      if (query.trim()) {
+        setSuggestions([]); // Clear suggestions after search
+        onSearch(); // Trigger the search
+      }
+    } else {
+      navigate("/search_overlay");
     }
   };
 
@@ -137,9 +143,9 @@ const Navbar: React.FC<NavbarProps> = ({
             </div>
           </form>
           <div className="w-[40px]">
-            <Link to={"/search_overlay"} className="search-btn">
+            <a onClick={handleSearch} className="search-btn">
               取消
-            </Link>
+            </a>
           </div>
         </div>
 

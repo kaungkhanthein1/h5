@@ -2,14 +2,13 @@ import { useEffect } from "react";
 import { setAuthModel } from "../../../features/login/ModelSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetUserQuery } from "../services/profileApi"; // Import your query
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { setUser } from "./slice/UserSlice";
 import ImageWithPlaceholder from "./info/ImageWithPlaceholder";
 import { showToast } from "../error/ErrorSlice";
 
 const Header = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate()
 
   // Check for token in localStorage
   const isLoggedIn = localStorage.getItem("authToken");
@@ -27,8 +26,7 @@ const Header = () => {
   };
 
   const goToPointMall = () => {
-    // dispatch(showToast({ message: "该功能正在开发中", type: "success" }));
-    navigate("/point_info")
+    dispatch(showToast({ message: "该功能正在开发中", type: "success" }));
   }
   const user = userData?.data;
   // console.log(user);

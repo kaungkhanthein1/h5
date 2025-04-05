@@ -12,7 +12,14 @@ const Banner = ({ list }: { list: any }) => {
   const handleBannerClick = (clickLink: string) => {
     // console.log("clickLink is=>", clickLink);
     if (clickLink && clickLink.startsWith("http")) {
-      window.open(clickLink, "_blank");
+      // Create and click an anchor element for external links
+      const a = document.createElement('a');
+      a.href = clickLink;
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
     } else {
       navigate(`/player/${clickLink}`);
       // Handle cases where clickLink is not a full URL or handle internal links

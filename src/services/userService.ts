@@ -277,7 +277,7 @@ export const getOtp = async (
     // console.log(otpResponse);
   } catch (error: any) {
     // console.error("Error requesting OTP:", error);
-    return error.response;
+    throw error;
   }
 };
 
