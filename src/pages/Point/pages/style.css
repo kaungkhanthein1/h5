@@ -1,0 +1,35 @@
+.jf-card {
+  /* @apply w-full flex rounded-xl h-[84px] pl-[26px] pr-[19px] items-center justify-between; */
+  background: linear-gradient(180deg, #ffe0df 0%, #ffffff 50%);
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.12),
+    inset 0px 2px 2px rgba(255, 255, 255, 0.5);
+}
+
+.jf-btn {
+  /* @apply border border-orange-secondary px-4 py-1.5 rounded-full font-medium text-xs; */
+}
+
+.jf-foot {
+  /* @apply bg-white fixed w-full z-10 bottom-0 left-0 min-h-min px-4 py-2; */
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.25);
+}
+.jf-red {
+  /* @apply w-full p-3 flex gap-3 text-white justify-between; */
+  padding: 28px 18px;
+  padding-right: 32px;
+  background: linear-gradient(90deg, #fc3e3a 0%, #fe6555 100%);
+}
+.jf-infinitescroll {
+  /* @apply container px-4 mt-[45px] gap-3 pb-3 overflow-y-auto; */
+  height: calc(100vh - 300px);
+  /* height: 400px; */
+}
+
+.jf-infinitescroll-panel {
+  /* @apply container  overflow-y-auto; */
+  height: calc(100vh - 220px);
+}
+/* .game-box {
+      background: url(../../public/gamebg.jpg) no-repeat;
+      background-size: 100% 80%;
+    } */

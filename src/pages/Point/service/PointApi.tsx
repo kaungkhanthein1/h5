@@ -67,10 +67,49 @@ export const pointApi = createApi({
     }),
     getDailyTesks: builder.query<any, any>({
       query: () => ({
-        url: convertToSecureUrl("/activities/rules/integral"),
+        url: convertToSecureUrl("/user/daily_tasks"),
+      }),
+    }),
+    getActivity: builder.query<any, any>({
+      query: () => ({
+        url: convertToSecureUrl("/user/integral_details?act=count"),
+      }),
+    }),
+    getActivityList: builder.query<any, any>({
+      query: ({ act }) => ({
+        url: convertToSecureUrl(
+          `/user/integral_details?act=${act}&page=1&pageSize=10`
+        ),
+      }),
+    }),
+    getInvitaionMember: builder.query<any, any>({
+      query: () => ({
+        url: convertToSecureUrl("/user/invite_details?act=count"),
+      }),
+    }),
+    getInvitaionMemberList: builder.query<any, any>({
+      query: () => ({
+        url: convertToSecureUrl("/user/invite_details?act=list"),
+      }),
+    }),
+    getInviteNotice: builder.query({
+      query: () => ({
+        url: convertToSecureUrl("/activities/invite/notices"),
+        method: "GET",
+        // params: convertToSecurePayload({
+        //   qr_create: qr_create,
+        // }),
       }),
     }),
   }),
 });
 
-export const { useGetUserQuery, useGetDailyTesksQuery } = pointApi;
+export const {
+  useGetUserQuery,
+  useGetDailyTesksQuery,
+  useGetActivityQuery,
+  useGetInvitaionMemberQuery,
+  useGetActivityListQuery,
+  useGetInvitaionMemberListQuery,
+  useGetInviteNoticeQuery
+} = pointApi;

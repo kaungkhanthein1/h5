@@ -34,11 +34,18 @@ import Social from "./pages/social";
 import Short from "./pages/short";
 import { useGetRecommendedMoviesQuery } from "./pages/home/services/homeApi";
 import Announce from "./components/Announce";
+import land from './assets/login/land.png'
+// import { Game } from "./pages/Point/pages/Game";
 // import Menber from "./pages/share/member";
 // import Share from "./pages/share";
 
 // Lazy load the pages
 const Home = React.lazy(() => import("./pages/home"));
+const Game = React.lazy(() => import("./pages/Point/pages/Game"));
+const Mall = React.lazy(() => import("./pages/Point/pages/Mall"));
+const List = React.lazy(() => import("./pages/Point/pages/List"));
+const Shop = React.lazy(() => import("./pages/Point/pages/Shop"));
+const ItemDetail = React.lazy(() => import("./pages/Point/pages/ItemDetail"));
 const Search = React.lazy(() => import("./pages/search"));
 const Main = React.lazy(() => import("./pages/search/Main"));
 const Explorer = React.lazy(() => import("./pages/explorer"));
@@ -61,6 +68,7 @@ const Invite = React.lazy(() => import("./pages/profile/Invite"));
 const Share = React.lazy(() => import("./pages/share"));
 const Member = React.lazy(() => import("./pages/share/member"));
 const Point = React.lazy(() => import("./pages/Point"));
+const ItemInfo = React.lazy(() => import("./pages/Point/pages/ItemInfo"));
 
 // ProtectedRoute component to handle route guarding
 // const ProtectedRoute: React.FC<{ children: JSX.Element }> = ({ children }) => {
@@ -84,6 +92,43 @@ const App: React.FC = () => {
   // const { data: notiData, isLoading: notiLoading } = useGetNotificationQuery();
 
   const [showNotice, setShowNotice] = useState(false);
+  const [preloadedImage, setPreloadedImage] = useState<string | null>(null);
+
+  // Preload landing image
+  useEffect(() => {
+    if (data?.data) {
+      const startAds = data?.data["start"];
+      if (startAds && startAds.length > 0 && startAds[0]?.data?.image) {
+        // Immediately start fetching the image as a blob
+        fetch(startAds[0]?.data?.image)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.blob();
+          })
+          .then(blob => {
+            const url = URL.createObjectURL(blob);
+            setPreloadedImage(url);
+            
+            // Also preload the image in browser cache
+            const img = new Image();
+            img.src = url;
+          })
+          .catch(err => {
+            console.error("Failed to preload image:", err);
+            // Continue without preloaded image
+          });
+      }
+    }
+    
+    // Clean up any blob URLs when component unmounts
+    return () => {
+      if (preloadedImage) {
+        URL.revokeObjectURL(preloadedImage);
+      }
+    };
+  }, [data]);
 
   // Combined loading state
   // const isLoading = moviesLoading || topicsLoading || notiLoading;
@@ -144,7 +189,12 @@ const App: React.FC = () => {
     location.pathname.startsWith("/share") ||
     location.pathname.startsWith("/invite") ||
     location.pathname.startsWith("/share/member") ||
-    location.pathname.startsWith("/point_info");
+    location.pathname.startsWith("/point_info") ||
+    location.pathname.startsWith("/game") ||
+    location.pathname.startsWith("/point_mall") ||
+    location.pathname.startsWith("/list") ||
+    location.pathname.startsWith("/itemDetail") ||
+    location.pathname.startsWith("/shop");
 
   const hideHeader = location.pathname.startsWith("/explorer");
   const { hideMode } = JSON.parse(
@@ -231,9 +281,11 @@ const App: React.FC = () => {
 
   if (!data?.data) {
     return (
-      <div className="flex justify-center items-center h-screen bg-[#161619]">
-        <Loader />
-      </div>
+      <img
+        className="h-screen w-screen object-cover"
+        src={land}
+        alt=""
+      />
     );
   }
 
@@ -242,7 +294,7 @@ const App: React.FC = () => {
       {data?.data && (
         <>
           {panding ? (
-            <Landing data={data} />
+            <Landing data={data} preloadedImage={preloadedImage} />
           ) : (
             <div
               className={`flex flex-col min-h-screen ${
@@ -252,7 +304,13 @@ const App: React.FC = () => {
               {/* <BannerAds /> */}
               {/* Conditionally render Header */}
               {!hideHeaderFooter && !hideHeader && <Header />}
-              {showNotice && <Announce setShowNotice={setShowNotice} config={headerData} showNotice={showNotice}/>}
+              {showNotice && (
+                <Announce
+                  setShowNotice={setShowNotice}
+                  config={headerData}
+                  showNotice={showNotice}
+                />
+              )}
 
               <div className="flex-grow">
                 <Suspense
@@ -266,6 +324,13 @@ const App: React.FC = () => {
                     <Route path="/" element={<Home />} />
                     <Route path="/home" element={<Home />} />
                     <Route path="/search" element={<Main />} />
+                    <Route path="/game" element={<Game />} />
+                    <Route path="/point_mall" element={<Mall />} />
+                    <Route path="/list" element={<List />} />
+                    <Route path="/list" element={<List />} />
+                    <Route path="/itemDetail/:id" element={<ItemDetail />} />
+                    <Route path="/info/:id" element={<ItemInfo />} />
+                    <Route path="/shop/:id" element={<Shop />} />
                     <Route path="/search_overlay" element={<Search />} />
 
                     <Route path="/explorer" element={<Explorer />} />
@@ -338,3 +403,4 @@ const AppWithRouter = () => (
 );
 
 export default AppWithRouter;
+

@@ -14,8 +14,8 @@ const Header: React.FC<HeaderProps> = ({}) => {
       </div>
       <h1 className=" text-white text-[18px] pl-[16px] font-[600]">我的积分</h1>
       <a
-        target="_blink"
-        href="https://cc3e497d.qdhgtch.com:1333/help"
+        // target="_blink"
+        href="/point_mall"
         className=" py-[8px] px-[10px mt-[5px"
       >
         <span className=" text-white text-[14px] font-[500]">积分商城</span>

@@ -63,6 +63,7 @@ const PostList = ({
   const [lightboxStates, setLightboxStates] = useState<{
     [key: string]: { isOpen: boolean; currentIndex: number };
   }>({});
+  let videoData = useRef<HTMLVideoElement[]>([]);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -503,6 +504,7 @@ const PostList = ({
             )}
             {post.file_type === "video" && (
               <Player
+                videoData={videoData}
                 isCenterPlay={true}
                 src={post?.files[0]?.resourceURL}
                 thumbnail={post?.files[0].thumbnail}

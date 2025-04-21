@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ImageWithPlaceholder from "./socialImgPlaceholder";
 import CustomLightbox from "./CustomLightBox";
 import Player from "./Player";
@@ -31,6 +31,7 @@ const Social_details: React.FC<any> = ({
   const { isShowingDetails } = useSelector((state: any) => state.model);
   // console.log(isShowingDetails);
   const dispatch = useDispatch();
+  let videoData = useRef<HTMLVideoElement[]>([]);
 
   const { data, isFetching, refetch, isLoading } = useGetCommentListQuery({
     post_id: post.post_id,
@@ -84,7 +85,7 @@ const Social_details: React.FC<any> = ({
     setList([]);
   };
 
-  console.log(" this is mf =>",isLoading)
+  console.log(" this is mf =>", isLoading);
   return (
     <div
       className="inset-0 px-[10px] fixed w-screen top-0 h-screen bg-background overflow-y-scroll z-[99999]"
@@ -279,6 +280,7 @@ const Social_details: React.FC<any> = ({
           )}
           {post.file_type === "video" && (
             <Player
+              videoData={videoData}
               isCenterPlay={false}
               src={post?.files[0].resourceURL}
               thumbnail={post?.files[0].thumbnail}

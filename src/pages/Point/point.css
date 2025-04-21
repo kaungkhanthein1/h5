@@ -31,3 +31,49 @@
     )
   );
 }
+
+.activatyList {
+  border-radius: 12px;
+  background: linear-gradient(
+    112deg,
+    rgba(136, 136, 136, 0.1) 10.86%,
+    rgba(68, 68, 68, 0.05) 44.18%,
+    rgba(93, 90, 90, 0.06) 64.53%,
+    rgba(136, 128, 128, 0.07) 100%
+  );
+}
+
+.acti_amount_text {
+  text-align: right;
+  font-family: "PingFang SC";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 18.883px; /* 118.017% */
+  letter-spacing: -0.32px;
+  background: var(
+    --Gold-Raidal,
+    radial-gradient(50% 50% at 50% 50%, #ffc279 0%, #ffe5a0 100%)
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.share_badge_box {
+  border-radius: 100px;
+  background: rgba(68, 68, 68, 0.12);
+  box-shadow: 0px -4px 4px 0px rgba(255, 227, 130, 0.02) inset;
+  padding: 4px 12px;
+
+  gap: 10px;
+  color: rgba(255, 255, 255, 0.67);
+  font-variant-numeric: lining-nums proportional-nums;
+  font-feature-settings: "dlig" on;
+  font-family: "PingFang SC";
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px; /* 200% */
+  letter-spacing: 0.1px;
+}

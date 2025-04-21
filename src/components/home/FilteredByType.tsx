@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import nodata from "../../assets/nodata.png";
 
@@ -90,12 +90,17 @@ const FilteredByType = () => {
     }
   }, [totalData, movieData]);
 
+  const prevTabRef = useRef(activeTab);
+
   useEffect(() => {
-    dispatch(setSort("by_default"));
-    dispatch(setSortName("综合"));
-    dispatch(setClass("类型"));
-    dispatch(setArea("地区"));
-    dispatch(setYear("年份"));
+    if (prevTabRef.current !== activeTab) {
+      dispatch(setSort("by_default"));
+      dispatch(setSortName("综合"));
+      dispatch(setClass("类型"));
+      dispatch(setArea("地区"));
+      dispatch(setYear("年份"));
+      prevTabRef.current = activeTab;
+    }
   }, [activeTab]);
 
   return (

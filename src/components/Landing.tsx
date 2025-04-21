@@ -1,57 +1,109 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
 import { setPanding } from "../features/login/ModelSlice";
 import { useGetAdsQuery } from "../services/helperService";
 import land from "../assets/login/land.png";
-
-import ad1 from "../assets/login/ad1.png";
 import { Link } from "react-router-dom";
 
-const Landing: React.FC<any> = ({ data }) => {
+import ad1 from "../assets/login/ad1.png";
+
+interface LandingProps {
+  data: any;
+  preloadedImage?: string | null;
+}
+
+const Landing: React.FC<LandingProps> = ({ data, preloadedImage }) => {
   const dispatch = useDispatch();
   const [cc, setCc] = useState<any>();
   const [skip, setSkip] = useState(3);
   const [image, setImage] = useState('');
-  // const { data, isLoading } = useGetAdsQuery();
+  const [blobUrl, setBlobUrl] = useState<string>('');
   const [imgLoad, setImgLoad] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const countdownRef = useRef<NodeJS.Timeout | null>(null);
+  const adDisplayTime = 6000; // 6 seconds in milliseconds
 
+  // Load and setup image
   useEffect(() => {
     if (data?.data) {
       const cur = data?.data["start"];
       if(cur && cur.length > 0) {
-        setCc(cur[0])
-        setImage(cur[0]?.data?.image)
+        setCc(cur[0]);
+        
+        if (preloadedImage) {
+          // Use preloaded blob URL if available
+          setImage(preloadedImage);
+          setBlobUrl(preloadedImage);
+          setIsLoading(false);
+        } else if (cur[0]?.data?.image) {
+          // Convert image to blob URL if not preloaded
+          setIsLoading(true);
+          fetch(cur[0]?.data?.image)
+            .then(response => response.blob())
+            .then(blob => {
+              const url = URL.createObjectURL(blob);
+              setBlobUrl(url);
+              setImage(url);
+              setIsLoading(false);
+            })
+            .catch(err => {
+              console.error("Failed to fetch image:", err);
+              setImage(land);
+              setIsLoading(false);
+            });
+        } else {
+          setImage(land);
+          setIsLoading(false);
+        }
       } else {
         setImage(land);
+        setIsLoading(false);
       }
-      const timer = setTimeout(() => {
-        dispatch(setPanding(false));
-        sendMessageToNative();
-      }, 6000);
 
-      return () => clearTimeout(timer);
-    }
-  }, [data]);
-
-  useEffect(() => {
-    if (imgLoad) {
-      const countdown = setInterval(() => {
-        if (skip > 0) {
-          setSkip((prev) => prev - 1);
-        } else {
-          dispatch(setPanding(false));
-          sendMessageToNative();
+      return () => {
+        // Clean up blob URLs and timers
+        if (blobUrl) {
+          URL.revokeObjectURL(blobUrl);
         }
-      }, 1000);
-
-      return () => clearInterval(countdown);
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+        }
+        if (countdownRef.current) {
+          clearInterval(countdownRef.current);
+        }
+      };
     }
-  }, [skip, imgLoad]);
+  }, [data, preloadedImage]);
+
+  // Handle image load success
+  const handleImageLoaded = () => {
+    setImgLoad(true);
+    
+    // Start the main timer only after image has loaded
+    timeoutRef.current = setTimeout(() => {
+      dispatch(setPanding(false));
+      sendMessageToNative();
+    }, adDisplayTime);
+    
+    // Start the countdown timer
+    countdownRef.current = setInterval(() => {
+      setSkip((prev) => {
+        if (prev <= 1) {
+          clearInterval(countdownRef.current!);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
+  
   const handleImageError = (
     event: React.SyntheticEvent<HTMLImageElement, Event>
   ) => {
     event.currentTarget.src = land; // Set default image if API image fails
+    handleImageLoaded(); // Continue with the default image
   };
 
   const sendMessageToNative = () => {
@@ -60,19 +112,39 @@ const Landing: React.FC<any> = ({ data }) => {
     }
   };
   
+  const skipAd = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    if (countdownRef.current) {
+      clearInterval(countdownRef.current);
+    }
+    dispatch(setPanding(false));
+    sendMessageToNative();
+  };
+  
   return (
         <>
-          <Link target="_blink" to={cc?.data?.url}>
+          {isLoading ? (
             <img
               className="h-screen w-screen object-cover"
-              onLoad={() => setImgLoad(true)}
-              src={image}
-              alt=""
+              src={land}
+              alt="Loading..."
             />
-          </Link>
+          ) : (
+            <Link target="_blink" to={cc?.data?.url}>
+              <img
+                className="h-screen w-screen object-cover"
+                onLoad={handleImageLoaded}
+                src={image}
+                onError={handleImageError}
+                alt=""
+              />
+            </Link>
+          )}
           {imgLoad && (
             <div
-              onClick={() => {dispatch(setPanding(false)); sendMessageToNative()}}
+              onClick={skipAd}
               style={{
                 borderRadius: "52px",
                 background: "rgba(0, 0, 0, 0.98)",

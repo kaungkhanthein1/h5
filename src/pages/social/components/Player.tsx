@@ -312,6 +312,189 @@
 
 // export default Player;
 
+// import React, { useEffect, useRef, useState } from "react";
+// import Artplayer from "artplayer";
+// import Loader from "../../../pages/search/components/Loader";
+
+// const Player = ({
+//   src,
+//   thumbnail,
+//   status,
+//   isCenterPlay,
+// }: {
+//   src: string;
+//   thumbnail: string;
+//   status: boolean;
+//   isCenterPlay: boolean;
+// }) => {
+//   const playerContainerRef = useRef<HTMLDivElement>(null);
+//   const artPlayerInstanceRef = useRef<Artplayer | null>(null);
+//   const [loading, setLoading] = useState(false);
+//   const [isPlaying, setIsPlaying] = useState(false);
+//   const [error, setError] = useState(false);
+//   const activePlayerRef = useRef<HTMLDivElement | null>(null);
+//   const observerRef = useRef<IntersectionObserver | null>(null);
+
+//   // Get autoMode setting from localStorage
+//   const { autoMode } = JSON.parse(
+//     localStorage.getItem("movieAppSettings") || '{"autoMode":false}'
+//   );
+
+//   useEffect(() => {
+//     if (!playerContainerRef.current) return;
+
+//     const initializePlayer = () => {
+//       Artplayer.MOBILE_DBCLICK_PLAY = false;
+//       Artplayer.MOBILE_CLICK_PLAY = false;
+
+//       artPlayerInstanceRef.current = new Artplayer({
+//         container: playerContainerRef.current!,
+//         url: src,
+//         poster: thumbnail,
+//         volume: 0.5,
+//         muted: false,
+//         autoplay: false,
+//         aspectRatio: true,
+//         miniProgressBar: true,
+//         fastForward: true,
+//         fullscreen: true,
+//         theme: "#00a1d6",
+//       });
+
+//       artPlayerInstanceRef.current.on("play", () => setIsPlaying(true));
+//       artPlayerInstanceRef.current.on("pause", () => setIsPlaying(false));
+//       // artPlayerInstanceRef.current.on("destroy", () => {
+//       //   setIsPlaying(false);
+//       //   setError(false);
+//       // });
+//       artPlayerInstanceRef.current.on("error", () => {
+//         setError(true);
+//         // destroyPlayer();
+//       });
+//     };
+
+//     const destroyPlayer = () => {
+//       if (artPlayerInstanceRef.current) {
+//         artPlayerInstanceRef.current.destroy();
+//         artPlayerInstanceRef.current = null;
+//         setIsPlaying(false);
+//       }
+//     };
+
+//     const handleIntersection = (entries: IntersectionObserverEntry[]) => {
+//       entries.forEach((entry) => {
+//         const videoContainer = entry.target as HTMLDivElement;
+
+//         if (entry.isIntersecting) {
+//           // Initialize player if not exists
+//           if (!artPlayerInstanceRef.current) {
+//             initializePlayer();
+//           }
+
+//           // Handle play if this is the center video
+//           if (isCenterPlay && artPlayerInstanceRef.current) {
+//             activePlayerRef.current = videoContainer;
+//             if (autoMode && !isPlaying) {
+//               artPlayerInstanceRef.current.play().catch(() => setError(true));
+//             }
+//           }
+//         } else {
+//           // Destroy player if it's this container's player
+//           if (activePlayerRef.current === videoContainer) {
+//             destroyPlayer();
+//             activePlayerRef.current = null;
+//           }
+//         }
+//       });
+//     };
+
+//     // Initialize IntersectionObserver
+//     observerRef.current = new IntersectionObserver(handleIntersection, {
+//       root: null,
+//       rootMargin: "0px",
+//       threshold: 0.5, // 50% visibility threshold
+//     });
+
+//     observerRef.current.observe(playerContainerRef.current);
+
+//     return () => {
+//       // Cleanup observer and player
+//       if (observerRef.current) {
+//         observerRef.current.disconnect();
+//       }
+//       destroyPlayer();
+//     };
+//   }, [src, thumbnail, isCenterPlay, autoMode]);
+
+//   const handleRetry = () => {
+//     setError(false);
+//     setLoading(true); // Start fake loading
+//     setTimeout(() => {
+//       setLoading(false); // End fake loading
+//       setError(true); // Show error message again
+//     }, 1500);
+//     // setError(false);
+//     // setLoading(true);
+
+//     // setTimeout(() => {
+//     //   setLoading(false);
+//     //   if (playerContainerRef.current && !artPlayerInstanceRef.current) {
+//     //     Artplayer.MOBILE_DBCLICK_PLAY = false;
+//     //     Artplayer.MOBILE_CLICK_PLAY = false;
+
+//     //     artPlayerInstanceRef.current = new Artplayer({
+//     //       container: playerContainerRef.current,
+//     //       url: src,
+//     //       poster: thumbnail,
+//     //       volume: 0.5,
+//     //       muted: false,
+//     //       autoplay: false,
+//     //       aspectRatio: true,
+//     //       miniProgressBar: true,
+//     //       fastForward: true,
+//     //       fullscreen: true,
+//     //       theme: "#00a1d6",
+//     //     });
+
+//     //     artPlayerInstanceRef.current.on("play", () => setIsPlaying(true));
+//     //     artPlayerInstanceRef.current.on("pause", () => setIsPlaying(false));
+//     //     artPlayerInstanceRef.current.on("error", () => setError(true));
+//     //   }
+//     // }, 500);
+//   };
+
+//   return (
+//     <div className={`social-player ${status ? "hide-controls" : ""}`}>
+//       {loading && (
+//         <div className="loading-message flex justify-center items-center text-center bg-black w-full h-[250px] md:h-[350px] lg:h-[400px] xl:h-[400px]">
+//           <Loader />
+//         </div>
+//       )}
+//       {error && (
+//         <div className="error-message flex justify-center items-center text-center bg-black w-full h-[250px] md:h-[350px] lg:h-[400px] xl:h-[400px]">
+//           <div>
+//             <p className="text-white">出了点小问题，请稍后重试</p>
+//             <button
+//               onClick={handleRetry}
+//               className="p-1 px-4 text-[14px] rounded-full bg-[#F54100] mt-2"
+//             >
+//               重试
+//             </button>
+//           </div>
+//         </div>
+//       )}
+//       {!loading && !error && (
+//         <div
+//           ref={playerContainerRef}
+//           className="relative artplayer-app w-full h-[250px] md:h-[350px] lg:h-[400px] xl:h-[400px]"
+//         ></div>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default Player;
+
 import React, { useEffect, useRef, useState } from "react";
 import Artplayer from "artplayer";
 import Loader from "../../../pages/search/components/Loader";
@@ -321,18 +504,19 @@ const Player = ({
   thumbnail,
   status,
   isCenterPlay,
+  videoData,
 }: {
   src: string;
   thumbnail: string;
   status: boolean;
   isCenterPlay: boolean;
+  videoData: any;
 }) => {
   const playerContainerRef = useRef<HTMLDivElement>(null);
   const artPlayerInstanceRef = useRef<Artplayer | null>(null);
   const [loading, setLoading] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [error, setError] = useState(false);
-  const activePlayerRef = useRef<HTMLDivElement | null>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
 
   // Get autoMode setting from localStorage
@@ -340,51 +524,75 @@ const Player = ({
     localStorage.getItem("movieAppSettings") || '{"autoMode":false}'
   );
 
+  const destroyPlayer = () => {
+    // Destroy Artplayer instance
+    if (artPlayerInstanceRef.current) {
+      artPlayerInstanceRef.current.destroy();
+      artPlayerInstanceRef.current = null;
+      setIsPlaying(false);
+    }
+  };
+
+  const initializePlayer = () => {
+    Artplayer.MOBILE_DBCLICK_PLAY = false;
+    Artplayer.MOBILE_CLICK_PLAY = false;
+
+    artPlayerInstanceRef.current = new Artplayer({
+      container: playerContainerRef.current!,
+      url: src,
+      poster: thumbnail,
+      volume: 0.5,
+      muted: false,
+      autoplay: false,
+      aspectRatio: true,
+      miniProgressBar: true,
+      fastForward: true,
+      fullscreen: true,
+      theme: "#00a1d6",
+
+      customType: {
+        mp4: function (video: HTMLVideoElement, url: string) {
+          // Configure video element
+
+          if (videoData.current.length > 1) {
+            videoData.current[0].pause();
+            videoData.current[0].removeAttribute("src");
+            videoData.current[0].load(); // Reset the video element
+            videoData.current.splice(0, 1); // Remove the first video element
+          }
+
+          videoData?.current?.push(video);
+
+          const loadVideo = async () => {
+            video.src = url;
+          };
+
+          // Start loading process
+          loadVideo().catch(console.error);
+
+          return () => {
+            if (video) {
+              video.pause();
+              video.removeAttribute("src");
+              video.load();
+            }
+          };
+        },
+      },
+    });
+
+    artPlayerInstanceRef.current.on("play", () => setIsPlaying(true));
+    artPlayerInstanceRef.current.on("pause", () => setIsPlaying(false));
+    artPlayerInstanceRef.current.on("error", () => {
+      setError(true);
+    });
+  };
+
   useEffect(() => {
     if (!playerContainerRef.current) return;
 
-    const initializePlayer = () => {
-      Artplayer.MOBILE_DBCLICK_PLAY = false;
-      Artplayer.MOBILE_CLICK_PLAY = false;
-
-      artPlayerInstanceRef.current = new Artplayer({
-        container: playerContainerRef.current!,
-        url: src,
-        poster: thumbnail,
-        volume: 0.5,
-        muted: false,
-        autoplay: false,
-        aspectRatio: true,
-        miniProgressBar: true,
-        fastForward: true,
-        fullscreen: true,
-        theme: "#00a1d6",
-      });
-
-      artPlayerInstanceRef.current.on("play", () => setIsPlaying(true));
-      artPlayerInstanceRef.current.on("pause", () => setIsPlaying(false));
-      // artPlayerInstanceRef.current.on("destroy", () => {
-      //   setIsPlaying(false);
-      //   setError(false);
-      // });
-      artPlayerInstanceRef.current.on("error", () => {
-        setError(true);
-        // destroyPlayer();
-      });
-    };
-
-    const destroyPlayer = () => {
-      if (artPlayerInstanceRef.current) {
-        artPlayerInstanceRef.current.destroy();
-        artPlayerInstanceRef.current = null;
-        setIsPlaying(false);
-      }
-    };
-
     const handleIntersection = (entries: IntersectionObserverEntry[]) => {
       entries.forEach((entry) => {
-        const videoContainer = entry.target as HTMLDivElement;
-
         if (entry.isIntersecting) {
           // Initialize player if not exists
           if (!artPlayerInstanceRef.current) {
@@ -392,18 +600,12 @@ const Player = ({
           }
 
           // Handle play if this is the center video
-          if (isCenterPlay && artPlayerInstanceRef.current) {
-            activePlayerRef.current = videoContainer;
-            if (autoMode && !isPlaying) {
-              artPlayerInstanceRef.current.play().catch(() => setError(true));
-            }
+          if (artPlayerInstanceRef.current && autoMode && !isPlaying) {
+            artPlayerInstanceRef.current.play().catch(() => setError(true));
           }
         } else {
-          // Destroy player if it's this container's player
-          if (activePlayerRef.current === videoContainer) {
-            destroyPlayer();
-            activePlayerRef.current = null;
-          }
+          // Destroy player when not intersecting
+          destroyPlayer();
         }
       });
     };
@@ -411,56 +613,29 @@ const Player = ({
     // Initialize IntersectionObserver
     observerRef.current = new IntersectionObserver(handleIntersection, {
       root: null,
-      rootMargin: "0px",
-      threshold: 0.5, // 50% visibility threshold
+      rootMargin: "200px 0px",
+      threshold: 0.5,
     });
 
     observerRef.current.observe(playerContainerRef.current);
 
     return () => {
-      // Cleanup observer and player
       if (observerRef.current) {
         observerRef.current.disconnect();
       }
       destroyPlayer();
     };
-  }, [src, thumbnail, isCenterPlay, autoMode]);
+  }, [src, thumbnail, autoMode]);
 
   const handleRetry = () => {
     setError(false);
-    setLoading(true); // Start fake loading
+    setLoading(true);
     setTimeout(() => {
-      setLoading(false); // End fake loading
-      setError(true); // Show error message again
-    }, 1500);
-    // setError(false);
-    // setLoading(true);
-
-    // setTimeout(() => {
-    //   setLoading(false);
-    //   if (playerContainerRef.current && !artPlayerInstanceRef.current) {
-    //     Artplayer.MOBILE_DBCLICK_PLAY = false;
-    //     Artplayer.MOBILE_CLICK_PLAY = false;
-
-    //     artPlayerInstanceRef.current = new Artplayer({
-    //       container: playerContainerRef.current,
-    //       url: src,
-    //       poster: thumbnail,
-    //       volume: 0.5,
-    //       muted: false,
-    //       autoplay: false,
-    //       aspectRatio: true,
-    //       miniProgressBar: true,
-    //       fastForward: true,
-    //       fullscreen: true,
-    //       theme: "#00a1d6",
-    //     });
-
-    //     artPlayerInstanceRef.current.on("play", () => setIsPlaying(true));
-    //     artPlayerInstanceRef.current.on("pause", () => setIsPlaying(false));
-    //     artPlayerInstanceRef.current.on("error", () => setError(true));
-    //   }
-    // }, 500);
+      setLoading(false);
+      if (playerContainerRef.current && !artPlayerInstanceRef.current) {
+        initializePlayer();
+      }
+    }, 500);
   };
 
   return (
