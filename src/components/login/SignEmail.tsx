@@ -59,7 +59,6 @@ const SignEmail: React.FC<SignEmailProps> = ({ handleBack2 }) => {
     setShowPassword(!showPassword);
   };
 
-
   // Password validation function
   const validatePassword = (password: string) => {
     const lengthValid = password.length >= 8 && password.length <= 25;
@@ -104,7 +103,7 @@ const SignEmail: React.FC<SignEmailProps> = ({ handleBack2 }) => {
   return (
     <>
       {openOtp && (
-        <Opt key={key} setIsVisible={setIsVisible} password={password} email={email} />
+        <Opt setIsVisible={setIsVisible} password={password} email={email} />
       )}
       <div className="min-h-screen flex items-center justify-center overflow-hidde fixed z-[99999]">
         {openCaptcha && (

@@ -23,20 +23,13 @@ interface OptProps {
   email?: string;
   password?: string;
   phone?: string;
-  key: string;
   setIsVisible: (isVisible: boolean) => void;
 }
 interface messg {
   msg: string;
 }
 
-const Opt: React.FC<OptProps> = ({
-  email,
-  password,
-  phone,
-  setIsVisible,
-  key,
-}) => {
+const Opt: React.FC<OptProps> = ({ email, password, phone, setIsVisible }) => {
   const [signUpEmail, { isLoading, error }] = useSignUpEmailMutation();
   const [signUpPhone, { isLoading: phload }] = useSignUpPhoneMutation();
   const [panding, setPanding] = useState(false);
@@ -61,7 +54,7 @@ const Opt: React.FC<OptProps> = ({
         // console.error("Error fetching OTP:", error);
         const msg = error.response.data.msg;
         dispatch(showToast({ message: msg, type: "error" }));
-        handleBack()
+        handleBack();
         // Show error message to the user, e.g., using state or toast notification
       }
     };

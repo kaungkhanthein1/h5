@@ -20,6 +20,7 @@ import { useNavigate } from "react-router";
 import AudioPlayer from "./AudioPlayer";
 
 const PostList = ({
+  isRefreshing,
   data,
   loading,
   hasMore,
@@ -27,6 +28,7 @@ const PostList = ({
   setShowDetail,
   showDetail,
 }: {
+  isRefreshing: any;
   data: any;
   loading: boolean;
   hasMore: boolean;
@@ -113,6 +115,13 @@ const PostList = ({
     );
   }
 
+  if (isRefreshing) {
+    return (
+      <div className="text-center -mt-[100px] max-sm:h-[80vh]  h-[100vh] flex justify-center items-center">
+        <Loader />
+      </div>
+    );
+  }
   if (!data.length) {
     return (
       <div className="text-center -mt-[100px]  max-sm:h-[80vh]  h-[100vh] flex justify-center items-center">

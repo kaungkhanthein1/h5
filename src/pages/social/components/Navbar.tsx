@@ -314,6 +314,17 @@ const Navbar = () => {
   // }, [postsData, recommandData, followData, audioData, activeTab]);
 
   const handleRefresh = async () => {
+    setPage(1);
+    setHasMore(true);
+
+    if (activeTabRef.current === 2) await postRefetch();
+    else if (activeTabRef.current === 1) await recommandRefetch();
+    else if (activeTabRef.current === 0) await followRefetch();
+    else await audioRefetch();
+
+    await new Promise((resolve) => setTimeout(resolve, 500)); // Add pause before closing refresh
+  };
+  const handleTabRefresh = async () => {
     setIsRefreshing(true);
     setPage(1);
     setHasMore(true);
@@ -335,6 +346,9 @@ const Navbar = () => {
       setPage(1);
       setDataList([]);
       setHasMore(true);
+    } else {
+      window.scrollTo(0, 0);
+      handleTabRefresh();
     }
   };
 
@@ -386,11 +400,19 @@ const Navbar = () => {
         isPullable={!showDetail}
       >
         <PostList
+          isRefreshing={isRefreshing}
           setShowDetail={setShowDetail}
           showDetail={showDetail}
           data={dataList}
           loading={
-            postsLoading || recommandLoading || followLoading || audioLoading
+            postsLoading ||
+            recommandLoading ||
+            followLoading ||
+            audioLoading ||
+            postsFetching ||
+            recommandFetching ||
+            followFetching ||
+            audioFetching
           }
           hasMore={hasMore}
           fetchMoreData={fetchMoreData}
