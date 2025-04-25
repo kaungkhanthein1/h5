@@ -12,10 +12,12 @@ import {
   setAuthModel,
   setCaptchaOpen,
   setLoginOpen,
+  setOtpOpen,
   setSignupOpen,
 } from "../../features/login/ModelSlice";
 import { showToast } from "../../pages/profile/error/ErrorSlice";
 import { useLocation } from "react-router-dom";
+import { getOtp } from "../../services/userService";
 
 interface SignPhoneProps {
   handleBack2: () => void; // Accept handleBack as a prop
@@ -25,7 +27,9 @@ const SignPhone: React.FC<SignPhoneProps> = ({ handleBack2 }) => {
   const [key, setKey] = useState("");
 
   const dispatch = useDispatch();
-  const { openCaptcha, openOtp } = useSelector((state: any) => state.model);
+  const { openCaptcha, openOtp, GraphicKey } = useSelector(
+    (state: any) => state.model
+  );
   const [showOtp, setShowOtp] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [phone, setPhone] = useState("");
@@ -34,6 +38,8 @@ const SignPhone: React.FC<SignPhoneProps> = ({ handleBack2 }) => {
   const [isVisible, setIsVisible] = useState(true);
   const [isFocusedEmail, setIsFocusedEmail] = useState(false);
   const [isFocusedPassword, setIsFocusedPassword] = useState(false);
+  const [box, setBox] = useState(false);
+
   const show = () => {
     setShowPassword(!showPassword);
   };
@@ -108,15 +114,38 @@ const SignPhone: React.FC<SignPhoneProps> = ({ handleBack2 }) => {
     setIsVisible(false);
   };
 
+  useEffect(() => {
+    const fetchOtp = async () => {
+      try {
+        if (phone) {
+          await getOtp(GraphicKey, phone, "phone");
+          setBox(true);
+          dispatch(setOtpOpen(false));
+        }
+      } catch (error: any) {
+        // console.error("Error fetching OTP:", error);
+        const msg = error.response.data.msg;
+        dispatch(showToast({ message: msg, type: "error" }));
+        dispatch(setOtpOpen(false));
+
+        // Show error message to the user, e.g., using state or toast notification
+      }
+    };
+
+    if (openOtp) {
+      fetchOtp();
+    }
+  }, [openOtp]);
+
   return (
     <div className="min-h-screen flex items-center justify-center overflow-hidden">
-      {openOtp && (
-        <Opt key={key} setIsVisible={setIsVisible} phone={phone} password={password} />
+      {box && (
+        <Opt setIsVisible={setIsVisible} phone={phone} password={password} />
       )}
       {openCaptcha && (
         <Captch
-        key={key}
-        setKey={setKey}
+          key={key}
+          setKey={setKey}
           setIsVisible={setIsVisible}
           isLogin={false}
           username={phone}

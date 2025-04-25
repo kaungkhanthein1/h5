@@ -11,12 +11,16 @@ import {
   setAuthModel,
   setCaptchaOpen,
   setLoginOpen,
+  setOtpOpen,
   setSignupOpen,
 } from "../../features/login/ModelSlice";
 import axios from "axios";
 import UserName from "./UserName";
 import "../../pages/login/login.css";
 import { useLocation } from "react-router-dom";
+import { getOtp } from "../../services/userService";
+
+import { showToast } from "../../pages/profile/error/ErrorSlice";
 
 interface SignEmailProps {
   handleBack2: () => void; // Accept handleBack as a prop
@@ -25,8 +29,13 @@ interface SignEmailProps {
 const SignEmail: React.FC<SignEmailProps> = ({ handleBack2 }) => {
   const dispatch = useDispatch();
   const [key, setKey] = useState("");
-  const { openCaptcha, openOtp, openSignUpEmailModel, openUserNameForm } =
-    useSelector((state: any) => state.model);
+  const {
+    openCaptcha,
+    openOtp,
+    openSignUpEmailModel,
+    openUserNameForm,
+    GraphicKey,
+  } = useSelector((state: any) => state.model);
   const [showOtp, setShowOtp] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
@@ -35,6 +44,7 @@ const SignEmail: React.FC<SignEmailProps> = ({ handleBack2 }) => {
   const [isVisible, setIsVisible] = useState(true);
   const [isFocusedEmail, setIsFocusedEmail] = useState(false);
   const [isFocusedPassword, setIsFocusedPassword] = useState(false);
+  const [box, setBox] = useState(false);
 
   const currentLocation = useLocation(); // Use the `useLocation` hook from react-router-dom
   const previousPathname = useRef(currentLocation.pathname);
@@ -99,10 +109,34 @@ const SignEmail: React.FC<SignEmailProps> = ({ handleBack2 }) => {
   const handleClose = () => {
     setIsVisible(false);
   };
+
+  useEffect(() => {
+    const fetchOtp = async () => {
+      try {
+        if (email) {
+          await getOtp(GraphicKey, email, "email");
+          setBox(true);
+          dispatch(setOtpOpen(false));
+        }
+      } catch (error: any) {
+        // console.error("Error fetching OTP:", error);
+        const msg = error.response.data.msg;
+        dispatch(showToast({ message: msg, type: "error" }));
+        dispatch(setOtpOpen(false));
+
+        // Show error message to the user, e.g., using state or toast notification
+      }
+    };
+
+    if (openOtp) {
+      fetchOtp();
+    }
+  }, [openOtp]);
+
   // console.log(key);
   return (
     <>
-      {openOtp && (
+      {box && (
         <Opt setIsVisible={setIsVisible} password={password} email={email} />
       )}
       <div className="min-h-screen flex items-center justify-center overflow-hidde fixed z-[99999]">
