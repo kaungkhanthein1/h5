@@ -137,7 +137,12 @@ const SignEmail: React.FC<SignEmailProps> = ({ handleBack2 }) => {
   return (
     <>
       {box && (
-        <Opt setIsVisible={setIsVisible} password={password} email={email} />
+        <Opt
+          setIsVisible={setIsVisible}
+          password={password}
+          email={email}
+          setBox={setBox}
+        />
       )}
       <div className="min-h-screen flex items-center justify-center overflow-hidde fixed z-[99999]">
         {openCaptcha && (

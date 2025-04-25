@@ -23,13 +23,20 @@ interface OptProps {
   email?: string;
   password?: string;
   phone?: string;
+  setBox?: any;
   setIsVisible: (isVisible: boolean) => void;
 }
 interface messg {
   msg: string;
 }
 
-const Opt: React.FC<OptProps> = ({ email, password, phone, setIsVisible }) => {
+const Opt: React.FC<OptProps> = ({
+  email,
+  password,
+  phone,
+  setIsVisible,
+  setBox,
+}) => {
   const [signUpEmail, { isLoading, error }] = useSignUpEmailMutation();
   const [signUpPhone, { isLoading: phload }] = useSignUpPhoneMutation();
   const [panding, setPanding] = useState(false);
@@ -153,7 +160,9 @@ const Opt: React.FC<OptProps> = ({ email, password, phone, setIsVisible }) => {
   };
 
   const handleBack = () => {
+    setBox(false);
     dispatch(setOtpOpen(false));
+
     setIsVisible(true);
   };
 
