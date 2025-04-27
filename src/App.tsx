@@ -363,6 +363,7 @@ const App: React.FC = () => {
                     <Route path="/invite" element={<Invite />} />
                     <Route path="/share/member" element={<Member />} />
                     <Route path="/point_info" element={<Point />} />
+                    <Route path="/point_info_redeem" element={<Point showTab={false}/>} />
                   </Routes>
                 </Suspense>
                 <ErrorToast />

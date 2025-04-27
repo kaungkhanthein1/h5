@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { showToast } from "../../error/ErrorSlice";
 import { useDispatch } from "react-redux";
-import { setActiveNav } from "../../../../pages/home/slice/HomeSlice";
+import { setActiveNav, setActivePointTab } from "../../../../pages/home/slice/HomeSlice";
 
 const Content = ({ notice }: any) => {
   const dispatch = useDispatch();
@@ -23,21 +23,36 @@ const Content = ({ notice }: any) => {
     return null;
   }
 
-  const JumpAction = (notice: any) => {
-    if (notice?.extend.page_path === "rankings") {
-      dispatch(setActiveNav(3));
-      setTimeout(() => {
-        navigate("/explorer");
-      }, 300);
 
-    } else {
-      dispatch(
-        showToast({
-          // message: "IOS积分系统正在开发中！敬请期待～",
-          message: ` ${notice.extend.page_name} 正在开发中！敬请期待~`,
-          type: "error",
-        })
-      );
+  const JumpAction = (notice: any) => {
+    switch (notice?.extend.page_path) {
+      case "rankings":
+        dispatch(setActiveNav(3));
+        setTimeout(() => {
+          navigate("/explorer");
+        }, 300);
+        break;
+      case "points_mall":
+        navigate("/point_mall");
+        break;
+      case "daily_task":
+        dispatch(setActivePointTab(2));
+        setTimeout(() => {
+          navigate("/point_info_redeem");
+        }, 300);
+        break;
+      case "invite_home":
+        navigate('/share');
+        break;
+      default:
+        dispatch(
+          showToast({
+            // message: "IOS积分系统正在开发中！敬请期待～",
+            message: ` ${notice.extend.page_name} 正在开发中！敬请期待~`,
+            type: "error",
+          })
+        );
+        break;
     }
   };
 

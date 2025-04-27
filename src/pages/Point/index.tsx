@@ -15,8 +15,9 @@ import {
   useGetInvitaionMemberQuery,
 } from "./service/PointApi";
 import Loader from "../../components/login/Loader";
+import { useSelector } from "react-redux";
 
-const Index = () => {
+const Index = ({showTab = true}) => {
   const isLoggedIn = localStorage.getItem("authToken");
   const parsedLoggedIn = isLoggedIn ? JSON.parse(isLoggedIn) : null;
   const token = parsedLoggedIn?.data?.access_token;
@@ -51,7 +52,7 @@ const Index = () => {
   const taskList = task?.data;
   const inviteList = invite?.data;
   const inretralDetails = activity?.data;
-  const [activeTab, setActiveTab] = useState(1);
+  const activeTab = useSelector((state: any) => state?.home?.activePointTab);
 
   const tabs = [
     { title: "积分明细", content: <Tab1 actavityList={actavityList} /> }, //point detail
@@ -66,10 +67,9 @@ const Index = () => {
       <Top
         point={userData}
         invite={inviteList}
-        activeTab={activeTab}
         inretralDetails={inretralDetails}
       />
-      <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />
+      {showTab && <Tabs />}
       {ListLoading ? (
         <Loader />
       ) : (

@@ -27,21 +27,38 @@ const Content = ({ notice, handleAppClose }: any) => {
   }
 
   const JumpAction = (notice: any) => {
-    if (notice?.extend.page_path === "rankings") {
-      dispatch(setActiveNav(3));
-      setTimeout(() => {
-        navigate("/explorer");
-      }, 300);
-
-      handleAppClose();
-    } else {
-      dispatch(
-        showToast({
-          // message: "IOS积分系统正在开发中！敬请期待～",
-          message: ` ${notice.extend.page_name} 正在开发中！敬请期待~`,
-          type: "error",
-        })
-      );
+    switch (notice?.extend.page_path) {
+      case "rankings":
+        dispatch(setActiveNav(3));
+        setTimeout(() => {
+          navigate("/explorer");
+        }, 300);
+        handleAppClose();
+        break;
+      case "points_mall":
+        navigate("/point_mall");
+        handleAppClose();
+        break;
+      case "daily_task":
+        dispatch(setActiveNav(3));
+        setTimeout(() => {
+          navigate("/point_info_redeem");
+        }, 300);
+        handleAppClose();
+        break;
+      case "invite_home":
+        navigate('/share');
+        handleAppClose();
+        break;
+      default:
+        dispatch(
+          showToast({
+            // message: "IOS积分系统正在开发中！敬请期待～",
+            message: ` ${notice.extend.page_name} 正在开发中！敬请期待~`,
+            type: "error",
+          })
+        );
+        break;
     }
   };
 

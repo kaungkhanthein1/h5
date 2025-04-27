@@ -2,20 +2,21 @@ import React from "react";
 import "./point.css";
 import { useGetDailyTesksQuery, useGetUserQuery } from "./service/PointApi";
 import light from "./lignt.png";
+import { useSelector } from "react-redux";
 
 interface TopProps {
   inretralDetails: any;
-  activeTab: number;
   invite: any;
   point: any;
 }
 
 const Top: React.FC<TopProps> = ({
   inretralDetails,
-  activeTab,
   invite,
   point,
 }) => {
+  const activeTab = useSelector((state: any) => state?.home?.activePointTab);
+
   // console.log(point)
   // console.log(inretralDetails);
   return (

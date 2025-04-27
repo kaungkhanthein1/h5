@@ -1,11 +1,11 @@
 import React from "react";
+import { setActivePointTab } from "../home/slice/HomeSlice";
+import { useDispatch, useSelector } from "react-redux";
 
-interface TabsProps {
-  setActiveTab: any;
-  activeTab: any;
-}
+const Tabs: React.FC = () => {
+  const dispatch = useDispatch();
+  const activeTab = useSelector((state: any) => state?.home?.activePointTab);
 
-const Tabs: React.FC<TabsProps> = ({ activeTab, setActiveTab }) => {
   const tabs = [
     {
       id: 1,
@@ -141,7 +141,7 @@ const Tabs: React.FC<TabsProps> = ({ activeTab, setActiveTab }) => {
       <div className=" grid grid-cols-3 w-full justify-center items-center">
         {tabs?.map((tt: any) => (
           <div
-            onClick={() => setActiveTab(tt.id)}
+            onClick={() => dispatch(setActivePointTab(tt.id))}
             key={tt.id}
             className=" flex flex-col justify-center items-center"
           >

@@ -12,6 +12,7 @@ import { useEffect } from "react";
 
 const Home: React.FC = () => {
   const { data, isLoading, refetch } = useGetRecommendedMoviesQuery();
+  // console.log(data, "data");
   const activeTab = useSelector((state: any) => state.home.activeTab);
   const isLoggedIn = localStorage.getItem("authToken");
   const parsedLoggedIn = isLoggedIn ? JSON.parse(isLoggedIn) : null;
@@ -21,6 +22,10 @@ const Home: React.FC = () => {
   useEffect(() => {
     if (data == undefined) refetch();
   }, [data]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [activeTab]);
 
   return (
     <>

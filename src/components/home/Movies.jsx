@@ -6,9 +6,12 @@ import "swiper/css";
 import MovieCard from "./MovieCard";
 
 import rightvg from "../../assets/rightvg.svg";
+import { setActiveTab } from "src/pages/home/slice/HomeSlice";
+import { useDispatch } from "react-redux";
 
 const Movies = ({ movieData }) => {
   const apiMovie = movieData?.list;
+  const dispatch = useDispatch();
 
   if (apiMovie?.length === 0) {
     return (
@@ -52,7 +55,21 @@ const Movies = ({ movieData }) => {
               {movieData?.title}
             </span>
           </h1>
-          {/* <h1 className="">{movieData?.navigator?.title}</h1> */}
+          {movieData?.right?.text?.length ? (
+            <div
+              className="flex items-center gap-1"
+              onClick={() =>
+                dispatch(setActiveTab(movieData?.right?.data?.index))
+              }
+            >
+              <h1 className="text-[10px] text-gray-500">
+                {movieData?.right?.text}
+              </h1>
+              <img src={rightvg} alt="" />
+            </div>
+          ) : (
+            <></>
+          )}
         </div>
         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 pl-3 lg:grid-cols-8 gap-y-5 gap-2 mt-0 pt-1 pb-2 px-3">
           {apiMovie?.map((movie) => (

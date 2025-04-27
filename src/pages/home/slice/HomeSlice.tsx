@@ -4,6 +4,7 @@ const HomeSlice = createSlice({
   name: "home",
   initialState: {
     activeTab: 0,
+    activePointTab: 1,
     sort: "by_default",
     sortName: "综合",
     class: "类型",
@@ -16,6 +17,9 @@ const HomeSlice = createSlice({
   reducers: {
     setActiveTab: (state, { payload }) => {
       state.activeTab = payload;
+    },
+    setActivePointTab: (state, { payload }) => {
+      state.activePointTab = payload;
     },
     setActiveNav: (state, { payload }) => {
       state.activeNav = payload;
@@ -46,6 +50,7 @@ const HomeSlice = createSlice({
 
 export const {
   setActiveTab,
+  setActivePointTab,
   setSort,
   setClass,
   setArea,

@@ -106,6 +106,8 @@ const Password = () => {
                 placeholder="输入新密码"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                minLength={8}
+                maxLength={25}
               />
               <span
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"

@@ -181,6 +181,8 @@ const Header: FC = () => {
     window.scrollTo(0, 0);
   }, [classData, area, year, activeTab, sortData, sortName]);
 
+  // console.log(activeTab, "activeTab");
+
   // Scroll event listener to detect scroll direction
   useEffect(() => {
     const handleScroll = () => {
