@@ -33,3 +33,46 @@
       background: url(../../public/gamebg.jpg) no-repeat;
       background-size: 100% 80%;
     } */
+
+.skeleton-vertical {
+  background: linear-gradient(
+    180deg,
+    rgba(225, 225, 225, 0.2) 25%,
+    rgba(0, 0, 0, 0.3) 50%,
+    rgba(225, 225, 225, 0.2) 75%
+  );
+  background-size: 100% 400%;
+  animation: shimmer-vertical 1.5s infinite;
+}
+
+@keyframes shimmer-vertical {
+  0% {
+    background-position: top;
+  }
+  100% {
+    background-position: bottom;
+  }
+}
+
+.nolist_head {
+  color: #161619;
+  font-variant-numeric: lining-nums proportional-nums;
+  font-feature-settings: "dlig" on;
+  font-family: "PingFang SC";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 22px; /* 110% */
+  letter-spacing: 0.2px;
+}
+
+.nolist_des {
+  color: rgba(0, 0, 0, 0.6);
+  text-align: center;
+  font-feature-settings: "liga" off, "clig" off;
+  font-family: "PingFang SC";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 22px; /* 122.222% */
+}

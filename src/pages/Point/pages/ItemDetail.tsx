@@ -7,7 +7,9 @@ import { Head, Card, Alert } from "../components";
 import { itemDetail, sendOrder } from "../api";
 import numeral from "numeral";
 import Toast from "../components/Toast";
-import "./style.css"
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+import "./style.css";
 
 export const ItemDetail = () => {
   const [err, setErr] = useState<boolean>(false);
@@ -64,7 +66,7 @@ export const ItemDetail = () => {
   };
 
   const update = (jf: any) => {
-    console.log('it is come')
+    console.log("it is come");
     // @ts-ignore
     // if (typeof JsBridge === "undefined") {
     //   // @ts-ignore
@@ -178,36 +180,61 @@ export const ItemDetail = () => {
         </Dialog>
       </Transition>
 
-      <div className="w-full px-4 my-2">
-        <div className="w-full rounded-lg bg-white h-[200px] relative overflow-hidden p-2 ">
-          {res?.label ?? "" ? (
-            <div className="absolute bg-[#ff6a33] text-white text-xs right-0 top-0 rounded-bl-lg px-3 h-[21px] flex items-center font-semibold">
-              {res.label}
-            </div>
-          ) : null}
-          <img
-            alt=""
-            src={res?.image}
-            className="object-cover w-full h-full rounded"
-          />
+      {loading ? (
+        <SkeletonTheme
+          direction="ltr"
+          baseColor="#E1E1E1"
+          highlightColor="#00000030"
+        >
+          <Skeleton className="rounded-lg w-full h-[200px] xl:w-[600px]" />
+        </SkeletonTheme>
+      ) : (
+        <div className="w-full px-4 my-2">
+          <div className="w-full rounded-lg bg-white h-[200px] relative overflow-hidden p-2 ">
+            {res?.label ?? "" ? (
+              <div className="absolute bg-[#ff6a33] text-white text-xs right-0 top-0 rounded-bl-lg px-3 h-[21px] flex items-center font-semibold">
+                {res.label}
+              </div>
+            ) : null}
+            <img
+              alt=""
+              src={res?.image}
+              className="object-cover w-full h-full rounded"
+            />
+          </div>
         </div>
-      </div>
+      )}
 
-      <div className="flex flex-col py-5 px-4 bg-white rounded-lg h-full">
-        <p className="font-medium text-lg text-black mb-6">
-          {res?.title ?? ""}
-        </p>
-        <div className="font-medium text-base text-black flex items-center gap-1 mb-4">
-          <div className="w-[3px] h-[14px] rounded-full bg-[#ff6a33]"></div>
-          商品详情
-        </div>
+      {loading ? (
+        <SkeletonTheme
+          direction="ltr"
+          baseColor="#E1E1E1"
+          highlightColor="#00000030"
+        >
+          <div className="flex flex-col py-5 gap-2 px-4 bg-white rounded-lg h-full">
+            <Skeleton width={150} className="rounded-lg h-[40px]" />
+            <Skeleton width={130} className="rounded-lg h-[40px]" />
+            <Skeleton className="rounded-lg h-[150px]" />
+          </div>
+        </SkeletonTheme>
+      ) : (
+        <div className="flex flex-col py-5 px-4 bg-white rounded-lg h-full">
+          <p className="font-medium text-lg text-black mb-6">
+            {res?.title ?? ""}
+          </p>
+          <div className="font-medium text-base text-black flex items-center gap-1 mb-4">
+            <div className="w-[3px] h-[14px] rounded-full bg-[#ff6a33]"></div>
+            商品详情
+          </div>
 
-        <div className="flex flex-col text-sm text-black/60 pb-[100px]">
-          <div
-            dangerouslySetInnerHTML={{ __html: res?.introduction ?? "" }}
-          ></div>
+          <div className="flex flex-col text-sm text-black/60 pb-[100px]">
+            <div
+              dangerouslySetInnerHTML={{ __html: res?.introduction ?? "" }}
+            ></div>
+          </div>
         </div>
-      </div>
+      )}
+
       {err && (
         <div className=" absolute bottom-[20px]">
           <h1 className=" text-xl text-red-700 font-bold">
@@ -230,9 +257,9 @@ export const ItemDetail = () => {
           </div>
           {(res?.stock ?? 0) > 0 ? (
             <button
-            // onTouchStart={handleBuy}
-            onTouchEnd={handleBuy}
-            onClick={handleBuy}
+              // onTouchStart={handleBuy}
+              onTouchEnd={handleBuy}
+              onClick={handleBuy}
               className="bg-[#ff6a33] text-sm py-[14px] px-[72px] text-white font-medium rounded "
             >
               立即兑换
@@ -248,4 +275,4 @@ export const ItemDetail = () => {
   );
 };
 
-export default ItemDetail
+export default ItemDetail;

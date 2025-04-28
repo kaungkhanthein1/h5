@@ -1,5 +1,6 @@
 import { FC, useState, Fragment, useMemo, useRef, useEffect } from "react";
 import { useRequest, useSafeState } from "ahooks";
+import Loader from "../../../pages/search/components/Loader";
 import { useInfiniteScroll } from "ahooks";
 import { Head, Card } from "../components";
 import { getItems } from "../api";
@@ -9,6 +10,9 @@ import numeral from "numeral";
 import "./style.css";
 import { useGetActivityQuery } from "../service/PointApi";
 import { useNavigate } from "react-router-dom";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+import noListImg from "../test.png";
 
 export const Mall = () => {
   const [t, st] = useState<any>(0);
@@ -138,7 +142,8 @@ export const Mall = () => {
       // window.location.href = hrefLink
     }
   };
-
+  // const noList = data?.data?.list.length === 0
+  const noList = data?.data?.list.length === 0;
   return (
     <div className="container bg-white/90" ref={ref}>
       <Head />
@@ -258,26 +263,67 @@ export const Mall = () => {
         </div>
       </div>
 
-      {/* {loading ? () : ()} */}
+      {loading && dataList.length === 0 && (
+        <div className="mt-[45px]">
+          <SkeletonTheme
+            direction="ltr"
+            baseColor="#E1E1E1"
+            highlightColor="#00000030"
+          >
+            <div className="grid grid-cols-2 gap-3 pb-3">
+              {[...Array(6)].map((_, index) => (
+                <Skeleton className="rounded-lg w-[250px] h-[250px] xl:w-[600px]" />
+              ))}
+            </div>
+          </SkeletonTheme>
+        </div>
+      )}
 
-      <div
-        className="jf-infinitescroll container px-4 mt-[45px] gap-3 pb-3 overflow-y-auto"
-        id="scrollableDiv"
-      >
-       
+      {noList ? (
+        <div className=" w-screen h-[70vh] flex justify-center items-center">
+          <div className=" flex flex-col justify-center items-center">
+            <img className=" h-[184px]" src={noListImg} alt="" />
+            <h1 className="nolist_head">这里还没有商品</h1>
+            <span className=" nolist_des">稍后再试</span>
+          </div>
+        </div>
+      ) : (
+        <div
+          className="jf-infinitescroll container px-4 mt-[45px] gap-3 pb-3 overflow-y-auto"
+          id="scrollableDiv"
+        >
+          {/* {loading ? (
+            <SkeletonTheme
+              direction="ltr"
+              baseColor="#E1E1E1"
+              highlightColor="#00000030"
+            >
+              <div className="grid grid-cols-2 gap-3 pb-3">
+                {[...Array(6)].map((_, index) => (
+                  <Skeleton className="rounded-lg w-[250px] h-[250px] xl:w-[600px]" />
+                ))}
+              </div>
+            </SkeletonTheme>
+          ) : ( */}
           <InfiniteScroll
             className="grid grid-cols-2 gap-3 pb-3"
             dataLength={dataList.length}
             next={fetchMoreData}
             hasMore={dataList.length < (data?.data?.total ?? 1)}
-            loader={<h4></h4>}
+            loader={
+              <div className="flex bg-transparent justify-center items-center w-screen py-5">
+                <Loader />
+              </div>
+            }
             scrollableTarget="scrollableDiv"
           >
             {dataList?.map((i, k) => (
               <Card key={i.id} data={i} />
             ))}
           </InfiniteScroll>
-      </div>
+          {/* )} */}
+        </div>
+      )}
     </div>
   );
 };
