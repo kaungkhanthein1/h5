@@ -87,7 +87,7 @@ export const Panel: FC<PanelProps> = ({ status }) => {
       id={`scrollableDiv-${status}`}
     >
       {loading && dataList.length === 0 && (
-        <div className="mt-[45px">
+        <div className="mt-[45px px-4">
           <SkeletonTheme
             direction="ltr"
             baseColor="#E1E1E1"

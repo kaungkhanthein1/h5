@@ -186,7 +186,9 @@ export const ItemDetail = () => {
           baseColor="#E1E1E1"
           highlightColor="#00000030"
         >
-          <Skeleton className="rounded-lg w-full h-[200px] xl:w-[600px]" />
+          <div className="px-4">
+            <Skeleton className="rounded-lg w-full h-[200px] xl:w-[600px]" />
+          </div>
         </SkeletonTheme>
       ) : (
         <div className="w-full px-4 my-2">
