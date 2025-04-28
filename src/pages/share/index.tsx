@@ -97,21 +97,77 @@ const Share: React.FC<ShareProps> = ({}) => {
     }
   };
 
-  const handleSaveAsImage = () => {
-    if (imageRef.current) {
-      toPng(imageRef.current, { cacheBust: true })
-        .then((dataUrl) => {
-          const link = document.createElement("a");
-          link.href = dataUrl;
-          link.download = "share-info.png";
-          link.click();
-          dispatch(showToast({ message: "保存成功", type: "success" }));
-        })
-        .catch((err) => {
-          console.error("Failed to generate image:", err);
-        });
+  const sendEventToNative = (name: string, text: string) => {
+    if (
+      (window as any).webkit &&
+      (window as any).webkit.messageHandlers &&
+      (window as any).webkit.messageHandlers.jsBridge
+    ) {
+      (window as any).webkit.messageHandlers.jsBridge.postMessage({
+        eventName: name,
+        value: text,
+      });
     }
   };
+
+  const isIOSApp = () => {
+    return (
+      (window as any).webkit &&
+      (window as any).webkit.messageHandlers &&
+      (window as any).webkit.messageHandlers.jsBridge
+    );
+  };
+
+  const handleSaveAsImage = () => {
+    if (isIOSApp()) {
+      sendEventToNative("saveImage", invite?.data?.qrcode.data); // shareUrl should be base64
+    } else {
+      console.log(invite?.data?.qrcode.data);
+      if (!invite?.data?.qrcode.data.startsWith("data:image")) {
+        console.error("Invalid image format.");
+        return;
+      }
+
+      try {
+        // Convert data URL to blob
+        const response = fetch(invite?.data?.qrcode.data)
+          .then((res) => res.blob())
+          .then((blob) => {
+            // Create a blob URL and initiate download
+            const blobUrl = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = blobUrl;
+            link.download = "QRCode.png";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            // Clean up the blob URL after download
+            setTimeout(() => {
+              URL.revokeObjectURL(blobUrl);
+            }, 100);
+          });
+      } catch (error) {
+        console.error("Error downloading QR code:", error);
+      }
+    }
+  };
+
+  // const handleSaveAsImage = () => {
+  //   if (imageRef.current) {
+  //     toPng(imageRef.current, { cacheBust: true })
+  //       .then((dataUrl) => {
+  //         const link = document.createElement("a");
+  //         link.href = dataUrl;
+  //         link.download = "share-info.png";
+  //         link.click();
+  //         dispatch(showToast({ message: "保存成功", type: "success" }));
+  //       })
+  //       .catch((err) => {
+  //         console.error("Failed to generate image:", err);
+  //       });
+  //   }
+  // };
   return (
     <div className="bg-background min-h-screen flex flex-col  gap-[10px]">
       {/* header */}
@@ -214,47 +270,45 @@ const Share: React.FC<ShareProps> = ({}) => {
       {/* alert */}
       <Alert list={list} img={fire} />
       {/* invited user */}
-      {token && (
-        <div className="flex invite_user mx-[20px] justify-around items-center mt-[20px] p-4">
-          <Link
-            to={"/point_mall"}
-            className=" flex flex-col items-center justify-center gap-[8px]"
-          >
-            <img
-              className=" w-[30px] h-[30px] dolar p-[8px]"
-              src={dolar}
-              alt=""
-            />
-            <div className=" flex justify-center items-center gap-[6px]">
-              <div className=" flex flex-col">
-                <h1 className=" text-center text-[12px] font-[500] text-[#CCC3B2]">
-                  积分兑换
-                </h1>
-                <h1 className=" text-center text-[8px] font-[400] text-[#CCC3B2]">
-                  兑换价值百元大礼包
-                </h1>
-              </div>
-              <img src={go} alt="" />
-            </div>
-          </Link>
-          <p className=" line"></p>
-          <div
-            onClick={() => navigate("/share/member")}
-            className=" flex flex-col items-center justify-center gap-[8px]"
-          >
-            <h1 className=" text-[18px] font-[600] text-white/70">
-              {userData?.data?.invite_user_num}
-            </h1>
-            <div className=" flex justify-center items-center gap-[6px]">
-              <h1 className="text-center text-[12px] font-[500] text-[#CCC3B2]">
-                我的邀请
+      <div className="flex invite_user mx-[20px] justify-around items-center mt-[20px] p-4">
+        <Link
+          to={"/point_mall"}
+          className=" flex flex-col items-center justify-center gap-[8px]"
+        >
+          <img
+            className=" w-[30px] h-[30px] dolar p-[8px]"
+            src={dolar}
+            alt=""
+          />
+          <div className=" flex justify-center items-center gap-[6px]">
+            <div className=" flex flex-col">
+              <h1 className=" text-center text-[12px] font-[500] text-[#CCC3B2]">
+                积分兑换
               </h1>
-
-              <img src={go} alt="" />
+              <h1 className=" text-center text-[8px] font-[400] text-[#CCC3B2]">
+                兑换价值百元大礼包
+              </h1>
             </div>
+            <img src={go} alt="" />
+          </div>
+        </Link>
+        <p className=" line"></p>
+        <div
+          onClick={() => navigate("/share/member")}
+          className=" flex flex-col items-center justify-center gap-[8px]"
+        >
+          <h1 className=" text-[18px] font-[600] text-white/70">
+            {userData?.data?.invite_user_num}
+          </h1>
+          <div className=" flex justify-center items-center gap-[6px]">
+            <h1 className="text-center text-[12px] font-[500] text-[#CCC3B2]">
+              我的邀请
+            </h1>
+
+            <img src={go} alt="" />
           </div>
         </div>
-      )}
+      </div>
       {/* two button */}
       <div className="flex justify-center items-center gap-[16px] py-4">
         {/* copy */}
