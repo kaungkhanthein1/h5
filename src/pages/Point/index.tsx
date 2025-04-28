@@ -74,7 +74,7 @@ const Index = ({showTab = true}) => {
         <Loader />
       ) : (
         <div className=" px-[20px]">
-          {tabs[activeTab ? activeTab - 1 : activeTab - 1]?.content}
+          {tabs[activeTab ? activeTab - 1 : 0]?.content}
         </div>
       )}
     </div>

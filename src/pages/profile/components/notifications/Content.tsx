@@ -3,7 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { showToast } from "../../error/ErrorSlice";
 import { useDispatch } from "react-redux";
 import { setActiveNav, setActivePointTab } from "../../../../pages/home/slice/HomeSlice";
-
+import Markdown from 'react-markdown'
+// import remarkGfm from 'remark-gfm'
 const Content = ({ notice }: any) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -41,6 +42,9 @@ const Content = ({ notice }: any) => {
           navigate("/point_info_redeem");
         }, 300);
         break;
+      case "points_lottery":
+        navigate("/game");
+        break;
       case "invite_home":
         navigate('/share');
         break;
@@ -60,7 +64,9 @@ const Content = ({ notice }: any) => {
     <div className="content p-3">
       <div className="text-card">
         <h3>{notice.title}</h3>
-        <p className="mt-3">{notice.content}</p>
+        <p className="mt-3">
+          <Markdown>{notice.content}</Markdown>
+        </p>
         {/* {pageType ? (
           <>
             {notice.extend.parameters?.video_id && (
