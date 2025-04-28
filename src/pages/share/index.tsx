@@ -214,45 +214,47 @@ const Share: React.FC<ShareProps> = ({}) => {
       {/* alert */}
       <Alert list={list} img={fire} />
       {/* invited user */}
-      <div className="flex invite_user mx-[20px] justify-around items-center mt-[20px] p-4">
-        <Link
-          to={"/point_mall"}
-          className=" flex flex-col items-center justify-center gap-[8px]"
-        >
-          <img
-            className=" w-[30px] h-[30px] dolar p-[8px]"
-            src={dolar}
-            alt=""
-          />
-          <div className=" flex justify-center items-center gap-[6px]">
-            <div className=" flex flex-col">
-              <h1 className=" text-center text-[12px] font-[500] text-[#CCC3B2]">
-                积分兑换
-              </h1>
-              <h1 className=" text-center text-[8px] font-[400] text-[#CCC3B2]">
-                兑换价值百元大礼包
-              </h1>
+      {token && (
+        <div className="flex invite_user mx-[20px] justify-around items-center mt-[20px] p-4">
+          <Link
+            to={"/point_mall"}
+            className=" flex flex-col items-center justify-center gap-[8px]"
+          >
+            <img
+              className=" w-[30px] h-[30px] dolar p-[8px]"
+              src={dolar}
+              alt=""
+            />
+            <div className=" flex justify-center items-center gap-[6px]">
+              <div className=" flex flex-col">
+                <h1 className=" text-center text-[12px] font-[500] text-[#CCC3B2]">
+                  积分兑换
+                </h1>
+                <h1 className=" text-center text-[8px] font-[400] text-[#CCC3B2]">
+                  兑换价值百元大礼包
+                </h1>
+              </div>
+              <img src={go} alt="" />
             </div>
-            <img src={go} alt="" />
-          </div>
-        </Link>
-        <p className=" line"></p>
-        <div
-          onClick={() => navigate("/share/member")}
-          className=" flex flex-col items-center justify-center gap-[8px]"
-        >
-          <h1 className=" text-[18px] font-[600] text-white/70">
-            {userData?.data?.invite_user_num}
-          </h1>
-          <div className=" flex justify-center items-center gap-[6px]">
-            <h1 className="text-center text-[12px] font-[500] text-[#CCC3B2]">
-              我的邀请
+          </Link>
+          <p className=" line"></p>
+          <div
+            onClick={() => navigate("/share/member")}
+            className=" flex flex-col items-center justify-center gap-[8px]"
+          >
+            <h1 className=" text-[18px] font-[600] text-white/70">
+              {userData?.data?.invite_user_num}
             </h1>
+            <div className=" flex justify-center items-center gap-[6px]">
+              <h1 className="text-center text-[12px] font-[500] text-[#CCC3B2]">
+                我的邀请
+              </h1>
 
-            <img src={go} alt="" />
+              <img src={go} alt="" />
+            </div>
           </div>
         </div>
-      </div>
+      )}
       {/* two button */}
       <div className="flex justify-center items-center gap-[16px] py-4">
         {/* copy */}

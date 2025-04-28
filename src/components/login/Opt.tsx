@@ -75,8 +75,8 @@ const Opt: React.FC<OptProps> = ({
     const countdown = setInterval(() => {
       if (timer > 0) setTimer((prev) => prev - 1);
     }, 1000);
-
-    if (timer === 0) setButtonText("Resend Code");
+    
+    if (timer === 0) setButtonText("重新发送");
     else setButtonText(`${timer} s`);
 
     return () => clearInterval(countdown);

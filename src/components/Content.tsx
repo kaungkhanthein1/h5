@@ -3,8 +3,13 @@ import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { showToast } from "../pages/profile/error/ErrorSlice";
 import { setActiveNav } from "../pages/home/slice/HomeSlice";
+import { setAuthModel } from "../features/login/ModelSlice";
 
 const Content = ({ notice, handleAppClose }: any) => {
+  const isLoggedIn = localStorage.getItem("authToken");
+  const parsedLoggedIn = isLoggedIn ? JSON.parse(isLoggedIn) : null;
+  const token = parsedLoggedIn?.data?.access_token;
+
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
@@ -36,18 +41,37 @@ const Content = ({ notice, handleAppClose }: any) => {
         handleAppClose();
         break;
       case "points_mall":
-        navigate("/point_mall");
-        handleAppClose();
+        if (!token) {
+          dispatch(setAuthModel(true));
+          handleAppClose();
+        } else {
+          navigate("/point_mall");
+          handleAppClose();
+        }
+        break;
+      case "points_lottery":
+        if (!token) {
+          dispatch(setAuthModel(true));
+          handleAppClose();
+        } else {
+          navigate("/game");
+          handleAppClose();
+        }
         break;
       case "daily_task":
-        dispatch(setActiveNav(3));
-        setTimeout(() => {
-          navigate("/point_info_redeem");
-        }, 300);
-        handleAppClose();
+        if (!token) {
+          dispatch(setAuthModel(true));
+          handleAppClose();
+        } else {
+          dispatch(setActiveNav(3));
+          setTimeout(() => {
+            navigate("/point_info_redeem");
+          }, 300);
+          handleAppClose();
+        }
         break;
       case "invite_home":
-        navigate('/share');
+        navigate("/share");
         handleAppClose();
         break;
       default:
