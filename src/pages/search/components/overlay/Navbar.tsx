@@ -51,6 +51,15 @@ const Navbar: React.FC<NavbarProps> = ({ randomWord }) => {
     }
   };
 
+  const handleCancel = (event: any) => {
+    event.preventDefault();
+    if (query.length > 0) {
+      setQuery("");
+    } else {
+      navigate("/");
+    }
+  };
+
   const handleSuggestionClick = (suggestion: string) => {
     setQuery(suggestion); // Set the clicked suggestion as the query
     setSuggestions([]); // Clear suggestions
@@ -122,7 +131,7 @@ const Navbar: React.FC<NavbarProps> = ({ randomWord }) => {
           </div>
         </form>
         <div className="w-[40px]">
-          <button className="search-btn" onClick={handleSubmit}>
+          <button className="search-btn" onClick={handleCancel}>
             取消
           </button>
         </div>
