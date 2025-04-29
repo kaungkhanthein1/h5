@@ -234,7 +234,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     if (location.pathname !== "/") {
-      refetchAds();
+      // refetchAds();
       refetch();
     }
   }, [location.pathname]);

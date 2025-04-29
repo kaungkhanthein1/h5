@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { showToast } from "../pages/profile/error/ErrorSlice";
 import { setActiveNav } from "../pages/home/slice/HomeSlice";
 import { setAuthModel } from "../features/login/ModelSlice";
+import Markdown from "react-markdown";
 
 const Content = ({ notice, handleAppClose }: any) => {
   const isLoggedIn = localStorage.getItem("authToken");
@@ -94,9 +95,15 @@ const Content = ({ notice, handleAppClose }: any) => {
         <h3 className=" text-white text-[12px] font-[500] leading-[14px]">
           {notice.title}
         </h3>
-        <p className="mt-3 text-[#888] text-[10px] font-[500]">
-          {notice.content}
-        </p>
+        <span className="mt-3" style={{
+          fontFamily: 'PingFang SC',
+          fontWeight: 500,
+          fontSize: '12px',
+          lineHeight: '100%',
+          letterSpacing: '-1.1%'
+        }}>
+          <Markdown>{notice.content}</Markdown>
+        </span>
         {/* {pageType ? (
           <>
             {notice.extend.parameters?.video_id && (

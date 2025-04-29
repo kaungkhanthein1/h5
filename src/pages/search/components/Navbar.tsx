@@ -77,6 +77,12 @@ const Navbar: React.FC<NavbarProps> = ({
     }
   };
 
+  const gobackPage = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    navigate("/search_overlay");
+  };
+
   // Handle suggestion click (trigger search with selected suggestion)
   const handleSuggestionClick = (suggestion: string) => {
     setQuery(suggestion); // Set the clicked suggestion as the query
@@ -143,7 +149,7 @@ const Navbar: React.FC<NavbarProps> = ({
             </div>
           </form>
           <div className="w-[40px]">
-            <a onClick={handleSearch} className="search-btn">
+            <a onClick={gobackPage} className="search-btn">
               取消
             </a>
           </div>

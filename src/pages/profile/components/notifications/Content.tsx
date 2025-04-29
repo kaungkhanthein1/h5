@@ -92,9 +92,15 @@ const Content = ({ notice }: any) => {
     <div className="content p-3">
       <div className="text-card">
         <h3>{notice.title}</h3>
-        <p className="mt-3">
+        <span className="mt-3" style={{
+          fontFamily: 'PingFang SC',
+          fontWeight: 500,
+          fontSize: '12px',
+          lineHeight: '100%',
+          letterSpacing: '-1.1%'
+        }}>
           <Markdown>{notice.content}</Markdown>
-        </p>
+        </span>
         {/* {pageType ? (
           <>
             {notice.extend.parameters?.video_id && (

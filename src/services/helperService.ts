@@ -3,6 +3,7 @@ import { getAdsData, getconfigData, getNotiData } from "./playerService";
 import { decryptWithAes } from "./newEncryption";
 import { useDispatch } from "react-redux";
 import { setActiveTab } from "../pages/home/slice/HomeSlice";
+import isEqual from 'lodash/isEqual'; // Or use a custom deep comparison function
 
 export const useGetHeaderTopicsQuery = () => {
   const [data, setData] = useState<any>(null);
@@ -60,24 +61,31 @@ export const useGetAdsQuery = () => {
   const [error, setError] = useState<any>(null);
 
   const fetchAdsTopics = async (forceRefresh = false) => {
-    // setIsFetching(true);
+    setIsFetching(true);
+    setError(null);
 
     try {
       const cachedData = localStorage.getItem("AdsQuery");
-
-      // **Step 1: Serve Cached Data Immediately**
+      
+      // Immediately show cached data unless forcing refresh
       if (cachedData && !forceRefresh) {
-        setConfigData(JSON.parse(cachedData));
+        const parsedData = JSON.parse(cachedData);
+        setConfigData(parsedData);
         setIsLoading(false);
-        await new Promise(resolve => setTimeout(resolve, 5000)); // 5000ms = 5 seconds
       }
-      // **Step 2: Fetch Fresh Data in the Background**
+
+      // Always fetch fresh data
       const response = await getAdsData();
       const newData = response.data ? response : await decryptWithAes(response);
-      // **Step 3: Update Cache & UI**
-      localStorage.setItem("AdsQuery", JSON.stringify(newData));
-      setConfigData(newData);
-      setError(null);
+
+      // Prevent unnecessary updates with deep comparison
+      const currentCachedData = localStorage.getItem("AdsQuery");
+      const parsedCurrentData = currentCachedData ? JSON.parse(currentCachedData) : null;
+
+      if (!isEqual(newData, parsedCurrentData)) {
+        localStorage.setItem("AdsQuery", JSON.stringify(newData));
+        setConfigData(newData);
+      }
     } catch (err) {
       console.error("Failed to fetch Ads data:", err);
       setError(err);
@@ -96,7 +104,7 @@ export const useGetAdsQuery = () => {
     isLoading,
     isFetching,
     error,
-    refetchAds: () => fetchAdsTopics(true), // Force refresh when refetching
+    refetchAds: () => fetchAdsTopics(true),
   };
 };
 

@@ -20,11 +20,14 @@ const MovieCard = ({
   const [collectMovie] = useCollectMovieMutation();
   const favorites = useSelector(selectFavData);
   const { openAuthModel } = useSelector((state: any) => state.model);
-  const { refetch } = useGetListQuery({ page: 1, type_id: 0 });
 
   const isLoggedIn = localStorage.getItem("authToken");
   const parsedLoggedIn = isLoggedIn ? JSON.parse(isLoggedIn) : null;
   const token = parsedLoggedIn?.data?.access_token;
+  const { refetch } = useGetListQuery(
+    { page: 1, type_id: 0 },
+    { skip: !token }
+  );
 
   useEffect(() => {
     if (openAuthModel) {

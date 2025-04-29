@@ -87,6 +87,7 @@
   },
   "devDependencies": {
     "@types/crypto-js": "^4.2.2",
+    "@types/lodash": "^4.17.16",
     "@types/lozad": "^1.16.4",
     "@types/numeral": "^2.0.5",
     "@types/ramda": "^0.30.2",
