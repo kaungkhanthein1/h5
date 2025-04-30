@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { setAuthModel } from "../../../features/login/ModelSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetUserQuery } from "../services/profileApi"; // Import your query
@@ -9,14 +9,20 @@ import { showToast } from "../error/ErrorSlice";
 
 const Header = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   // Check for token in localStorage
   const isLoggedIn = localStorage.getItem("authToken");
   const parsedLoggedIn = isLoggedIn ? JSON.parse(isLoggedIn) : null;
   const token = parsedLoggedIn?.data?.access_token;
 
-  const { data: userData, error } = useGetUserQuery(undefined, {
+  const {
+    data: userData,
+    error,
+    refetch,
+    isFetching,
+    isLoading,
+  } = useGetUserQuery(undefined, {
     skip: !token,
   });
 
@@ -28,14 +34,13 @@ const Header = () => {
 
   const goToPointMall = () => {
     // dispatch(showToast({ message: "该功能正在开发中", type: "success" }));
-    navigate("/point_info")
-  }
+    navigate("/point_info");
+  };
   const user = userData?.data;
-  // console.log(user);
 
   return (
     <div className="profile-header">
-      {user ? (
+      {user && !isFetching ? (
         <div className="profile-div-main w-full justify-between profile-card_point gap-[10px]">
           <Link
             to={"/info"}
@@ -147,7 +152,10 @@ const Header = () => {
               </svg>
             </div>
           </Link>
-          <button onClick={goToPointMall} className=" flex w-full justify-between items-center pt-[15px] px-[7px]">
+          <button
+            onClick={goToPointMall}
+            className=" flex w-full justify-between items-center pt-[15px] px-[7px]"
+          >
             {/* text */}
             <div className=" flex justify-center items-center gap-[8px]">
               <svg

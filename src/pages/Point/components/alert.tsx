@@ -65,7 +65,7 @@ export const Alert: FC<AlertProps> = ({
                   {msg}
                   {
                     isCopy ? (
-                      <button className="text-orange-secondary text-sm pt-3 w-full font-medium border-none">
+                      <button className="text-[#ff6a33] text-sm pt-3 w-full font-medium border-none">
                         <Copy btntype="text" ctx={msg} />
                       </button>
                     ) : null

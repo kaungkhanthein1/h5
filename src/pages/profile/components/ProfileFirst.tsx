@@ -1,4 +1,4 @@
-import { startTransition, useEffect, useState } from "react";
+import { startTransition, useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import ImageWithPlaceholder from "../../search/components/ImgPlaceholder";
 import { setAuthModel } from "../../../features/login/ModelSlice";
@@ -27,7 +27,11 @@ const ProfileFirst = () => {
   const parsedLoggedIn = isLoggedIn ? JSON.parse(isLoggedIn) : null;
   const token = parsedLoggedIn?.data?.access_token;
 
-  const { data: userData, error } = useGetUserQuery(undefined, {
+  const {
+    data: userData,
+    error,
+    refetch,
+  } = useGetUserQuery(undefined, {
     skip: !token,
   });
 
@@ -35,15 +39,32 @@ const ProfileFirst = () => {
 
   const {
     data: favoriteMovies,
-    // isLoading: isFavoritesLoading,
-    // isFetching: isFavoritesFetching,
+    isError: favoriteError,
+    refetch: refetchList,
+    isLoading: isFavoritesLoading,
+    isFetching: isFavoritesFetching,
   } = useGetListQuery({ page: 1, type_id: 0 }, { skip: !token });
-  const { data, isLoading, isFetching, refetch } = useGetRecordQuery(
-    undefined,
-    {
-      skip: !token,
+  const {
+    data,
+    isLoading,
+    isFetching,
+    isError: recordError,
+    refetch: refetchRecord,
+  } = useGetRecordQuery(undefined, {
+    skip: !token,
+  }); // Fetch favorite movies list from API
+
+  const prevTokenRef = useRef(token);
+
+  useEffect(() => {
+    // Only trigger refetch if the token has changed
+    if (prevTokenRef.current !== token) {
+      prevTokenRef.current = token;
+      refetch();
+      refetchRecord();
+      refetchList();
     }
-  ); // Fetch favorite movies list from API
+  }, [token, refetch]);
 
   // const [movies, setMovies] = useState<Movie[]>([]);
   const dispatch = useDispatch();
@@ -134,8 +155,6 @@ const ProfileFirst = () => {
     }
   };
 
-  // console.log(latestMovies);
-
   return (
     <div className="profile-div">
       <div className="profile-div-main w-full">
@@ -178,7 +197,7 @@ const ProfileFirst = () => {
         </a>
 
         {/* Horizontal Scrolling Movie List */}
-        {token && movies?.length !== 0 && (
+        {token && movies?.length !== 0 && !isFetching && !recordError && (
           <div className="flex overflow-x-scroll whitespace-nowrap watch_ten scrollbar-hide gap-4 ">
             {latestMovies?.map((movie: any) => (
               <Link
@@ -262,40 +281,43 @@ const ProfileFirst = () => {
         </a>
 
         {/* Horizontal Scrolling Movie List */}
-        {token && favorites?.length !== 0 && (
-          <div className="flex overflow-x-scroll whitespace-nowrap watch_ten scrollbar-hide gap-4 ">
-            {favorites?.map((movie: any) => (
-              <Link
-                to={`/player/${movie?.movie_id}`}
-                key={movie?.movie_id}
-                className="w-[114px]"
-              >
-                <div className="flex flex-col w-[114px] gap-2 transition-all duration-300 ease-in-out">
-                  <div className="relative w-[114px] transition-transform duration-500 ease-in-out transform">
-                    <ImageWithPlaceholder
-                      src={movie?.cover}
-                      alt={`Picture of ${movie?.movie_name}`}
-                      width={114}
-                      height={153}
-                      className="rounded-md w-full h-[153px] object-cover object-center"
-                    />
-                    <div className="absolute w-full bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-black to-transparent rounded-sm"></div>
+        {token &&
+          favorites?.length !== 0 &&
+          !isFavoritesFetching &&
+          !favoriteError && (
+            <div className="flex overflow-x-scroll whitespace-nowrap watch_ten scrollbar-hide gap-4 ">
+              {favorites?.map((movie: any) => (
+                <Link
+                  to={`/player/${movie?.movie_id}`}
+                  key={movie?.movie_id}
+                  className="w-[114px]"
+                >
+                  <div className="flex flex-col w-[114px] gap-2 transition-all duration-300 ease-in-out">
+                    <div className="relative w-[114px] transition-transform duration-500 ease-in-out transform">
+                      <ImageWithPlaceholder
+                        src={movie?.cover}
+                        alt={`Picture of ${movie?.movie_name}`}
+                        width={114}
+                        height={153}
+                        className="rounded-md w-full h-[153px] object-cover object-center"
+                      />
+                      <div className="absolute w-full bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-black to-transparent rounded-sm"></div>
 
-                    <div className="absolute bottom-[3px] right-[3px] text-[10px]">
-                      {movie?.dynamic}
+                      <div className="absolute bottom-[3px] right-[3px] text-[10px]">
+                        {movie?.dynamic}
+                      </div>
+                    </div>
+
+                    <div>
+                      <h1 className=" truncate text-[#888] text-[14px]">
+                        {movie?.movie_name}
+                      </h1>
                     </div>
                   </div>
-
-                  <div>
-                    <h1 className=" truncate text-[#888] text-[14px]">
-                      {movie?.movie_name}
-                    </h1>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        )}
+                </Link>
+              ))}
+            </div>
+          )}
         {/* point */}
         <a className="p-first cursor-pointer " onClick={handleMallClick}>
           <div className="flex gap-3 items-center">

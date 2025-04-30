@@ -161,7 +161,7 @@ export const Panel: FC<PanelProps> = ({ status }) => {
                   </p>
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-lg text-orange-secondary font-semibold">
+                  <span className="text-lg text-[#ff6a33] font-semibold">
                     {numeral(i?.order_price ?? 0).format("0,0")}&nbsp;积分
                   </span>
                 </div>

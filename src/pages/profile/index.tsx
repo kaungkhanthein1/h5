@@ -3,9 +3,10 @@ import Navbar from "./components/Navbar";
 import Header from "./components/Header";
 import ProfileFirst from "./components/ProfileFirst";
 import ProfileSecond from "./components/ProfileSecond";
-import { useGetUserQuery } from "./services/profileApi";
 
 const index = () => {
+  // Check for token in localStorage
+
   return (
     <>
       <div className="profile-bg"></div>
