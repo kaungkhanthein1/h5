@@ -100,52 +100,10 @@ const Content = ({ notice, handleAppClose }: any) => {
           fontWeight: 500,
           fontSize: '12px',
           lineHeight: '100%',
-          letterSpacing: '-1.1%'
+          letterSpacing: '-0.011em' // Changed from '-1.1%'
         }}>
           <Markdown>{notice.content}</Markdown>
         </span>
-        {/* {pageType ? (
-          <>
-            {notice.extend.parameters?.video_id && (
-              <button
-                onClick={() =>
-                  navigate(`/player/${notice.extend.parameters?.video_id}`)
-                }
-                className="noti-btn mt-6"
-              >
-                {notice.extend.page_name}
-              </button>
-            )}
-            {notice.extend.parameters?.topic_id && (
-              <button
-                onClick={() =>
-                  navigate(`/explorer/${notice.extend.parameters?.topic_id}`)
-                }
-                className="noti-btn mt-6"
-              >
-                {notice.extend.page_name}
-              </button>
-            )}
-            {!notice.extend.parameters?.topic_id &&
-              !notice.extend.parameters?.video_id && (
-                <button
-                  onClick={() => JumpAction(notice)}
-                  className="noti-btn mt-6"
-                >
-                  {notice.extend.page_name}
-                </button>
-              )}
-          </>
-        ) : (
-          notice.extend.page_name && (
-            <button
-              className="noti-btn mt-6"
-              onClick={() => JumpAction(notice)}
-            >
-              {notice.extend.page_name}
-            </button>
-          )
-        )} */}
         {pageType ? (
           <button className="noti-btn mt-6" onClick={() => JumpAction(notice)}>
             {notice.extend.page_name}
