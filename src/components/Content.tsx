@@ -100,9 +100,8 @@ const Content = ({ notice, handleAppClose }: any) => {
           fontWeight: 500,
           fontSize: '12px',
           lineHeight: '100%',
-          letterSpacing: '-0.011em' // Changed from '-1.1%'
         }}>
-          <Markdown>{notice.content}</Markdown>
+          <p>{notice.content}</p>
         </span>
         {pageType ? (
           <button className="noti-btn mt-6" onClick={() => JumpAction(notice)}>
