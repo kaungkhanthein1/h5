@@ -43,6 +43,13 @@ const ShareApi = createApi({
         }),
       }),
     }),
+
+    getShare: builder.query({
+      query: () => ({
+        url: convertToSecureUrl("/user/get_share"),
+        method: "GET",
+      }),
+    }),
     getInvitedDetails: builder.query({
       // Custom query function
       queryFn: async (
@@ -83,6 +90,10 @@ const ShareApi = createApi({
   }),
 });
 
-export const { useGetShareScanQuery, useGetInvitedDetailsQuery } = ShareApi;
+export const {
+  useGetShareScanQuery,
+  useGetShareQuery,
+  useGetInvitedDetailsQuery,
+} = ShareApi;
 
 export default ShareApi;

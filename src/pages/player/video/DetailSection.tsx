@@ -164,8 +164,8 @@ const handleShare = async () => {
     // Check if the cookie exists
     const cachedContent = Cookies.get(cookieKey);
     if (cachedContent) {
-      copyToClipboard(JSON.parse(cachedContent).data.link);
-      sendShareEventToNative(JSON.parse(cachedContent).data.link);
+      copyToClipboard(JSON.parse(cachedContent).data.content);
+      sendShareEventToNative(JSON.parse(cachedContent).data.content);
       return;
     }
 
@@ -185,8 +185,8 @@ const handleShare = async () => {
     if (data && result) {
       // Save to cookie with a 2-hour expiry
       Cookies.set(cookieKey, JSON.stringify(result), { expires: 1 / 12 }); // 1/12 day = 2 hours
-      sendShareEventToNative(result?.data.link);
-      copyToClipboard(result?.data.link);
+      sendShareEventToNative(result?.data.content);
+      copyToClipboard(result?.data.content);
     }
   } catch (error) {
     console.error("Error fetching share content:", error);
