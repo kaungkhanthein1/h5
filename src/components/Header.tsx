@@ -178,7 +178,7 @@ const Header: FC = () => {
 
   useEffect(() => {
     dispatch(setShowFilterTag(false));
-    window.scrollTo(0, 0);
+    // window.scrollTo(0, 0);
   }, [classData, area, year, activeTab, sortData, sortName]);
 
   // console.log(activeTab, "activeTab");

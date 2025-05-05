@@ -5,13 +5,14 @@ import info from "../../../assets/info.png";
 import shareLink from "../../../assets/shareLink.png";
 import selectedStar from "../../../assets/selectedStar.png";
 import rate from "../../../assets/rate.svg";
+import icon from "../../../assets/logo.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronRight,
   faTimes,
   faFire,
 } from "@fortawesome/free-solid-svg-icons";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 import CommentComponent from "./CommentSection";
 import { useDispatch } from "react-redux";
 import { setAuthModel } from "../../../features/login/ModelSlice";
@@ -122,26 +123,26 @@ const DetailSection: React.FC<DetailSectionProps> = ({
       handleCopy();
       // sendEventToNative(text);
       // Attempt to use the Clipboard API (works in most modern browsers)
-      if ('clipboard' in navigator) {
+      if ("clipboard" in navigator) {
         await navigator.clipboard.writeText(text);
       } else {
-        const input = document.createElement('input');
-        input.setAttribute('value', text); // Set the value to the text we want to copy
-        input.setAttribute('readonly', '');  // Make it readonly so user can't modify it
-        input.style.position = 'absolute';  // Ensure it doesn't affect layout
-        input.style.opacity = '0';          // Make it invisible
-        input.style.pointerEvents = 'none'; // Disable interaction
-        input.style.zIndex = '-9999';       // Position it off-screen
+        const input = document.createElement("input");
+        input.setAttribute("value", text); // Set the value to the text we want to copy
+        input.setAttribute("readonly", ""); // Make it readonly so user can't modify it
+        input.style.position = "absolute"; // Ensure it doesn't affect layout
+        input.style.opacity = "0"; // Make it invisible
+        input.style.pointerEvents = "none"; // Disable interaction
+        input.style.zIndex = "-9999"; // Position it off-screen
 
-        document.body.appendChild(input);  // Append it to the body
-        input.select();  // Select the text
-        document.execCommand('copy');  // Copy the selected text to clipboard
+        document.body.appendChild(input); // Append it to the body
+        input.select(); // Select the text
+        document.execCommand("copy"); // Copy the selected text to clipboard
         document.body.removeChild(input); // Remove the input from the DOM
       }
     } catch (error) {
       console.error("Clipboard copy failed", error);
     }
-  }
+  };
 
   const sendEventToNative = (text: string) => {
     if (
@@ -151,63 +152,63 @@ const DetailSection: React.FC<DetailSectionProps> = ({
     ) {
       (window as any).webkit.messageHandlers.jsBridge.postMessage({
         eventName: "movieDetailShare",
-        value: text
-    });
-  }
-  }
-
-const handleShare = async () => {
-  setIsLoading(true);
-  const cookieKey = 'shareContent';
-  
-  try {
-    // Check if the cookie exists
-    const cachedContent = Cookies.get(cookieKey);
-    if (cachedContent) {
-      copyToClipboard(JSON.parse(cachedContent).data.content);
-      sendShareEventToNative(JSON.parse(cachedContent).data.content);
-      return;
+        value: text,
+      });
     }
+  };
 
-    // Call the API if no cached content is found
-    const response = await axios.get(
-      convertToSecureUrl(`${process.env.REACT_APP_API_URL}/user/get_share`),
-      {
-        headers: {
-          "Content-Type": "application/json",
-        }
+  const handleShare = async () => {
+    setIsLoading(true);
+    const cookieKey = "shareContent";
+
+    try {
+      // Check if the cookie exists
+      const cachedContent = Cookies.get(cookieKey);
+      if (cachedContent) {
+        copyToClipboard(JSON.parse(cachedContent).data.content);
+        sendShareEventToNative(JSON.parse(cachedContent).data.content);
+        return;
       }
-    );
 
-    const data = await response.data;
-    const result: any = await decryptWithAes(data);
+      // Call the API if no cached content is found
+      const response = await axios.get(
+        convertToSecureUrl(`${process.env.REACT_APP_API_URL}/user/get_share`),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-    if (data && result) {
-      // Save to cookie with a 2-hour expiry
-      Cookies.set(cookieKey, JSON.stringify(result), { expires: 1 / 12 }); // 1/12 day = 2 hours
-      sendShareEventToNative(result?.data.content);
-      copyToClipboard(result?.data.content);
+      const data = await response.data;
+      const result: any = await decryptWithAes(data);
+
+      if (data && result) {
+        // Save to cookie with a 2-hour expiry
+        Cookies.set(cookieKey, JSON.stringify(result), { expires: 1 / 12 }); // 1/12 day = 2 hours
+        sendShareEventToNative(result?.data.content);
+        copyToClipboard(result?.data.content);
+      }
+    } catch (error) {
+      console.error("Error fetching share content:", error);
+    } finally {
+      setIsLoading(false);
     }
-  } catch (error) {
-    console.error("Error fetching share content:", error);
-  } finally {
-    setIsLoading(false);
-  }
-};
+  };
 
-const sendShareEventToNative = (value: any) => {
-  // copyToClipboard("https://d1svxjht0opoc5.cloudfront.net/kkoor4.pdf");
-  if (
-    (window as any).webkit &&
-    (window as any).webkit.messageHandlers &&
-    (window as any).webkit.messageHandlers.jsBridge
-  ) {
-    (window as any).webkit.messageHandlers.jsBridge.postMessage({
-      eventName: "socialMediaShare",
-      value: value,
-    });
-  }
-};
+  const sendShareEventToNative = (value: any) => {
+    // copyToClipboard("https://d1svxjht0opoc5.cloudfront.net/kkoor4.pdf");
+    if (
+      (window as any).webkit &&
+      (window as any).webkit.messageHandlers &&
+      (window as any).webkit.messageHandlers.jsBridge
+    ) {
+      (window as any).webkit.messageHandlers.jsBridge.postMessage({
+        eventName: "socialMediaShare",
+        value: value,
+      });
+    }
+  };
 
   const customHeight = () => {
     const upperDiv = document.getElementById("upper-div");
@@ -247,13 +248,13 @@ const sendShareEventToNative = (value: any) => {
     };
   }, [modalRef]);
 
-  useEffect(()=>{
+  useEffect(() => {
     if (activeTab === "tab-1") {
       setTimeout(() => {
         window.scrollTo(0, 0);
       }, 200);
     }
-  },[activeTab]);
+  }, [activeTab]);
 
   return (
     <div className="flex flex-col w-full bg-background">
@@ -358,7 +359,15 @@ const sendShareEventToNative = (value: any) => {
         )}
 
         {visible && (
-            <img src={shareLink} alt="" className="w-32 h-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"/>
+          <div className="flex justify-center items-center ">
+            <div
+              className={`text-[8px] fixed w-fit  top-1/2 mx-auto left-0 right-0  py-3 px-5  flex items-center justify-center gap-1 rounded-full toast  text-white text-center z-[9999999999999999999]`}
+            >
+              <img src={icon} className="w-3 h-3" alt="" />
+              <p className=" text-[13px]">链接已复制 </p>
+            </div>
+          </div>
+          // <img src={shareLink} alt="" className="w-32 h-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"/>
         )}
 
         {activeTab === "tab-2" ? (

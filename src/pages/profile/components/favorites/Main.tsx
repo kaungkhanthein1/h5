@@ -21,6 +21,7 @@ interface MainProps {
   currentPage: any;
   isAdsLoading: any;
   isAdsFetching: any;
+  refetch: any;
 }
 
 const Main: React.FC<MainProps> = ({
@@ -36,6 +37,7 @@ const Main: React.FC<MainProps> = ({
   isFetching,
   setMovies,
   onTypeClick,
+  refetch,
 }) => {
   const navigate = useNavigate();
   const [selectedMovies, setSelectedMovies] = useState<string[]>([]);
@@ -63,9 +65,11 @@ const Main: React.FC<MainProps> = ({
     );
   };
 
+  
   const confirmDelete = async () => {
     try {
       await deleteCollect({ ids: deleteMovies.join(",") }).unwrap(); // Call the delete mutation
+      await refetch();
       // dispatch(deleteFavData(selectedMovies));
       setMovies((prevMovies: any[]) =>
         prevMovies.filter((movie) => !selectedMovies.includes(movie.movie_id))
@@ -73,6 +77,7 @@ const Main: React.FC<MainProps> = ({
       setSelectedMovies([]);
       setIsEditMode(false);
       setShowConfirmation(false);
+      
     } catch (error) {
       console.error("Failed to delete favorites:", error);
     }
@@ -85,15 +90,15 @@ const Main: React.FC<MainProps> = ({
   const handleMovieClick = (movieId: string, id: string) => {
     if (isEditMode) {
       handleDeleteSelect(id);
-      handleMovieSelect(movieId); // Select the movie when in edit mode
+      handleMovieSelect(movieId);
     } else {
       navigate(`/player/${movieId}`);
     }
   };
 
   const selectAllMovies = () => {
-    setSelectedMovies(movies?.map(x => x.movie_id) || []);
-  }
+    setSelectedMovies(movies?.map((x) => x.movie_id) || []);
+  };
 
   return (
     <div className="bg-[#161619] pb-[50px] mt-[65px] ">
@@ -144,9 +149,10 @@ const Main: React.FC<MainProps> = ({
                     <input
                       type="checkbox"
                       checked={selectedMovies.includes(movie.movie_id)}
-                      onChange={(e) => {
-                        e.stopPropagation();
+                      onClick={(e) => e.stopPropagation()}
+                      onChange={() => {
                         handleMovieSelect(movie.movie_id);
+                        handleDeleteSelect(movie.id);
                       }}
                       className="h-5 w-5 text-[#F54100] border-2 border-gray-600 rounded-full focus:ring-0 focus:outline-none"
                     />
@@ -384,11 +390,15 @@ const Main: React.FC<MainProps> = ({
         >
           <button
             className="w-[50%] cancel-all"
-            onClick={() => selectedMovies && selectedMovies.length === movies?.length ? setSelectedMovies([]) : selectAllMovies()}
+            onClick={() =>
+              selectedMovies && selectedMovies.length === movies?.length
+                ? setSelectedMovies([])
+                : selectAllMovies()
+            }
           >
             {selectedMovies && selectedMovies.length === movies?.length
-                  ? "全部取消"
-                  : "选择全部"}
+              ? "全部取消"
+              : "选择全部"}
           </button>
           <button
             className="delete-all w-[50%]"

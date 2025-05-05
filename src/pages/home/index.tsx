@@ -23,9 +23,9 @@ const Home: React.FC = () => {
     if (data == undefined) refetch();
   }, [data]);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [activeTab]);
+  // useEffect(() => {
+  //   window.scrollTo(0, 0);
+  // }, [activeTab]);
 
   return (
     <>

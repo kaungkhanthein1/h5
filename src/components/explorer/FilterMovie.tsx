@@ -237,9 +237,6 @@ const FilterMovie = () => {
     const handleScroll = () => {
       if (window.scrollY !== 0) {
         scrollRef.current = window.scrollY; // Update ref on scroll
-        if (!isInitialLoad.current) {
-          dispatch(setScrollPosition(window.scrollY));
-        }
       }
     };
 
@@ -272,7 +269,7 @@ const FilterMovie = () => {
         isInitialLoad.current = false; // Update the ref
       };
 
-      const timer = setTimeout(restore, 100);
+      const timer = setTimeout(restore, 10);
       return () => clearTimeout(timer);
     } else {
       isInitialLoad.current = false;

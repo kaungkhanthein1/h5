@@ -33,7 +33,7 @@ const CommentComponent: React.FC<CommentProps> = ({
   comments,
   setComments,
   hasMore,
-  setHasMore
+  setHasMore,
 }) => {
   const [newComment, setNewComment] = useState("");
   const [replyingTo, setReplyingTo] = useState<number | null>(null);
@@ -75,10 +75,10 @@ const CommentComponent: React.FC<CommentProps> = ({
   const fetchComments = async () => {
     setIsLoading(true);
     try {
-      const response: any = await fetchCommentData(movieId || '', page);
+      const response: any = await fetchCommentData(movieId || "", page);
       const data: any = response ? await decryptWithAes(response) : null;
 
-      console.log('data is=>', data);
+      console.log("data is=>", data);
       // Concatenate new comments to existing ones using spread operator (...)
       const updatedComments =
         comments &&
@@ -255,12 +255,14 @@ const CommentComponent: React.FC<CommentProps> = ({
               "Content-Type": "application/json",
               Authorization: authorization,
             },
-            body: JSON.stringify(convertToSecurePayload({
-              comment_id: replyingTo ? replyingTo : 0,
-              movie_id: movieId,
-              type: "text",
-              content: newComment,
-            })),
+            body: JSON.stringify(
+              convertToSecurePayload({
+                comment_id: replyingTo ? replyingTo : 0,
+                movie_id: movieId,
+                type: "text",
+                content: newComment,
+              })
+            ),
           }
         );
 
@@ -338,7 +340,11 @@ const CommentComponent: React.FC<CommentProps> = ({
                   />
                 </div>
                 <div style={{ marginLeft: "46px", marginTop: "-8px" }}>
-                  <div className={`comment-text text-gray-300 mb-1 ${comment.status === 0 ? 'italic' : ''}`}>
+                  <div
+                    className={`comment-text text-gray-300 mb-1 ${
+                      comment.status === 0 ? "italic" : ""
+                    }`}
+                  >
                     {comment.content}
                   </div>
                   <div className="comment-actions flex items-center justify-start gap-4 mt-2">
@@ -406,7 +412,11 @@ const CommentComponent: React.FC<CommentProps> = ({
                             <div
                               style={{ marginLeft: "46px", marginTop: "-8px" }}
                             >
-                              <div className={`comment-text text-gray-300 mb-1 ${comment.status === 0 ? 'italic' : ''}`}>
+                              <div
+                                className={`comment-text text-gray-300 mb-1 ${
+                                  comment.status === 0 ? "italic" : ""
+                                }`}
+                              >
                                 {reply.content}
                               </div>
                               <div className="comment-actions flex items-center justify-start gap-4 mt-2">
@@ -539,7 +549,7 @@ const CommentComponent: React.FC<CommentProps> = ({
                 setNumberOfRow(newNumberOfRows > 1 ? newNumberOfRows : 1);
               }
             }}
-            className="flex-grow bg-source text-white p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="flex-grow bg-source text-white border-0 outline-none p-2 rounded-md focus:outline-none focus:ring-0"
             placeholder={"确认过眼神，你是发言人！"}
             rows={numberOfRow} // Dynamically adjust the rows
           />

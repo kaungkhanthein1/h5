@@ -22,26 +22,6 @@ const Explorer: React.FC = () => {
     { title: "排行榜", content: <Tab4 /> },
   ];
 
-  // Scroll event listener to detect scroll direction
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > lastScrollY && window.scrollY > 100) {
-        // Scrolling down, hide the header
-        setIsHeaderVisible(false);
-      } else if (window.scrollY < lastScrollY) {
-        // Scrolling up, show the header
-        setIsHeaderVisible(true);
-      }
-      setLastScrollY(window.scrollY);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [lastScrollY]);
-
   return (
     // bg-[#1f1f21]
     <div className="relative">

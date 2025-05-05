@@ -35,6 +35,7 @@ const Favorite = () => {
     data: favoriteMovies,
     isLoading: isFavoritesLoading,
     isFetching: isFavoritesFetching,
+    refetch,
   } = useGetListQuery({ page: currentPage, type_id: currentType }); // Fetch favorite movies list from API
 
   const [isEditMode, setIsEditMode] = useState(false);
@@ -108,6 +109,7 @@ const Favorite = () => {
             movies={movies}
             setMovies={setMovies}
             onTypeClick={handleTypeClick}
+            refetch={refetch}
           />
         </>
       </div>
