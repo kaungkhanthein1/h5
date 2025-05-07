@@ -24,7 +24,7 @@ const ErrorToast: React.FC = () => {
       <div
         className={`text-[8px] fixed w-fit  bottom-10 mx-auto left-0 right-0  py-3 px-5  flex items-center justify-center gap-1 rounded-full toast  text-white text-center z-[9999999999999999999]`}
       >
-        <img src={logo} alt="" className="w-3 h-3" />
+        <img src={logo} alt="" className="w-6 h-6" />
         <p className=" text-[13px]">{message}</p>
       </div>
     </div>

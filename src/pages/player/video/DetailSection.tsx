@@ -22,6 +22,7 @@ import { DetailSectionProps } from "../../../model/videoModel";
 import { useGetListQuery } from "../../../pages/profile/services/profileApi";
 import NewAds from "../../../components/NewAds";
 import Fire from "../../../assets/Fire.png";
+import copy from 'copy-to-clipboard';
 import {
   convertToSecurePayload,
   convertToSecureUrl,
@@ -120,25 +121,11 @@ const DetailSection: React.FC<DetailSectionProps> = ({
 
   const copyToClipboard = async (text: string) => {
     try {
-      handleCopy();
-      // sendEventToNative(text);
-      // Attempt to use the Clipboard API (works in most modern browsers)
-      if ("clipboard" in navigator) {
-        await navigator.clipboard.writeText(text);
-      } else {
-        const input = document.createElement("input");
-        input.setAttribute("value", text); // Set the value to the text we want to copy
-        input.setAttribute("readonly", ""); // Make it readonly so user can't modify it
-        input.style.position = "absolute"; // Ensure it doesn't affect layout
-        input.style.opacity = "0"; // Make it invisible
-        input.style.pointerEvents = "none"; // Disable interaction
-        input.style.zIndex = "-9999"; // Position it off-screen
-
-        document.body.appendChild(input); // Append it to the body
-        input.select(); // Select the text
-        document.execCommand("copy"); // Copy the selected text to clipboard
-        document.body.removeChild(input); // Remove the input from the DOM
+      if(isWebView()) {
+        sendEventToNative(text  );
       }
+      handleCopy();
+      copy(text);
     } catch (error) {
       console.error("Clipboard copy failed", error);
     }
@@ -157,6 +144,13 @@ const DetailSection: React.FC<DetailSectionProps> = ({
     }
   };
 
+  function isWebView() {
+    return (
+      (window as any).webkit &&
+      (window as any).webkit.messageHandlers &&
+      (window as any).webkit.messageHandlers.jsBridge
+    );
+  }
   const handleShare = async () => {
     setIsLoading(true);
     const cookieKey = "shareContent";
@@ -363,7 +357,7 @@ const DetailSection: React.FC<DetailSectionProps> = ({
             <div
               className={`text-[8px] fixed w-fit  top-1/2 mx-auto left-0 right-0  py-3 px-5  flex items-center justify-center gap-1 rounded-full toast  text-white text-center z-[9999999999999999999]`}
             >
-              <img src={icon} className="w-3 h-3" alt="" />
+              <img src={icon} className="w-6 h-6" alt="" />
               <p className=" text-[13px]">链接已复制 </p>
             </div>
           </div>
