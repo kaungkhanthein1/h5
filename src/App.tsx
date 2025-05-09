@@ -347,7 +347,7 @@ const App: React.FC = () => {
               )}
 
               {showUpdateNotification && !showNotice && !isWebView() && (
-                <div className="fixed bottom-20 left-0 right-0 z-[9999] flex justify-center">
+                <div className="fixed bottom-24 left-0 right-0 z-[9999] flex justify-center">
                   <UpdateNotification 
                     onUpdate={handleUpdateClick} 
                     onClose={handleCloseUpdateNotification}
