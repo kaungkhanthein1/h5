@@ -9,6 +9,7 @@ import Header from "./components/Header";
 import FooterNav from "./components/FooterNav";
 import { useDispatch, useSelector } from "react-redux";
 import LoginEmail from "./components/login/LoginEmail";
+import UpdateNotification from "./components/UpdateNotification";
 
 import {
   setAuthModel,
@@ -93,6 +94,7 @@ const App: React.FC = () => {
 
   const [showNotice, setShowNotice] = useState(false);
   const [preloadedImage, setPreloadedImage] = useState<string | null>(null);
+  const [showUpdateNotification, setShowUpdateNotification] = useState(false);
 
   // Preload landing image
   useEffect(() => {
@@ -247,6 +249,16 @@ const App: React.FC = () => {
     }
   }, [dispatch]);
 
+  // Show update notification after ads screen
+  useEffect(() => {
+    if (!panding) {
+      const hasSeenUpdateNotification = sessionStorage.getItem("hasSeenUpdateNotification");
+      if (!hasSeenUpdateNotification) {
+        setShowUpdateNotification(true);
+      }
+    }
+  }, [panding]);
+
   useEffect(() => {
     if (openAuthModel || openLoginModel || openSignupModel) {
       document.body.style.overflow = "hidden"; // Disable scrolling
@@ -279,6 +291,20 @@ const App: React.FC = () => {
     });
   };
 
+  const handleUpdateClick = () => {
+    const link = headerData?.data?.about?.filter((item: any) => item.text === "官网下载")[0]?.link;
+    // Handle update action here
+    window.open(link, '_blank');
+    // Or any other update logic
+    setShowUpdateNotification(false);
+    sessionStorage.setItem("hasSeenUpdateNotification", "true");
+  };
+
+  const handleCloseUpdateNotification = () => {
+    setShowUpdateNotification(false);
+    sessionStorage.setItem("hasSeenUpdateNotification", "true");
+  };
+
   if (!data?.data) {
     return (
       <img
@@ -286,6 +312,14 @@ const App: React.FC = () => {
         src={land}
         alt=""
       />
+    );
+  }
+
+  function isWebView() {
+    return (
+      (window as any).webkit &&
+      (window as any).webkit.messageHandlers &&
+      (window as any).webkit.messageHandlers.jsBridge
     );
   }
 
@@ -310,6 +344,15 @@ const App: React.FC = () => {
                   config={headerData}
                   showNotice={showNotice}
                 />
+              )}
+
+              {showUpdateNotification && !showNotice && !isWebView() && (
+                <div className="fixed bottom-20 left-0 right-0 z-[9999] flex justify-center">
+                  <UpdateNotification 
+                    onUpdate={handleUpdateClick} 
+                    onClose={handleCloseUpdateNotification}
+                  />
+                </div>
               )}
 
               <div className="flex-grow">
