@@ -1,5 +1,6 @@
 import CryptoJS from "crypto-js";
 import JSEncrypt from "jsencrypt";
+import forge from "node-forge";
 
 /**
  * Generate signature using HMAC MD5
@@ -64,6 +65,56 @@ export function urlSafeB64encode(data: string): string {
 // }
 // import CryptoJS from "crypto-js";
 
+export class RSAEncryptor {
+  public publicKey: any;
+  public k: number;
+
+  constructor(keySize: any) {
+    this.publicKey = forge.pki.publicKeyFromPem(
+      process.env.REACT_APP_PUBLIC_KEY || ""
+    ); // Load the public key
+    this.k = keySize / 8; // Key size in bytes
+  }
+
+  encryptPKCS1(plaintext: any) {
+    const maxLength = this.k - 11; // Maximum chunk size (key size - PKCS#1 padding overhead)
+    if (maxLength <= 0) {
+      throw new Error("Invalid key size for PKCS#1 encryption.");
+    }
+
+    // Convert plaintext to binary format (UTF-8 encoding)
+    const binaryData = forge.util.encodeUtf8(plaintext);
+
+    // Split binary data into chunks
+    const chunks = this._splitIntoChunks(binaryData, maxLength);
+
+    // Encrypt each chunk and concatenate the binary encrypted data
+    const encryptedChunks = chunks.map((chunk) =>
+      this._rsaesPkcs1V15Encrypt(chunk)
+    );
+
+    // Concatenate all encrypted binary chunks
+    const concatenatedCiphertext = encryptedChunks.join("");
+
+    // Encode the concatenated ciphertext to Base64
+    return forge.util.encode64(concatenatedCiphertext);
+  }
+
+  // Helper method: split plaintext into chunks
+  _splitIntoChunks(data: any, length: any) {
+    const chunks = [];
+    for (let i = 0; i < data.length; i += length) {
+      chunks.push(data.slice(i, i + length));
+    }
+    return chunks;
+  }
+
+  // Helper method: encrypt a single chunk with PKCS#1 v1.5
+  _rsaesPkcs1V15Encrypt(data: any) {
+    return this.publicKey.encrypt(data, "RSAES-PKCS1-V1_5"); // PKCS#1 v1.5 padding encryption
+  }
+}
+
 export function decryptWithAes(data: string): object | null {
   try {
     // Decode the encrypted data (if URL-safe base64 encoding was used)
@@ -109,7 +160,7 @@ function convertUrlToFormData(url: string): Record<string, any> {
 
 function createSecureUrl(base: string, formData: Record<string, any>): string {
   const publicKey = process.env.REACT_APP_PUBLIC_KEY;
-  
+
   if (!publicKey) {
     throw new Error("Public key is not defined");
   }

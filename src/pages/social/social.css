@@ -29,6 +29,17 @@
   opacity: 1;
   border-radius: 8.934px;
 }
+
+.social-image-container1 {
+  position: relative;
+  background-image: url("../../assets/gifPlaceholder.png");
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+  opacity: 1;
+  border-radius: 8.934px;
+}
+
 /* 
 .lightbox-overlay {
   position: fixed;

@@ -151,6 +151,7 @@ const DetailSection: React.FC<DetailSectionProps> = ({
       (window as any).webkit.messageHandlers.jsBridge
     );
   }
+  
   const handleShare = async () => {
     setIsLoading(true);
     const cookieKey = "shareContent";

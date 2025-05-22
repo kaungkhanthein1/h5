@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
 import { setPanding } from "../features/login/ModelSlice";
 import { useGetAdsQuery } from "../services/helperService";
-import land from "../assets/login/land.png";
+import land from "../assets/login/land.webp";
 import { Link } from "react-router-dom";
 
 import ad1 from "../assets/login/ad1.png";

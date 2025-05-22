@@ -1,6 +1,7 @@
 import Loader from "../../../pages/search/components/Loader";
 
 import ImageWithPlaceholder from "./socialImgPlaceholder";
+import ImageWithPlaceholder1 from "./gifPlaceholder";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 import {
@@ -540,6 +541,13 @@ const PostList = ({
                   />
                 )}
               </div>
+            )}
+            {post.file_type === "gif" && (
+              <ImageWithPlaceholder1
+                src={post.files[0]?.resourceURL}
+                alt={`Picture of social_image`}
+                className="w-full h-full object-cover"
+              />
             )}
             {post.file_type === "video" && (
               <Player

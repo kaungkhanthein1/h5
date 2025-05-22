@@ -35,7 +35,7 @@ import Social from "./pages/social";
 import Short from "./pages/short";
 import { useGetRecommendedMoviesQuery } from "./pages/home/services/homeApi";
 import Announce from "./components/Announce";
-import land from './assets/login/land.png'
+import land from './assets/login/land.webp'
 // import { Game } from "./pages/Point/pages/Game";
 // import Menber from "./pages/share/member";
 // import Share from "./pages/share";
@@ -292,7 +292,7 @@ const App: React.FC = () => {
   };
 
   const handleUpdateClick = () => {
-    const link = headerData?.data?.about?.filter((item: any) => item.text === "官网下载")[0]?.link;
+    const link = headerData?.data?.app_store_link;
     // Handle update action here
     window.open(link, '_blank');
     // Or any other update logic
@@ -346,7 +346,7 @@ const App: React.FC = () => {
                 />
               )}
 
-              {showUpdateNotification && !showNotice && !isWebView() && (
+              {showUpdateNotification && !showNotice && !isWebView() && headerData?.data?.app_store_link && (
                 <div className="fixed bottom-24 left-0 right-0 z-[9999] flex justify-center">
                   <UpdateNotification 
                     onUpdate={handleUpdateClick} 
@@ -384,7 +384,7 @@ const App: React.FC = () => {
                       <Route path="/social" element={<div />} />
                     )}
                     {/* <Route path="/social" element={<Social />} /> */}
-                    <Route path="/short" element={<Short />} />
+                    {/* <Route path="/short" element={<Short />} /> */}
                     <Route path="/explorer/:id" element={<Detail />} />
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/player/:id" element={<Player />} />

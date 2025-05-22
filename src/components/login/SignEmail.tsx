@@ -71,7 +71,7 @@ const SignEmail: React.FC<SignEmailProps> = ({ handleBack2 }) => {
 
   // Password validation function
   const validatePassword = (password: string) => {
-    const lengthValid = password.length >= 8 && password.length <= 25;
+    const lengthValid = password.length >= 6 && password.length <= 25;
     const containsLetters = /[a-zA-Z]/.test(password);
     const containsNumbers = /\d/.test(password);
     return lengthValid && containsLetters && containsNumbers;
@@ -259,7 +259,7 @@ const SignEmail: React.FC<SignEmailProps> = ({ handleBack2 }) => {
                         : "text-[#888]"
                     }  `}
                   >
-                    <p>8-25个字符</p>
+                    <p>6-25个字符</p>
                     <p>必须是以下两者中的至少两种组合：字母，数字</p>{" "}
                     {/* <p>letters, numbers.</p> */}
                   </div>

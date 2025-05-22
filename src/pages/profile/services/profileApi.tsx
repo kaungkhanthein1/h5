@@ -3,6 +3,8 @@ import {
   convertToSecurePayload,
   convertToSecureUrl,
   decryptWithAes,
+  generateSignature,
+  RSAEncryptor,
 } from "../../../services/newEncryption";
 
 interface ChangeAvatarResponse {
@@ -10,6 +12,25 @@ interface ChangeAvatarResponse {
     url: string;
   };
 }
+
+export const generateData = (data: any) => {
+  const newData = { ...data, timestamp: new Date().getTime() };
+
+  const jsonString = JSON.stringify(newData);
+
+  const keySize = 1024; // Key size in bits (e.g., 1024, 2048)
+  const encryptor = new RSAEncryptor(keySize);
+
+  const encryptedData = encryptor.encryptPKCS1(jsonString);
+
+  const signature = generateSignature(encryptedData);
+
+  return {
+    pack: encryptedData,
+    signature,
+  };
+};
+
 export const profileApi = createApi({
   reducerPath: "profileApi",
 
@@ -99,7 +120,7 @@ export const profileApi = createApi({
       query: (data) => ({
         url: `/user/movie_collect/delete`,
         method: "POST",
-        body: convertToSecurePayload({
+        body: generateData({
           ids: data.ids,
         }),
       }),
@@ -247,7 +268,7 @@ export const profileApi = createApi({
       query: (data) => ({
         url: `/user/playback/delete`,
         method: "POST",
-        body: convertToSecurePayload({
+        body: generateData({
           ids: data.ids,
         }),
       }),
@@ -276,5 +297,5 @@ export const {
   useChangeAvatarMutation,
   useLazySocialCallbackQuery,
   useCreateInviteMutation,
-  useGetIosVersionQuery
+  useGetIosVersionQuery,
 } = profileApi;
