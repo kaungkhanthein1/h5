@@ -77,18 +77,18 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 </svg><div>`,
               tooltip: "Fullscreen",
               click: function (...args) {
-                // playerRef.current.fullscreen = true;
-                if (
-                  (window as any).webkit &&
-                  (window as any).webkit.messageHandlers &&
-                  (window as any).webkit.messageHandlers.jsBridge
-                ) {
-                  (window as any).webkit.messageHandlers.jsBridge.postMessage({
-                    eventName: "fullscreen",
-                  });
-                } else {
-                  playerRef.current.fullscreen = true;
-                }
+                playerRef.current.fullscreen = true;
+                // if (
+                //   (window as any).webkit &&
+                //   (window as any).webkit.messageHandlers &&
+                //   (window as any).webkit.messageHandlers.jsBridge
+                // ) {
+                //   (window as any).webkit.messageHandlers.jsBridge.postMessage({
+                //     eventName: "fullscreen",
+                //   });
+                // } else {
+                //   playerRef.current.fullscreen = true;
+                // }
               },
             },
           ],

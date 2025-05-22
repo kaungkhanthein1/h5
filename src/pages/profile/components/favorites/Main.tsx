@@ -5,6 +5,8 @@ import Loader from "../../../search/components/Loader";
 import ImageWithPlaceholder from "../../../search/components/ImgPlaceholder";
 import { useDeleteCollectMutation } from "../../services/profileApi"; // Import delete mutation
 import NewAds from "../../../../components/NewAds";
+import { showToast } from "../../error/ErrorSlice";
+import { useDispatch } from "react-redux";
 
 interface MainProps {
   isEditMode: boolean;
@@ -44,6 +46,8 @@ const Main: React.FC<MainProps> = ({
   const [deleteMovies, setDeleteMovies] = useState<string[]>([]);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [deleteCollect] = useDeleteCollectMutation(); // Use the delete mutation
+  const [isLoadingDelete, setIsLoadingDelete] = useState(false);
+  const dispatch = useDispatch();
 
   const handleDelete = () => {
     setShowConfirmation(true);
@@ -65,8 +69,9 @@ const Main: React.FC<MainProps> = ({
     );
   };
 
-  
   const confirmDelete = async () => {
+    setShowConfirmation(false);
+    setIsLoadingDelete(true);
     try {
       await deleteCollect({ ids: deleteMovies.join(",") }).unwrap(); // Call the delete mutation
       await refetch();
@@ -77,9 +82,13 @@ const Main: React.FC<MainProps> = ({
       setSelectedMovies([]);
       setIsEditMode(false);
       setShowConfirmation(false);
-      
+      setIsLoadingDelete(false);
     } catch (error) {
-      console.error("Failed to delete favorites:", error);
+      dispatch(showToast({ message: "服务器开小差了", type: "error" }));
+      setIsLoadingDelete(false);
+      setShowConfirmation(false);
+      setSelectedMovies([]);
+      setIsEditMode(false);
     }
   };
 
@@ -429,6 +438,11 @@ const Main: React.FC<MainProps> = ({
                 </button>
               </div>
             </div>
+          </div>
+        )}
+        {isLoadingDelete && (
+          <div className="fixed inset-0 z-20 bg-black bg-opacity-80 flex justify-center items-center">
+            <Loader />
           </div>
         )}
       </div>

@@ -6,6 +6,8 @@ import { useDeleteRecordMutation } from "../../services/profileApi";
 import Loader from "../../../search/components/Loader";
 import NewAds from "../../../../components/NewAds";
 import { useGetAdsQuery } from "../../../../services/helperService";
+import { showToast } from "../../error/ErrorSlice";
+import { useDispatch } from "react-redux";
 
 const Main: React.FC<any> = ({
   isEditMode,
@@ -19,6 +21,8 @@ const Main: React.FC<any> = ({
   const [deleteRecord] = useDeleteRecordMutation(); // Use the delete mutation
   const [filterToggle, setFilterToggle] = useState(false);
   const navigate = useNavigate(); // Hook for navigation
+  const [isLoadingDelete, setIsLoadingDelete] = useState(false);
+  const dispatch = useDispatch();
 
   const handleDelete = () => {
     setShowConfirmation(true);
@@ -33,11 +37,24 @@ const Main: React.FC<any> = ({
   };
 
   const confirmDelete = async () => {
-    await deleteRecord({ ids: selectedMovies.join(",") }).unwrap(); // Call the delete mutation
-    refetch();
-
-    setIsEditMode(false);
     setShowConfirmation(false);
+    setIsLoadingDelete(true);
+    try {
+      await deleteRecord({ ids: selectedMovies.join(",") }).unwrap(); // Call the delete mutation
+      refetch();
+
+      setIsEditMode(false);
+      setShowConfirmation(false);
+      setIsLoadingDelete(false);
+    } catch (error) {
+      dispatch(showToast({ message: "服务器开小差了", type: "error" }));
+      setSelectedMovies([]);
+      setIsEditMode(false);
+
+      setIsLoadingDelete(false);
+      setShowConfirmation(false);
+      // Handle error (e.g., show a notification)
+    }
   };
 
   const cancelDelete = () => {
@@ -246,6 +263,11 @@ const Main: React.FC<any> = ({
               </button>
             </div>
           </div>
+        </div>
+      )}
+      {isLoadingDelete && (
+        <div className="fixed inset-0 z-20 bg-black bg-opacity-80 flex justify-center items-center">
+          <Loader />
         </div>
       )}
     </div>
