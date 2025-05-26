@@ -8,14 +8,9 @@ import {
   useGetHeaderTopicsQuery,
   useGetAdsQuery,
 } from "../../services/helperService";
+import NewAds from "../../components/NewAds";
 
 const Favorite = () => {
-  const {
-    data: adsData,
-    isLoading: isAdsLoading,
-    isFetching: isAdsFetching,
-  } = useGetAdsQuery(); // Fetch ads data from API
-
   const [currentPage, setcurrentPage] = useState(1);
   const [currentType, setcurrentType] = useState<number>(0);
   // const {
@@ -57,8 +52,6 @@ const Favorite = () => {
     }
   }, [types]);
 
-  const advert = adsData?.data?.notice_up?.data;
-
   const handleTypeClick = (typeId: number) => {
     setcurrentType(typeId);
     setcurrentPage(1); // Reset to the first page when type changes
@@ -92,6 +85,9 @@ const Favorite = () => {
       <div className="fixed-bg"></div>
       <div className=" text-white">
         <Navbar isEditMode={isEditMode} onEditClick={handleEditClick} />
+        <div className="mt-20">
+          <NewAds section="collect_up" />
+        </div>
 
         <>
           <Main
@@ -99,11 +95,8 @@ const Favorite = () => {
             setcurrentType={setcurrentType}
             currentType={currentType}
             types={types}
-            isAdsLoading={isAdsLoading}
-            isAdsFetching={isAdsFetching}
             isLoading={isFavoritesLoading}
             isFetching={isFavoritesFetching}
-            advert={advert}
             isEditMode={isEditMode}
             setIsEditMode={setIsEditMode}
             movies={movies}

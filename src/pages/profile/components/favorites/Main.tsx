@@ -12,7 +12,6 @@ interface MainProps {
   isEditMode: boolean;
   setIsEditMode: React.Dispatch<React.SetStateAction<boolean>>;
   movies: any[];
-  advert: any;
   isLoading: boolean;
   isFetching: boolean;
   setMovies: any;
@@ -21,21 +20,16 @@ interface MainProps {
   setcurrentType: any;
   onTypeClick: any;
   currentPage: any;
-  isAdsLoading: any;
-  isAdsFetching: any;
   refetch: any;
 }
 
 const Main: React.FC<MainProps> = ({
   currentType,
-  isAdsLoading,
-  isAdsFetching,
   currentPage,
   types,
   isEditMode,
   setIsEditMode,
   movies,
-  advert,
   isFetching,
   setMovies,
   onTypeClick,
@@ -110,18 +104,17 @@ const Main: React.FC<MainProps> = ({
   };
 
   return (
-    <div className="bg-[#161619] pb-[50px] mt-[65px] ">
+    <div className="bg-[#161619] pb-[50px] mt-[25px] ">
       <div className="mt-3">
-        {isAdsLoading || isAdsFetching ? (
+        {/* {isAdsLoading || isAdsFetching ? (
           <div className="flex justify-center items-center h-[126px]">
             <Loader />
           </div>
         ) : (
           <>
-            {/* <Ads advert={advert} /> */}
             <NewAds section="collect_up" />
           </>
-        )}
+        )} */}
 
         <div className="flex items-center gap-2 mt-7 px-3 overflow-x-scroll max-w-full whitespace-nowrap scrollbar-hide">
           {types?.map((type: any, index: number) => (

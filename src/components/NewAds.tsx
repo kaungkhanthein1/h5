@@ -40,8 +40,8 @@ const NewAds: React.FC<NewAdsProps> = ({ section, fromMovie = false }) => {
         to={item.data?.url || "#"}
       >
         {imageLoading && (
-          <div className="w-[58px] h-[58px] object-cover rounded-[8px] mx-auto bg-white/15 animate-pulse flex justify-center items-center">
-            <p className="text-[12px] font-[500] text-[#888]">
+          <div className=" min-w-[60px] min-h-[60px] object-cover rounded-[8px] mx-auto bg-white/15 animate-pulse flex justify-center items-center">
+            <p className="text-[13px] font-[500] text-[#888]">
               {item?.remarks}
             </p>
           </div>
@@ -49,12 +49,12 @@ const NewAds: React.FC<NewAdsProps> = ({ section, fromMovie = false }) => {
         {imgSrc && (
           <img
             src={imgSrc}
-            className="w-[58px] h-[58px] object-cover rounded-[8px] mx-auto"
+            className=" min-w-[60px] min-h-[60px] object-cover rounded-[8px] mx-auto"
             alt="ad"
             loading="lazy"
           />
         )}
-        <p className="text-[12px] font-[500] text-[#888]">
+        <p className="text-[13px] font-[500] text-[#888]">
           {item?.remarks || "No description"}
         </p>
       </Link>
@@ -74,7 +74,7 @@ const NewAds: React.FC<NewAdsProps> = ({ section, fromMovie = false }) => {
                 key={index}
                 className="flex flex-col items-center gap-[4px] animate-pulse mb-1"
               >
-                <div className="w-[58px] h-[58px] bg-white/30 rounded-[4px]" />
+                <div className=" min-w-[60px] min-h-[60px] bg-white/30 rounded-[4px]" />
               </div>
             ))
           : cur.map((item, index) => (

@@ -36,6 +36,9 @@ const History = () => {
       <div className="fixed-bg"></div>
       <div className="text-white">
         <Navbar isEditMode={isEditMode} onEditClick={handleEditClick} />
+        <div className="mt-20">
+          <NewAds section="play_record_up" />
+        </div>
         {movies?.length > 0 ? (
           <Main
             isEditMode={isEditMode}

@@ -265,7 +265,8 @@ const DetailSection: React.FC<DetailSectionProps> = ({
           <div id="tab-1" className="block">
             {/* Movie Title and Info */}
             <div className="movie-info mb-4 flex-auto overflow-x-scroll">
-              <h2 className="text-[16px] font-semibold text-white">
+              {/* text-[16px] remove */}
+              <h2 className="text-[18px] font-semibold text-white">
                 {movieDetail.name || "暂无标题"}
               </h2>
               <div className="info text-white/40 text-sm flex justify-between items-start overflow-x-auto space-x-2 mt-2">

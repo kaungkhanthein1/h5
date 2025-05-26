@@ -8,7 +8,7 @@ const myFun = async (args: any, api: any, extraOptions: any) => {
   const baseQuery = fetchBaseQuery({
     baseUrl: process.env.REACT_APP_API_URL,
     prepareHeaders: (headers) => {
-      headers.set("X-Client-Version", "3098");
+      headers.set("X-Client-Version", "3100");
       const settings = JSON.parse(
         localStorage.getItem("movieAppSettings") || "{}"
       );

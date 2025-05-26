@@ -12,6 +12,7 @@ import "../share.css";
 import { useGetInvitedDetailsQuery } from "../../../features/share/ShareApi";
 import axios from "axios";
 import { convertToSecureUrl } from "../../../services/newEncryption";
+import Loader from "../../../components/login/Loader";
 
 interface MemberProps {}
 
@@ -22,7 +23,7 @@ const Member: React.FC<MemberProps> = ({}) => {
     refetch,
     isFetching,
     isError,
-  } : any = useGetInvitedDetailsQuery({
+  }: any = useGetInvitedDetailsQuery({
     act: "list",
     page: 1,
     pagesize: 10,
@@ -32,8 +33,10 @@ const Member: React.FC<MemberProps> = ({}) => {
 
   // Trigger refetch when the component mounts
   useEffect(() => {
-    refetch()
+    refetch();
   }, [refetch]);
+
+  console.log(isFetching);
 
   return (
     <div className=" relative">
@@ -56,7 +59,8 @@ const Member: React.FC<MemberProps> = ({}) => {
           <img src={back} className=" p-[20px" alt="" />
         </div>
         <h1 className=" text-white text-[18px] pl-[16px] font-[600]">
-          Invitation
+          {/* Invitation */}
+          邀请的好友
         </h1>
         <a
           target="_blink"
@@ -64,90 +68,97 @@ const Member: React.FC<MemberProps> = ({}) => {
           className=" py-[8px] px-[10px mt-[5px"
         >
           <span className=" text-white text-[14px] font-[500]">
-            Point Rules
+            {/* Point Rules */}
+            积分规则
           </span>
         </a>
       </div>
 
       {/* member list */}
-      <div className="text-white text-2xl px-4 mt-[0px] h-fit ">
-        {isFetching ? (
-          <div className=" h-[500px] member_pag">
-            <div className="flex flex-col h-full justify-center items-center w-full gap-2">
-              <img src={user} alt="" />
-              <h1 className=" text-[#888] text-[14px] font-[400]">加载中</h1>
+      {isFetching ? (
+       <Loader />
+      ) : (
+        <div className="text-white text-2xl px-4 mt-[0px] h-fit ">
+          {isFetching ? (
+            <div className=" h-[500px] member_pag">
+              <div className="flex flex-col h-full justify-center items-center w-full gap-2">
+                <img src={user} alt="" />
+                <h1 className=" text-[#888] text-[14px] font-[400]">加载中</h1>
+              </div>
             </div>
-          </div>
-        ) : isError ? (
-          <div className="text-red-500 text-xl">Error fetching data</div>
-        ) : memberList?.data?.list.length === 0 ? (
-          <div className=" h-[600px] member_pag">
-            <div className="flex flex-col h-full justify-center items-center w-full gap-2">
-              <img src={user} alt="" />
-              <h1 className=" text-[#888] text-[14px] font-[400]">
-                没有受邀用户
-              </h1>
+          ) : isError ? (
+            <div className="text-red-500 text-xl">Error fetching data</div>
+          ) : memberList?.data?.list.length === 0 ? (
+            <div className=" h-[600px] member_pag">
+              <div className="flex flex-col h-full justify-center items-center w-full gap-2">
+                <img src={user} alt="" />
+                <h1 className=" text-[#888] text-[14px] font-[400]">
+                  没有受邀用户
+                </h1>
+              </div>
             </div>
-          </div>
-        ) : (
-          <div>
-            <ul className="">
-              {memberList?.data?.list?.map((member: any, index: string) => (
-                <li
-                  key={index}
-                  className="flex items-center gap-4 p-4 member_list"
-                >
-                  {/* Avatar */}
-                  <img
-                    src={member?.avatar || user}
-                    alt={member.nickname}
-                    className="w-10 h-10 rounded-full"
-                  />
-                  {/* Nickname */}
-                  <div className="flex flex-col gap-[4px]">
-                    <span className="font-[500] text-[16px] leading-[20px] text-white">
-                      {member.nickname}
-                    </span>
-                    {/* Display create_time if needed */}
-                    <span className="text-[14px] font-[400] text-[#888]">
-                      {(() => {
-                        const now = new Date();
-                        const memberTime = new Date(member.create_time * 1000);
-                        const timeDifference =
-                          now.getTime() - memberTime.getTime(); // Time difference in milliseconds
-                        const minutesDifference = Math.floor(
-                          timeDifference / (1000 * 60)
-                        );
-                        // If the time difference is less than 5 minutes, show "Just Now"
-                        if (minutesDifference < 5) {
-                          return "Just Now";
-                        } else {
-                          // Otherwise, return the formatted date and time
-                          return `${memberTime.getFullYear()}-${(
-                            memberTime.getMonth() + 1
-                          )
-                            .toString()
-                            .padStart(2, "0")}-${memberTime
-                            .getDate()
-                            .toString()
-                            .padStart(2, "0")} - ${memberTime
-                            .getHours()
-                            .toString()
-                            .padStart(2, "0")}:${memberTime
-                            .getMinutes()
-                            .toString()
-                            .padStart(2, "0")}`;
-                        }
-                      })()}
-                    </span>
-                  </div>
-                </li>
-              ))}
-            </ul>{" "}
-            {/* Render the member list items here */}
-          </div>
-        )}
-      </div>
+          ) : (
+            <div>
+              <ul className="">
+                {memberList?.data?.list?.map((member: any, index: string) => (
+                  <li
+                    key={index}
+                    className="flex items-center gap-4 p-4 member_list"
+                  >
+                    {/* Avatar */}
+                    <img
+                      src={member?.avatar || user}
+                      alt={member.nickname}
+                      className="w-10 h-10 rounded-full"
+                    />
+                    {/* Nickname */}
+                    <div className="flex flex-col gap-[4px]">
+                      <span className="font-[500] text-[16px] leading-[20px] text-white">
+                        {member.nickname}
+                      </span>
+                      {/* Display create_time if needed */}
+                      <span className="text-[14px] font-[400] text-[#888]">
+                        {(() => {
+                          const now = new Date();
+                          const memberTime = new Date(
+                            member.create_time * 1000
+                          );
+                          const timeDifference =
+                            now.getTime() - memberTime.getTime(); // Time difference in milliseconds
+                          const minutesDifference = Math.floor(
+                            timeDifference / (1000 * 60)
+                          );
+                          // If the time difference is less than 5 minutes, show "Just Now"
+                          if (minutesDifference < 5) {
+                            return "Just Now";
+                          } else {
+                            // Otherwise, return the formatted date and time
+                            return `${memberTime.getFullYear()}-${(
+                              memberTime.getMonth() + 1
+                            )
+                              .toString()
+                              .padStart(2, "0")}-${memberTime
+                              .getDate()
+                              .toString()
+                              .padStart(2, "0")} - ${memberTime
+                              .getHours()
+                              .toString()
+                              .padStart(2, "0")}:${memberTime
+                              .getMinutes()
+                              .toString()
+                              .padStart(2, "0")}`;
+                          }
+                        })()}
+                      </span>
+                    </div>
+                  </li>
+                ))}
+              </ul>{" "}
+              {/* Render the member list items here */}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

@@ -16,7 +16,7 @@ const AdsApi = createApi({
         url: convertToSecureUrl("/advert/config"),
         method: "GET",
         headers: {
-          "X-Client-Version": "3098", // Add your specific header here
+          "X-Client-Version": "3100", // Add your specific header here
         },
       }),
     }),
@@ -25,7 +25,7 @@ const AdsApi = createApi({
         url: convertToSecureUrl("/advert/config"),
         method: "GET",
         headers: {
-          "X-Client-Version": "3098", // Add your specific header here
+          "X-Client-Version": "3100", // Add your specific header here
         },
       }),
     }),

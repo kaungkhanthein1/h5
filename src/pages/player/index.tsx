@@ -470,7 +470,7 @@ const DetailPage: React.FC = () => {
                   }`}
                   onClick={() => setActiveTab("tab-1")}
                 >
-                  <span className="text-white">详情</span>
+                  <span className="text-white text-[16px]">详情</span>
                   {activeTab === "tab-1" && (
                     <div className="absolute bottom-0 left-3 w-4/6 h-1 bg-mainColor rounded-md"></div>
                   )}
@@ -481,7 +481,7 @@ const DetailPage: React.FC = () => {
                   }`}
                   onClick={() => setActiveTab("tab-2")}
                 >
-                  <span>评论</span>
+                  <span className=" text-[16px]">评论</span>
                   <span className="text-gray-500 ml-1.5 text-sm">
                     {commentCount > 99 ? "99+" : commentCount || 0}
                   </span>

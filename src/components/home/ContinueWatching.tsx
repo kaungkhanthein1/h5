@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ImageWithPlaceholder from "../../pages/search/components/ImgPlaceholder";
 import { useGetRecordQuery } from "../../pages/profile/services/profileApi";
 import "./home.css";
@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 const ContinueWatching = () => {
   const isLoggedIn = localStorage.getItem("authToken");
   const parsedLoggedIn = isLoggedIn ? JSON.parse(isLoggedIn) : null;
+  const navigate = useNavigate();
   const token = parsedLoggedIn?.data?.access_token;
   const { data } = useGetRecordQuery(undefined, { skip: !token }); // Fetch favorite movies list from API
 
@@ -43,7 +44,24 @@ const ContinueWatching = () => {
       {token && movies?.length !== 0 && (
         <div className="max-md:px-3 px-10">
           {latestMovies?.length > 0 && (
-            <h1 className="text-white font-headerFont">继续观看</h1>
+            <div className=" flex justify-between items-center">
+              <h1 className="text-white font-headerFont">继续观看</h1>
+              <svg
+                onClick={() => navigate("/history")}
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+              >
+                <g opacity="0.2">
+                  <path
+                    d="M13.1722 12L8.22217 7.04999L9.63617 5.63599L16.0002 12L9.63617 18.364L8.22217 16.95L13.1722 12Z"
+                    fill="white"
+                  />
+                </g>
+              </svg>
+            </div>
           )}
           <div className="flex overflow-x-scroll whitespace-nowrap scrollbar-hide gap-4 mt-5">
             {latestMovies?.map((movie: any) => (
@@ -83,7 +101,9 @@ const ContinueWatching = () => {
                     }}
                   ></div>
                 </div>
-                <div className="his-text mt-1 cus-elips">{movie?.movie_name}</div>
+                <div className="his-text mt-1 cus-elips">
+                  {movie?.movie_name}
+                </div>
               </Link>
             ))}
           </div>

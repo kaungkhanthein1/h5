@@ -38,7 +38,7 @@ const SourceSelector: React.FC<SourceSelectorProps> = ({
     <div className="bg-background p-4 mb-4">
       {/* Section header with title and expand all */}
       <div className="flex justify-between items-center mb-2">
-        <h4 className="text-white text-base font-bold">选集</h4>
+        <h4 className="text-white text-[18px] font-bold">选集</h4>
 
         {/* Expand All (展开全部) button triggers the modal */}
         <div className="flex items-center text-gray-400 text-sm">
@@ -49,7 +49,7 @@ const SourceSelector: React.FC<SourceSelectorProps> = ({
             }}
             className="flex items-center"
           >
-            <span>展开全部</span>
+            <span className=" text-[16px]">展开全部</span>
             <FontAwesomeIcon icon={faChevronRight} className="ml-1 text-xs" />
           </button>
         </div>

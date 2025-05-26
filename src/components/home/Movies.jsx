@@ -51,7 +51,7 @@ const Movies = ({ movieData }) => {
       <div className="">
         <div className="flex justify-between items-center px-3 text-[16px] mb-3">
           <h1 className="uppercase text-white font-semibold flex items-center">
-            <span className="text-white font-headerFont">
+            <span className="text-white text-[16px] font-headerFont">
               {movieData?.title}
             </span>
           </h1>
@@ -62,7 +62,7 @@ const Movies = ({ movieData }) => {
                 dispatch(setActiveTab(movieData?.right?.data?.index))
               }
             >
-              <h1 className="text-[10px] text-gray-500">
+              <h1 className="text-[14px] text-gray-500">
                 {movieData?.right?.text}
               </h1>
               <img src={rightvg} alt="" />
