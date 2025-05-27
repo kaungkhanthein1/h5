@@ -255,7 +255,7 @@ const Main: React.FC<any> = ({
                 className="text-[#f54100] w-[50%] p-3 border-t-[1px] border-gray-500"
                 onClick={confirmDelete}
               >
-                删除全部
+                {selectedMovies.length > 1 ? "删除全部" : "删除"}
               </button>
             </div>
           </div>
