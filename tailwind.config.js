@@ -1,64 +1,51 @@
 /** @type {import('tailwindcss').Config} */
-export default {
-  darkMode: ["class"],
-  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+module.exports = {
+  content: ['./src/**/*.{js,jsx,ts,tsx}'],
   theme: {
     extend: {
-      fontFamily: {
-        headerFont: ["HeaderFont", "sans-serif"], // Add your custom font
-        cnFont: ["cnFont", "sans-serif"], // Add your custom font
-        sfProM: ["sfProM", "sans-serif"], // Add your custom font
-        sfProB: ["sfProB", "sans-serif"], // Add your custom font
-        sfProS: ["sfProS", "sans-serif"], // Add your custom font
-      },
-      borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
-      },
       colors: {
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
-        card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
-        },
-        popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
-        },
-        primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
-        },
-        secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
-        },
-        muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
-        },
-        accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
-        },
-        destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
-        },
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        chart: {
-          1: "hsl(var(--chart-1))",
-          2: "hsl(var(--chart-2))",
-          3: "hsl(var(--chart-3))",
-          4: "hsl(var(--chart-4))",
-          5: "hsl(var(--chart-5))",
-        },
+        primary: '#BB86FC',
+        secondary: '#03DAC6',
+        background: '#161619',
+        header: '#282828',
+        footer: '#282828',
+        text: '#E0E0E0',
+        accent: '#FFAB40',
+        selected: '#FF5722',
+        unselected: '#4B5563',
+        player: 'black',
+        playerNavigator: '#F54100',
+        source: 'rgba(255, 255, 255, 0.1)',
+        sourceBack: 'rgba(22, 22, 25, 1)',
+        episodeSelected: 'rgba(255, 255, 255, 0.04)',
+        mainColor: 'rgba(245, 65, 0, 1)',
+        unselectedColor: 'rgba(255, 255, 255, 0.8)',
+        commentInput: 'rgba(32, 32, 34, 0.9)',
+        commentIcon: 'rgba(255, 255, 255, 0.6)',
+        channel: '#522B0F',
+        channelSecondary: '#522B0F99',
       },
+      fontSize: {
+        'xs': '0.75rem',   // Extra small text
+        'sm': '0.875rem',  // Small text
+        'base': '1rem',    // Base size (typically for body text)
+        'lg': '1.125rem',  // Large text
+        'xl': '1.25rem',   // Extra large
+        '2xl': '1.5rem',   // Heading levels or special text
+        '3xl': '1.875rem',
+        '4xl': '2.25rem',
+        '5xl': '3rem',
+      },
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+        serif: ['Merriweather', 'serif'],
+      },
+      // backgroundImage: {
+      //   noplay: "url('./src/assets/noplay.svg')",
+      // },
     },
   },
-  plugins: [require("tailwindcss-animate"), require("@tailwindcss/line-clamp")],
+  plugins: [],
 };
+
+

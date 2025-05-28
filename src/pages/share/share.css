@@ -1,0 +1,147 @@
+.rule {
+  border-radius: var(--Height-And-Sizes-12, 12px) 0px 0px
+    var(--Height-And-Sizes-12, 12px);
+  border-top: 1px solid var(--Blur-Stroke, rgba(68, 68, 68, 0.12));
+  border-bottom: 1px solid var(--Blur-Stroke, rgba(68, 68, 68, 0.12));
+  border-left: 1px solid var(--Blur-Stroke, rgba(68, 68, 68, 0.12));
+  background: linear-gradient(
+    0deg,
+    rgba(68, 68, 68, 0.12) 0%,
+    rgba(170, 170, 170, 0.2) 100%
+  );
+  backdrop-filter: blur(10px);
+}
+
+.bg_share {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.tab {
+  border-radius: 100px;
+  background: var(
+    --Stroke-Linear,
+    linear-gradient(
+      67deg,
+      rgba(205, 191, 166, 0.12) 30.28%,
+      rgba(205, 191, 166, 0.24) 73.76%,
+      rgba(233, 216, 187, 0.32) 91.45%,
+      rgba(255, 236, 204, 0.52) 98.14%
+    )
+  );
+  box-shadow: 0px 0px 32px 0px rgba(255, 227, 130, 0.2);
+}
+
+.scan {
+  border-radius: 30px;
+  border: 1px solid rgba(205, 191, 166, 0.12);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.invite_code {
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.point {
+  background: linear-gradient(
+    90deg,
+    #fff 43.69%,
+    rgba(153, 153, 153, 0) 84.39%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.fire_box {
+  border-radius: 100px;
+  background: linear-gradient(
+    67deg,
+    rgba(205, 191, 166, 0.06) 30.28%,
+    rgba(205, 191, 166, 0.12) 73.76%,
+    rgba(233, 216, 187, 0.15) 91.45%,
+    rgba(255, 236, 204, 0.25) 98.14%
+  );
+  backdrop-filter: blur(2px);
+}
+
+.dolar {
+  border-radius: 100px;
+  background: var(
+    --Stroke-Linear,
+    linear-gradient(
+      67deg,
+      rgba(205, 191, 166, 0.12) 30.28%,
+      rgba(205, 191, 166, 0.24) 73.76%,
+      rgba(233, 216, 187, 0.32) 91.45%,
+      rgba(255, 236, 204, 0.52) 98.14%
+    )
+  );
+  box-shadow: 0px 0px 32px 0px rgba(255, 227, 130, 0.12);
+}
+
+.invite_user {
+  border-radius: 16px;
+  border: 1px solid rgba(205, 191, 166, 0.12);
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(1.5px);
+}
+
+.line {
+  background: rgba(255, 255, 255, 0.12);
+  width: 1px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+.link_button {
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.member_page {
+  border-radius: 38.5px;
+  background: linear-gradient(180deg, #161619 0%, #141416 100%);
+}
+
+.member_list {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.rain_effect_thuHtoo {
+  opacity: 0.32;
+  background: url("../../assets//share/rain.gif") lightgray 50% / cover
+    no-repeat;
+  mix-blend-mode: plus-lighter;
+  width: 100%;
+  height: 155px;
+}
+
+.top_box {
+  border-radius: 16px;
+  border: 1px solid var(--Stroke-Linear, rgba(205, 191, 166, 0.12));
+  background: linear-gradient(
+    112deg,
+    rgba(0, 0, 0, 0.12) 10.86%,
+    rgba(136, 128, 128, 0.04) 100%
+  );
+  backdrop-filter: blur(16px);
+}
+
+.share_badge_box {
+  border-radius: 100px;
+  background: rgba(68, 68, 68, 0.12);
+  box-shadow: 0px -4px 4px 0px rgba(255, 227, 130, 0.02) inset;
+  padding: 4px 12px;
+
+  gap: 10px;
+  color: rgba(255, 255, 255, 0.67);
+  font-variant-numeric: lining-nums proportional-nums;
+  font-feature-settings: "dlig" on;
+  font-family: "PingFang SC";
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px; /* 200% */
+  letter-spacing: 0.1px;
+}

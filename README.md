@@ -1,50 +1,34 @@
-# React + TypeScript + Vite
+# Check Build Consistency
+# npm run build
+# cp -r build build1
+# npm run build
+# diff -r build1 build
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Currently, two official plugins are available:
+# H5 Frontend Deployment Document
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Node Version: 20.9.0 LTS
+## 1. Project Link
+[https://github.com/dfios/dyls-h5-frontend](https://github.com/dfios/dyls-h5-frontend)
 
-## Expanding the ESLint configuration
+## 2. Deployment Branch (Production Branch)
+**Branch:** `develop`
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## 3. Configure Environment File
+Ensure the following environment variables are set in the `.env` file:
 
-- Configure the top-level `parserOptions` property like this:
+```env
+REACT_APP_API_URL=""
+REACT_APP_PUBLIC_KEY=""
+REACT_APP_SIGN_KEY=""
+REACT_APP_AES_KEY=""
+REACT_APP_AES_IV=""
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+# Notes:
+# REACT_APP_API_URL is a combination of the server address, port, and API version (api/v1). 
+# Example: REACT_APP_API_URL="https://cc3e497d.qdhgtch.com:2345/api/v1"
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+# Deployment Script:
+# Run the following commands to deploy:
+# npm install
+# npm run build

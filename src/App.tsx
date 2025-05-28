@@ -1,147 +1,150 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect, useState } from "react";
-import Routing from "./routes/Routing";
-import { useDispatch, useSelector } from "react-redux";
-import { setPanding } from "./store/slices/ModelSlice";
-import ErrorToast from "./page/home/services/ErrorToast";
-
-import { Toaster } from "./components/ui/toaster";
-import { useGetApplicationAdsQuery } from "./store/api/explore/exploreApi";
+import React, { startTransition, Suspense, useEffect, useState } from "react";
 import {
-  initDeviceInfoListener,
-  initDeviceInfo,
-  APP_VERSION,
-} from "./lib/deviceInfo";
-import { useCheckAppVersionQuery } from "./store/api/versionApi";
-import guide from "./assets/guide.webp";
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
+import Header from "./components/Header";
+import FooterNav from "./components/FooterNav";
+import { useDispatch, useSelector } from "react-redux";
+import LoginEmail from "./components/login/LoginEmail";
+import UpdateNotification from "./components/UpdateNotification";
 
-const App = () => {
-  const { panding } = useSelector((state: any) => state.model);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { data } = useGetApplicationAdsQuery("");
+import {
+  setAuthModel,
+  setLoginOpen,
+  setPanding,
+  setSignupOpen,
+} from "./features/login/ModelSlice";
+import Login from "./pages/login";
+import SignUp from "./components/login/SignUp";
+import Favorite from "./pages/profile/Favorite";
+import Loader from "./pages/search/components/Loader";
+import ErrorToast from "./pages/profile/error/ErrorToast";
+import Landing from "./components/Landing";
+import BannerAds from "./components/BannerAds";
+import {
+  useGetAdsQuery,
+  useGetHeaderTopicsQuery,
+  useGetNotificationQuery,
+} from "./services/helperService";
+import { setIsScrolling } from "./pages/home/slice/HomeSlice";
+import SocialComment from "./pages/social/components/Social_details";
+import Social from "./pages/social";
+import Short from "./pages/short";
+import { useGetRecommendedMoviesQuery } from "./pages/home/services/homeApi";
+import Announce from "./components/Announce";
+import land from './assets/login/land.webp'
+// import { Game } from "./pages/Point/pages/Game";
+// import Menber from "./pages/share/member";
+// import Share from "./pages/share";
 
-  const [isMobileBrowser, setIsMobileBrowser] = useState(false);
+// Lazy load the pages
+const Home = React.lazy(() => import("./pages/home"));
+const Game = React.lazy(() => import("./pages/Point/pages/Game"));
+const Mall = React.lazy(() => import("./pages/Point/pages/Mall"));
+const List = React.lazy(() => import("./pages/Point/pages/List"));
+const Shop = React.lazy(() => import("./pages/Point/pages/Shop"));
+const ItemDetail = React.lazy(() => import("./pages/Point/pages/ItemDetail"));
+const Search = React.lazy(() => import("./pages/search"));
+const Main = React.lazy(() => import("./pages/search/Main"));
+const Explorer = React.lazy(() => import("./pages/explorer"));
+const Profile = React.lazy(() => import("./pages/profile"));
+const Player = React.lazy(() => import("./pages/player"));
+const Detail = React.lazy(() => import("./pages/explorer/Detail"));
+const History = React.lazy(() => import("./pages/profile/History"));
+const Settings = React.lazy(() => import("./pages/profile/Settings"));
+const Callback = React.lazy(() => import("./pages/callback"));
+const Notifications = React.lazy(() => import("./pages/profile/Notifications"));
+const Info = React.lazy(() => import("./pages/profile/Info"));
+const Nickname = React.lazy(() => import("./pages/profile/Nickname"));
+const Username = React.lazy(() => import("./pages/profile/Username"));
+const Email = React.lazy(() => import("./pages/profile/Email"));
+const Phnumber = React.lazy(() => import("./pages/profile/Phnumber"));
+const Password = React.lazy(() => import("./pages/profile/Password"));
+const Bind = React.lazy(() => import("./pages/profile/Bind"));
+const Contact = React.lazy(() => import("./pages/profile/Contact"));
+const Invite = React.lazy(() => import("./pages/profile/Invite"));
+const Share = React.lazy(() => import("./pages/share"));
+const Member = React.lazy(() => import("./pages/share/member"));
+const Point = React.lazy(() => import("./pages/Point"));
+const ItemInfo = React.lazy(() => import("./pages/Point/pages/ItemInfo"));
+
+// ProtectedRoute component to handle route guarding
+// const ProtectedRoute: React.FC<{ children: JSX.Element }> = ({ children }) => {
+//   const isLoggedIn = localStorage.getItem("authToken"); // Check if the user is authenticated
+//   return isLoggedIn ? children : <Navigate to="/login" replace />;
+// };
+
+const App: React.FC = () => {
   const dispatch = useDispatch();
-  const [showInAppBrowserAlert, setShowInAppBrowserAlert] = useState(false);
+  const {
+    openAuthModel,
+    openLoginModel,
+    openSignupModel,
+    panding,
+    isShowingDetails,
+  } = useSelector((state: any) => state.model);
+  const { data, isLoading: adsLoading, refetchAds } = useGetAdsQuery();
+  const { isLoading: moviesLoading, refetch } = useGetRecommendedMoviesQuery();
+  const { data: headerData, isLoading: topicsLoading } =
+    useGetHeaderTopicsQuery();
+  // const { data: notiData, isLoading: notiLoading } = useGetNotificationQuery();
 
-  // Convert version string to numeric format (e.g., 1.1.6.8 -> 1168)
-  const numericVersion = APP_VERSION ? APP_VERSION.split(".").join("") : "";
+  const [showNotice, setShowNotice] = useState(false);
+  const [preloadedImage, setPreloadedImage] = useState<string | null>(null);
+  const [showUpdateNotification, setShowUpdateNotification] = useState(false);
 
-  // Check for app updates using RTK Query
-  const { data: versionData, isSuccess: versionCheckSuccess } =
-    useCheckAppVersionQuery(
-      {
-        platform: "ios",
-        version: numericVersion,
-      },
-      {
-        // Skip if version is not available
-        skip: !numericVersion,
-      }
-    );
-
-  const isWebClip = (): boolean => {
-    return (
-      "standalone" in window.navigator && window.navigator.standalone === true
-    );
-  };
-  // Handle version check result
+  // Preload landing image
   useEffect(() => {
-    if (versionCheckSuccess && versionData) {
-      const needsUpdate = versionData?.data?.update_status;
-      if (needsUpdate) {
-        if (isWebClip()) {
-          window.location.reload();
-        }
+    if (data?.data) {
+      const startAds = data?.data["start"];
+      if (startAds && startAds.length > 0 && startAds[0]?.data?.image) {
+        // Immediately start fetching the image as a blob
+        fetch(startAds[0]?.data?.image)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.blob();
+          })
+          .then(blob => {
+            const url = URL.createObjectURL(blob);
+            setPreloadedImage(url);
+            
+            // Also preload the image in browser cache
+            const img = new Image();
+            img.src = url;
+          })
+          .catch(err => {
+            console.error("Failed to preload image:", err);
+            // Continue without preloaded image
+          });
       }
     }
-  }, [versionCheckSuccess, versionData]);
-
-  useEffect(() => {
-    // Function to check if the user is on a mobile browser
-    const checkIfMobileBrowser = () => {
-      const userAgent = navigator.userAgent;
-      const isAndroid = /Android/i.test(userAgent); // Check only for Android
-
-      setIsMobileBrowser(isAndroid);
-    };
-
-    // Function to adjust the height of the video element
-    const adjustVideoHeight = () => {
-      const videoElement = document.querySelector(
-        ".video"
-      ) as HTMLElement | null;
-      const videoElement1 = document.querySelector(
-        ".video1"
-      ) as HTMLElement | null;
-      const videoFooter = document.querySelector(
-        ".videoFooter"
-      ) as HTMLElement | null;
-
-      const videoFooter2 = document.querySelector(
-        ".videoFooter"
-      ) as HTMLElement | null;
-
-      if (videoElement && isMobileBrowser) {
-        // Adjusted height for mobile browsers
-        videoElement.style.height = "calc(100dvh - 64px)";
-      }
-
-      if (videoFooter && isMobileBrowser) {
-        // Adjusted height for mobile browsers
-        videoFooter.style.bottom = "40px";
-      }
-
-      if (videoFooter2 && isMobileBrowser) {
-        // Adjusted height for mobile browsers
-        videoFooter2.style.bottom = "40px";
-      }
-
-      if (videoElement1 && isMobileBrowser) {
-        // Adjusted height for mobile browsers
-        videoElement1.style.height = "calc(100dvh - 0px)";
-      }
-    };
-
-    // Check if the user is on a mobile browser
-    checkIfMobileBrowser();
-
-    // Adjust the height initially
-    adjustVideoHeight();
-
-    // Add a resize event listener to handle viewport changes
-    window.addEventListener("resize", adjustVideoHeight);
-
-    // Cleanup the event listener on component unmount
+    
+    // Clean up any blob URLs when component unmounts
     return () => {
-      window.removeEventListener("resize", adjustVideoHeight);
+      if (preloadedImage) {
+        URL.revokeObjectURL(preloadedImage);
+      }
     };
-  }, [isMobileBrowser]);
+  }, [data]);
+
+  // Combined loading state
+  // const isLoading = moviesLoading || topicsLoading || notiLoading;
 
   useEffect(() => {
-    const isAndroid = /Android/i.test(navigator.userAgent);
-    if (isAndroid) {
-      document.body.classList.add("android");
-      document.body.classList.remove("not-android");
-    } else {
-      document.body.classList.add("not-android");
-      document.body.classList.remove("android");
+    const hasSeenNotice = sessionStorage.getItem("hasSeenNotice");
+    if (!hasSeenNotice) {
+      setShowNotice(true);
+      sessionStorage.setItem("hasSeenNotice", "true");
     }
   }, []);
 
-  // Now we check if landing has been seen this session or not
-  useEffect(() => {
-    const hasSeenLanding = sessionStorage.getItem("hasSeenLanding");
-    if (!hasSeenLanding) {
-      dispatch(setPanding(true));
-    }
-  }, [dispatch]);
-
-  useEffect(() => {
-    // Initialize device info listener
-    initDeviceInfoListener();
-    initDeviceInfo();
-  }, []);
+  const location = useLocation();
+  // const isLoggedIn = localStorage.getItem("authToken"); // Check if the user is authenticated
 
   const sendNativeEvent = (message: string) => {
     if (
@@ -154,63 +157,294 @@ const App = () => {
   };
 
   useEffect(() => {
+    sendNativeEvent("dylsh5");
+  }, []);
+
+  useEffect(() => {
     if (panding) {
-      sendNativeEvent("beabox_ads_started");
+      sendNativeEvent("dylsh5_ads_started");
     } else {
-      sendNativeEvent("beabox_home_started");
+      sendNativeEvent("dylsh5_home_started");
     }
   }, [panding]);
+  // Hide header and footer when the current path is "/player/:id" or "/login"
+  const hideHeaderFooter =
+    location.pathname.startsWith("/player") ||
+    location.pathname.startsWith("/history") ||
+    location.pathname.startsWith("/favorites") ||
+    location.pathname.startsWith("/notifications") ||
+    location.pathname.startsWith("/settings") ||
+    location.pathname.startsWith("/search_overlay") ||
+    location.pathname.startsWith("/search") ||
+    location.pathname.startsWith("/profile") ||
+    location.pathname.startsWith("/social") ||
+    location.pathname.startsWith("/short") ||
+    location.pathname.startsWith("/social_callback") ||
+    location.pathname.startsWith("/info") ||
+    location.pathname.startsWith("/nickname") ||
+    location.pathname.startsWith("/username") ||
+    location.pathname.startsWith("/update_email") ||
+    location.pathname.startsWith("/update_phone") ||
+    location.pathname.startsWith("/update_password") ||
+    location.pathname.startsWith("/bind") ||
+    location.pathname.startsWith("/contact") ||
+    location.pathname.startsWith("/share") ||
+    location.pathname.startsWith("/invite") ||
+    location.pathname.startsWith("/share/member") ||
+    location.pathname.startsWith("/point_info") ||
+    location.pathname.startsWith("/game") ||
+    location.pathname.startsWith("/point_mall") ||
+    location.pathname.startsWith("/list") ||
+    location.pathname.startsWith("/itemDetail") ||
+    location.pathname.startsWith("/shop");
 
-  const detectInAppBrowser = () => {
-    const ua = navigator.userAgent.toLowerCase();
-    return {
-      inWeChat: ua.indexOf("micromessenger") !== -1,
-      inAlipay: ua.indexOf("alipayclient") !== -1,
-      inWeibo: ua.indexOf("weibo") !== -1,
-      inQQ: ua.indexOf("qq/") !== -1,
-      inDouyin: ua.includes("douyin"),
-      inToutiao: ua.includes("newsarticle"),
-    };
+  const hideHeader = location.pathname.startsWith("/explorer");
+  const { hideMode } = JSON.parse(
+    localStorage.getItem("movieAppSettings") || "{}"
+  );
+
+  const sendMessageToNative = (message: string) => {
+    if (
+      (window as any).webkit &&
+      (window as any).webkit.messageHandlers &&
+      (window as any).webkit.messageHandlers.jsBridge
+    ) {
+      (window as any).webkit.messageHandlers.jsBridge.postMessage(message);
+    }
   };
 
   useEffect(() => {
-    const browserInfo = detectInAppBrowser();
-    if (
-      browserInfo.inWeChat ||
-      browserInfo.inAlipay ||
-      browserInfo.inWeibo ||
-      browserInfo.inQQ
-    ) {
-      setShowInAppBrowserAlert(true);
+    if (data?.data) {
+      if (
+        (location.pathname === "/" ||
+          location.pathname.startsWith("/search") ||
+          location.pathname.startsWith("/search_overlay")) &&
+        !panding
+      ) {
+        sendMessageToNative("showHomeScreen");
+      } else if (location.pathname.startsWith("/profile") && !panding) {
+        sendMessageToNative("showProfileScreen");
+      } else if (
+        location.pathname !== "/" &&
+        !location.pathname.startsWith("/profile") &&
+        !panding
+      ) {
+        sendMessageToNative("hideGradient");
+      }
     }
-  }, []);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (location.pathname !== "/") {
+      // refetchAds();
+      refetch();
+    }
+  }, [location.pathname]);
+
+  useEffect(() => {
+    const hasSeenLanding = sessionStorage.getItem("hasSeenLanding");
+    if (!hasSeenLanding) {
+      sessionStorage.setItem("hasSeenLanding", "true"); // Mark as shown
+      dispatch(setPanding(true));
+    }
+  }, [dispatch]);
+
+  // Show update notification after ads screen
+  useEffect(() => {
+    if (!panding) {
+      const hasSeenUpdateNotification = sessionStorage.getItem("hasSeenUpdateNotification");
+      if (!hasSeenUpdateNotification) {
+        setShowUpdateNotification(true);
+      }
+    }
+  }, [panding]);
+
+  useEffect(() => {
+    if (openAuthModel || openLoginModel || openSignupModel) {
+      document.body.style.overflow = "hidden"; // Disable scrolling
+    } else {
+      document.body.style.overflow = ""; // Restore scrolling
+    }
+  }, [openAuthModel, openLoginModel, openSignupModel]);
+  // console.log(panding);
+
+  // useEffect(() => {
+  //   // Redirect to login if not logged in and trying to access any route other than login
+  //   if (!isLoggedIn && location.pathname !== "/login") {
+  //     window.location.href = "/login";
+  //   }
+  // }, [isLoggedIn, location.pathname]);
+
+  const handleBack = () => {
+    startTransition(() => {
+      dispatch(setAuthModel(true));
+      dispatch(setLoginOpen(false));
+      dispatch(setSignupOpen(false));
+    });
+  };
+
+  const closeAllModals = () => {
+    startTransition(() => {
+      dispatch(setAuthModel(false));
+      dispatch(setLoginOpen(false));
+      dispatch(setSignupOpen(false));
+    });
+  };
+
+  const handleUpdateClick = () => {
+    const link = headerData?.data?.app_store_link;
+    // Handle update action here
+    window.open(link, '_blank');
+    // Or any other update logic
+    setShowUpdateNotification(false);
+    sessionStorage.setItem("hasSeenUpdateNotification", "true");
+  };
+
+  const handleCloseUpdateNotification = () => {
+    setShowUpdateNotification(false);
+    sessionStorage.setItem("hasSeenUpdateNotification", "true");
+  };
+
+  if (!data?.data) {
+    return (
+      <img
+        className="h-screen w-screen object-cover"
+        src={land}
+        alt=""
+      />
+    );
+  }
+
+  function isWebView() {
+    return (
+      (window as any).webkit &&
+      (window as any).webkit.messageHandlers &&
+      (window as any).webkit.messageHandlers.jsBridge
+    );
+  }
 
   return (
     <>
-      {!showInAppBrowserAlert && (
+      {data?.data && (
         <>
-          <Routing />
-          <Toaster />
-          <ErrorToast />
-        </>
-      )}
-      {showInAppBrowserAlert && (
-        <div className="fixed w-full h-screen bg-white z-[3000] top-0 left-0">
-          <div className="w-full z-[1300] absolute h-full flex justify-center items-center">
-            <div className="text-[14px] bg-white rounded-lg text-center relative max-w-md w-full">
-              <div className="relative w-full">
-                <img
-                  src={guide}
-                  alt=""
-                  className="w-full h-dvh object-contain"
+          {panding ? (
+            <Landing data={data} preloadedImage={preloadedImage} />
+          ) : (
+            <div
+              className={`flex flex-col min-h-screen ${
+                panding ? "invisible" : "visible"
+              }`}
+            >
+              {/* <BannerAds /> */}
+              {/* Conditionally render Header */}
+              {!hideHeaderFooter && !hideHeader && <Header />}
+              {showNotice && (
+                <Announce
+                  setShowNotice={setShowNotice}
+                  config={headerData}
+                  showNotice={showNotice}
                 />
+              )}
+
+              {showUpdateNotification && !showNotice && !isWebView() && headerData?.data?.app_store_link && (
+                <div className="fixed bottom-24 left-0 right-0 z-[9999] flex justify-center">
+                  <UpdateNotification 
+                    onUpdate={handleUpdateClick} 
+                    onClose={handleCloseUpdateNotification}
+                  />
+                </div>
+              )}
+
+              <div className="flex-grow">
+                <Suspense
+                  fallback={
+                    <div className="flex justify-center items-center h-screen bg-[#161619]">
+                      <Loader />
+                    </div>
+                  }
+                >
+                  <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/home" element={<Home />} />
+                    <Route path="/search" element={<Main />} />
+                    <Route path="/game" element={<Game />} />
+                    <Route path="/point_mall" element={<Mall />} />
+                    <Route path="/list" element={<List />} />
+                    <Route path="/list" element={<List />} />
+                    <Route path="/itemDetail/:id" element={<ItemDetail />} />
+                    <Route path="/info/:id" element={<ItemInfo />} />
+                    <Route path="/shop/:id" element={<Shop />} />
+                    <Route path="/search_overlay" element={<Search />} />
+
+                    <Route path="/explorer" element={<Explorer />} />
+                    {/* Conditional rendering of the Social component */}
+                    {!hideMode && location.pathname === "/social" ? (
+                      <Route path="/social" element={<Social />} />
+                    ) : (
+                      <Route path="/social" element={<div />} />
+                    )}
+                    {/* <Route path="/social" element={<Social />} /> */}
+                    {/* <Route path="/short" element={<Short />} /> */}
+                    <Route path="/explorer/:id" element={<Detail />} />
+                    <Route path="/profile" element={<Profile />} />
+                    <Route path="/player/:id" element={<Player />} />
+                    <Route path="/history" element={<History />} />
+                    <Route path="/favorites" element={<Favorite />} />
+                    <Route path="/settings" element={<Settings />} />
+                    <Route path="/notifications" element={<Notifications />} />
+                    <Route path="/info" element={<Info />} />
+                    <Route path="/nickname" element={<Nickname />} />
+                    <Route path="/username" element={<Username />} />
+                    <Route path="/social_callback" element={<Callback />} />
+                    <Route path="/social_comment" element={<SocialComment />} />
+                    <Route path="/update_email" element={<Email />} />
+                    <Route path="/update_phone" element={<Phnumber />} />
+                    <Route path="/update_password" element={<Password />} />
+                    <Route path="/bind" element={<Bind />} />
+                    <Route path="/contact" element={<Contact />} />
+                    <Route path="/share" element={<Share />} />
+                    <Route path="/invite" element={<Invite />} />
+                    <Route path="/share/member" element={<Member />} />
+                    <Route path="/point_info" element={<Point />} />
+                    <Route path="/point_info_redeem" element={<Point showTab={false}/>} />
+                  </Routes>
+                </Suspense>
+                <ErrorToast />
               </div>
+
+              {/* Conditionally render FooterNav */}
+              {!hideHeaderFooter && <FooterNav />}
+              {location.pathname.startsWith("/profile") && <FooterNav />}
+              {location.pathname.startsWith("/social") && !isShowingDetails && (
+                <FooterNav />
+              )}
+              {location.pathname.startsWith("/short") && <FooterNav />}
+
+              {(openAuthModel || openLoginModel || openSignupModel) && (
+                <div
+                  className="fixed inset-0 bg-black/40 opacity-50 z-[99899] h-screen" // Overlay with 50% opacity
+                  onClick={closeAllModals} // Close all modals on click
+                ></div>
+              )}
+              {/* <div className=" fixed h-screen flex flex-col justify-center items-center"> */}
+              {openAuthModel && <LoginEmail handleBack={handleBack} />}
+              {/* {openLoginModel && <LoginEmail handleBack={handleBack} />} */}
+              {openSignupModel && <SignUp handleBack={handleBack} />}
+              {/* </div> */}
             </div>
-          </div>
-        </div>
+          )}
+        </>
       )}
     </>
   );
 };
 
-export default App;
+// Wrap the App component with Router for useLocation to work
+const AppWithRouter = () => (
+  <Router>
+    <App />
+  </Router>
+);
+
+export default AppWithRouter;
+

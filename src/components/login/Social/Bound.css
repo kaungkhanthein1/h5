@@ -1,0 +1,9 @@
+.close {
+  border-radius: 1000px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.create {
+  border-radius: 20px;
+  background: rgba(255, 76, 0, 0.04);
+}

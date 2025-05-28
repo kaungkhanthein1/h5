@@ -1,0 +1,101 @@
+.jf-card {
+  /* @apply w-full flex rounded-xl h-[84px] pl-[26px] pr-[19px] items-center justify-between; */
+  background: linear-gradient(180deg, #ffe0df 0%, #ffffff 50%);
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.12),
+    inset 0px 2px 2px rgba(255, 255, 255, 0.5);
+}
+
+.jf-btn {
+  /* @apply border border-orange-secondary px-4 py-1.5 rounded-full font-medium text-[12px]; */
+}
+
+.jf-foot {
+  /* @apply bg-white fixed w-full z-10 bottom-0 left-0 min-h-min px-4 py-2; */
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.25);
+}
+.jf-red {
+  /* @apply w-full p-3 flex gap-3 text-white justify-between; */
+  padding: 28px 18px;
+  padding-right: 32px;
+  background: linear-gradient(90deg, #fc3e3a 0%, #fe6555 100%);
+}
+.jf-infinitescroll {
+  /* @apply container px-4 mt-[45px] gap-3 pb-3 overflow-y-auto; */
+  height: calc(100vh - 300px);
+  /* height: 400px; */
+}
+
+.jf-infinitescroll-panel {
+  /* @apply container  overflow-y-auto; */
+  height: calc(100vh - 220px);
+}
+/* .game-box {
+      background: url(../../public/gamebg.jpg) no-repeat;
+      background-size: 100% 80%;
+    } */
+
+.skeleton-vertical {
+  background: linear-gradient(
+    180deg,
+    rgba(225, 225, 225, 0.2) 25%,
+    rgba(0, 0, 0, 0.3) 50%,
+    rgba(225, 225, 225, 0.2) 75%
+  );
+  background-size: 100% 400%;
+  animation: shimmer-vertical 1.5s infinite;
+}
+
+@keyframes shimmer-vertical {
+  0% {
+    background-position: top;
+  }
+  100% {
+    background-position: bottom;
+  }
+}
+
+.nolist_head {
+  color: #161619;
+  font-variant-numeric: lining-nums proportional-nums;
+  font-feature-settings: "dlig" on;
+  font-family: "PingFang SC";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 22px; /* 110% */
+  letter-spacing: 0.2px;
+}
+
+.nolist_des {
+  color: rgba(0, 0, 0, 0.6);
+  text-align: center;
+  font-feature-settings: "liga" off, "clig" off;
+  font-family: "PingFang SC";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 22px; /* 122.222% */
+}
+
+.new_redeem {
+  color: #444;
+  font-family: "Helvetica Neue";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 21px; /* 131.25% */
+}
+
+.new_redeem_num {
+  color: var(--Nav-Linear, #fa652e);
+  font-family: "Helvetica Neue";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 21px;
+}
+
+.get_point_btn {
+  border-radius: 20px;
+  border: 1px solid var(--Nav-Linear, #fa652e);
+}

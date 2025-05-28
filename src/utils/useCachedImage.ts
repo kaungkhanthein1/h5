@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 // hooks/useCachedImage.ts
 import { useEffect, useState } from 'react';
 import { getCachedImage, storeImage } from '../utils/imageCache';
@@ -38,8 +37,7 @@ const useCachedImage = (imageUrl: string) => {
           setImgSrc(newCachedImage);
           setIsLoading(false);
         }
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      } catch (error: any) {
+      } catch (error) {
         failedUrls.add(imageUrl); // Mark URL as failed
         if (isMounted) setImgSrc(imageUrl); // Fallback to original URL
         setIsLoading(false);

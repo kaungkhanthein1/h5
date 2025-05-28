@@ -1,0 +1,31 @@
+.font-headerFont {
+  color: var(--White-100, #fff);
+  font-family: "PingFang SC";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.control-dots {
+  position: absolute !important;
+  right: 0 !important;
+  width: auto !important;
+  margin-right: 10px !important;
+}
+
+.control-dots li {
+  margin: 0px 3px !important;
+}
+
+.bg-filter {
+  z-index: 999;
+  background: linear-gradient(
+      180deg,
+      rgba(22, 22, 25, 0) 0%,
+      rgba(22, 22, 25, 0) 0%
+    ),
+    linear-gradient(90deg, #0a5b75 0%, #4b2555 100%);
+  padding-bottom: 10px;
+  background-position: bottom;
+}
