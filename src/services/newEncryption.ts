@@ -115,31 +115,35 @@ export class RSAEncryptor {
   }
 }
 
-export function decryptWithAes(data: string): object | null {
-  try {
-    // Decode the encrypted data (if URL-safe base64 encoding was used)
-    const encryptedData = data.replace(/-/g, "+").replace(/_/g, "/"); // Convert URL-safe base64 to standard base64
+export function decryptWithAes(data: string): any | null {
+  // staging
+  return data;
 
-    // Decrypt the data
-    const decrypted = CryptoJS.AES.decrypt(
-      encryptedData,
-      CryptoJS.enc.Utf8.parse(process.env.REACT_APP_AES_KEY || ""),
-      {
-        iv: CryptoJS.enc.Utf8.parse(process.env.REACT_APP_AES_IV || ""),
-        mode: CryptoJS.mode.CBC,
-        padding: CryptoJS.pad.Pkcs7,
-      }
-    );
+  // prod
+  // try {
+  //   // Decode the encrypted data (if URL-safe base64 encoding was used)
+  //   const encryptedData = data.replace(/-/g, "+").replace(/_/g, "/"); // Convert URL-safe base64 to standard base64
 
-    // Convert decrypted data to string
-    const decryptedStr = decrypted.toString(CryptoJS.enc.Utf8);
+  //   // Decrypt the data
+  //   const decrypted = CryptoJS.AES.decrypt(
+  //     encryptedData,
+  //     CryptoJS.enc.Utf8.parse(process.env.REACT_APP_AES_KEY || ""),
+  //     {
+  //       iv: CryptoJS.enc.Utf8.parse(process.env.REACT_APP_AES_IV || ""),
+  //       mode: CryptoJS.mode.CBC,
+  //       padding: CryptoJS.pad.Pkcs7,
+  //     }
+  //   );
 
-    // Parse the JSON string to an object
-    return JSON.parse(decryptedStr);
-  } catch (err) {
-    console.error("Decryption error:", err);
-    return null;
-  }
+  //   // Convert decrypted data to string
+  //   const decryptedStr = decrypted.toString(CryptoJS.enc.Utf8);
+
+  //   // Parse the JSON string to an object
+  //   return JSON.parse(decryptedStr);
+  // } catch (err) {
+  //   console.error("Decryption error:", err);
+  //   return null;
+  // }
 }
 
 export function urlSafeB64decode(data: string): string {

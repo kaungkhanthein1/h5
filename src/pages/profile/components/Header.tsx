@@ -36,7 +36,13 @@ const Header = () => {
     // dispatch(showToast({ message: "该功能正在开发中", type: "success" }));
     navigate("/point_info");
   };
-  const user = userData?.data;
+
+  // prod
+  // const user = userData?.data;
+
+  // staging
+  const parsedUserData = JSON.parse(userData || "{}");
+  const user = parsedUserData?.data;
 
   return (
     <div className="profile-header">
@@ -53,7 +59,7 @@ const Header = () => {
                     width={58}
                     height={58}
                     src={user?.avatar}
-                    alt={user?.username}
+                    alt={user?.username || user?.nickname}
                     className="rounded-full"
                   />
                 ) : (
@@ -125,7 +131,7 @@ const Header = () => {
                 )}
               </div>
               <div className="flex flex-col gap-0">
-                <h1>{user?.nickname}</h1>
+                <h1>{user?.nickname || user?.username}</h1>
                 <div className="flex gap-2 mt-1 items-center">
                   {user?.level && (
                     <img src={user?.level} className="w-[80px] h-[30px]" />
