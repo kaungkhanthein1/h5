@@ -268,7 +268,7 @@ export const Mall = () => {
               onClick={handleOpenTask}
               className="border get_point_btn px-4 py-1.5 rounded-full font-medium text-xs;"
             >
-              获取积分
+              获取金币和劵
             </button>
           </div>
         </div>

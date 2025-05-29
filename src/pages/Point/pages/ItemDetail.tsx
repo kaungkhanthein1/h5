@@ -251,7 +251,7 @@ export const ItemDetail = () => {
         <div className="flex pb-2 justify-between items-center">
           <div className="flex flex-col">
             {typeof res?.current_price === "number" && (
-              <span className="text-lg text-orange-secondary font-semibold">
+              <span className="text-md text-[#ff6a33] font-semibold">
                 {res?.require_coupon > 0 && `${res.require_coupon} 兑换劵 + `}
                 {numeral(res.current_price).format("0,0")}&nbsp;积分
               </span>
