@@ -247,7 +247,7 @@ const Share: React.FC<ShareProps> = ({}) => {
                         我的邀请码 :
                       </h1>
                       <span className=" text-white text-[16px] font-[500] leading-[20px]">
-                        {userData.data.invite_code}
+                        {userData?.data?.invite_code}
                       </span>
                       <img onClick={handleCopy} src={copy} alt="" />
                     </div>

@@ -38,7 +38,7 @@ export const Card: FC<CardProps> = ({ data, key = "" }) => {
       <div className="flex px-2 pb-3 pt-2 justify-between items-center">
         <div className="flex flex-col">
           {/* new line */}
-          { data?.require_coupon && data?.require_coupon !== 0 && (
+          {data?.require_coupon !== 0 && (
             <span className="text-sm text-[#ff6a33] font-semibold">
               {data?.require_coupon} 兑换劵 +
             </span>

@@ -163,10 +163,8 @@ export const Panel: FC<PanelProps> = ({ status }) => {
                 <div className="flex flex-col">
                   <span className="text-lg text-[#ff6a33] font-semibold">
                     {/* new line */}
-                    {i.goods_coupon &&
-                      i.goods_coupon !== 0 &&
-                      `${i.goods_coupon} 兑换劵 +`}{" "}
-                     {numeral(i?.order_price ?? 0).format("0,0")}
+                    {i.goods_coupon !== 0 && `${i.goods_coupon} 兑换劵 +`}{" "}
+                    {numeral(i?.order_price ?? 0).format("0,0")}
                     &nbsp;积分
                   </span>
                 </div>

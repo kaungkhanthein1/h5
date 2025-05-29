@@ -26,10 +26,10 @@ export const Mall = () => {
   const { data: userData } = useGetUserQuery(undefined, {
     skip: !token,
   });
+  const parsedUserData = JSON.parse(userData || "{}");
 
-  const integralDetails = userData?.data?.integral;
-  const coupon = userData?.data?.coupon;
-  console.log(coupon);
+  const integralDetails = parsedUserData?.data?.integral;
+  const coupon = parsedUserData?.data?.coupon;
   const [pageConfig, setPageConfig] = useState({
     page: 1,
     pageSize: 6,

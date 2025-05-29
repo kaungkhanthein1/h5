@@ -92,7 +92,9 @@ export const ItemDetail = () => {
         const order = await sendOrder(params.id, {
           form_data: "[]",
         });
+        console.log(order)
         if (order?.data?.order_id) {
+          console.log("updating",order)
           update(order.data.surplus_integral);
           return navigate(`/info/${order.data.order_id}`);
         }

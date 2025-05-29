@@ -422,7 +422,8 @@ export const ItemInfo = () => {
               </div>
               <div className="flex flex-col">
                 <span className="text-lg text-[#ff6a33] font-semibold">
-                  {/* new line */}1 兑换劵 +{" "}
+                  {res?.goods?.require_coupon !== 0 &&
+                    `${res?.goods?.require_coupon} 兑换劵 +`}
                   {numeral(res?.goods?.current_price ?? 0).format("0,0")}
                   &nbsp;积分
                 </span>
@@ -567,8 +568,7 @@ export const ItemInfo = () => {
           <div className="w-full flex justify-between py-2.5">
             <p className="text-base">商品总价</p>
             <p className="text-base text-black/60">
-              {/* new line */}
-              1 兑换劵 +{" "}
+              {/* new line */}1 兑换劵 +{" "}
               {numeral(res?.goods?.original_price ?? 0).format("0,0")}&nbsp;积分
             </p>
           </div>

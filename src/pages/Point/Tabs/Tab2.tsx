@@ -19,7 +19,7 @@ const Tab2: React.FC<Tab2Props> = ({ taskList }) => {
     }
   };
 
-  // console.log(taskList);
+  console.log(taskList);
   return (
     <div className=" flex flex-col gap-[18px]">
       {taskList?.map((tt: any) => (
@@ -37,7 +37,7 @@ const Tab2: React.FC<Tab2Props> = ({ taskList }) => {
             {tt?.reward !== 0 && (
               <span className=" flex justify-center items-center text-[14px] font-[500] text-[#FF6A33]">
                 + {tt.reward}{" "}
-                <img className=" w-[18px] h-[18px]" src={coin} alt="" />
+                <img className=" w-[18px] h-[18px]" src={tt.currency_icon} alt="" />
               </span>
             )}
             {/* <button
