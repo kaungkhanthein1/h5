@@ -10,6 +10,7 @@ import { useForm, useFieldArray } from "react-hook-form";
 import numeral from "numeral";
 import "./style.css";
 import FeedbackComponent from "../../../pages/player/video/Feedback";
+import { useGetUserQuery } from "../../../pages/profile/services/profileApi";
 
 export const ItemInfo = () => {
   const params = useParams();
@@ -24,6 +25,9 @@ export const ItemInfo = () => {
   const [isRemove, setIsRemove] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showFeedbackModal, setShowFeedbackModal] = useState(false); // For triggering modal
+
+  const { data: userData, refetch } = useGetUserQuery(undefined);
+
 
   let [deleteMode, setDeleteMode] = useState<boolean>(false);
   let [isOpen, setIsOpen] = useState<boolean>(false);
@@ -137,6 +141,7 @@ export const ItemInfo = () => {
       //     );
       //   }
       refresh();
+      refetch()
     } catch (err) {
     } finally {
       // setIsOpen(false);
