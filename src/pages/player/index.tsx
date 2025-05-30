@@ -590,7 +590,7 @@ const DetailPage: React.FC = () => {
             className={`${activeTab === "tab-1" ? "overflow-y-scroll" : ""}`} 
             style={{
               height: activeTab === "tab-1" ? `${availableHeight}px` : "auto",
-              minHeight: activeTab === "tab-1" ? "300px" : "auto"
+              minHeight: "auto"
             }}>
             <DetailSection
               adsData={adsData}
