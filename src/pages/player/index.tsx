@@ -25,35 +25,97 @@ import {
 } from "../../services/newEncryption";
 import PlayerLoading from "./video/PlayerLoading";
 
-// Custom hook for dynamic height calculation
 const useDynamicHeight = () => {
   const [availableHeight, setAvailableHeight] = useState(300);
-  
+  const [hasElement, setHasElement] = useState(false);
+
   useEffect(() => {
     const calculateHeight = () => {
-      const upperDiv = document.getElementById('upper-div');
-      const windowHeight = window.innerHeight;
-      
+      const upperDiv = document.getElementById("upper-div");
       if (upperDiv) {
+        const windowHeight = window.innerHeight;
         const upperDivHeight = upperDiv.offsetHeight;
-        const tabsHeight = 60; // Approximate height of tabs section
-        const padding = 20; // Additional padding/margin
+        const tabsHeight = 60;
+        const padding = 20;
         const calculated = windowHeight - upperDivHeight - tabsHeight - padding;
-        setAvailableHeight(Math.max(calculated, 300)); // Minimum 300px
+        setAvailableHeight(Math.max(calculated, 300));
+        if (!hasElement) setHasElement(true);
       }
     };
 
+    // Try immediately
     calculateHeight();
-    window.addEventListener('resize', calculateHeight);
-    
-    return () => window.removeEventListener('resize', calculateHeight);
-  }, []);
+
+    if (!hasElement) {
+      // Set up MutationObserver if element not found
+      const observer = new MutationObserver((mutations) => {
+        if (document.getElementById("upper-div")) {
+          calculateHeight();
+          observer.disconnect();
+        }
+      });
+
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+      });
+
+      // Also try periodically as fallback
+      const interval = setInterval(() => {
+        if (document.getElementById("upper-div")) {
+          calculateHeight();
+          clearInterval(interval);
+        }
+      }, 100);
+
+      window.addEventListener("resize", calculateHeight);
+
+      return () => {
+        observer.disconnect();
+        clearInterval(interval);
+        window.removeEventListener("resize", calculateHeight);
+      };
+    } else {
+      // Element exists, just listen for resize
+      window.addEventListener("resize", calculateHeight);
+      return () => window.removeEventListener("resize", calculateHeight);
+    }
+  }, [hasElement]);
 
   return availableHeight;
 };
+// Custom hook for dynamic height calculation
+// const useDynamicHeight = () => {
+//   const [availableHeight, setAvailableHeight] = useState(300);
+
+//   useEffect(() => {
+//     const calculateHeight = () => {
+//       const upperDiv = document.getElementById("upper-div");
+//       const windowHeight = window.innerHeight;
+//       console.log(upperDiv);
+
+//       if (upperDiv) {
+//         const upperDivHeight = upperDiv.offsetHeight;
+//         const tabsHeight = 60; // Approximate height of tabs section
+//         const padding = 20; // Additional padding/margin
+//         const calculated = windowHeight - upperDivHeight - tabsHeight - padding;
+//         console.log(calculated, "calculated height");
+//         setAvailableHeight(Math.max(calculated, 300)); // Minimum 300px
+//       }
+//     };
+
+//     calculateHeight();
+//     window.addEventListener("resize", calculateHeight);
+
+//     return () => window.removeEventListener("resize", calculateHeight);
+//   }, []);
+
+//   return availableHeight;
+// };
 
 const DetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+
   const availableHeight = useDynamicHeight();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [movieDetail, setMovieDetail] = useState<MovieDetail | null>(null);
@@ -539,8 +601,7 @@ const DetailPage: React.FC = () => {
                 ) : (
                   <PlayerLoading onBack={navigateBackFunction} />
                 )
-              ) :
-              (
+              ) : (
                 <NetworkError
                   switchNow={switchNow}
                   refresh={refresh}
@@ -585,13 +646,14 @@ const DetailPage: React.FC = () => {
             </div>
           </div>
 
-          <div 
+          <div
             ref={scrollContainerRef}
-            className={`${activeTab === "tab-1" ? "overflow-y-scroll" : ""}`} 
+            className={`${activeTab === "tab-1" ? "overflow-y-scroll" : ""}`}
             style={{
               height: activeTab === "tab-1" ? `${availableHeight}px` : "auto",
-              minHeight: "auto"
-            }}>
+              minHeight: "auto",
+            }}
+          >
             <DetailSection
               adsData={adsData}
               movieDetail={movieDetail}
@@ -619,8 +681,8 @@ const DetailPage: React.FC = () => {
                 />
 
                 {/* <div className="mt-8 px-4"> */}
-                  {/* {adsData && <AdsSection adsDataList={adsData?.player_recommend_up} />} */}
-                  {/* <NewAds section={"player_recommend_up"} fromMovie={true} /> */}
+                {/* {adsData && <AdsSection adsDataList={adsData?.player_recommend_up} />} */}
+                {/* <NewAds section={"player_recommend_up"} fromMovie={true} /> */}
                 {/* </div> */}
                 <RecommendedList
                   data={movieDetail}
