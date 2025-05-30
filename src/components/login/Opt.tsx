@@ -25,6 +25,7 @@ interface OptProps {
   phone?: string;
   setBox?: any;
   setIsVisible: (isVisible: boolean) => void;
+  invite_code: any;
 }
 interface messg {
   msg: string;
@@ -36,6 +37,7 @@ const Opt: React.FC<OptProps> = ({
   phone,
   setIsVisible,
   setBox,
+  invite_code,
 }) => {
   const [signUpEmail, { isLoading, error }] = useSignUpEmailMutation();
   const [signUpPhone, { isLoading: phload }] = useSignUpPhoneMutation();
@@ -75,7 +77,7 @@ const Opt: React.FC<OptProps> = ({
     const countdown = setInterval(() => {
       if (timer > 0) setTimer((prev) => prev - 1);
     }, 1000);
-    
+
     if (timer === 0) setButtonText("重新发送");
     else setButtonText(`${timer} s`);
 
@@ -116,6 +118,7 @@ const Opt: React.FC<OptProps> = ({
             email,
             password,
             email_code: otpCode,
+            invite_code: invite_code,
           });
           if (data) {
             dispatch(setOtpOpen(false));
@@ -128,6 +131,7 @@ const Opt: React.FC<OptProps> = ({
             phone,
             password,
             sms_code: otpCode,
+            invite_code: invite_code,
           });
           if (data) {
             dispatch(setOtpOpen(false));

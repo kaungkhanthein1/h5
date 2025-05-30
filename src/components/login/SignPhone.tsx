@@ -39,6 +39,7 @@ const SignPhone: React.FC<SignPhoneProps> = ({ handleBack2 }) => {
   const [isFocusedEmail, setIsFocusedEmail] = useState(false);
   const [isFocusedPassword, setIsFocusedPassword] = useState(false);
   const [box, setBox] = useState(false);
+  const [inviteCode, setInviteCode] = useState("");
 
   const show = () => {
     setShowPassword(!showPassword);
@@ -145,6 +146,7 @@ const SignPhone: React.FC<SignPhoneProps> = ({ handleBack2 }) => {
           phone={phone}
           password={password}
           setBox={setBox}
+          invite_code={inviteCode}
         />
       )}
       {openCaptcha && (
@@ -160,7 +162,7 @@ const SignPhone: React.FC<SignPhoneProps> = ({ handleBack2 }) => {
       <AnimatePresence>
         {isVisible && (
           <motion.div
-            className="login_box h-[480px] fixed bottom-0 z-[99999] w-screen py-4 px-[20px] bg-gray-800 rounded-t-2xl"
+            className="login_box h-[580px] fixed bottom-0 z-[99999] w-screen py-4 px-[20px] bg-gray-800 rounded-t-2xl"
             initial="hidden"
             animate="visible"
             exit="exit"
@@ -262,6 +264,16 @@ const SignPhone: React.FC<SignPhoneProps> = ({ handleBack2 }) => {
                   <p>6-25个字符</p>
                   <p>必须是以下两者中的至少两种组合：字母，数字</p>{" "}
                   {/* <p>letters, numbers.</p> */}
+                </div>
+
+                <div className="invite_code w-full flex justify-center items-center py-[14px]">
+                  <input
+                    type="text"
+                    value={inviteCode}
+                    onChange={(e) => setInviteCode(e.target.value)}
+                    className="w-[150px] bg-transparent focus:outline-none text-white placeholder-[#5B5B5B]"
+                    placeholder="输入促销代码（可选）"
+                  />
                 </div>
 
                 <button

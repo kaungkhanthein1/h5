@@ -22,7 +22,7 @@ import { DetailSectionProps } from "../../../model/videoModel";
 import { useGetListQuery } from "../../../pages/profile/services/profileApi";
 import NewAds from "../../../components/NewAds";
 import Fire from "../../../assets/Fire.png";
-import copy from 'copy-to-clipboard';
+import copy from "copy-to-clipboard";
 import {
   convertToSecurePayload,
   convertToSecureUrl,
@@ -121,8 +121,8 @@ const DetailSection: React.FC<DetailSectionProps> = ({
 
   const copyToClipboard = async (text: string) => {
     try {
-      if(isWebView()) {
-        sendEventToNative(text  );
+      if (isWebView()) {
+        sendEventToNative(text);
       }
       handleCopy();
       copy(text);
@@ -151,7 +151,7 @@ const DetailSection: React.FC<DetailSectionProps> = ({
       (window as any).webkit.messageHandlers.jsBridge
     );
   }
-  
+
   const handleShare = async () => {
     setIsLoading(true);
     const cookieKey = "shareContent";
@@ -225,11 +225,12 @@ const DetailSection: React.FC<DetailSectionProps> = ({
     };
   }, []);
 
-  useEffect(() => {
-    setTimeout(() => {
-      window.scrollTo(0, 0);
-    }, 200);
-  }, []);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     console.log("scroll to top");
+  //     window.scrollTo(0, 0);
+  //   }, 200);
+  // }, []);
 
   useEffect(() => {
     const handleClickOutside = (event: any) => {
@@ -243,13 +244,13 @@ const DetailSection: React.FC<DetailSectionProps> = ({
     };
   }, [modalRef]);
 
-  useEffect(() => {
-    if (activeTab === "tab-1") {
-      setTimeout(() => {
-        window.scrollTo(0, 0);
-      }, 200);
-    }
-  }, [activeTab]);
+  // useEffect(() => {
+  //   if (activeTab === "tab-1") {
+  //     setTimeout(() => {
+  //       window.scrollTo(0, 0);
+  //     }, 200);
+  //   }
+  // }, [activeTab]);
 
   return (
     <div className="flex flex-col w-full bg-background">
@@ -310,36 +311,8 @@ const DetailSection: React.FC<DetailSectionProps> = ({
               </div>
             </div>
 
-            {/* Action Buttons */}
-            <div className="actions flex justify-between my-4">
-              <button
-                onClick={() => handleTabClick("star")}
-                className="action-btn flex flex-col items-center px-4 py-2 rounded-md"
-              >
-                <img
-                  src={isStarred ? selectedStar : star}
-                  alt=""
-                  className="h-7 mb-2"
-                />
-                <span className="text-white/40 text-[14px]">收藏</span>
-              </button>
-
-              <button
-                onClick={() => handleTabClick("feedback")}
-                className="flex flex-col items-center px-4 py-2 rounded-md"
-              >
-                <img src={info} alt="" className="h-7 mb-2" />
-                <span className="text-white/40 text-[14px]">反馈/求片</span>
-              </button>
-
-              <button
-                onClick={() => handleShare()}
-                className="action-btn flex flex-col items-center px-4 py-2 rounded-md"
-              >
-                <img src={share} alt="" className="h-7 mb-2" />
-                <span className="text-white/40 text-[14px]">分享</span>
-              </button>
-            </div>
+            {/* Action Buttons - moved to sticky bottom bar */}
+            {/* <div className="h-20" /> Spacer for sticky bar */}
             {/* Warning Message */}
             <div className="warning bg-gray-800 rounded-md text-white text-center">
               <div className="warning-content">
@@ -486,6 +459,61 @@ const DetailSection: React.FC<DetailSectionProps> = ({
           height={`${lowerDivHeight}px`}
         />
       )}
+
+      {/* Sticky Bottom Action Bar */}
+      <div className="fixed bottom-0 left-0 w-full z-50 bg-[#1F1F21] flex justify-between items-center px-2 py-2" style={{boxShadow: '0 -2px 8px rgba(0,0,0,0.2)'}}>
+        <div className="flex flex-1 justify-evenly">
+          {/* 下载本地 */}
+          {/* <button
+            onClick={() => alert('下载本地功能开发中')}
+            className="flex flex-col items-center px-2 py-1 rounded-md"
+          >
+            <svg width="28" height="28" fill="none" viewBox="0 0 24 24" className="mb-1"><path d="M12 3v12m0 0l-4-4m4 4l4-4" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><rect x="4" y="19" width="16" height="2" rx="1" fill="#fff" fillOpacity=".25"/></svg>
+            <span className="text-white/40 text-[14px]">下载本地</span>
+          </button> */}
+          {/* 收藏 */}
+          <button
+            onClick={() => handleTabClick("star")}
+            className="flex flex-col items-center px-2 py-1 rounded-md"
+          >
+            <img
+              src={isStarred ? selectedStar : star}
+              alt=""
+              className="h-6 mb-1"
+            />
+            <span className="text-white/40 text-[13px]">收藏</span>
+          </button>
+          {/* 反馈/求片 */}
+          <button
+            onClick={() => handleTabClick("feedback")}
+            className="flex flex-col items-center px-2 py-1 rounded-md"
+          >
+            <img src={info} alt="" className="h-6 mb-1" />
+            <span className="text-white/40 text-[13px]">反馈/求片</span>
+          </button>
+        </div>
+        {/* 分享好友得积分按钮 */}
+        <button
+          onClick={() => handleShare()}
+          className="ml-2 flex items-center rounded-full px-5 py-2 relative min-w-[170px] justify-center"
+          style={{
+            background: 'linear-gradient(271deg, rgba(254,228,179,0.06) 0%, rgba(255,217,147,0.06) 100%)',
+            backgroundBlendMode: 'normal',
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: 'cover'
+          }}
+        >
+          <div
+        className="flex justify-start items-start flex-row gap-2.5 px-1.5 bg-[#FF6A33] rounded-tl-[10px] rounded-tr-sm rounded-br-[10px] rounded-bl-sm absolute right-[0px] top-[-7.5px]">
+        <span
+          className="text-[#FFFFFF] text-[10px] font-['PingFang_SC'] text-center font-medium">
+          可兑换
+        </span>
+      </div>
+          <img src={share} className="h-6 mr-1" alt=""/>
+          <span className="text-[#E6D3A7] text-[15px] font-normal">分享好友得积分</span>
+        </button>
+      </div>
     </div>
   );
 };

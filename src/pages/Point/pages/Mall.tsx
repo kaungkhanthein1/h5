@@ -3,7 +3,7 @@ import { useRequest, useSafeState } from "ahooks";
 import Loader from "../../../pages/search/components/Loader";
 import { useInfiniteScroll } from "ahooks";
 import { Head, Card } from "../components";
-import { getItems } from "../api";
+import { getItems } from "../api"; 
 import { GoodsData, List, ApiData } from "../types/goods";
 import InfiniteScroll from "react-infinite-scroll-component";
 import numeral from "numeral";
@@ -26,10 +26,14 @@ export const Mall = () => {
   const { data: userData } = useGetUserQuery(undefined, {
     skip: !token,
   });
-  const parsedUserData = JSON.parse(userData || "{}");
+  // staging
+  // const parsedUserData = JSON.parse(userData || "{}");
 
-  const integralDetails = parsedUserData?.data?.integral;
-  const coupon = parsedUserData?.data?.coupon;
+  //prod
+  const parsedUserData = userData;
+
+  const integralDetails = userData?.data?.integral;
+  const coupon = userData?.data?.coupon;
   const [pageConfig, setPageConfig] = useState({
     page: 1,
     pageSize: 6,

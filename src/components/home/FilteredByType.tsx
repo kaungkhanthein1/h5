@@ -238,48 +238,48 @@ const FilteredByType = () => {
       "pure-mode": settings.filterToggle ? 1 : 0,
     }),
   };
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY !== 0) {
-        scrollRef.current = window.scrollY; // Update ref on scroll
-      }
-    };
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     if (window.scrollY !== 0) {
+  //       scrollRef.current = window.scrollY; // Update ref on scroll
+  //     }
+  //   };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
+  //   window.addEventListener("scroll", handleScroll, { passive: true });
 
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
+  //   return () => {
+  //     window.removeEventListener("scroll", handleScroll);
 
-      // Save the ref value which is always up-to-date
-      if (!isInitialLoad.current) {
-        sessionStorage.setItem(
-          "filterMovieScrollPosition1",
-          scrollRef.current.toString()
-        );
-      }
-    };
-  }, []); // Only depend on isInitialLoad
+  //     // Save the ref value which is always up-to-date
+  //     if (!isInitialLoad.current) {
+  //       sessionStorage.setItem(
+  //         "filterMovieScrollPosition1",
+  //         scrollRef.current.toString()
+  //       );
+  //     }
+  //   };
+  // }, []); // Only depend on isInitialLoad
 
-  useEffect(() => {
-    const savedPosition = sessionStorage.getItem("filterMovieScrollPosition1");
+  // useEffect(() => {
+  //   const savedPosition = sessionStorage.getItem("filterMovieScrollPosition1");
 
-    if (savedPosition) {
-      const position = parseInt(savedPosition);
-      const restore = () => {
-        window.scrollTo({
-          top: position,
-          behavior: "auto",
-        });
-        sessionStorage.removeItem("filterMovieScrollPosition1");
-        isInitialLoad.current = false; // Update the ref
-      };
+  //   if (savedPosition) {
+  //     const position = parseInt(savedPosition);
+  //     const restore = () => {
+  //       window.scrollTo({
+  //         top: position,
+  //         behavior: "auto",
+  //       });
+  //       sessionStorage.removeItem("filterMovieScrollPosition1");
+  //       isInitialLoad.current = false; // Update the ref
+  //     };
 
-      const timer = setTimeout(restore, 10);
-      return () => clearTimeout(timer);
-    } else {
-      isInitialLoad.current = false;
-    }
-  }, []);
+  //     const timer = setTimeout(restore, 10);
+  //     return () => clearTimeout(timer);
+  //   } else {
+  //     isInitialLoad.current = false;
+  //   }
+  // }, []);
 
   const prevFilters = useRef({ sort, area, year, classData, activeTab });
   // 1. Handle filter changes and data fetching

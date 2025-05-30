@@ -38,11 +38,11 @@ const Header = () => {
   };
 
   // prod
-  // const user = userData?.data;
+  const user = userData?.data;
 
   // staging
-  const parsedUserData = JSON.parse(userData || "{}");
-  const user = parsedUserData?.data;
+  // const parsedUserData = JSON.parse(userData || "{}");
+  // const user = parsedUserData?.data;
 
   return (
     <div className="profile-header">

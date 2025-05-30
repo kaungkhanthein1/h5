@@ -141,13 +141,19 @@ export const login = async (
   }
 };
 
-export const signup = async ({ email, password, email_code }: any) => {
+export const signup = async ({
+  email,
+  password,
+  email_code,
+  invite_code,
+}: any) => {
   try {
     let bd = convertToSecurePayload({
       email,
       password,
       email_code,
       timestamp: new Date().getTime(),
+      invite_code,
     });
     const { data } = await axios.post(
       `${process.env.REACT_APP_API_URL}/user/register/email`,
@@ -160,13 +166,14 @@ export const signup = async ({ email, password, email_code }: any) => {
   }
 };
 
-export const signupPh = async ({ phone, password, sms_code }: any) => {
+export const signupPh = async ({ phone, password, sms_code ,invite_code }: any) => {
   try {
     let bd = convertToSecurePayload({
       phone,
       password,
       sms_code,
       timestamp: new Date().getTime(),
+      invite_code
     });
     const { data } = await axios.post(
       `${process.env.REACT_APP_API_URL}/user/register/phone`,
@@ -459,7 +466,7 @@ export const getCurrentVersion = async ({ type, current }: any) => {
     `${process.env.REACT_APP_API_URL}/app/check_update?type=${type}&current=${current}`
   );
 
-  const url2 = `https://cc3e497d.qdhgtch.com:2345/api/v1/app/check_update?type=${type}&current=${current}`
+  const url2 = `https://cc3e497d.qdhgtch.com:2345/api/v1/app/check_update?type=${type}&current=${current}`;
 
   const { data } = await axios.get(url2);
   return data;

@@ -22,7 +22,8 @@ const Top: React.FC<TopProps> = ({ inretralDetails, invite, point }) => {
           {/* header */}
           <div className="  top-0 flex justify-center items-center w-full">
             <span className="absolute text-[#CCC] text-[12px] font-[500]">
-              Invited Users
+              {/* Invited Users */}
+              我的邀请
             </span>
             <svg
               xmlns="http://www.w3.org/2000/svg"

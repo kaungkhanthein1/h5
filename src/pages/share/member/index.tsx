@@ -81,7 +81,8 @@ const Member: React.FC<MemberProps> = ({}) => {
           {/* header */}
           <div className="  top-0 flex justify-center items-center w-full">
             <span className="absolute text-[#CCC] text-[10px] font-[500]">
-              Invited Users
+              {/* Invited Users */}
+              我的邀请
             </span>
             <svg
               xmlns="http://www.w3.org/2000/svg"

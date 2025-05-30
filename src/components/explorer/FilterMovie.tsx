@@ -178,7 +178,7 @@
 // export default FilterMovie;
 
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetHeaderTopicsQuery } from "../../services/helperService";
 import MovieCard from "../home/MovieCard";
@@ -233,48 +233,50 @@ const FilterMovie = () => {
   const isChanged = useRef(false);
   const scrollRef = useRef<number>(0); // Add a ref to track scroll position
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY !== 0) {
-        scrollRef.current = window.scrollY; // Update ref on scroll
-      }
-    };
+  // console.log(window.scrollY, "window.scrollY");
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     if (window.scrollY !== 0) {
+  //       scrollRef.current = window.scrollY; // Update ref on scroll
+  //     }
+  //   };
 
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
+  //   window.addEventListener("scroll", handleScroll, { passive: true });
 
-      // Save the ref value which is always up-to-date
-      if (!isInitialLoad.current) {
-        sessionStorage.setItem(
-          "filterMovieScrollPosition",
-          scrollRef.current.toString()
-        );
-      }
-    };
-  }, []); // Only depend on isInitialLoad
+  //   return () => {
+  //     window.removeEventListener("scroll", handleScroll);
 
-  useEffect(() => {
-    const savedPosition = sessionStorage.getItem("filterMovieScrollPosition");
+  //     // Save the ref value which is always up-to-date
+  //     if (!isInitialLoad.current) {
+  //       sessionStorage.setItem(
+  //         "filterMovieScrollPosition",
+  //         scrollRef.current.toString()
+  //       );
+  //     }
+  //   };
+  // }, []); // Only depend on isInitialLoad
 
-    if (savedPosition) {
-      const position = parseInt(savedPosition);
-      const restore = () => {
-        window.scrollTo({
-          top: position,
-          behavior: "auto",
-        });
-        sessionStorage.removeItem("filterMovieScrollPosition");
-        isInitialLoad.current = false; // Update the ref
-      };
+  // useEffect(() => {
+  //   const savedPosition = sessionStorage.getItem("filterMovieScrollPosition");
 
-      const timer = setTimeout(restore, 10);
-      return () => clearTimeout(timer);
-    } else {
-      isInitialLoad.current = false;
-    }
-  }, []);
+  //   if (savedPosition) {
+  //     const position = parseInt(savedPosition);
+  //     const restore = () => {
+  //       window.scrollTo({
+  //         top: position,
+  //         behavior: "auto",
+  //       });
+  //       sessionStorage.removeItem("filterMovieScrollPosition");
+  //       isInitialLoad.current = false; // Update the ref
+  //     };
+
+  //     const timer = setTimeout(restore, 10);
+  //     return () => clearTimeout(timer);
+  //   } else {
+  //     isInitialLoad.current = false;
+  //   }
+  // }, []);
 
   const {
     data: configData,
@@ -383,6 +385,12 @@ const FilterMovie = () => {
   //   dispatch(setYear("年份"));
   // }, [activeTab, dispatch]);
 
+  const memoizedFilterTag = React.useMemo(() => <FilterTag />, []);
+  const memoizedNewAds = React.useMemo(
+    () => <NewAds section="topic_movies_top" />,
+    []
+  );
+
   if (isloader || isFetching) {
     return null;
   }
@@ -396,10 +404,8 @@ const FilterMovie = () => {
         />
       )}
       <div>
-        <FilterTag />
-        <div className="mb-5 -mt-3">
-          <NewAds section="topic_movies_top" />
-        </div>
+        {memoizedFilterTag}
+        <div className="mb-5 -mt-3">{memoizedNewAds}</div>
         {isLoading || dataFetching ? (
           <div className="mt-10 flex justify-center items-center w-full">
             <Loader />
