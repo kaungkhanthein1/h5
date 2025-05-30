@@ -28,12 +28,49 @@ const ModalComponent: React.FC<ModalComponentProps> = ({
   const episodeGridRef = useRef<HTMLDivElement>(null);
   const selectedSourceRef = useRef<HTMLDivElement>(null);
   const selectedEpisodeRef = useRef<HTMLButtonElement>(null);
+  const activeTabRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     // Combine all episodes from the playFrom list
     // const allEpisodes = playFrom.flatMap((source) => source.list);
     setFilteredEpisodes(episodes);
-    }, [episodes]);
+    
+    // Initialize the episode range based on the default episode if available
+    if (defaultEpisodeId && episodes.length > 0) {
+      const episodeIndex = episodes.findIndex(
+        (episode) => episode.episode_id === defaultEpisodeId
+      );
+      
+      if (episodeIndex !== -1) {
+        const tabIndex = Math.floor(episodeIndex / 50);
+        const start = tabIndex * 50;
+        const end = Math.min(start + 50, episodes.length);
+        setEpisodeRange([start, end]);
+      }
+    }
+  }, [episodes, defaultEpisodeId]);
+
+  // Auto-select the correct tab based on the selected episode
+  useEffect(() => {
+    if (selectedEpisodeId && filteredEpisodes.length > 0) {
+      // Find the index of the selected episode
+      const episodeIndex = filteredEpisodes.findIndex(
+        (episode) => episode.episode_id === selectedEpisodeId
+      );
+      
+      if (episodeIndex !== -1) {
+        // Calculate which tab this episode should be in
+        const tabIndex = Math.floor(episodeIndex / 50);
+        const start = tabIndex * 50;
+        const end = Math.min(start + 50, filteredEpisodes.length);
+        
+        // Only update if we're not already in the correct range
+        if (episodeRange[0] !== start || episodeRange[1] !== end) {
+          setEpisodeRange([start, end]);
+        }
+      }
+    }
+  }, [selectedEpisodeId, filteredEpisodes]);
 
   // Handle episode selection and update the state
   const handleEpisodeClick = (episode: Episode) => {
@@ -142,6 +179,29 @@ const ModalComponent: React.FC<ModalComponentProps> = ({
     return () => clearTimeout(timeoutId);
   }, [selectedEpisodeId, episodeRange]);
 
+  // Auto-scroll to active episode tab
+  useEffect(() => {
+    const scrollToActiveTab = () => {
+      if (activeTabRef.current) {
+        const tabElement = activeTabRef.current;
+        const containerElement = tabElement.parentElement;
+        
+        if (containerElement && tabElement.offsetParent !== null) {
+          tabElement.scrollIntoView({
+            behavior: 'auto',
+            block: 'nearest',
+            inline: 'center'
+          });
+        }
+      }
+    };
+
+    // Add a small delay to ensure elements are rendered
+    const timeoutId = setTimeout(scrollToActiveTab, 150);
+    
+    return () => clearTimeout(timeoutId);
+  }, [episodeRange]);
+
   const customHeight = () => {
     const upperDiv = document.getElementById('upper-div');
     const upperDivHeight = upperDiv?.offsetHeight || 0;
@@ -248,17 +308,17 @@ const ModalComponent: React.FC<ModalComponentProps> = ({
                 {Array.from({ length: Math.ceil(filteredEpisodes.length / 50) }, (_, index) => {
                   const start = index * 50;
                   const end = Math.min(start + 50, filteredEpisodes.length);
+                  const isActive = episodeRange[0] === start;
                   return (
-                    <>
                     <button
                       key={index}
+                      ref={isActive ? activeTabRef : null}
                       className={`px-1 whitespace-nowrap py-2 text-sm`}
                       onClick={() => handleTabClick(start, end)}
                     >
                       <div className="mb-2">{start + 1}-{end}集</div>
                       {episodeRange[0] === start && <div className="w-full h-1 bg-mainColor rounded-md"></div>}
                     </button>
-                    </>
                   );
                 })}
               </div>
