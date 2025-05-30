@@ -266,7 +266,15 @@ const App: React.FC = () => {
       document.body.style.overflow = ""; // Restore scrolling
     }
   }, [openAuthModel, openLoginModel, openSignupModel]);
-  // console.log(panding);
+
+  // Apply overflow-hidden only on player pages
+  useEffect(() => {
+    if (location.pathname.startsWith("/player")) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+  }, [location.pathname]);
 
   // useEffect(() => {
   //   // Redirect to login if not logged in and trying to access any route other than login

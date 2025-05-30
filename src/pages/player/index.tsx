@@ -27,7 +27,7 @@ import PlayerLoading from "./video/PlayerLoading";
 
 // Custom hook for dynamic height calculation
 const useDynamicHeight = () => {
-  const [availableHeight, setAvailableHeight] = useState(300);
+  const [availableHeight, setAvailableHeight] = useState(400);
   
   useEffect(() => {
     const calculateHeight = () => {
@@ -39,7 +39,7 @@ const useDynamicHeight = () => {
         const tabsHeight = 60; // Approximate height of tabs section
         const padding = 20; // Additional padding/margin
         const calculated = windowHeight - upperDivHeight - tabsHeight - padding;
-        setAvailableHeight(Math.max(calculated, 300)); // Minimum 300px
+        setAvailableHeight(Math.max(calculated, 400)); // Minimum 300px
       }
     };
 
