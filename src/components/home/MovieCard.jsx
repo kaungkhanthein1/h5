@@ -69,7 +69,7 @@ const MovieCard = ({
             //text-[12px] reomove
             className={`text-[14px] ${
               isSlider ? "w-[105px]" : ""
-            } mt-[.14rem] leading-[18px] font-confortFont font-[400] text-white truncate`}
+            } mt-[7px] leading-[18px] font-confortFont font-[400] text-white truncate`}
           >
             {he.decode(movie?.name || "Unknown Title")}
           </h2>

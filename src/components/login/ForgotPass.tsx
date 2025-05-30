@@ -139,7 +139,7 @@ const ForgotPass: React.FC<ForgotPassProps> = ({ setForgot }) => {
                   className="w-full px- py-2 bg-transparent input_border focus:outline-none text-white placeholder-[#5B5B5B]"
                   required
                   placeholder="输入新密码"
-                  minLength={8}
+                  minLength={6}
                   maxLength={25}
                 />
                 {/* <label
@@ -177,7 +177,7 @@ const ForgotPass: React.FC<ForgotPassProps> = ({ setForgot }) => {
                   className="w-full px- py-2 bg-transparent input_border focus:outline-none text-white placeholder-[#5B5B5B]"
                   required
                   placeholder="再次输入新密码"
-                  minLength={8}
+                  minLength={6}
                   maxLength={25}
                 />
                 {/* <label

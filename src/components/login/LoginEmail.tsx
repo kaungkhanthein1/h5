@@ -208,7 +208,7 @@ const LoginEmail: React.FC<LoginEmailProps> = ({ handleBack }) => {
                       className="w-full px- py-2 bg-[#2B2B2D] input_border focus:outline-none text-white placeholder-[#5B5B5B]"
                       required
                       placeholder="输入登录密码"
-                      minLength={8}
+                      minLength={6}
                       maxLength={25}
                     />
                     {/* <label
