@@ -261,9 +261,21 @@ const DetailPage: React.FC = () => {
 
   useEffect(() => {
     if (currentEpisode) {
-      window.scrollTo(0, 0);
+      // Removed window.scrollTo as we're controlling container scroll instead
     }
   }, [movieDetail, currentEpisode]);
+
+  // Reset scroll position on initial load and when episode changes
+  useEffect(() => {
+    if (scrollContainerRef.current && currentEpisode) {
+      // Small delay to ensure DOM is fully rendered
+      setTimeout(() => {
+        if (scrollContainerRef.current) {
+          scrollContainerRef.current.scrollTop = 0;
+        }
+      }, 100);
+    }
+  }, [currentEpisode, movieDetail]);
 
   const handleVideoError = (errorUrl: string) => {
     // if (errorVideoUrl !== errorUrl && errorUrl) {
@@ -386,7 +398,11 @@ const DetailPage: React.FC = () => {
   // Reset scroll position when switching to tab-1
   useEffect(() => {
     if (activeTab === "tab-1" && scrollContainerRef.current) {
-      scrollContainerRef.current.scrollTop = 0;
+      setTimeout(() => {
+        if (scrollContainerRef.current) {
+          scrollContainerRef.current.scrollTop = 0;
+        }
+      }, 50);
     }
   }, [activeTab]);
 
