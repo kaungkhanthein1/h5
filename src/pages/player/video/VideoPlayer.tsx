@@ -27,6 +27,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   
   // Function to check if browser natively supports HLS
   const hasNativeHLSSupport = () => {
+    return false;
     const video = document.createElement('video');
     return video.canPlayType('application/vnd.apple.mpegurl') !== '' ||
            video.canPlayType('application/x-mpegURL') !== '';
@@ -302,18 +303,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   };
 
   const handleBack = async () => {
-    if (playerRef.current) {
-      // Report progress before navigating back
-      reportProgress(playerRef.current.currentTime, playerRef.current.duration);
-      playerRef.current.pause();
-      playerRef.current.video.src = ""; // Stop video requests
-      playerRef.current.destroy();
-      playerRef.current = null;
-      const token = getToken();
-      if (token) {
-        refetch();
-      }
-    }
     onBack();
   };
 

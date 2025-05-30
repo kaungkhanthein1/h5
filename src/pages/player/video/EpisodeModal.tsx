@@ -202,25 +202,25 @@ const ModalComponent: React.FC<ModalComponentProps> = ({
     return () => clearTimeout(timeoutId);
   }, [episodeRange]);
 
-  const customHeight = () => {
-    const upperDiv = document.getElementById('upper-div');
-    const upperDivHeight = upperDiv?.offsetHeight || 0;
-    const remainingHeight = window.innerHeight - upperDivHeight;
-    return remainingHeight;
-  };
+  // const customHeight = () => {
+  //   const upperDiv = document.getElementById('upper-div');
+  //   const upperDivHeight = upperDiv?.offsetHeight || 0;
+  //   const remainingHeight = window.innerHeight - upperDivHeight;
+  //   return remainingHeight;
+  // };
 
-  useEffect(() => {
-    const updateHeight = () => {
-      setLowerDivHeight(customHeight());
-    };
+  // useEffect(() => {
+  //   const updateHeight = () => {
+  //     setLowerDivHeight(customHeight());
+  //   };
 
-    updateHeight(); // Set initial height
-    window.addEventListener('resize', updateHeight); // Update height on window resize
+  //   updateHeight(); // Set initial height
+  //   window.addEventListener('resize', updateHeight); // Update height on window resize
 
-    return () => {
-      window.removeEventListener('resize', updateHeight); // Cleanup event listener
-    };
-  }, []);
+  //   return () => {
+  //     window.removeEventListener('resize', updateHeight); // Cleanup event listener
+  //   };
+  // }, []);
 
   const modalRef = useRef<any>(null);
   useEffect(() => {
@@ -236,24 +236,11 @@ const ModalComponent: React.FC<ModalComponentProps> = ({
   }, [modalRef]);
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center">
-      <div className="bg-sourceBack backdrop-blur-md w-full max-w-md rounded-t-xl p-4 text-white" ref={modalRef}
-        style={{ height: `${lowerDivHeight}px` }}>
+      <div className="h-[calc(100%-211px)]
+      bg-sourceBack backdrop-blur-md w-full max-w-md rounded-t-xl p-4 text-white" ref={modalRef}>
         <div className="flex justify-between items-center mb-4">
           <div className="flex space-x-6 overflow-x-auto scrollbar-hide m-auto">
-            {/* <button
-              className={`pb-2 text-gray-400`}
-              onClick={() => setActiveTab("episodes")}
-            > */}
-              {/* 选集 */}
-              {/* {activeTab === "episodes" && <div className="absolute w-[32px] h-1 bg-mainColor rounded-md mt-1"></div>} */}
-            {/* </button> */}
-            {/* <button
-              className={`pb-2 text-gray-400`}
-              onClick={() => setActiveTab("sources")}
-            > */}
-              {activeTab === "sources" ? <span>播放源</span> : <span>播放与选集</span>}
-              {/* {activeTab === "sources" && <div className="absolute w-[32px] h-1 bg-mainColor rounded-md mt-1 ml-2"></div>} */}
-            {/* </button> */}
+              <span>播放与选集</span>
           </div>
           <button onClick={onClose} className="text-white">
             <FontAwesomeIcon icon={faTimes} className="text-lg" />
@@ -261,7 +248,6 @@ const ModalComponent: React.FC<ModalComponentProps> = ({
         </div>
 
         <div className="h-[calc(100%-60px)] overflow-y-auto scrollbar-hide">
-          {activeTab === "episodes" && (
             <div className="h-full flex flex-col">
               <div className="flex space-x-3 pb-2 overflow-x-auto scrollbar-hide" ref={sourceScrollRef}>
               {playFrom &&
@@ -274,7 +260,7 @@ const ModalComponent: React.FC<ModalComponentProps> = ({
                     onClick={() => {
                       setSelectedSource(index);
                       changeSource(source);
-                      onClose();
+                      // onClose();
                     }}
                   >
                     {index === selectedSource && (
@@ -330,7 +316,7 @@ const ModalComponent: React.FC<ModalComponentProps> = ({
                       <button
                         key={episode.episode_id}
                         ref={episode.episode_id === selectedEpisodeId ? selectedEpisodeRef : null}
-                        onClick={() => {handleEpisodeClick(episode); onClose();}}
+                        onClick={() => {handleEpisodeClick(episode);}}
                         className={`py-2 text-center rounded-lg ${
                           episode.episode_id !== selectedEpisodeId
                             ? "bg-source text-white"
@@ -350,46 +336,6 @@ const ModalComponent: React.FC<ModalComponentProps> = ({
                 </div>
               </div>
             </div>
-          )}
-
-          {activeTab === "sources" && (
-            <div ref={sourceScrollRef}>
-              {playFrom &&
-                playFrom.map((source, index) => (
-                  <div
-                    key={index}
-                    ref={index === selectedSource ? selectedSourceRef : null}
-                    className={`flex justify-between items-center p-3 rounded-lg mb-2 cursor-pointer 
-                      ${index === selectedSource ? 'bg-episodeSelected' : 'bg-source'}`}
-                    onClick={() => {
-                      setSelectedSource(index);
-                      changeSource(source);
-                      onClose();
-                    }}
-                  >
-                    <div>
-                      <h4 className="text-white">{source.name}</h4>
-                      {/* Display total videos if available */}
-                      <div className="flex justify-between items-center">
-                      {source.total && (
-                        <p className="bg-source text-white text-[12px] px-3 py-1.5 my-2 mr-3 rounded-md">{source.total} 个视频</p>
-                      )}
-                      {/* Display tips if available */}
-                      <p className="bg-source text-white text-[12px] px-3 py-1.5 my-2 rounded-md">
-                        {source.tips || "No description available"}
-                      </p>
-                      </div>
-                    </div>
-                    {index === selectedSource && (
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <circle cx="12" cy="12" r="9" fill="#F54100"/>
-                      <path d="M10.5 13.6032L16.0152 8.0874L16.8642 8.9358L10.5 15.3L6.68158 11.4816L7.52998 10.6332L10.5 13.6032Z" fill="white"/>
-                      </svg>
-                    )}
-                  </div>
-                ))}
-            </div>
-          )}
         </div>
       </div>
     </div>

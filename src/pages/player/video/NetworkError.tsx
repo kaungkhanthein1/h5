@@ -69,7 +69,7 @@ const NetworkError: React.FC<any> = ({ switchNow, refresh, onBack }) => {
             onClick={switchNow}
           >
             <span className="text-white text-[14px] font-['Helvetica_Neue'] font-bold">
-              切换资源 {countdown}秒
+              切换资源 {countdown} 秒
             </span>
           </button>
         </div>

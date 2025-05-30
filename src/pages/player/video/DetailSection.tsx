@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import share from "../../../assets/share.png";
 import star from "../../../assets/star.png";
 import info from "../../../assets/info.png";
@@ -50,17 +50,17 @@ const DetailSection: React.FC<DetailSectionProps> = ({
   const { refetch } = useGetListQuery({ page: 1, type_id: 0 });
   const [showFeedbackModal, setShowFeedbackModal] = useState(false); // For triggering modal
   const [visible, setVisible] = useState(false);
-  const [lowerDivHeight, setLowerDivHeight] = useState(0);
-  const modalRef = useRef<any>(null);
+  // const [lowerDivHeight, setLowerDivHeight] = useState(0);
+  // const modalRef = useRef<any>(null);
 
   const handleCopy = () => {
     setVisible(true);
     setTimeout(() => setVisible(false), 2000); // Hide after 2 seconds
   };
 
-  const handleDetailClick = () => {
-    setShowModal(true);
-  };
+  // const handleDetailClick = () => {
+  //   setShowModal(true);
+  // };
 
   const handleCloseModal = () => {
     setShowModal(false);
@@ -212,18 +212,60 @@ const DetailSection: React.FC<DetailSectionProps> = ({
     return remainingHeight;
   };
 
+  const lowerDivHeightRef = useRef(customHeight());
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  // This won't trigger re-renders
+  const updateHeight = useCallback(() => {
+    const newHeight = customHeight();
+    lowerDivHeightRef.current = newHeight;
+
+    // Directly apply to modal if it's open
+    if (modalRef.current && showModal) {
+      modalRef.current.style.height = `${newHeight}px`;
+    }
+  }, [showModal]);
+
   useEffect(() => {
-    const updateHeight = () => {
-      setLowerDivHeight(customHeight());
+    // Initial height calculation
+    updateHeight();
+
+    // Throttled resize handler
+    let ticking = false;
+    const handleResize = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          updateHeight();
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
-    updateHeight(); // Set initial height
-    window.addEventListener("resize", updateHeight); // Update height on window resize
+    window.addEventListener("resize", handleResize, { passive: true });
+    return () => window.removeEventListener("resize", handleResize);
+  }, [updateHeight]);
 
-    return () => {
-      window.removeEventListener("resize", updateHeight); // Cleanup event listener
-    };
-  }, []);
+  const handleDetailClick = () => {
+    setShowModal(true);
+    // Apply current height directly
+    if (modalRef.current) {
+      modalRef.current.style.height = `${lowerDivHeightRef.current}px`;
+    }
+  };
+
+  // useEffect(() => {
+  //   const updateHeight = () => {
+  //     setLowerDivHeight(customHeight());
+  //   };
+
+  //   updateHeight(); // Set initial height
+  //   window.addEventListener("resize", updateHeight); // Update height on window resize
+
+  //   return () => {
+  //     window.removeEventListener("resize", updateHeight); // Cleanup event listener
+  //   };
+  // }, []);
 
   // useEffect(() => {
   //   setTimeout(() => {
@@ -344,7 +386,7 @@ const DetailSection: React.FC<DetailSectionProps> = ({
             {/* Comment section or other content */}
             <CommentComponent
               movieId={id}
-              lowerDivHeight={lowerDivHeight}
+              lowerDivHeight={lowerDivHeightRef.current}
               setCommentCount={setCommentCount}
               commentCount={commentCount}
               comments={comments}
@@ -367,7 +409,7 @@ const DetailSection: React.FC<DetailSectionProps> = ({
           <div
             ref={modalRef}
             className="bg-background backdrop-blur-md w-full max-w-md bottom-0 rounded-lg p-6 text-white overflow-y-auto"
-            style={{ height: `${lowerDivHeight}px` }}
+            style={{ height: `${lowerDivHeightRef.current}px` }}
           >
             {/* Modal Header */}
             <div className="flex justify-between items-center mb-4">
@@ -456,12 +498,15 @@ const DetailSection: React.FC<DetailSectionProps> = ({
           onClose={handleFeedbackModel}
           setIsLoading={setIsLoading}
           isLoading={isLoading}
-          height={`${lowerDivHeight}px`}
+          height={`${lowerDivHeightRef?.current}px`}
         />
       )}
 
       {/* Sticky Bottom Action Bar */}
-      <div className="fixed bottom-0 left-0 w-full z-50 bg-[#1F1F21] flex justify-between items-center px-2 py-2" style={{boxShadow: '0 -2px 8px rgba(0,0,0,0.2)'}}>
+      {activeTab === "tab-1" && <div
+        className="fixed bottom-0 left-0 w-full z-50 bg-[#1F1F21] flex justify-between items-center px-2 py-2"
+        style={{ boxShadow: "0 -2px 8px rgba(0,0,0,0.2)" }}
+      >
         <div className="flex flex-1 justify-evenly">
           {/* 下载本地 */}
           {/* <button
@@ -497,23 +542,24 @@ const DetailSection: React.FC<DetailSectionProps> = ({
           onClick={() => handleShare()}
           className="ml-2 flex items-center rounded-full px-5 py-2 relative min-w-[170px] justify-center"
           style={{
-            background: 'linear-gradient(271deg, rgba(254,228,179,0.06) 0%, rgba(255,217,147,0.06) 100%)',
-            backgroundBlendMode: 'normal',
-            backgroundRepeat: 'no-repeat',
-            backgroundSize: 'cover'
+            background:
+              "linear-gradient(271deg, rgba(254,228,179,0.06) 0%, rgba(255,217,147,0.06) 100%)",
+            backgroundBlendMode: "normal",
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "cover",
           }}
         >
-          <div
-        className="flex justify-start items-start flex-row gap-2.5 px-1.5 bg-[#FF6A33] rounded-tl-[10px] rounded-tr-sm rounded-br-[10px] rounded-bl-sm absolute right-[0px] top-[-7.5px]">
-        <span
-          className="text-[#FFFFFF] text-[10px] font-['PingFang_SC'] text-center font-medium">
-          可兑换
-        </span>
-      </div>
-          <img src={share} className="h-6 mr-1" alt=""/>
-          <span className="text-[#E6D3A7] text-[15px] font-normal">分享好友得积分</span>
+          <div className="flex justify-start items-start flex-row gap-2.5 px-1.5 bg-[#FF6A33] rounded-tl-[10px] rounded-tr-sm rounded-br-[10px] rounded-bl-sm absolute right-[0px] top-[-7.5px]">
+            <span className="text-[#FFFFFF] text-[10px] font-['PingFang_SC'] text-center font-medium">
+              可兑换
+            </span>
+          </div>
+          <img src={share} className="h-6 mr-1" alt="" />
+          <span className="text-[#E6D3A7] text-[15px] font-normal">
+            分享好友得积分
+          </span>
         </button>
-      </div>
+      </div>}
     </div>
   );
 };

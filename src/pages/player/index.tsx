@@ -25,8 +25,37 @@ import {
 } from "../../services/newEncryption";
 import PlayerLoading from "./video/PlayerLoading";
 
+// Custom hook for dynamic height calculation
+const useDynamicHeight = () => {
+  const [availableHeight, setAvailableHeight] = useState(300);
+  
+  useEffect(() => {
+    const calculateHeight = () => {
+      const upperDiv = document.getElementById('upper-div');
+      const windowHeight = window.innerHeight;
+      
+      if (upperDiv) {
+        const upperDivHeight = upperDiv.offsetHeight;
+        const tabsHeight = 60; // Approximate height of tabs section
+        const padding = 20; // Additional padding/margin
+        const calculated = windowHeight - upperDivHeight - tabsHeight - padding;
+        setAvailableHeight(Math.max(calculated, 300)); // Minimum 300px
+      }
+    };
+
+    calculateHeight();
+    window.addEventListener('resize', calculateHeight);
+    
+    return () => window.removeEventListener('resize', calculateHeight);
+  }, []);
+
+  return availableHeight;
+};
+
 const DetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const availableHeight = useDynamicHeight();
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [movieDetail, setMovieDetail] = useState<MovieDetail | null>(null);
   const [currentEpisode, setCurrentEpisode] = useState<Episode | null>(null);
   const [currentEpisodeNumber, setCurrentEpisodeNumber] = useState<number>(0);
@@ -354,6 +383,13 @@ const DetailPage: React.FC = () => {
     }
   }, [episodes]);
 
+  // Reset scroll position when switching to tab-1
+  useEffect(() => {
+    if (activeTab === "tab-1" && scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTop = 0;
+    }
+  }, [activeTab]);
+
   const handleChangeSource = async (nextSource: any) => {
     if (nextSource && nextSource.code && id) {
       setIsPlayerLoading(true);
@@ -454,7 +490,7 @@ const DetailPage: React.FC = () => {
     fetchMovieDetail(id);
   };
   return (
-    <div className="bg-background min-h-screen">
+    <div className="bg-background min-h-screen overflow-hidden">
       {!movieDetail ? (
         <>
           <PlayerLoading onBack={navigateBackFunction} />
@@ -487,7 +523,8 @@ const DetailPage: React.FC = () => {
                 ) : (
                   <PlayerLoading onBack={navigateBackFunction} />
                 )
-              ) : (
+              ) :
+              (
                 <NetworkError
                   switchNow={switchNow}
                   refresh={refresh}
@@ -532,7 +569,13 @@ const DetailPage: React.FC = () => {
             </div>
           </div>
 
-          <div className={`${activeTab === "tab-1" && "overflow-y-scroll"}`}>
+          <div 
+            ref={scrollContainerRef}
+            className={`${activeTab === "tab-1" ? "overflow-y-scroll" : ""}`} 
+            style={{
+              height: activeTab === "tab-1" ? `${availableHeight}px` : "auto",
+              minHeight: activeTab === "tab-1" ? "300px" : "auto"
+            }}>
             <DetailSection
               adsData={adsData}
               movieDetail={movieDetail}
