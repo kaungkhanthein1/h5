@@ -13,7 +13,7 @@ const Tab3 = () => {
           <Loader />
         </div>
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pb-32 px-3 pt-5 min-h-screen">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pb-32 pt-14 px-3 pt-5 min-h-screen">
           {topicData?.data?.list?.map((item: any) => (
             <Link to={`/explorer/${item?.id}`} key={item?.id}>
               <Card item={item} />

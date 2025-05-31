@@ -74,7 +74,7 @@ const Tab2 = () => {
   };
 
   return (
-    <div className="pb-32 min-h-screen">
+    <div className="pb-32 pt-14 min-h-screen">
       <nav className="py-4 sticky top-[50px] z-50 bg-background">
         <div className="grid grid-cols-7 mb-2">
           {currentWeekDates?.map((date, index) => (
