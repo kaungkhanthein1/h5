@@ -29,6 +29,7 @@ import {
   decryptWithAes,
 } from "../../../services/newEncryption";
 import axios from "axios";
+import episode from "../../../assets/episode.png";
 
 const DetailSection: React.FC<DetailSectionProps> = ({
   movieDetail,
@@ -38,6 +39,7 @@ const DetailSection: React.FC<DetailSectionProps> = ({
   setActiveTab,
   setCommentCount,
   commentCount,
+  setIsModalOpen,
 }) => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [hasMore, setHasMore] = useState(false);
@@ -50,6 +52,7 @@ const DetailSection: React.FC<DetailSectionProps> = ({
   const { refetch } = useGetListQuery({ page: 1, type_id: 0 });
   const [showFeedbackModal, setShowFeedbackModal] = useState(false); // For triggering modal
   const [visible, setVisible] = useState(false);
+
   // const [lowerDivHeight, setLowerDivHeight] = useState(0);
   // const modalRef = useRef<any>(null);
 
@@ -509,13 +512,13 @@ const DetailSection: React.FC<DetailSectionProps> = ({
       >
         <div className="flex flex-1 justify-evenly">
           {/* 下载本地 */}
-          {/* <button
-            onClick={() => alert('下载本地功能开发中')}
+          <button
+            onClick={() => setIsModalOpen(true)}
             className="flex flex-col items-center px-2 py-1 rounded-md"
           >
-            <svg width="28" height="28" fill="none" viewBox="0 0 24 24" className="mb-1"><path d="M12 3v12m0 0l-4-4m4 4l4-4" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><rect x="4" y="19" width="16" height="2" rx="1" fill="#fff" fillOpacity=".25"/></svg>
-            <span className="text-white/40 text-[14px]">下载本地</span>
-          </button> */}
+            <img src={episode} alt="" className="h-5 mb-[5px] mt-0.5" />
+            <span className="text-white/40 text-[14px]">选集</span>
+          </button>
           {/* 收藏 */}
           <button
             onClick={() => handleTabClick("star")}

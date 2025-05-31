@@ -133,6 +133,8 @@ const DetailPage: React.FC = () => {
   const [commentCount, setCommentCount] = useState(0);
   const [visible, setVisible] = useState(false);
   const [isPlayerLoading, setIsPlayerLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -662,6 +664,7 @@ const DetailPage: React.FC = () => {
               setActiveTab={setActiveTab}
               setCommentCount={setCommentCount}
               commentCount={commentCount}
+              setIsModalOpen={setIsModalOpen}
             />
             {activeTab === "tab-1" && (
               <>
@@ -673,6 +676,8 @@ const DetailPage: React.FC = () => {
                   movieDetail={movieDetail}
                   selectedSource={selectedSource}
                   setSelectedSource={setSelectedSource}
+                  setIsModalOpen={setIsModalOpen}
+                  isModalOpen={isModalOpen}
                 />
                 <EpisodeSelector
                   episodes={episodes || []}
