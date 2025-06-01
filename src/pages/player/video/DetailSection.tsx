@@ -29,7 +29,6 @@ import {
   decryptWithAes,
 } from "../../../services/newEncryption";
 import axios from "axios";
-import episode from "../../../assets/episode.png";
 
 const DetailSection: React.FC<DetailSectionProps> = ({
   movieDetail,
@@ -39,7 +38,6 @@ const DetailSection: React.FC<DetailSectionProps> = ({
   setActiveTab,
   setCommentCount,
   commentCount,
-  setIsModalOpen,
 }) => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [hasMore, setHasMore] = useState(false);
@@ -53,8 +51,7 @@ const DetailSection: React.FC<DetailSectionProps> = ({
   const [showFeedbackModal, setShowFeedbackModal] = useState(false); // For triggering modal
   const [visible, setVisible] = useState(false);
 
-  // const [lowerDivHeight, setLowerDivHeight] = useState(0);
-  // const modalRef = useRef<any>(null);
+  const modalRef = useRef<any>(null);
 
   const handleCopy = () => {
     setVisible(true);
@@ -216,7 +213,6 @@ const DetailSection: React.FC<DetailSectionProps> = ({
   };
 
   const lowerDivHeightRef = useRef(customHeight());
-  const modalRef = useRef<HTMLDivElement>(null);
 
   // This won't trigger re-renders
   const updateHeight = useCallback(() => {
@@ -356,8 +352,36 @@ const DetailSection: React.FC<DetailSectionProps> = ({
               </div>
             </div>
 
-            {/* Action Buttons - moved to sticky bottom bar */}
-            {/* <div className="h-20" /> Spacer for sticky bar */}
+            {/* Action Buttons */}
+            <div className="actions flex justify-between my-4">
+              <button
+                onClick={() => handleTabClick("star")}
+                className="action-btn flex flex-col items-center px-4 py-2 rounded-md"
+              >
+                <img
+                  src={isStarred ? selectedStar : star}
+                  alt=""
+                  className="h-7 mb-2"
+                />
+                <span className="text-white/40 text-[14px]">收藏</span>
+              </button>
+
+              <button
+                onClick={() => handleTabClick("feedback")}
+                className="flex flex-col items-center px-4 py-2 rounded-md"
+              >
+                <img src={info} alt="" className="h-7 mb-2" />
+                <span className="text-white/40 text-[14px]">反馈/求片</span>
+              </button>
+
+              <button
+                onClick={() => handleShare()}
+                className="action-btn flex flex-col items-center px-4 py-2 rounded-md"
+              >
+                <img src={share} alt="" className="h-7 mb-2" />
+                <span className="text-white/40 text-[14px]">分享</span>
+              </button>
+            </div>
             {/* Warning Message */}
             <div className="warning bg-gray-800 rounded-md text-white text-center">
               <div className="warning-content">
@@ -504,65 +528,6 @@ const DetailSection: React.FC<DetailSectionProps> = ({
           height={`${lowerDivHeightRef?.current}px`}
         />
       )}
-
-      {/* Sticky Bottom Action Bar */}
-      {activeTab === "tab-1" && <div
-        className="fixed bottom-0 left-0 w-full z-50 bg-[#1F1F21] flex justify-between items-center px-2 py-2"
-        style={{ boxShadow: "0 -2px 8px rgba(0,0,0,0.2)" }}
-      >
-        <div className="flex flex-1 justify-evenly">
-          {/* 下载本地 */}
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="flex flex-col items-center px-2 py-1 rounded-md"
-          >
-            <img src={episode} alt="" className="h-5 mb-[5px] mt-0.5" />
-            <span className="text-white/40 text-[14px]">选集</span>
-          </button>
-          {/* 收藏 */}
-          <button
-            onClick={() => handleTabClick("star")}
-            className="flex flex-col items-center px-2 py-1 rounded-md"
-          >
-            <img
-              src={isStarred ? selectedStar : star}
-              alt=""
-              className="h-6 mb-1"
-            />
-            <span className="text-white/40 text-[13px]">收藏</span>
-          </button>
-          {/* 反馈/求片 */}
-          <button
-            onClick={() => handleTabClick("feedback")}
-            className="flex flex-col items-center px-2 py-1 rounded-md"
-          >
-            <img src={info} alt="" className="h-6 mb-1" />
-            <span className="text-white/40 text-[13px]">反馈/求片</span>
-          </button>
-        </div>
-        {/* 分享好友得积分按钮 */}
-        <button
-          onClick={() => handleShare()}
-          className="ml-2 flex items-center rounded-full px-5 py-2 relative min-w-[170px] justify-center"
-          style={{
-            background:
-              "linear-gradient(271deg, rgba(254,228,179,0.06) 0%, rgba(255,217,147,0.06) 100%)",
-            backgroundBlendMode: "normal",
-            backgroundRepeat: "no-repeat",
-            backgroundSize: "cover",
-          }}
-        >
-          <div className="flex justify-start items-start flex-row gap-2.5 px-1.5 bg-[#FF6A33] rounded-tl-[10px] rounded-tr-sm rounded-br-[10px] rounded-bl-sm absolute right-[0px] top-[-7.5px]">
-            <span className="text-[#FFFFFF] text-[10px] font-['PingFang_SC'] text-center font-medium">
-              可兑换
-            </span>
-          </div>
-          <img src={share} className="h-6 mr-1" alt="" />
-          <span className="text-[#E6D3A7] text-[15px] font-normal">
-            分享好友得积分
-          </span>
-        </button>
-      </div>}
     </div>
   );
 };

@@ -25,99 +25,8 @@ import {
 } from "../../services/newEncryption";
 import PlayerLoading from "./video/PlayerLoading";
 
-const useDynamicHeight = () => {
-  const [availableHeight, setAvailableHeight] = useState(300);
-  const [hasElement, setHasElement] = useState(false);
-
-  useEffect(() => {
-    const calculateHeight = () => {
-      const upperDiv = document.getElementById("upper-div");
-      if (upperDiv) {
-        const windowHeight = window.innerHeight;
-        const upperDivHeight = upperDiv.offsetHeight;
-        const tabsHeight = 60;
-        const padding = 20;
-        const calculated = windowHeight - upperDivHeight - tabsHeight - padding;
-        setAvailableHeight(Math.max(calculated, 300));
-        if (!hasElement) setHasElement(true);
-      }
-    };
-
-    // Try immediately
-    calculateHeight();
-
-    if (!hasElement) {
-      // Set up MutationObserver if element not found
-      const observer = new MutationObserver((mutations) => {
-        if (document.getElementById("upper-div")) {
-          calculateHeight();
-          observer.disconnect();
-        }
-      });
-
-      observer.observe(document.body, {
-        childList: true,
-        subtree: true,
-      });
-
-      // Also try periodically as fallback
-      const interval = setInterval(() => {
-        if (document.getElementById("upper-div")) {
-          calculateHeight();
-          clearInterval(interval);
-        }
-      }, 100);
-
-      window.addEventListener("resize", calculateHeight);
-
-      return () => {
-        observer.disconnect();
-        clearInterval(interval);
-        window.removeEventListener("resize", calculateHeight);
-      };
-    } else {
-      // Element exists, just listen for resize
-      window.addEventListener("resize", calculateHeight);
-      return () => window.removeEventListener("resize", calculateHeight);
-    }
-  }, [hasElement]);
-
-  return availableHeight;
-};
-// Custom hook for dynamic height calculation
-// const useDynamicHeight = () => {
-//   const [availableHeight, setAvailableHeight] = useState(300);
-
-//   useEffect(() => {
-//     const calculateHeight = () => {
-//       const upperDiv = document.getElementById("upper-div");
-//       const windowHeight = window.innerHeight;
-//       console.log(upperDiv);
-
-//       if (upperDiv) {
-//         const upperDivHeight = upperDiv.offsetHeight;
-//         const tabsHeight = 60; // Approximate height of tabs section
-//         const padding = 20; // Additional padding/margin
-//         const calculated = windowHeight - upperDivHeight - tabsHeight - padding;
-//         console.log(calculated, "calculated height");
-//         setAvailableHeight(Math.max(calculated, 300)); // Minimum 300px
-//       }
-//     };
-
-//     calculateHeight();
-//     window.addEventListener("resize", calculateHeight);
-
-//     return () => window.removeEventListener("resize", calculateHeight);
-//   }, []);
-
-//   return availableHeight;
-// };
-
 const DetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-
-  const availableHeight = useDynamicHeight();
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [movieDetail, setMovieDetail] = useState<MovieDetail | null>(null);
   const [currentEpisode, setCurrentEpisode] = useState<Episode | null>(null);
   const [currentEpisodeNumber, setCurrentEpisodeNumber] = useState<number>(0);
@@ -133,8 +42,6 @@ const DetailPage: React.FC = () => {
   const [commentCount, setCommentCount] = useState(0);
   const [visible, setVisible] = useState(false);
   const [isPlayerLoading, setIsPlayerLoading] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -325,21 +232,9 @@ const DetailPage: React.FC = () => {
 
   useEffect(() => {
     if (currentEpisode) {
-      // Removed window.scrollTo as we're controlling container scroll instead
+      window.scrollTo(0, 0);
     }
   }, [movieDetail, currentEpisode]);
-
-  // Reset scroll position on initial load and when episode changes
-  useEffect(() => {
-    if (scrollContainerRef.current && currentEpisode) {
-      // Small delay to ensure DOM is fully rendered
-      setTimeout(() => {
-        if (scrollContainerRef.current) {
-          scrollContainerRef.current.scrollTop = 0;
-        }
-      }, 100);
-    }
-  }, [currentEpisode, movieDetail]);
 
   const handleVideoError = (errorUrl: string) => {
     // if (errorVideoUrl !== errorUrl && errorUrl) {
@@ -459,17 +354,6 @@ const DetailPage: React.FC = () => {
     }
   }, [episodes]);
 
-  // Reset scroll position when switching to tab-1
-  useEffect(() => {
-    if (activeTab === "tab-1" && scrollContainerRef.current) {
-      setTimeout(() => {
-        if (scrollContainerRef.current) {
-          scrollContainerRef.current.scrollTop = 0;
-        }
-      }, 50);
-    }
-  }, [activeTab]);
-
   const handleChangeSource = async (nextSource: any) => {
     if (nextSource && nextSource.code && id) {
       setIsPlayerLoading(true);
@@ -570,7 +454,7 @@ const DetailPage: React.FC = () => {
     fetchMovieDetail(id);
   };
   return (
-    <div className="bg-background min-h-screen overflow-hidden">
+    <div className="bg-background min-h-screen">
       {!movieDetail ? (
         <>
           <PlayerLoading onBack={navigateBackFunction} />
@@ -648,14 +532,7 @@ const DetailPage: React.FC = () => {
             </div>
           </div>
 
-          <div
-            ref={scrollContainerRef}
-            className={`${activeTab === "tab-1" ? "overflow-y-scroll" : ""}`}
-            style={{
-              height: activeTab === "tab-1" ? `${availableHeight}px` : "auto",
-              minHeight: "auto",
-            }}
-          >
+          <div className={`${activeTab === "tab-1" && "overflow-y-scroll"}`}>
             <DetailSection
               adsData={adsData}
               movieDetail={movieDetail}
@@ -664,7 +541,6 @@ const DetailPage: React.FC = () => {
               setActiveTab={setActiveTab}
               setCommentCount={setCommentCount}
               commentCount={commentCount}
-              setIsModalOpen={setIsModalOpen}
             />
             {activeTab === "tab-1" && (
               <>
@@ -676,8 +552,6 @@ const DetailPage: React.FC = () => {
                   movieDetail={movieDetail}
                   selectedSource={selectedSource}
                   setSelectedSource={setSelectedSource}
-                  setIsModalOpen={setIsModalOpen}
-                  isModalOpen={isModalOpen}
                 />
                 <EpisodeSelector
                   episodes={episodes || []}

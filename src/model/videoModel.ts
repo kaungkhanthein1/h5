@@ -82,7 +82,6 @@ export interface DetailSectionProps {
   setActiveTab: (active: string) => void;
   setCommentCount: (count: number) => void
   commentCount: number;
-  setIsModalOpen: (open: boolean) => void;
 }
 
 export interface AdsData {

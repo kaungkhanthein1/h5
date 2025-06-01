@@ -74,6 +74,7 @@ const Main: React.FC<any> = ({
             return a;
           }, [])
         : [];
+        console.log(allMovies)
     if (selectedMovies && selectedMovies?.length === allMovies?.length) {
       setSelectedMovies([]);
     } else {

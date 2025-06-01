@@ -27,7 +27,7 @@ export const ItemInfo = () => {
   const [showFeedbackModal, setShowFeedbackModal] = useState(false); // For triggering modal
 
   const { data: userData, refetch } = useGetUserQuery(undefined);
-
+  const [reloading, setReLoading] = useState(false);
 
   let [deleteMode, setDeleteMode] = useState<boolean>(false);
   let [isOpen, setIsOpen] = useState<boolean>(false);
@@ -141,7 +141,7 @@ export const ItemInfo = () => {
       //     );
       //   }
       refresh();
-      refetch()
+      refetch();
     } catch (err) {
     } finally {
       // setIsOpen(false);
@@ -170,6 +170,8 @@ export const ItemInfo = () => {
   };
 
   const onSubmit = async (data: any) => {
+    if(reloading) return
+    setReLoading(true);
     try {
       const order = await reOrder(params.id, {
         form_data: JSON.stringify(data.fieldArray),
@@ -186,6 +188,7 @@ export const ItemInfo = () => {
         show: true,
       });
     } finally {
+      setReLoading(false);
       refresh();
     }
   };
@@ -557,10 +560,14 @@ export const ItemInfo = () => {
             <div className="jf-foot bg-white fixed w-full z-10 bottom-0 left-0 min-h-min px-4 py-2">
               <div className="flex pb-2 justify-between items-center">
                 <button
+                  disabled={reloading}
                   type="submit"
-                  className=" bg-[#ff6a33] text-sm py-[14px] px-[72px] text-white font-medium rounded w-full"
+                  className={`${
+                    reloading ? "bg-white text-black" : "bg-[#ff6a33] text-white"
+                  }  text-sm py-[14px] px-[72px] font-medium rounded w-full`}
                 >
-                  重新下单
+                  {/* re-order */}
+                  {reloading ? "下单中..." : "重新下单"}
                 </button>
               </div>
             </div>
@@ -573,7 +580,8 @@ export const ItemInfo = () => {
           <div className="w-full flex justify-between py-2.5">
             <p className="text-base">商品总价</p>
             <p className="text-base text-black/60">
-              {/* new line */}1 兑换劵 +{" "}
+              {(res?.goods?.require_coupon ?? 0) !== 0 &&
+                `${res.goods.require_coupon} 兑换劵 + `}
               {numeral(res?.goods?.original_price ?? 0).format("0,0")}&nbsp;积分
             </p>
           </div>
