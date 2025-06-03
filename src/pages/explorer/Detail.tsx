@@ -40,7 +40,7 @@ const Detail = () => {
           <Loader />
         </div>
       ) : (
-        <div className="bg-background text-white pb-32">
+        <div className="bg-background text-white pb-32 pt-14">
           <div className="relative">
             <img
               src={details?.cover}

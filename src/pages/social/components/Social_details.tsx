@@ -409,12 +409,12 @@ const Social_details: React.FC<any> = ({
               next={fetchMoreDataCmt}
               hasMore={hasMore}
               loader={
-                <div className="flex bg-background justify-center items-center w-full pb-32">
+                <div className="flex bg-background justify-center items-center w-full pb-32 pt-14">
                   <Loader />
                 </div>
               }
               endMessage={
-                <div className="flex bg-background justify-center items-center w-full pb-32">
+                <div className="flex bg-background justify-center items-center w-full pb-32 pt-14">
                   <p style={{ textAlign: "center" }}>
                     <b className=" hidden text-white/60">没有更多评论</b>
                   </p>

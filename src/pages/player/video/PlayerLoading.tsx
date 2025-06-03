@@ -5,7 +5,7 @@ const PlayerLoading: React.FC<any> = ({onBack}) => {
   return (
     <>
       <div className="loading-back flex-row pt-16">
-      <div className="absolute top-4 left-4 z-50">
+      <div className="absolute top-3 left-4 z-50">
       <button className="text-white text-2xl" onClick={onBack}>
         <svg
               xmlns="http://www.w3.org/2000/svg"

@@ -1,3 +1,4 @@
+import "../../../../utils/polyfills";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { showToast } from "../../error/ErrorSlice";
@@ -92,22 +93,13 @@ const Content = ({ notice }: any) => {
     <div className="content p-3">
       <div className="text-card">
         <h3>{notice.title}</h3>
-        {/* <span className="mt-3" style={{
-          fontFamily: 'PingFang SC',
-          fontWeight: 500,
-          fontSize: '12px',
-          lineHeight: '100%',
-          letterSpacing: '-1.1%'
-        }}>
-          <Markdown>{notice.content}</Markdown>
-        </span> */}
         <span className="mt-3" style={{
           fontFamily: 'PingFang SC',
           fontWeight: 500,
           fontSize: '12px',
           lineHeight: '100%',
         }}>
-          <p>{notice.content}</p>
+          <Markdown>{notice.content}</Markdown>
         </span>
         {/* {pageType ? (
           <>

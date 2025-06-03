@@ -1,3 +1,4 @@
+import "../utils/polyfills";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -101,7 +102,7 @@ const Content = ({ notice, handleAppClose }: any) => {
           fontSize: '12px',
           lineHeight: '100%',
         }}>
-          <p>{notice.content}</p>
+          <Markdown>{notice.content}</Markdown>
         </span>
         {pageType ? (
           <button className="noti-btn mt-6" onClick={() => JumpAction(notice)}>

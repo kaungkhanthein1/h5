@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 // Import SVG files directly
@@ -18,8 +18,7 @@ const Footer: FC = () => {
   const { t } = useTranslation();
   const location = useLocation(); // Hook to get the current URL
   const [selectedMenu, setSelectedMenu] = useState("home");
-  const [lastScrollY, setLastScrollY] = useState(0);
-  const [isHeaderVisible, setIsHeaderVisible] = useState(true); // State to track header visibility
+  const navigate = useNavigate();
   useEffect(() => {
     // Update the selected menu based on the current location path
     if (location.pathname === "/" || location.pathname === "/home") {
@@ -35,26 +34,7 @@ const Footer: FC = () => {
     }
   }, [location.pathname]);
   // Scroll event listener to detect scroll direction
-  useEffect(() => {
-    const handleScroll = () => {
-      if (location.pathname === "/social") {
-        if (window.scrollY > lastScrollY && window.scrollY > 100) {
-          // Scrolling down, hide the header
-          setIsHeaderVisible(false);
-        } else if (window.scrollY < lastScrollY) {
-          // Scrolling up, show the header
-          setIsHeaderVisible(true);
-        }
-        setLastScrollY(window.scrollY);
-      }
-    };
 
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [lastScrollY]);
   const { hideMode } = JSON.parse(
     localStorage.getItem("movieAppSettings") || "{}"
   );
@@ -64,20 +44,26 @@ const Footer: FC = () => {
       "standalone" in window.navigator && window.navigator.standalone === true
     );
   };
+  console.log("render");
 
   return (
     <footer
-      // className={`bg-[#1f1f21] fixed  transition-all duration-300 w-full shadow-lg z-50 ${
-      //   isHeaderVisible ? "bottom-0" : "-bottom-[135px]"
-      // }`}
       className={`bg-[#1f1f21] fixed  transition-all duration-300 w-full shadow-lg z-[200] bottom-0`}
     >
-      <div className={`flex pt-4 ${isWebClip() && 'mb-5'} justify-around items-center py-2`}>
+      <div
+        className={`flex pt-4 ${
+          isWebClip() && "mb-5"
+        } justify-around items-center py-2`}
+      >
         {/* Home Icon */}
-        <Link
-          to="/"
+        <button
           className="flex flex-col items-center"
-          onClick={() => setSelectedMenu("home")}
+          onClick={() => {
+            if (location.pathname !== "/" || selectedMenu !== "home") {
+              setSelectedMenu("home");
+              navigate("/");
+            }
+          }}
         >
           <div className="rounded-full">
             <img
@@ -93,13 +79,20 @@ const Footer: FC = () => {
           >
             {t("footer.home")}
           </span>
-        </Link>
+        </button>
 
         {/* Explorer Icon */}
-        <Link
-          to="/explorer"
+        <button
           className="flex flex-col items-center"
-          onClick={() => setSelectedMenu("explorer")}
+          onClick={() => {
+            if (
+              location.pathname !== "/explorer" ||
+              selectedMenu !== "explorer"
+            ) {
+              setSelectedMenu("explorer");
+              navigate("/explorer");
+            }
+          }}
         >
           <div className="rounded-full">
             <img
@@ -119,13 +112,20 @@ const Footer: FC = () => {
           >
             {t("footer.explorer")}
           </span>
-        </Link>
+        </button>
         {/* Explorer Icon */}
         {!hideMode && (
-          <Link
-            to="/social"
+          <button
             className="flex flex-col items-center"
-            onClick={() => setSelectedMenu("social")}
+            onClick={() => {
+              if (
+                location.pathname !== "/social" ||
+                selectedMenu !== "social"
+              ) {
+                setSelectedMenu("social");
+                navigate("/social");
+              }
+            }}
           >
             <div className="rounded-full">
               <img
@@ -142,7 +142,7 @@ const Footer: FC = () => {
             >
               广场
             </span>
-          </Link>
+          </button>
         )}
 
         {/* Explorer Icon */}
@@ -168,10 +168,17 @@ const Footer: FC = () => {
         </Link> */}
 
         {/* Profile Icon */}
-        <Link
-          to="/profile"
+        <button
           className="flex flex-col items-center"
-          onClick={() => setSelectedMenu("profile")}
+          onClick={() => {
+            if (
+              location.pathname !== "/profile" ||
+              selectedMenu !== "profile"
+            ) {
+              setSelectedMenu("profile");
+              navigate("/profile");
+            }
+          }}
         >
           <div className="rounded-full">
             <img
@@ -189,7 +196,7 @@ const Footer: FC = () => {
           >
             {t("footer.profile")}
           </span>
-        </Link>
+        </button>
       </div>
     </footer>
   );

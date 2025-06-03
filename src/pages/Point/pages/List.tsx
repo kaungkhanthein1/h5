@@ -28,6 +28,10 @@ export const STATUS_MAP = {
     text: "已取消",
     clazz: "text-red-secondary",
   },
+  failed : {
+    text : "已驳回",
+    clazz : "text-red-secondary"
+  }
 };
 
 export const List = () => {

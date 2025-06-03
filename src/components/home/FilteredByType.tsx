@@ -384,7 +384,7 @@ const FilteredByType = () => {
             </div>
           ) : movieData?.length ? (
             <>
-              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 pl-3 lg:grid-cols-8 gap-y-5 gap-2 mt-0 pt-5 pb-20 px-3">
+              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 pl-3 lg:grid-cols-8 gap-y-2 gap-2 mt-0 pt-5 pb-20 px-3">
                 {movieData?.map((movie: any, index: any) => (
                   <div key={index} className="mx-auto w-full">
                     <MovieCard movie={movie} height={"200px"} />
