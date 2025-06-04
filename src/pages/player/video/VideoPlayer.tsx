@@ -387,7 +387,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
       {/* Video element wrapper */}
       <div
-        className={`relative w-full ${reHeight ? "h-[40vh]" : ""}`}
+        className={`relative w-full ${reHeight ? "h-[211px]" : ""}`}
         style={
           isLandscape
             ? { height: "211px" }
@@ -399,10 +399,10 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
           ref={videoElementRef}
           className={`absolute w-full ${
             reHeight
-              ? "h-[40vh]"
+              ? "h-[211px]"
               : isLandscape
-              ? "h-full flex items-center justify-center"
-              : "h-full"
+              ? "h-[211px] flex items-center justify-center"
+              : "h-[211px]"
           }`}
           style={
             isLandscape
