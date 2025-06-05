@@ -170,7 +170,7 @@ export const ItemInfo = () => {
   };
 
   const onSubmit = async (data: any) => {
-    if(reloading) return
+    if (reloading) return;
     setReLoading(true);
     try {
       const order = await reOrder(params.id, {
@@ -182,9 +182,11 @@ export const ItemInfo = () => {
           show: true,
         });
       }
-    } catch (err) {
+    } catch (err: any) {
+      const errMsg: any = error ?? "重新下单失败";
+
       setMsg({
-        msg: "重新下单失败",
+        msg: err,
         show: true,
       });
     } finally {
@@ -520,7 +522,7 @@ export const ItemInfo = () => {
         <div className="flex flex-col px-4 bg-white h-full">
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className="divide-y divide-black/05"
+            className="divide-y divide-black/05 mb-[100px]"
           >
             {controlledFields.map((field, index) => {
               return (
@@ -563,7 +565,9 @@ export const ItemInfo = () => {
                   disabled={reloading}
                   type="submit"
                   className={`${
-                    reloading ? "bg-white text-black" : "bg-[#ff6a33] text-white"
+                    reloading
+                      ? "bg-white text-black"
+                      : "bg-[#ff6a33] text-white"
                   }  text-sm py-[14px] px-[72px] font-medium rounded w-full`}
                 >
                   {/* re-order */}
