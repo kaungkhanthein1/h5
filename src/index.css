@@ -457,3 +457,14 @@ input[type="radio"]:checked {
   margin-top: 23%;
   margin-left: 40%;
 }
+
+/* styles.css */
+.full-height-fallback {
+  height: 100vh; /* Fallback for older browsers */
+}
+
+@supports (height: 100dvh) {
+  .full-height-fallback {
+    height: 100dvh; /* Used in modern browsers */
+  }
+}

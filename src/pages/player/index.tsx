@@ -570,7 +570,7 @@ const DetailPage: React.FC = () => {
     fetchMovieDetail(id);
   };
   return (
-    <div className="bg-background min-h-screen overflow-hidden">
+    <div className="bg-background full-height-fallback overflow-hidden">
       {!movieDetail ? (
         <>
           <PlayerLoading onBack={navigateBackFunction} />
