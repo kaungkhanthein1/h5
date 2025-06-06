@@ -20,7 +20,7 @@ const NetworkError: React.FC<any> = ({ switchNow, refresh, onBack }) => {
 
   return (
     <div
-      className="sticky top-0 z-50 flex justify-center items-center w-full h-[211px]"
+      className="sticky top-0 z-50 flex justify-center items-center w-full h-[220px]"
       style={{
         backgroundSize: "cover",
         backgroundPosition: "center",

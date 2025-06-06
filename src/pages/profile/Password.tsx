@@ -18,7 +18,7 @@ const Password = () => {
     e.preventDefault();
 
     // Validate password and repassword fields
-    if (password.length < 8 || password.length > 25) {
+    if (password.length < 6 || password.length > 25) {
       dispatch(
         showToast({
           message: "密码必须介于 8 到 25 个字符之间。",
@@ -186,7 +186,7 @@ const Password = () => {
             </div>
 
             <p className="text-[#555] font-inter text-[12px] font-medium leading-[20px] mt-3 ml-3">
-              8-25个字符必须为下列至少两种的组合：字母、数字
+              6-25个字符必须为下列至少两种的组合：字母、数字
             </p>
 
             <button

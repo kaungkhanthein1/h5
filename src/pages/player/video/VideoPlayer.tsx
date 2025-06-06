@@ -355,7 +355,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   return (
     <div
       id="my-player"
-      className={`relative w-full bg-black ${reHeight ? "h-[211px]" : "h-[211px]"}`}
+      className={`relative w-full bg-black ${reHeight ? "h-[220px]" : "h-[220px]"}`}
     >
       {/* Back button */}
       {isControlsVisible && (
@@ -387,10 +387,10 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
       {/* Video element wrapper */}
       <div
-        className={`relative w-full ${reHeight ? "h-[211px]" : "h-[211px]"}`}
+        className={`relative w-full ${reHeight ? "h-[220px]" : "h-[220px]"}`}
         style={
           isLandscape
-            ? { height: "211px" }
+            ? { height: "220px" }
             : { paddingTop: `${videoRatio * 100}%` }
         }
       >
@@ -399,10 +399,10 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
           ref={videoElementRef}
           className={`absolute w-full ${
             reHeight
-              ? "h-[211px]"
+              ? "h-[220px]"
               : isLandscape
-              ? "h-[211px] flex items-center justify-center"
-              : "h-[211px]"
+              ? "h-[220px] flex items-center justify-center"
+              : "h-[220px]"
           }`}
           style={
             isLandscape
