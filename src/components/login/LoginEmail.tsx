@@ -173,7 +173,8 @@ const LoginEmail: React.FC<LoginEmailProps> = ({ handleBack }) => {
 
                 <form
                   onSubmit={handleLogin}
-                  className="w-full flex flex-col gap-[40px] px-[10px]"
+                  // className="w-full flex flex-col gap-[40px] px-[10px]"
+                  className="w-full grid gap-[40px] px-[10px]"
                 >
                   <div className="relative ">
                     <input

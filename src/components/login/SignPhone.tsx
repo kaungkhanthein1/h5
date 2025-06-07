@@ -194,7 +194,8 @@ const SignPhone: React.FC<SignPhoneProps> = ({ handleBack2 }) => {
 
               <form
                 onSubmit={handleSubmit}
-                className="w-full flex flex-col gap-[40px] px-[10px]"
+                // className="w-full flex flex-col gap-[40px] px-[10px]"
+                className="w-full grid gap-[40px] px-[10px]"
               >
                 <div className="relative ">
                   <input
