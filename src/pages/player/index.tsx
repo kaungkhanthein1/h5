@@ -562,6 +562,8 @@ const DetailPage: React.FC = () => {
     fetchMovieDetail(movieDetail?.id);
   };
 
+  console.log(wholePageError, "wholePageError");
+
   const showRecommandMovie = (id: string) => {
     setCurrentEpisode(null);
     setMovieDetail(null);
@@ -582,7 +584,7 @@ const DetailPage: React.FC = () => {
         <>
           <div className="sticky top-0 z-50">
             <div id="upper-div">
-              {currentEpisode && !wholePageError ? (
+              {!wholePageError ? (
                 !isPlayerLoading ? (
                   <VideoPlayer
                     key={currentEpisode?.episode_id}

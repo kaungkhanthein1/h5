@@ -32,8 +32,8 @@ export const Mall = () => {
   //prod
   const parsedUserData = userData;
 
-  const integralDetails = userData?.data?.integral;
-  const coupon = userData?.data?.coupon;
+  const integralDetails = parsedUserData?.data?.integral;
+  const coupon = parsedUserData?.data?.coupon;
   const [pageConfig, setPageConfig] = useState({
     page: 1,
     pageSize: 6,

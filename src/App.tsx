@@ -35,7 +35,9 @@ import Social from "./pages/social";
 import Short from "./pages/short";
 import { useGetRecommendedMoviesQuery } from "./pages/home/services/homeApi";
 import Announce from "./components/Announce";
-import land from './assets/login/land.webp'
+import land from "./assets/login/land.webp";
+import SpinAnimation from "./pages/Point/components/SpinAnimation";
+import { useGetOpenStateQuery } from "./pages/Point/service/PointApi";
 // import { Game } from "./pages/Point/pages/Game";
 // import Menber from "./pages/share/member";
 // import Share from "./pages/share";
@@ -92,6 +94,8 @@ const App: React.FC = () => {
     useGetHeaderTopicsQuery();
   // const { data: notiData, isLoading: notiLoading } = useGetNotificationQuery();
 
+  //staging remove skip
+
   const [showNotice, setShowNotice] = useState(false);
   const [preloadedImage, setPreloadedImage] = useState<string | null>(null);
   const [showUpdateNotification, setShowUpdateNotification] = useState(false);
@@ -103,27 +107,27 @@ const App: React.FC = () => {
       if (startAds && startAds.length > 0 && startAds[0]?.data?.image) {
         // Immediately start fetching the image as a blob
         fetch(startAds[0]?.data?.image)
-          .then(response => {
+          .then((response) => {
             if (!response.ok) {
-              throw new Error('Network response was not ok');
+              throw new Error("Network response was not ok");
             }
             return response.blob();
           })
-          .then(blob => {
+          .then((blob) => {
             const url = URL.createObjectURL(blob);
             setPreloadedImage(url);
-            
+
             // Also preload the image in browser cache
             const img = new Image();
             img.src = url;
           })
-          .catch(err => {
+          .catch((err) => {
             console.error("Failed to preload image:", err);
             // Continue without preloaded image
           });
       }
     }
-    
+
     // Clean up any blob URLs when component unmounts
     return () => {
       if (preloadedImage) {
@@ -234,17 +238,26 @@ const App: React.FC = () => {
     }
   }, [location.pathname]);
 
+  const { data: open } = useGetOpenStateQuery("");
+  const [isopen, setIsopen] = useState(false);
+  useEffect(() => {
+    if (open?.data) {
+      setIsopen(true);
+    }
+  }, [open]);
+  console.log(" is open", open?.data);
+
   useEffect(() => {
     if (location.pathname !== "/") {
-      const lastFetchTime = sessionStorage.getItem('lastRefetchTime');
+      const lastFetchTime = sessionStorage.getItem("lastRefetchTime");
       const now = Date.now();
       const twoHours = 2 * 60 * 60 * 1000; // 2 hours in milliseconds
-      
+
       // If no previous fetch time or 2 hours have passed, refetch
-      if (!lastFetchTime || (now - parseInt(lastFetchTime)) > twoHours) {
+      if (!lastFetchTime || now - parseInt(lastFetchTime) > twoHours) {
         refetchAds();
         refetch();
-        sessionStorage.setItem('lastRefetchTime', now.toString());
+        sessionStorage.setItem("lastRefetchTime", now.toString());
       }
     }
   }, [location.pathname, refetchAds, refetch]);
@@ -260,7 +273,9 @@ const App: React.FC = () => {
   // Show update notification after ads screen
   useEffect(() => {
     if (!panding) {
-      const hasSeenUpdateNotification = sessionStorage.getItem("hasSeenUpdateNotification");
+      const hasSeenUpdateNotification = sessionStorage.getItem(
+        "hasSeenUpdateNotification"
+      );
       if (!hasSeenUpdateNotification) {
         setShowUpdateNotification(true);
       }
@@ -310,7 +325,7 @@ const App: React.FC = () => {
   const handleUpdateClick = () => {
     const link = headerData?.data?.app_store_link;
     // Handle update action here
-    window.open(link, '_blank');
+    window.open(link, "_blank");
     // Or any other update logic
     setShowUpdateNotification(false);
     sessionStorage.setItem("hasSeenUpdateNotification", "true");
@@ -322,13 +337,7 @@ const App: React.FC = () => {
   };
 
   if (!data?.data) {
-    return (
-      <img
-        className="h-screen w-screen object-cover"
-        src={land}
-        alt=""
-      />
-    );
+    return <img className="h-screen w-screen object-cover" src={land} alt="" />;
   }
 
   function isWebView() {
@@ -338,7 +347,6 @@ const App: React.FC = () => {
       (window as any).webkit.messageHandlers.jsBridge
     );
   }
-
   return (
     <>
       {data?.data && (
@@ -362,13 +370,20 @@ const App: React.FC = () => {
                 />
               )}
 
-              {showUpdateNotification && !showNotice && !isWebView() && headerData?.data?.app_store_link && (
-                <div className="fixed bottom-24 left-0 right-0 z-[9999] flex justify-center">
-                  <UpdateNotification 
-                    onUpdate={handleUpdateClick} 
-                    onClose={handleCloseUpdateNotification}
-                  />
-                </div>
+              {showUpdateNotification &&
+                !showNotice &&
+                !isWebView() &&
+                headerData?.data?.app_store_link && (
+                  <div className="fixed bottom-24 left-0 right-0 z-[9999] flex justify-center">
+                    <UpdateNotification
+                      onUpdate={handleUpdateClick}
+                      onClose={handleCloseUpdateNotification}
+                    />
+                  </div>
+                )}
+
+              {!showNotice && location.pathname === "/" && (
+                <SpinAnimation open={open?.data} />
               )}
 
               <div className="flex-grow">
@@ -422,7 +437,10 @@ const App: React.FC = () => {
                     <Route path="/invite" element={<Invite />} />
                     <Route path="/share/member" element={<Member />} />
                     <Route path="/point_info" element={<Point />} />
-                    <Route path="/point_info_redeem" element={<Point showTab={false}/>} />
+                    <Route
+                      path="/point_info_redeem"
+                      element={<Point showTab={false} />}
+                    />
                   </Routes>
                 </Suspense>
                 <ErrorToast />
@@ -463,4 +481,3 @@ const AppWithRouter = () => (
 );
 
 export default AppWithRouter;
-

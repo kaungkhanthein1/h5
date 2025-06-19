@@ -195,7 +195,6 @@ const DetailSection: React.FC<DetailSectionProps> = ({
   };
 
   const sendShareEventToNative = (value: any) => {
-    // copyToClipboard("https://d1svxjht0opoc5.cloudfront.net/kkoor4.pdf");
     if (
       (window as any).webkit &&
       (window as any).webkit.messageHandlers &&

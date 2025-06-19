@@ -26,7 +26,9 @@ const Header = () => {
     skip: !token,
   });
 
+  console.log(token);
   const handleLoginClick = () => {
+    console.log("handleLoginClick called");
     if (!token) {
       dispatch(setAuthModel(true)); // Open the login modal if not logged in
     }
@@ -39,6 +41,7 @@ const Header = () => {
 
   // prod
   const user = userData?.data;
+  console.log(user);
 
   // staging
   // const parsedUserData = JSON.parse(userData || "{}");

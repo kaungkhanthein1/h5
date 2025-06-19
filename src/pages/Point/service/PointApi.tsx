@@ -101,6 +101,15 @@ export const pointApi = createApi({
         // }),
       }),
     }),
+    getOpenState: builder.query({
+      query: () => ({
+        url: convertToSecureUrl("/activity/open_status"),
+        method: "GET",
+        // params: convertToSecurePayload({
+        //   qr_create: qr_create,
+        // }),
+      }),
+    }),
   }),
 });
 
@@ -111,5 +120,6 @@ export const {
   useGetInvitaionMemberQuery,
   useGetActivityListQuery,
   useGetInvitaionMemberListQuery,
-  useGetInviteNoticeQuery
+  useGetInviteNoticeQuery,
+  useGetOpenStateQuery
 } = pointApi;

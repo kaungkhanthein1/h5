@@ -1,4 +1,4 @@
-import serviceAxios from '../utils/request'
+import serviceAxios from "../utils/request";
 
 export const getItems = (params: any): any => {
   return serviceAxios({
@@ -8,15 +8,12 @@ export const getItems = (params: any): any => {
   });
 };
 
-
-
 export const itemDetail = (item_id: any): any => {
   return serviceAxios({
     url: `/integral_goods/items/${item_id}`,
     method: "get",
   });
 };
-
 
 export const getArticles = (): any => {
   return serviceAxios({
@@ -25,7 +22,6 @@ export const getArticles = (): any => {
   });
 };
 
-
 export const getArticleDetail = (id: any): any => {
   return serviceAxios({
     url: `/help_center/articles/${id}`,
@@ -33,15 +29,13 @@ export const getArticleDetail = (id: any): any => {
   });
 };
 
-
 export const sendOrder = (item_id: any, data: any): any => {
   return serviceAxios({
     url: `/integral_goods/items/${item_id}/order`,
     method: "post",
-    data: data
+    data: data,
   });
 };
-
 
 export const getOrder = (order_id: any): any => {
   return serviceAxios({
@@ -69,10 +63,9 @@ export const getOrderList = (params: getOrderListParams): any => {
   return serviceAxios({
     url: `/user/integral_orders`,
     method: "get",
-    params
+    params,
   });
 };
-
 
 export const cancelOrder = (orderId: string): any => {
   return serviceAxios({
@@ -88,15 +81,13 @@ export const removeOrder = (orderId: string): any => {
   });
 };
 
-
 export const reOrder = (orderId: any, data: any): any => {
   return serviceAxios({
     url: `/user/integral_orders/${orderId}/reorder`,
     method: "post",
-    data: data
+    data: data,
   });
 };
-
 
 export const getLotteryItems = (): any => {
   return serviceAxios({
@@ -105,19 +96,17 @@ export const getLotteryItems = (): any => {
   });
 };
 
-
-export const sendSpin = (): any => {
+export const sendSpin = (group_id: any): any => {
   return serviceAxios({
-    url: `/integral_lottery/spin`,
+    url: `/integral_lottery/spin?group_id=${group_id}`,
     method: "post",
   });
 };
-
 
 export const getRecords = (params: any): any => {
   return serviceAxios({
     url: `/integral_lottery/records`,
     method: "get",
-    params
+    params,
   });
 };

@@ -83,7 +83,7 @@ const Share: React.FC<ShareProps> = ({}) => {
   const handleShareLink = () => {
     if (invite) {
       const link = invite?.data?.content;
-
+      sendEventToNative("movieDetailShare", link);
       navigator.clipboard
         .writeText(link)
         .then(() => {
