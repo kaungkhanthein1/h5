@@ -48,9 +48,9 @@ const History = () => {
           />
         ) : (
           <div className="h-[80vh] mt-20">
-            <div className="w-full">
+            {/* <div className="w-full">
               <NewAds section="play_record_up" />
-            </div>
+            </div> */}
             <div className="flex flex-col justify-center items-center text-center h-[50vh]">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
