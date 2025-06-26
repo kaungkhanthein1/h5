@@ -320,7 +320,6 @@ const FilterMovie = () => {
       isChanged.current = true;
 
       // Reset movieData immediately when filters change
-      dispatch(setMovieData([]));
 
       prevFilters.current = { sort, area, year, classData, activeTab };
     }
@@ -335,6 +334,7 @@ const FilterMovie = () => {
       data?.data?.list.length &&
       (movieData.length === 0 || isChanged.current)
     ) {
+      dispatch(setMovieData([]));
       dispatch(setMovieData(data.data.list));
       setTotalData(data.data.total);
       isChanged.current = false;
