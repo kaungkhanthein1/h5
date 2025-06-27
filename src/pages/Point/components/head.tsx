@@ -33,7 +33,7 @@ export const Head: FC<HeadProps> = ({
         <button onClick={routerLink} className="w-[60px] focus:outline-none focus:bg-white">
           <img alt="back" src="/left.png" className="w-6 h-6" />
         </button>
-        <Link className="font-medium text-base" to="/">
+        <Link className="font-medium text-base" to="/point_mall">
           {title ?? '积分商城'}
         </Link>
 

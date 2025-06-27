@@ -24,10 +24,10 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
   const inactivityTimeout = useRef<number | null>(null);
   const [reHeight, setReHeight] = useState(false);
   const [isLandscape, setIsLandscape] = useState(false);
-  const [isVideoLoaded, setIsVideoLoaded] = useState(false); // Track if video is loaded
 
   // Function to check if browser natively supports HLS
   const hasNativeHLSSupport = () => {
+    return false;
     const video = document.createElement("video");
     return (
       video.canPlayType("application/vnd.apple.mpegurl") !== "" ||
@@ -73,35 +73,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
     const initializePlayer = async () => {
       if (videoElementRef.current && videoUrl) {
-        // Define fullscreen button
-        const fullscreenButton = {
-          position: "right",
-          html: `<div><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M20 3H22V9H20V5H16V3H20ZM4 3H8V5H4V9H2V3H4ZM20 19V15H22V21H16V19H20ZM4 19H8V21H2V15H4V19Z" fill="white" fill-opacity="0.9"/>
-                  </svg><div>`,
-          tooltip: "Fullscreen",
-          click: function (...args: any[]) {
-            playerRef.current.fullscreen = true;
-            // if (
-            //   (window as any).webkit &&
-            //   (window as any).webkit.messageHandlers &&
-            //   (window as any).webkit.messageHandlers.jsBridge
-            // ) {
-            //   (window as any).webkit.messageHandlers.jsBridge.postMessage({
-            //     eventName: "fullscreen",
-            //   });
-            // } else {
-            //   playerRef.current.fullscreen = true;
-            // }
-          },
-        };
-
-        // Conditionally include fullscreen button
-        const controlsArray = [];
-        if (isVideoLoaded) {
-          controlsArray.push(fullscreenButton);
-        }
-
         const art = new Artplayer({
           container: videoElementRef.current,
           url: videoUrl,
@@ -109,8 +80,35 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
           playbackRate: true,
           setting: true,
           autoOrientation: false,
+          // fullscreen: true,
           airplay: true,
-          controls: controlsArray,
+          controls: [
+            {
+              position: "right",
+              html: `<div><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M20 3H22V9H20V5H16V3H20ZM4 3H8V5H4V9H2V3H4ZM20 19V15H22V21H16V19H20ZM4 19H8V21H2V15H4V19Z" fill="white" fill-opacity="0.9"/>
+</svg><div>`,
+              tooltip: "Fullscreen",
+              click: function (...args) {
+                // playerRef.current.fullscreen = true;
+                if (
+                  (window as any).webkit &&
+                  (window as any).webkit.messageHandlers &&
+                  (window as any).webkit.messageHandlers.jsBridge
+                ) {
+                  (window as any).webkit.messageHandlers.jsBridge.postMessage({
+                    eventName: "fullscreen",
+                  });
+                } else {
+                  playerRef.current.fullscreen = true;
+                }
+              },
+            },
+          ],
+          // miniProgressBar: true,
+          // moreVideoAttr: {
+          //   playsInline: true,
+          // },
         });
 
         // Handle HLS streams: prioritize native support, fallback to HLS.js
@@ -125,6 +123,19 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
               console.error("Native HLS error:", e);
               handleVideoError(videoUrl);
             });
+
+            // Add timeout for loading
+            // const loadTimeout = setTimeout(() => {
+            //   if (art.video.readyState === 0) {
+            //     console.error("Video loading timeout");
+            //     // handleVideoError(videoUrl);
+            //   }
+            // }, 10000); // 10 second timeout
+
+            // // Clear timeout when video starts loading
+            // art.video.addEventListener("loadstart", () => {
+            //   clearTimeout(loadTimeout);
+            // });
           } else if (Hls.isSupported()) {
             // Fallback to HLS.js for browsers without native support
             hls = new Hls();
@@ -182,7 +193,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
         // Adjust video ratio based on the video's actual dimensions
         art.once("video:loadedmetadata", () => {
-          setIsVideoLoaded(true); // Set video as loaded
           const videoWidth = art.video.videoWidth;
           const videoHeight = art.video.videoHeight;
           if (videoWidth > videoHeight) {
@@ -267,7 +277,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         playerRef.current = null;
       }
     };
-  }, [videoUrl, resumeTime, isVideoLoaded]);
+  }, [videoUrl, resumeTime]);
 
   useEffect(() => {
     const handleVisibilityChange = () => {
