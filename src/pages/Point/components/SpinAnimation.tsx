@@ -29,12 +29,13 @@ const SpinAnimation: React.FC<SpinAnimationProps> = ({ open }) => {
   const handleAnimationClick = (name: string) => {
     console.log(name);
     if (name === "game") {
+      dispatch(setPointMall("/"));
       navigate(`/${name}`);
     } else {
       if (!token) {
         dispatch(setAuthModel(true));
       } else {
-        dispatch(setPointMall("/"))
+        dispatch(setPointMall("/"));
         navigate(`/${name}`);
       }
     }
