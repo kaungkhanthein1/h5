@@ -38,6 +38,7 @@ import Announce from "./components/Announce";
 import land from "./assets/login/land.webp";
 import SpinAnimation from "./pages/Point/components/SpinAnimation";
 import { useGetOpenStateQuery } from "./pages/Point/service/PointApi";
+import { refreshToken } from "./services/userService";
 // import { Game } from "./pages/Point/pages/Game";
 // import Menber from "./pages/share/member";
 // import Share from "./pages/share";
@@ -335,6 +336,29 @@ const App: React.FC = () => {
     setShowUpdateNotification(false);
     sessionStorage.setItem("hasSeenUpdateNotification", "true");
   };
+
+  useEffect(() => {
+    const authToken = localStorage.getItem("authToken");
+    if (authToken) {
+      try {
+        const parsed = JSON.parse(authToken);
+        const refresh_token = parsed?.data?.refresh_token;
+        if (refresh_token) {
+          refreshToken(refresh_token).then((newToken) => {
+            if (newToken) {
+              // Update localStorage with new token if needed
+              // localStorage.setItem("authToken", JSON.stringify({ ...parsed, data: { ...parsed.data, ...newToken.data } }));
+            }
+          }).catch((err) => {
+            // Optionally handle refresh error (e.g., logout user)
+            console.error("Failed to refresh token", err);
+          });
+        }
+      } catch (e) {
+        // Invalid token format
+      }
+    }
+  }, []);
 
   if (!data?.data) {
     return <img className="h-screen w-screen object-cover" src={land} alt="" />;

@@ -6,7 +6,7 @@ import mall from "../../../assets/Point/mall.json";
 import closeSpin from "../../../assets/Point/closeSpin.svg";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setAuthModel } from "../../../features/login/ModelSlice";
+import { setAuthModel, setPointMall } from "../../../features/login/ModelSlice";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface SpinAnimationProps {
@@ -34,6 +34,7 @@ const SpinAnimation: React.FC<SpinAnimationProps> = ({ open }) => {
       if (!token) {
         dispatch(setAuthModel(true));
       } else {
+        dispatch(setPointMall("/"))
         navigate(`/${name}`);
       }
     }

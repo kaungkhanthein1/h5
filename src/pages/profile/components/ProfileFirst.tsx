@@ -1,7 +1,7 @@
 import { startTransition, useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import ImageWithPlaceholder from "../../search/components/ImgPlaceholder";
-import { setAuthModel } from "../../../features/login/ModelSlice";
+import { setAuthModel, setPointMall } from "../../../features/login/ModelSlice";
 import { useDispatch, useSelector } from "react-redux";
 import {
   useGetListQuery,
@@ -151,6 +151,7 @@ const ProfileFirst = () => {
       });
     } else {
       // If logged in, redirect to the favorites page
+      dispatch(setPointMall("/profile"))
       navigate("/point_mall");
     }
   };

@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { showToast } from "../pages/profile/error/ErrorSlice";
 import { setActiveNav } from "../pages/home/slice/HomeSlice";
-import { setAuthModel } from "../features/login/ModelSlice";
+import { setAuthModel, setPointMall } from "../features/login/ModelSlice";
 import Markdown from "react-markdown";
 
 const Content = ({ notice, handleAppClose }: any) => {
@@ -47,6 +47,7 @@ const Content = ({ notice, handleAppClose }: any) => {
           dispatch(setAuthModel(true));
           handleAppClose();
         } else {
+          dispatch(setPointMall("/"))
           navigate("/point_mall");
           handleAppClose();
         }

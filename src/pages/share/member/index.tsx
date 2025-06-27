@@ -42,7 +42,7 @@ const Member: React.FC<MemberProps> = ({}) => {
   return (
     <div className=" relative">
       <img
-        className=" absolute top-0 z-[-1] w-screen h-scree h-[350px object-center object-cover"
+        className=" fixed top-0 z-[-1] w-screen h-scree h-[350px object-center object-cover"
         src={BG}
         alt=""
       />

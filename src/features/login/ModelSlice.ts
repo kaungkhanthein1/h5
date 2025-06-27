@@ -15,6 +15,7 @@ interface model {
   panding: number;
   GraphicKey: string;
   isShowingDetails: boolean;
+  pointMall: string;
 }
 
 const initialState: model = {
@@ -32,6 +33,7 @@ const initialState: model = {
   panding: 0,
   GraphicKey: "",
   isShowingDetails: false,
+  pointMall: "",
 };
 
 export const modelSlice = createSlice({
@@ -84,6 +86,9 @@ export const modelSlice = createSlice({
       //no need
       state.panding = action.payload;
     },
+    setPointMall: (state, action) => {
+      state.pointMall = action.payload;
+    },
   },
 });
 
@@ -101,7 +106,8 @@ export const {
   setSocial_id,
   setGraphicKey,
   setPanding,
-  setShowingDetail
+  setShowingDetail,
+  setPointMall
 } = modelSlice.actions;
 
 export default modelSlice.reducer;

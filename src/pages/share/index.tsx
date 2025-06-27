@@ -24,6 +24,7 @@ import {
 } from "../../services/newEncryption";
 import { useGetInviteNoticeQuery } from "../Point/service/PointApi";
 import Alert from "./Alert";
+import { setPointMall } from "../../features/login/ModelSlice";
 
 interface ShareProps {}
 
@@ -272,6 +273,7 @@ const Share: React.FC<ShareProps> = ({}) => {
       {/* invited user */}
       <div className="flex invite_user mx-[20px] justify-around items-center mt-[20px] p-4">
         <Link
+        onClick={() =>  dispatch(setPointMall("/share"))}
           to={"/point_mall"}
           className=" flex flex-col items-center justify-center gap-[8px]"
         >

@@ -476,3 +476,21 @@ export const getCurrentVersion = async ({ type, current }: any) => {
   //   return response
   // }
 };
+
+export const refreshToken = async (refreshToken: string) => {
+  try {
+    const response = await axios.get(
+      convertToSecureUrl(`${process.env.REACT_APP_API_URL}/user/refresh_token`),
+      {
+        headers: {
+          Authorization: `Bearer ${refreshToken}`,
+        },
+      }
+    );
+    return decryptWithAes(response.data);
+  } catch (error) {
+    console.log('ddddis=<', error);
+    throw error;
+  }
+};
+

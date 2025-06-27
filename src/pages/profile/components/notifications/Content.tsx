@@ -10,7 +10,7 @@ import {
   setActiveNav,
   setActivePointTab,
 } from "../../../../pages/home/slice/HomeSlice";
-import { setAuthModel } from "../../../../features/login/ModelSlice";
+import { setAuthModel, setPointMall } from "../../../../features/login/ModelSlice";
 
 const Content = ({ notice }: any) => {
   const isLoggedIn = localStorage.getItem("authToken");
@@ -54,6 +54,7 @@ const Content = ({ notice }: any) => {
         if (!token) {
           dispatch(setAuthModel(true));
         } else {
+          dispatch(setPointMall("/notifications"))
           navigate("/point_mall");
         }
         break;
