@@ -34,7 +34,7 @@ const Tab4 = () => {
   const [rankingDataById, setRankingDataById] = useState([]);
   const [id, setId] = useState(0);
   const { data } = useGetMovieRankingListQuery(undefined, {
-    refetchOnMountOrArgChange: 300,
+    refetchOnMountOrArgChange: true,
   });
 
   const getRankingById = async (id: any) => {

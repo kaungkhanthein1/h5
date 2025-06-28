@@ -5,7 +5,7 @@ import Loader from "../../pages/search/components/Loader";
 
 const Tab3 = () => {
   const { data: topicData, isLoading } = useGetMovieTopicListQuery(undefined, {
-    refetchOnMountOrArgChange: 300,
+    refetchOnMountOrArgChange: true,
   });
 
   return (

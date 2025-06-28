@@ -252,7 +252,7 @@ const WeeklyMoviesContent = () => {
   const activeWeek = useSelector((state: any) => state.explore.activeWeek);
 
   const { data, isFetching } = useGetWeeklyMoviesQuery(activeWeek || 1, {
-    refetchOnMountOrArgChange: 300,
+    refetchOnMountOrArgChange: true,
   });
 
   if (isFetching) {

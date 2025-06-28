@@ -12,7 +12,7 @@ import { useEffect } from "react";
 
 const Home: React.FC = () => {
   const { data, isLoading, refetch } = useGetRecommendedMoviesQuery(undefined, {
-    refetchOnMountOrArgChange: 300, // Refetch if data is older than 60 seconds
+    refetchOnMountOrArgChange: true, // Refetch if data is older than 60 seconds
   });
   // console.log(data, "data");
   const activeTab = useSelector((state: any) => state.home.activeTab);

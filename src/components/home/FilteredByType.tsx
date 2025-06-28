@@ -231,7 +231,7 @@ const FilteredByType = () => {
       pageSize,
     },
     {
-      refetchOnMountOrArgChange: 300, // Refetch if data is older than 60 seconds
+      refetchOnMountOrArgChange: true, // Refetch if data is older than 60 seconds
     }
   );
 
