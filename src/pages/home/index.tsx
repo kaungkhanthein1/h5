@@ -12,7 +12,9 @@ import { useEffect } from "react";
 
 const Home: React.FC = () => {
   const { data, isLoading, refetch } = useGetRecommendedMoviesQuery(undefined, {
-    refetchOnMountOrArgChange: true, // Refetch if data is older than 60 seconds
+    refetchOnMountOrArgChange: true,
+    refetchOnReconnect: true,        // optional: refetch if internet reconnects
+    refetchOnFocus: true,            // optional: refetch when tab is focused, // Refetch if data is older than 60 seconds
   });
   // console.log(data, "data");
   const activeTab = useSelector((state: any) => state.home.activeTab);
@@ -31,6 +33,12 @@ const Home: React.FC = () => {
   // useEffect(() => {
   //   window.scrollTo(0, 0);
   // }, [activeTab]);
+
+  useEffect(()=>{
+    if(activeTab === 0) {
+      refetch();
+    }
+  },[activeTab])
 
   return (
     <>

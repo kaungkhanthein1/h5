@@ -35,6 +35,8 @@ const Tab4 = () => {
   const [id, setId] = useState(0);
   const { data } = useGetMovieRankingListQuery(undefined, {
     refetchOnMountOrArgChange: true,
+    refetchOnReconnect: true,        // optional: refetch if internet reconnects
+    refetchOnFocus: true,            // optional: refetch when tab is focused,
   });
 
   const getRankingById = async (id: any) => {
@@ -49,7 +51,9 @@ const Tab4 = () => {
         "pure-mode": settings.filterToggle ? 1 : 0,
       }),
     };
-    setIsLoading(true);
+    if(!rankingDataById) {
+      setIsLoading(true);
+    }
     const { data } = await axios(
       convertToSecureUrl(
         `${process.env.REACT_APP_API_URL}/movie/ranking/data?id=${id}`

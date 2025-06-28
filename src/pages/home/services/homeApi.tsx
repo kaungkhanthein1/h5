@@ -44,7 +44,7 @@ const myFun = async (args: any, api: any, extraOptions: any) => {
 
 export const homeApi = createApi({
   reducerPath: "homeApi",
-  keepUnusedDataFor: 0, // 1 minute
+  keepUnusedDataFor: 300, // 1 minute
 
   // baseQuery: fetchBaseQuery({
   //   baseUrl: process.env.REACT_APP_API_URL,
@@ -75,14 +75,14 @@ export const homeApi = createApi({
         return response;
       },
       providesTags: ["Config"],
-      keepUnusedDataFor: 0, // 1 minute
+      keepUnusedDataFor: 300, // 1 minute
     }),
     getRecommendedMovies: builder.query<any, void>({
       query: () => {
         return convertToSecureUrl(`/movie/index_recommend`);
       },
       providesTags: ["Recommendations"],
-      keepUnusedDataFor: 0, // 1 minute
+      keepUnusedDataFor: 300, // 1 minute
     }),
     getFilteredMovieByTopic: builder.query<any, void>({
       query: (id) => {
@@ -90,14 +90,14 @@ export const homeApi = createApi({
       },
 
       providesTags: ["Topic"],
-      keepUnusedDataFor: 0, // 1 minute
+      keepUnusedDataFor: 300, // 1 minute
     }),
     getFilterByMoviesByTypeId: builder.query<any, any>({
       query: (id) =>
         convertToSecureUrl(`/api/v1/movie/screen/list?type_id=${id}`),
 
       providesTags: ["TypeMovies"],
-      keepUnusedDataFor: 0, // 1 minute
+      keepUnusedDataFor: 300, // 1 minute
     }),
     getFilteredData: builder.query<any, any>({
       query: ({ id, sort, classData, area, year, page, pageSize }: any) =>
@@ -106,7 +106,7 @@ export const homeApi = createApi({
         ),
 
       providesTags: ["Movies"],
-      keepUnusedDataFor: 0, // 1 minute
+      keepUnusedDataFor: 300, // 1 minute
     }),
   }),
 });
