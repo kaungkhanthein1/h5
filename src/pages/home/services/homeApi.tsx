@@ -44,6 +44,8 @@ const myFun = async (args: any, api: any, extraOptions: any) => {
 
 export const homeApi = createApi({
   reducerPath: "homeApi",
+  keepUnusedDataFor: 300, // 1 minute
+
   // baseQuery: fetchBaseQuery({
   //   baseUrl: process.env.REACT_APP_API_URL,
   //   prepareHeaders: (headers) => {
@@ -60,6 +62,8 @@ export const homeApi = createApi({
   //     return headers;
   //   },
   // }),
+  tagTypes: ["Config", "Recommendations", "Movies", "Topic", "TypeMovies"],
+
   baseQuery: myFun,
   endpoints: (builder) => ({
     getHeaderTopics: builder.query<any, void>({
@@ -70,26 +74,39 @@ export const homeApi = createApi({
         console.log(response);
         return response;
       },
+      providesTags: ["Config"],
+      keepUnusedDataFor: 300, // 1 minute
     }),
     getRecommendedMovies: builder.query<any, void>({
       query: () => {
         return convertToSecureUrl(`/movie/index_recommend`);
       },
+      providesTags: ["Recommendations"],
+      keepUnusedDataFor: 300, // 1 minute
     }),
     getFilteredMovieByTopic: builder.query<any, void>({
       query: (id) => {
         return convertToSecureUrl(`/movie/${id}/recommend`);
       },
+
+      providesTags: ["Topic"],
+      keepUnusedDataFor: 300, // 1 minute
     }),
     getFilterByMoviesByTypeId: builder.query<any, any>({
       query: (id) =>
         convertToSecureUrl(`/api/v1/movie/screen/list?type_id=${id}`),
+
+      providesTags: ["TypeMovies"],
+      keepUnusedDataFor: 300, // 1 minute
     }),
     getFilteredData: builder.query<any, any>({
       query: ({ id, sort, classData, area, year, page, pageSize }: any) =>
         convertToSecureUrl(
           `/movie/screen/list?type_id=${id}&&sort=${sort}&&class=${classData}&&area=${area}&&year=${year}&&pageSize=${pageSize}&&page=${page}`
         ),
+
+      providesTags: ["Movies"],
+      keepUnusedDataFor: 300, // 1 minute
     }),
   }),
 });

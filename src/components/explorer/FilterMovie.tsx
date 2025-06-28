@@ -288,15 +288,20 @@ const FilterMovie = () => {
     data,
     isFetching: dataFetching,
     isLoading,
-  } = useGetFilteredDataQuery({
-    id: activeTab,
-    sort,
-    classData,
-    area,
-    year,
-    page,
-    pageSize,
-  });
+  } = useGetFilteredDataQuery(
+    {
+      id: activeTab,
+      sort,
+      classData,
+      area,
+      year,
+      page,
+      pageSize,
+    },
+    {
+      refetchOnMountOrArgChange: 300,
+    }
+  );
 
   const prevFilters = useRef({ sort, area, year, classData, activeTab });
 

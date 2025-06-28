@@ -33,7 +33,9 @@ const Tab4 = () => {
   const dispatch = useDispatch();
   const [rankingDataById, setRankingDataById] = useState([]);
   const [id, setId] = useState(0);
-  const { data } = useGetMovieRankingListQuery();
+  const { data } = useGetMovieRankingListQuery(undefined, {
+    refetchOnMountOrArgChange: 300,
+  });
 
   const getRankingById = async (id: any) => {
     // Retrieve settings from localStorage

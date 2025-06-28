@@ -4,7 +4,9 @@ import { useGetMovieTopicListQuery } from "../../pages/explorer/services/explore
 import Loader from "../../pages/search/components/Loader";
 
 const Tab3 = () => {
-  const { data: topicData, isLoading } = useGetMovieTopicListQuery();
+  const { data: topicData, isLoading } = useGetMovieTopicListQuery(undefined, {
+    refetchOnMountOrArgChange: 300,
+  });
 
   return (
     <>

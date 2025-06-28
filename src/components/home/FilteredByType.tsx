@@ -220,15 +220,20 @@ const FilteredByType = () => {
 
   const dispatch = useDispatch();
 
-  const { data, isFetching, isLoading } = useGetFilteredDataQuery({
-    id: activeTab,
-    sort,
-    classData,
-    area,
-    year,
-    page,
-    pageSize,
-  });
+  const { data, isFetching, isLoading } = useGetFilteredDataQuery(
+    {
+      id: activeTab,
+      sort,
+      classData,
+      area,
+      year,
+      page,
+      pageSize,
+    },
+    {
+      refetchOnMountOrArgChange: 300, // Refetch if data is older than 60 seconds
+    }
+  );
 
   const settings = JSON.parse(localStorage.getItem("movieAppSettings") || "{}");
 
@@ -302,9 +307,6 @@ const FilteredByType = () => {
 
       isChanged.current = true;
 
-      // Reset movieData immediately when filters change
-      dispatch(setMovieData([]));
-
       prevFilters.current = { sort, area, year, classData, activeTab };
     }
   }, [sort, area, year, classData, activeTab, dispatch]);
@@ -318,6 +320,8 @@ const FilteredByType = () => {
       data?.data?.list.length &&
       (movieData.length === 0 || isChanged.current)
     ) {
+      // Reset movieData immediately when filters change
+      dispatch(setMovieData([]));
       dispatch(setMovieData(data.data.list));
       setTotalData(data.data.total);
       isChanged.current = false;

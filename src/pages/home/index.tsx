@@ -11,7 +11,9 @@ import HomeAds from "../../components/home/HomeAds";
 import { useEffect } from "react";
 
 const Home: React.FC = () => {
-  const { data, isLoading, refetch } = useGetRecommendedMoviesQuery();
+  const { data, isLoading, refetch } = useGetRecommendedMoviesQuery(undefined, {
+    refetchOnMountOrArgChange: 300, // Refetch if data is older than 60 seconds
+  });
   // console.log(data, "data");
   const activeTab = useSelector((state: any) => state.home.activeTab);
   const isLoggedIn = localStorage.getItem("authToken");
@@ -19,9 +21,12 @@ const Home: React.FC = () => {
   const token = parsedLoggedIn?.data?.access_token;
   const { data: movies } = useGetRecordQuery(undefined, { skip: !token });
 
-  useEffect(() => {
-    if (data == undefined) refetch();
-  }, [data]);
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     refetch(); // Force refetch every 2 minutes
+  //   }, 10000);
+  //   return () => clearInterval(interval);
+  // }, [refetch]);
 
   // useEffect(() => {
   //   window.scrollTo(0, 0);
