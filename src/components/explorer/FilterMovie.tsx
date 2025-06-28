@@ -232,7 +232,6 @@ const FilterMovie = () => {
   const isInitialLoad = useRef(true);
   const isChanged = useRef(false);
   const scrollRef = useRef<number>(0); // Add a ref to track scroll position
-  const [loadedTabs, setLoadedTabs] = useState<Record<number, boolean>>({});
 
   // console.log(window.scrollY, "window.scrollY");
 
@@ -289,23 +288,15 @@ const FilterMovie = () => {
     data,
     isFetching: dataFetching,
     isLoading,
-  } = useGetFilteredDataQuery(
-    {
-      id: activeTab,
-      sort,
-      classData,
-      area,
-      year,
-      page,
-      pageSize,
-    },
-    {
-      refetchOnMountOrArgChange: true,
-      refetchOnReconnect: true,        // optional: refetch if internet reconnects
-      refetchOnFocus: true,            // optional: refetch when tab is focused
-  // keepUnusedDataFor: 300,          // cache lives for 5 mins after unmount
-    }
-  );
+  } = useGetFilteredDataQuery({
+    id: activeTab,
+    sort,
+    classData,
+    area,
+    year,
+    page,
+    pageSize,
+  });
 
   const prevFilters = useRef({ sort, area, year, classData, activeTab });
 
@@ -385,17 +376,6 @@ const FilterMovie = () => {
     }
   }, [totalData, movieData]);
 
-
-  useEffect(()=>{
-    if(!dataFetching) {
-      setLoadedTabs((prev) => ({ ...prev, [activeTab]: true }));
-    }
-  },[dataFetching]);
-
-  useEffect(()=>{
-    console.log('activeTab is=>', activeTab);
-  },[activeTab])
-
   // useEffect(() => {
   //   console.log("winnnn");
   //   dispatch(setSort("by_default"));
@@ -426,7 +406,7 @@ const FilterMovie = () => {
       <div>
         {memoizedFilterTag}
         <div className="mb-5 -mt-3">{memoizedNewAds}</div>
-        {isLoading || !loadedTabs[activeTab] ? ( 
+        {isLoading || dataFetching ? (
           <div className="mt-10 flex justify-center items-center w-full">
             <Loader />
           </div>

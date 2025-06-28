@@ -24,7 +24,7 @@ import { pointApi } from "../pages/Point/service/PointApi";
 import movieSlice from "./movieSlice";
 import homeMovieSlice from "./homeMovieSlice";
 
-// // Define persist config
+// Define persist config
 // const persistConfig = {
 //   key: "root",
 //   storage,

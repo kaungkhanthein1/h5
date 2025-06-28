@@ -251,13 +251,9 @@ const WeeklyMoviesNavigation = ({ currentDate }: { currentDate: number }) => {
 const WeeklyMoviesContent = () => {
   const activeWeek = useSelector((state: any) => state.explore.activeWeek);
 
-  const { data, isLoading } = useGetWeeklyMoviesQuery(activeWeek || 1, {
-    refetchOnMountOrArgChange: true,
-    refetchOnReconnect: true,        // optional: refetch if internet reconnects
-    refetchOnFocus: true,            // optional: refetch when tab is focused,
-  });
+  const { data, isFetching } = useGetWeeklyMoviesQuery(activeWeek || 1);
 
-  if (isLoading) {
+  if (isFetching) {
     return (
       <div className="flex justify-center items-center mt-10">
         <Loader />
