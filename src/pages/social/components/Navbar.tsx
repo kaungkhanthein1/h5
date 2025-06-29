@@ -266,25 +266,7 @@ const Navbar = () => {
 
     if (currentData?.data?.list) {
       const newList = currentData.data.list;
-
-      // For page 1: Check if first item's post_id matches existing first item
-      // For page > 1: Check if any new items don't exist in current dataList
-      const shouldUpdate =
-        page === 1
-          ? dataList.length === 0 ||
-            newList[0]?.post_id !== dataList[0]?.post_id
-          : newList.some(
-              (newItem: any) =>
-                !dataList.some(
-                  (existingItem) => existingItem.post_id === newItem.post_id
-                )
-            );
-
-      if (shouldUpdate) {
-        setDataList((prev) => (page === 1 ? newList : [...prev, ...newList]));
-      } else {
-        console.log("Skipping update - data hasn't changed");
-      }
+      setDataList((prev) => (page === 1 ? newList : [...prev, ...newList]));
       setHasMore(
         currentData.data.page * currentData.data.pageSize <
           currentData.data.total
