@@ -282,13 +282,13 @@ const Navbar = () => {
 
       if (shouldUpdate) {
         setDataList((prev) => (page === 1 ? newList : [...prev, ...newList]));
-        setHasMore(
-          currentData.data.page * currentData.data.pageSize <
-            currentData.data.total
-        );
       } else {
         console.log("Skipping update - data hasn't changed");
       }
+      setHasMore(
+        currentData.data.page * currentData.data.pageSize <
+          currentData.data.total
+      );
     }
   }, [postsData, recommandData, followData, audioData, activeTab]);
   // useEffect(() => {
