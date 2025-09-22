@@ -74,6 +74,9 @@ const SkeletonLoader = React.memo(({ fromMovie }: { fromMovie: boolean }) => (
 SkeletonLoader.displayName = 'SkeletonLoader';
 
 const NewAds: React.FC<NewAdsProps> = ({ section, fromMovie = false }) => {
+  return null;
+
+  /*
   const { data, isLoading, isFetching } = useGetAdsQuery();
   const [hasRendered, setHasRendered] = useState(false);
 
@@ -119,6 +122,7 @@ const NewAds: React.FC<NewAdsProps> = ({ section, fromMovie = false }) => {
       </div>
     </div>
   );
+  */
 };
 
 export default React.memo(NewAds);

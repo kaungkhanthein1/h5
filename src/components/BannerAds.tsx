@@ -1,3 +1,6 @@
+import React from "react";
+
+/*
 import React, { useState } from "react";
 import BottomAds from '../assets/bottomAds.jpg';
 
@@ -18,7 +21,7 @@ const BannerAd: React.FC = () => {
       </div>
       <a href={adLink}>
       <img
-        src={BottomAds} // Replace with your ad image URL
+        src={BottomAds}
         alt="Ad Banner"
         style={styles.bannerImage}
       />
@@ -56,9 +59,13 @@ const styles: Record<string, React.CSSProperties> = {
   },
   bannerImage: {
     width: "100%",
-    // maxWidth: "728px", // Adjust size as needed
     minHeight: "auto",
   },
+};
+*/
+
+const BannerAd: React.FC = () => {
+  return null;
 };
 
 export default BannerAd;

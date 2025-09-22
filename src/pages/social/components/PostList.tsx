@@ -363,7 +363,7 @@ const PostList = ({
       )}
       {/* {!showDetail && ( */}
       <>
-        {data.map((post: any, index: number) => (
+        {data.filter((post: any) => post?.type !== "ads").map((post: any, index: number) => (
           <div
             key={index}
             className="bg-background mt-2 rounded-lg p-0 text-white"
@@ -445,7 +445,7 @@ const PostList = ({
                       {post.user.nickname}
                     </h4>
 
-                    {post?.type !== "ads" && post?.user?.level && (
+                    {post?.user?.level && (
                       <img
                         src={post?.user?.level}
                         alt=""
@@ -454,7 +454,7 @@ const PostList = ({
                     )}
                   </div>
 
-                  {post?.type !== "ads" && post?.is_top === 1 && (
+                  {post?.is_top === 1 && (
                     <div className="flex items-center gap-1">
                       <span className="pin">已置顶</span>
                       <svg
@@ -475,17 +475,10 @@ const PostList = ({
                       </svg>
                     </div>
                   )}
-                  {post?.type === "ads" && (
-                    <div className="flex items-center gap-1">
-                      <span className="pin">
-                        {post?.ads_info?.profile_text}
-                      </span>
-                    </div>
-                  )}
+                  {/* Ads section removed */}
                 </div>
               </div>
-              {post?.type !== "ads" && (
-                <button
+              <button
                   onClick={() =>
                     handleFollowChange(post.user.id, followStatus[post.user.id])
                   }
@@ -515,7 +508,6 @@ const PostList = ({
                     </>
                   )}
                 </button>
-              )}
             </div>
             <p className="mb-2 px-4 social_des">{renderDescription(post)}</p>{" "}
             {post.file_type === "image" && (
@@ -557,7 +549,7 @@ const PostList = ({
                 src={post?.files[0]?.resourceURL}
                 thumbnail={post?.files[0].thumbnail}
                 // status={false}
-                status={post?.type === "ads" ? true : false}
+                status={false}
               />
             )}
             {post.file_type === "audio" && (
@@ -568,7 +560,7 @@ const PostList = ({
                 activePlayer={activePlayer}
               />
             )}
-            {post?.type === "post" || !post?.type ? (
+            {(
               <div className="flex justify-between items-center px-4 py-3 text-[12px]">
                 {showCreatedTime ? (
                   <div className="fixed top-0 left-0 flex h-screen items-center justify-center z-[1000] w-full">
@@ -661,44 +653,6 @@ const PostList = ({
                   </button>
                 </div>
               </div>
-            ) : (
-              post?.type === "ads" && (
-                <div className="flex justify-between items-center px-4 py-3 text-[12px]">
-                  <div className="flex items-center gap-2">
-                    <div>
-                      <img
-                        src={post?.ads_info?.icon}
-                        alt=""
-                        width={36}
-                        height={36}
-                      />
-                    </div>
-                    <div>
-                      <div className="flex flex-col">
-                        <span className="ads-title">
-                          {post?.ads_info?.title}
-                        </span>
-                        <span className="ads-description">
-                          {post?.ads_info?.description}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <div>
-                    <a
-                      target="_blank"
-                      href={post?.ads_info?.jump_url}
-                      className={`flex gap-2 px-2 py-1 items-center 
-                    bg-[#F54100]
-                rounded-[6px]`}
-                    >
-                      <span className="text-sm">
-                        {post?.ads_info?.btn_text}
-                      </span>
-                    </a>
-                  </div>
-                </div>
-              )
             )}
           </div>
         ))}

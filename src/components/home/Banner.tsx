@@ -9,6 +9,13 @@ const Banner = ({ list }: { list: any }) => {
   };
   const navigate = useNavigate();
 
+  // Filter out ads: remove items that navigate to external links
+  const filteredList = Array.isArray(list)
+    ? list.filter((banner: any) =>
+        !(typeof banner?.click === "string" && banner.click.startsWith("http"))
+      )
+    : [];
+
   const handleBannerClick = (clickLink: string) => {
     // console.log("clickLink is=>", clickLink);
     if (clickLink && clickLink.startsWith("http")) {
@@ -38,7 +45,7 @@ const Banner = ({ list }: { list: any }) => {
             autoPlay={true}
             infiniteLoop={true}
           >
-            {list?.map((banner: any) => (
+            {filteredList.map((banner: any) => (
               <div
                 key={banner?.image}
                 className="h-[200px] lg:h-[400px] rounded-md"
@@ -82,7 +89,7 @@ const Banner = ({ list }: { list: any }) => {
             selectedItem={selectedIndex}
             onChange={handleOnChange}
           >
-            {list?.map((banner: any, index: any) => (
+            {filteredList.map((banner: any, index: any) => (
               <div
                 key={banner?.image}
                 className={`${
