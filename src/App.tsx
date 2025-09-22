@@ -22,7 +22,7 @@ import SignUp from "./components/login/SignUp";
 import Favorite from "./pages/profile/Favorite";
 import Loader from "./pages/search/components/Loader";
 import ErrorToast from "./pages/profile/error/ErrorToast";
-import Landing from "./components/Landing";
+// import Landing from "./components/Landing";
 import BannerAds from "./components/BannerAds";
 import {
   useGetAdsQuery,
@@ -263,12 +263,10 @@ const App: React.FC = () => {
     }
   }, [location.pathname, refetchAds, refetch]);
 
+  // Disable landing/panding behavior
   useEffect(() => {
-    const hasSeenLanding = sessionStorage.getItem("hasSeenLanding");
-    if (!hasSeenLanding) {
-      sessionStorage.setItem("hasSeenLanding", "true"); // Mark as shown
-      dispatch(setPanding(true));
-    }
+    sessionStorage.setItem("hasSeenLanding", "true");
+    dispatch(setPanding(false));
   }, [dispatch]);
 
   // Show update notification after ads screen
@@ -375,9 +373,7 @@ const App: React.FC = () => {
     <>
       {data?.data && (
         <>
-          {panding ? (
-            <Landing data={data} preloadedImage={preloadedImage} />
-          ) : (
+          {
             <div
               className={`flex flex-col full-height-fallback ${
                 panding ? "invisible" : "visible"
@@ -490,7 +486,7 @@ const App: React.FC = () => {
               {openSignupModel && <SignUp handleBack={handleBack} />}
               {/* </div> */}
             </div>
-          )}
+          }
         </>
       )}
     </>

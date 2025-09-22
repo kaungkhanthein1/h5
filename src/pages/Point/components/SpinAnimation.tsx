@@ -53,82 +53,83 @@ const SpinAnimation: React.FC<SpinAnimationProps> = ({ open }) => {
   );
   const shouldShowPack = hasLottery || hasMall;
   console.log(" to open =>", shouldShowPack);
+  return null;
 
-  return (
-    <>
-      {!userHasClosedAnimation && shouldShowPack && (
-        <div className="fixed bottom-[5rem] right-2 z-[9999] rounded-full p-2">
-          <div className="relative flex flex-col items-center">
-            {/* Close Button */}
-            <button className="absolute bottom-[5rem] right-2 bg-white rounded-full w-5 h-5 flex items-center justify-center text-black z-[10000]">
-              <img
-                onClick={() => {
-                  setUserHasClosedAnimation(true);
-                  sessionStorage.setItem("animationClosed", "true");
-                }}
-                src={closeSpin}
-                alt=""
-              />
-            </button>
+  // return (
+  //   <>
+  //     {!userHasClosedAnimation && shouldShowPack && (
+  //       <div className="fixed bottom-[5rem] right-2 z-[9999] rounded-full p-2">
+  //         <div className="relative flex flex-col items-center">
+  //           {/* Close Button */}
+  //           <button className="absolute bottom-[5rem] right-2 bg-white rounded-full w-5 h-5 flex items-center justify-center text-black z-[10000]">
+  //             <img
+  //               onClick={() => {
+  //                 setUserHasClosedAnimation(true);
+  //                 sessionStorage.setItem("animationClosed", "true");
+  //               }}
+  //               src={closeSpin}
+  //               alt=""
+  //             />
+  //           </button>
 
-            {/* Loading Animation with Bounce */}
-            <AnimatePresence>
-              {showLoading && (
-                <motion.div
-                  className="flex flex-col"
-                  initial={{ y: 100, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  exit={{ y: 100, opacity: 0 }}
-                  transition={{
-                    type: "spring",
-                    stiffness: 400,
-                    damping: 20,
-                  }}
-                >
-                  {open
-                    ?.filter((item: any) => item.is_open)
-                    .map((item: any) => {
-                      const { type } = item;
+  //           {/* Loading Animation with Bounce */}
+  //           <AnimatePresence>
+  //             {showLoading && (
+  //               <motion.div
+  //                 className="flex flex-col"
+  //                 initial={{ y: 100, opacity: 0 }}
+  //                 animate={{ y: 0, opacity: 1 }}
+  //                 exit={{ y: 100, opacity: 0 }}
+  //                 transition={{
+  //                   type: "spring",
+  //                   stiffness: 400,
+  //                   damping: 20,
+  //                 }}
+  //               >
+  //                 {open
+  //                   ?.filter((item: any) => item.is_open)
+  //                   .map((item: any) => {
+  //                     const { type } = item;
 
-                      if (type === "lottery") {
-                        return (
-                          <AnimationLoader
-                            key={type}
-                            animationData={loadingAnimation}
-                            width={100}
-                            height={100}
-                            onClick={() => handleAnimationClick("game")}
-                          />
-                        );
-                      }
+  //                     if (type === "lottery") {
+  //                       return (
+  //                         <AnimationLoader
+  //                           key={type}
+  //                           animationData={loadingAnimation}
+  //                           width={100}
+  //                           height={100}
+  //                           onClick={() => handleAnimationClick("game")}
+  //                         />
+  //                       );
+  //                     }
 
-                      if (type === "point_mall") {
-                        return (
-                          <AnimationLoader
-                            key={type}
-                            animationData={mall}
-                            width={80}
-                            height={80}
-                            onClick={() => handleAnimationClick("point_mall")}
-                          />
-                        );
-                      }
+  //                     if (type === "point_mall") {
+  //                       return (
+  //                         <AnimationLoader
+  //                           key={type}
+  //                           animationData={mall}
+  //                           width={80}
+  //                           height={80}
+  //                           onClick={() => handleAnimationClick("point_mall")}
+  //                         />
+  //                       );
+  //                     }
 
-                      return null;
-                    })}
-                </motion.div>
-              )}
-            </AnimatePresence>
+  //                     return null;
+  //                   })}
+  //               </motion.div>
+  //             )}
+  //           </AnimatePresence>
 
-            {/* Pack Animation */}
-            <div onClick={toggleLoading}>
-              <AnimationLoader animationData={pack} width={110} height={110} />
-            </div>
-          </div>
-        </div>
-      )}
-    </>
-  );
+  //           {/* Pack Animation */}
+  //           <div onClick={toggleLoading}>
+  //             <AnimationLoader animationData={pack} width={110} height={110} />
+  //           </div>
+  //         </div>
+  //       </div>
+  //     )}
+  //   </>
+  // );
 };
 
 export default SpinAnimation;

@@ -122,43 +122,44 @@ const Landing: React.FC<LandingProps> = ({ data, preloadedImage }) => {
     dispatch(setPanding(false));
     sendMessageToNative();
   };
+  return null;
   
-  return (
-        <>
-          {isLoading ? (
-            <img
-              className="h-screen w-screen object-cover"
-              src={land}
-              alt="Loading..."
-            />
-          ) : (
-            <Link target="_blink" to={cc?.data?.url}>
-              <img
-                className="h-screen w-screen object-cover"
-                onLoad={handleImageLoaded}
-                src={image}
-                onError={handleImageError}
-                alt=""
-              />
-            </Link>
-          )}
-          {imgLoad && (
-            <div
-              onClick={skipAd}
-              style={{
-                borderRadius: "52px",
-                background: "rgba(0, 0, 0, 0.98)",
-                backdropFilter: "blur(2px)",
-              }}
-              className="absolute top-[2vh] right-[2vh]"
-            >
-              <h1 className="text-white text-[12px] md:text-sm font-[400] py-[4px] px-[12px]">
-                跳过广告 <span>{skip}</span>
-              </h1>
-            </div>
-          )}
-        </>
-  );
+  // return (
+  //       <>
+  //         {isLoading ? (
+  //           <img
+  //             className="h-screen w-screen object-cover"
+  //             src={land}
+  //             alt="Loading..."
+  //           />
+  //         ) : (
+  //           <Link target="_blink" to={cc?.data?.url}>
+  //             <img
+  //               className="h-screen w-screen object-cover"
+  //               onLoad={handleImageLoaded}
+  //               src={image}
+  //               onError={handleImageError}
+  //               alt=""
+  //             />
+  //           </Link>
+  //         )}
+  //         {imgLoad && (
+  //           <div
+  //             onClick={skipAd}
+  //             style={{
+  //               borderRadius: "52px",
+  //               background: "rgba(0, 0, 0, 0.98)",
+  //               backdropFilter: "blur(2px)",
+  //             }}
+  //             className="absolute top-[2vh] right-[2vh]"
+  //           >
+  //             <h1 className="text-white text-[12px] md:text-sm font-[400] py-[4px] px-[12px]">
+  //               跳过广告 <span>{skip}</span>
+  //             </h1>
+  //           </div>
+  //         )}
+  //       </>
+  // );
 };
 
 export default Landing;
