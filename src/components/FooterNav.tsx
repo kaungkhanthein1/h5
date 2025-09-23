@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 // Import SVG files directly
@@ -9,10 +9,10 @@ import explorerIcon from "../assets/explorer.png";
 import explorerSelectedIcon from "../assets/explorerSelected.png";
 import profileIcon from "../assets/profile.png";
 import profileSelectedIcon from "../assets/profileSelected.png";
-import beforePostIcon from "../assets/socialUnselected.svg";
-import afterPostIcon from "../assets/socialSelected.svg";
-import beforeShortIcon from "../assets/beforeshort.png";
-import afterShortIcon from "../assets/aftershort.png";
+// import beforePostIcon from "../assets/socialUnselected.svg";
+// import afterPostIcon from "../assets/socialSelected.svg";
+// import beforeShortIcon from "../assets/beforeshort.png";
+// import afterShortIcon from "../assets/aftershort.png";
 
 const Footer: FC = () => {
   const { t } = useTranslation();
@@ -27,17 +27,17 @@ const Footer: FC = () => {
       setSelectedMenu("explorer");
     } else if (location.pathname === "/profile") {
       setSelectedMenu("profile");
-    } else if (location.pathname === "/social") {
-      setSelectedMenu("social");
+    // } else if (location.pathname === "/social") {
+    //   setSelectedMenu("social");
     } else if (location.pathname === "/short") {
       setSelectedMenu("short");
     }
   }, [location.pathname]);
   // Scroll event listener to detect scroll direction
 
-  const { hideMode } = JSON.parse(
-    localStorage.getItem("movieAppSettings") || "{}"
-  );
+  // const { hideMode } = JSON.parse(
+  //   localStorage.getItem("movieAppSettings") || "{}"
+  // );
 
   const isWebClip = (): boolean => {
     return (
@@ -114,6 +114,8 @@ const Footer: FC = () => {
           </span>
         </button>
         {/* Explorer Icon */}
+        {/* Social tab temporarily disabled */}
+        {/**
         {!hideMode && (
           <button
             className="flex flex-col items-center"
@@ -132,7 +134,6 @@ const Footer: FC = () => {
                 src={selectedMenu === "social" ? afterPostIcon : beforePostIcon}
                 alt="Social"
                 className="h-[26px] w-[26px] mb-1.5"
-                // className="h-8 w-[48px] mb-2 -mt-[10px] "
               />
             </div>
             <span
@@ -144,6 +145,7 @@ const Footer: FC = () => {
             </span>
           </button>
         )}
+        */}
 
         {/* Explorer Icon */}
         {/* <Link
